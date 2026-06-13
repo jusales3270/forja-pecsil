@@ -195,6 +195,7 @@ model Pessoa {
   processamentosComoProgramador ProcessamentoMaquina[] @relation("ProgramadorProcessamento")
   processamentosComoOperador    ProcessamentoMaquina[] @relation("OperadorProcessamento")
   apontamentosTurno             ApontamentoTurno[]
+  apontamentosPeca              ApontamentoPeca[]
   inspecoesRealizadas           InspecaoOP[]
   medicoesRealizadas            MedicaoInspecao[]
   controlesVolume               ControleVolume[]
@@ -266,6 +267,7 @@ model Maquina {
   etapa          Etapa                  @relation(fields: [etapaId], references: [id])
   carimbos       Carimbo[]
   processamentos ProcessamentoMaquina[]
+  apontamentosPeca ApontamentoPeca[]
 
   @@map("maquinas")
 }
@@ -530,6 +532,7 @@ model OPLote {
   etapa          Etapa                  @relation(fields: [etapaId], references: [id])
   carimbos       Carimbo[]
   processamentos ProcessamentoMaquina[]
+  apontamentosPeca ApontamentoPeca[]
   inspecoes      InspecaoOP[]
 
   @@map("ops_lote")
@@ -725,4 +728,28 @@ model Alerta {
   destinatario Pessoa @relation(fields: [destinatarioId], references: [id])
 
   @@map("alertas")
+}
+
+// ============================================================
+// APONTAMENTO PECA (Sprint 4 - Bloco A: apontamento peca a peca)
+// Registro incremental "+1 peca"; autenticacao do operador = assinatura.
+// Controle interno de produtividade (Rota 2 simplificada).
+// ============================================================
+
+model ApontamentoPeca {
+  id           String   @id @default(uuid())
+  opLoteId     String   @map("op_lote_id")
+  maquinaId    String   @map("maquina_id")
+  operadorId   String   @map("operador_id")
+  numeroPeca   Int      @map("numero_peca")
+  observacoes  String?
+  criadoEm     DateTime @default(now()) @map("criado_em")
+
+  opLote   OPLote  @relation(fields: [opLoteId], references: [id])
+  maquina  Maquina @relation(fields: [maquinaId], references: [id])
+  operador Pessoa  @relation(fields: [operadorId], references: [id])
+
+  @@index([opLoteId])
+  @@index([operadorId, maquinaId])
+  @@map("apontamentos_peca")
 }

@@ -19,6 +19,7 @@ import { opLoteRoutes } from './routes/op-lote.js';
 import { maquinasRoutes } from './routes/maquinas.js';
 import { pessoasRoutes } from './routes/pessoas.js';
 import { lotesFantasmasRoutes } from './routes/lotes-fantasmas.js';
+import { apontamentoPecaRoutes } from './routes/apontamento-peca.js';
 
 import { prisma } from './db/prisma.js';
 
@@ -76,6 +77,7 @@ async function bootstrap() {
   await app.register(maquinasRoutes, { prefix: '/api' });
   await app.register(pessoasRoutes, { prefix: '/api' });
   await app.register(lotesFantasmasRoutes, { prefix: '/api' });
+  await app.register(apontamentoPecaRoutes, { prefix: '/api' });
 
   try {
     await app.listen({ port: env.PORT, host: '0.0.0.0' });
