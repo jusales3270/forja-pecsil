@@ -1,0 +1,87 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html,
+  body,
+  #root {
+    height: 100%;
+  }
+
+  body {
+    font-family: 'Inter', system-ui, sans-serif;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /* Inputs sempre com cursor de texto */
+  input,
+  textarea,
+  select {
+    @apply outline-none;
+  }
+}
+
+@layer components {
+  /* Botões */
+  .btn {
+    @apply inline-flex items-center justify-center rounded-lg font-semibold transition-all active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-forja-500 focus:ring-offset-2 focus:ring-offset-neutral-950;
+  }
+
+  .btn-primary {
+    @apply btn bg-forja-500 hover:bg-forja-600 text-white;
+  }
+
+  .btn-secondary {
+    @apply btn bg-neutral-800 hover:bg-neutral-700 text-neutral-100;
+  }
+
+  .btn-ghost {
+    @apply btn bg-transparent hover:bg-neutral-800 text-neutral-300;
+  }
+
+  /* Inputs de formulário */
+  .input {
+    @apply w-full bg-neutral-900 border border-neutral-700 rounded-lg px-4 py-3 text-neutral-100 placeholder-neutral-500 focus:border-forja-500 focus:ring-1 focus:ring-forja-500 transition-colors;
+  }
+
+  .input-lg {
+    @apply input text-lg py-4;
+  }
+
+  /* Labels */
+  .label {
+    @apply block text-sm font-medium text-neutral-300 mb-2;
+  }
+
+  /* Cards */
+  .card {
+    @apply bg-neutral-900 border border-neutral-800 rounded-xl p-6;
+  }
+
+  .card-hover {
+    @apply card hover:border-neutral-700 transition-colors;
+  }
+
+  /* Badge */
+  .badge {
+    @apply inline-flex items-center px-2.5 py-0.5 rounded-md text-xs font-medium;
+  }
+
+  .badge-forja {
+    @apply badge bg-forja-500/20 text-forja-100 border border-forja-500/30;
+  }
+
+  .badge-neutral {
+    @apply badge bg-neutral-800 text-neutral-300 border border-neutral-700;
+  }
+
+  /* Mensagens */
+  .error-message {
+    @apply text-sm text-red-300 bg-red-900/30 border border-red-700/50 rounded-lg px-4 py-3;
+  }
+
+  .info-message {
+    @apply text-sm text-blue-300 bg-blue-900/30 border border-blue-700/50 rounded-lg px-4 py-3;
+  }
+}

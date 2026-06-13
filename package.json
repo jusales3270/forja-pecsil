@@ -1,0 +1,19 @@
+{
+  "name": "forja",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Sistema de Controle de Produção Pecsil",
+  "scripts": {
+    "dev": "pnpm -r --parallel dev",
+    "build": "pnpm -r build",
+    "db:up": "docker compose up -d postgres redis",
+    "db:down": "docker compose down",
+    "db:migrate": "pnpm --filter backend db:migrate",
+    "db:seed": "pnpm --filter backend db:seed",
+    "db:reset": "pnpm --filter backend db:reset"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "packageManager": "pnpm@9.0.0"
+}

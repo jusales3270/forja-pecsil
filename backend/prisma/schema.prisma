@@ -1,0 +1,728 @@
+// ============================================================
+// Forja - Schema Prisma v2.1 (Sprint 2a)
+// Sistema de Controle de Produção Pecsil
+// ============================================================
+// Mudanças versus v2.0:
+// - Novo enum StatusArtigo
+// - Novo campo status em Artigo
+// - Nova entidade TipoServico (catálogo de tipos com etapa + exige_inspecao)
+// - Nova entidade ToleranciaGeralCliente (tabela de tolerâncias por cliente/faixa)
+// - OperacaoArtigo ganha relação opcional com TipoServico
+// ============================================================
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ============================================================
+// ENUMS
+// ============================================================
+
+enum Papel {
+  admin
+  chefe
+  pcp
+  engenharia
+  programador
+  operador
+  inspetor
+  embalador
+}
+
+enum TipoProduto {
+  forma
+  bloco
+  fundo_forma
+  fundo_bloco
+  molde
+}
+
+enum TipoMaquina {
+  torno
+  vertiflow
+  tres_eixos
+  quinto_eixo
+  fundicao
+  metalizacao
+  solda
+  qualidade
+  embalagem
+  outros
+}
+
+enum StatusOS {
+  aberta
+  em_producao
+  finalizada
+  atrasada
+  cancelada
+}
+
+enum StatusLote {
+  na_fila
+  em_processo
+  aguardando_qualidade
+  bloqueado
+  concluido
+}
+
+enum StatusOPLote {
+  na_fila
+  em_processo
+  aguardando_qualidade
+  concluida
+  bloqueada
+}
+
+enum StatusProcessamento {
+  rodando
+  finalizado
+  interrompido
+}
+
+enum StatusArtigo {
+  rascunho
+  ativo
+  arquivado
+}
+
+enum TipoDesenho {
+  cliente
+  forma
+  acompanhamento_dim
+}
+
+enum CaracteristicaCota {
+  funcional
+  critica
+  processo
+}
+
+enum FrequenciaMedicao {
+  todas
+  primeira
+  um_em_3
+  um_em_5
+  um_em_10
+  na_preparacao
+}
+
+enum InstrumentoMedicao {
+  paq_digital
+  comparador
+  altimetro
+  micrometro
+  renishaw
+  visual
+  metrologia
+  outros
+}
+
+enum ResultadoInspecao {
+  aprovado
+  reprovado
+  com_observacoes
+}
+
+enum TipoInspecao {
+  primeira_peca
+  amostragem
+  final
+}
+
+enum TipoEventoOS {
+  os_criada
+  os_alterada
+  prazo_alterado
+  prioridade_alterada
+  lote_criado
+  op_lote_iniciada
+  op_lote_concluida
+  inspecao_iniciada
+  inspecao_aprovada
+  inspecao_reprovada
+  inspecao_com_observacao
+  volume_registrado
+  observacao_livre
+  alerta_disparado
+  retrabalho_solicitado
+  os_finalizada
+  os_cancelada
+}
+
+enum TipoAlerta {
+  lote_parado
+  qualidade_reprovada
+  cota_fora_tolerancia
+  volume_correcao_alta
+  os_em_risco
+  os_vencida
+  resumo_diario
+}
+
+enum SeveridadeAlerta {
+  info
+  warning
+  critico
+}
+
+enum CanalAlerta {
+  whatsapp
+  dashboard
+}
+
+// ============================================================
+// PESSOAS
+// ============================================================
+
+model Pessoa {
+  id            String   @id @default(uuid())
+  nome          String
+  codigoPessoal String   @unique @map("codigo_pessoal")
+  pinHash       String   @map("pin_hash")
+  papel         Papel
+  ativo         Boolean  @default(true)
+  criadoEm      DateTime @default(now()) @map("criado_em")
+  atualizadoEm  DateTime @updatedAt @map("atualizado_em")
+
+  carimbosComoProgramador       Carimbo[]              @relation("ProgramadorCarimbo")
+  carimbosComoOperador          Carimbo[]              @relation("OperadorCarimbo")
+  processamentosComoProgramador ProcessamentoMaquina[] @relation("ProgramadorProcessamento")
+  processamentosComoOperador    ProcessamentoMaquina[] @relation("OperadorProcessamento")
+  apontamentosTurno             ApontamentoTurno[]
+  inspecoesRealizadas           InspecaoOP[]
+  medicoesRealizadas            MedicaoInspecao[]
+  controlesVolume               ControleVolume[]
+  eventosOS                     EventoOS[]
+  alertasRecebidos              Alerta[]
+  osCriadas                     OS[]                   @relation("OSCriadaPor")
+  artigosCriados                Artigo[]               @relation("ArtigoCriadoPor")
+
+  @@map("pessoas")
+}
+
+// ============================================================
+// CLIENTES
+// ============================================================
+
+model Cliente {
+  id           String   @id @default(uuid())
+  nome         String
+  observacoes  String?
+  ativo        Boolean  @default(true)
+  criadoEm     DateTime @default(now()) @map("criado_em")
+  atualizadoEm DateTime @updatedAt @map("atualizado_em")
+
+  oses                 OS[]
+  artigos              Artigo[]
+  toleranciasGerais    ToleranciaGeralCliente[]
+
+  @@map("clientes")
+}
+
+// ============================================================
+// ETAPAS
+// ============================================================
+
+model Etapa {
+  id                       String   @id @default(uuid())
+  nome                     String
+  ordemPadrao              Int      @unique @map("ordem_padrao")
+  slaHoras                 Int      @map("sla_horas")
+  aplicaParaTipos          String[] @map("aplica_para_tipos")
+  exigeCheckpointQualidade Boolean  @default(false) @map("exige_checkpoint_qualidade")
+  ativa                    Boolean  @default(true)
+  criadoEm                 DateTime @default(now()) @map("criado_em")
+  atualizadoEm             DateTime @updatedAt @map("atualizado_em")
+
+  maquinas      Maquina[]
+  carimbos      Carimbo[]
+  opsArtigo     OperacaoArtigo[]
+  opsLote       OPLote[]
+  tiposServico  TipoServico[]
+
+  @@map("etapas")
+}
+
+// ============================================================
+// MÁQUINAS
+// ============================================================
+
+model Maquina {
+  id            String      @id @default(uuid())
+  nome          String
+  codigoInterno String      @unique @map("codigo_interno")
+  tipo          TipoMaquina
+  etapaId       String      @map("etapa_id")
+  ativa         Boolean     @default(true)
+  criadoEm      DateTime    @default(now()) @map("criado_em")
+  atualizadoEm  DateTime    @updatedAt @map("atualizado_em")
+
+  etapa          Etapa                  @relation(fields: [etapaId], references: [id])
+  carimbos       Carimbo[]
+  processamentos ProcessamentoMaquina[]
+
+  @@map("maquinas")
+}
+
+// ============================================================
+// TIPO DE SERVIÇO (NOVO — catálogo de tipos com etapa + exige_inspecao)
+// ============================================================
+
+model TipoServico {
+  id            String   @id @default(uuid())
+  nome          String   @unique
+  etapaId       String   @map("etapa_id")
+  exigeInspecao Boolean  @default(false) @map("exige_inspecao")
+  ativo         Boolean  @default(true)
+  observacoes   String?
+  criadoEm      DateTime @default(now()) @map("criado_em")
+  atualizadoEm  DateTime @updatedAt @map("atualizado_em")
+
+  etapa     Etapa            @relation(fields: [etapaId], references: [id])
+  operacoes OperacaoArtigo[]
+
+  @@map("tipos_servico")
+}
+
+// ============================================================
+// TOLERÂNCIA GERAL CLIENTE (NOVO)
+// ============================================================
+
+model ToleranciaGeralCliente {
+  id           String   @id @default(uuid())
+  clienteId    String   @map("cliente_id")
+  faixaMin     Float    @map("faixa_min")
+  faixaMax     Float    @map("faixa_max")
+  toleranciaMais  Float @map("tolerancia_mais")
+  toleranciaMenos Float @map("tolerancia_menos")
+  observacoes  String?
+  criadoEm     DateTime @default(now()) @map("criado_em")
+  atualizadoEm DateTime @updatedAt @map("atualizado_em")
+
+  cliente Cliente @relation(fields: [clienteId], references: [id], onDelete: Cascade)
+
+  @@map("tolerancias_gerais_cliente")
+}
+
+// ============================================================
+// ARTIGO (atualizado: adiciona status)
+// ============================================================
+
+model Artigo {
+  id                String       @id @default(uuid())
+  codigo            String
+  descricao         String
+  tipoProduto       TipoProduto  @map("tipo_produto")
+  clienteId         String       @map("cliente_id")
+  material          String?
+  poPadrao          String?      @map("po_padrao")
+  observacoes       String?
+  status            StatusArtigo @default(rascunho)
+  ativo             Boolean      @default(true)
+  criadoPorId       String       @map("criado_por_id")
+  criadoEm          DateTime     @default(now()) @map("criado_em")
+  atualizadoEm      DateTime     @updatedAt @map("atualizado_em")
+
+  cliente   Cliente          @relation(fields: [clienteId], references: [id])
+  criadoPor Pessoa           @relation("ArtigoCriadoPor", fields: [criadoPorId], references: [id])
+  desenhos  Desenho[]
+  operacoes OperacaoArtigo[]
+  oses      OS[]
+
+  @@unique([codigo, clienteId])
+  @@map("artigos")
+}
+
+// ============================================================
+// DESENHO
+// ============================================================
+
+model Desenho {
+  id             String      @id @default(uuid())
+  artigoId       String      @map("artigo_id")
+  tipo           TipoDesenho
+  codigoDesenho  String      @map("codigo_desenho")
+  revisao        String
+  dataRevisao    DateTime?   @map("data_revisao")
+  arquivoBucket  String?     @map("arquivo_bucket")
+  arquivoKey     String?     @map("arquivo_key")
+  arquivoTipo    String?     @map("arquivo_tipo")
+  arquivoTamanho Int?        @map("arquivo_tamanho")
+  arquivoNomeOriginal String? @map("arquivo_nome_original")
+  observacoes    String?
+  criadoEm       DateTime    @default(now()) @map("criado_em")
+  atualizadoEm   DateTime    @updatedAt @map("atualizado_em")
+
+  artigo Artigo @relation(fields: [artigoId], references: [id], onDelete: Cascade)
+
+  @@map("desenhos")
+}
+
+// ============================================================
+// OPERACAO ARTIGO (atualizado: relação com TipoServico)
+// ============================================================
+
+model OperacaoArtigo {
+  id              String  @id @default(uuid())
+  artigoId        String  @map("artigo_id")
+  etapaId         String  @map("etapa_id")
+  tipoServicoId   String? @map("tipo_servico_id")
+  codigoOp        String  @map("codigo_op")
+  ordem           Int
+  tipoServico     String  @map("tipo_servico")
+  tempoUnitMin    Int     @map("tempo_unit_min")
+  tempoSetupMin   Int     @default(0) @map("tempo_setup_min")
+  exigeInspecao   Boolean @default(false) @map("exige_inspecao")
+  observacoes     String?
+  precoUnitario   Decimal?  @map("preco_unitario")     @db.Decimal(12, 2)
+  valorTotal      Decimal?  @map("valor_total")        @db.Decimal(14, 2)
+  numeroFiscal    String?   @map("numero_fiscal")
+  poCliente       String?   @map("po_cliente")
+  statusFiscal    String?   @map("status_fiscal")
+  valorRecebido   Decimal?  @map("valor_recebido")     @db.Decimal(14, 2)
+  dataNf          DateTime? @map("data_nf")
+  dataPagamento   DateTime? @map("data_pagamento")
+  criadoEm        DateTime @default(now()) @map("criado_em")
+  atualizadoEm    DateTime @updatedAt @map("atualizado_em")
+
+  artigo         Artigo          @relation(fields: [artigoId], references: [id], onDelete: Cascade)
+  etapa          Etapa           @relation(fields: [etapaId], references: [id])
+  tipoServicoRel TipoServico?    @relation(fields: [tipoServicoId], references: [id])
+  planoInspecao  PlanoInspecao?
+  opsLote        OPLote[]
+
+  @@unique([artigoId, codigoOp])
+  @@map("operacoes_artigo")
+}
+
+// ============================================================
+// PLANO INSPECAO
+// ============================================================
+
+model PlanoInspecao {
+  id                String   @id @default(uuid())
+  operacaoArtigoId  String   @unique @map("operacao_artigo_id")
+  observacoesGerais String?  @map("observacoes_gerais")
+  criadoEm          DateTime @default(now()) @map("criado_em")
+  atualizadoEm      DateTime @updatedAt @map("atualizado_em")
+
+  operacaoArtigo OperacaoArtigo  @relation(fields: [operacaoArtigoId], references: [id], onDelete: Cascade)
+  cotas          CotaInspecao[]
+
+  @@map("planos_inspecao")
+}
+
+// ============================================================
+// COTA INSPECAO (atualizado: tolerâncias opcionais — usa fallback)
+// ============================================================
+
+model CotaInspecao {
+  id                String              @id @default(uuid())
+  planoInspecaoId   String              @map("plano_inspecao_id")
+  codigoCota        String              @map("codigo_cota")
+  valorNominal      Float               @map("valor_nominal")
+  toleranciaMais    Float?              @map("tolerancia_mais")
+  toleranciaMenos   Float?              @map("tolerancia_menos")
+  caracteristica    CaracteristicaCota
+  frequenciaMonitorar  FrequenciaMedicao @map("frequencia_monitorar")
+  frequenciaRegistrar  FrequenciaMedicao @map("frequencia_registrar")
+  instrumento       InstrumentoMedicao
+  ordem             Int
+  observacoes       String?
+  criadoEm          DateTime            @default(now()) @map("criado_em")
+  atualizadoEm      DateTime            @updatedAt @map("atualizado_em")
+
+  planoInspecao PlanoInspecao     @relation(fields: [planoInspecaoId], references: [id], onDelete: Cascade)
+  medicoes      MedicaoInspecao[]
+
+  @@map("cotas_inspecao")
+}
+
+// ============================================================
+// OS
+// ============================================================
+
+model OS {
+  id              String      @id @default(uuid())
+  codigoGrv       String      @unique @map("codigo_grv")
+  clienteId       String      @map("cliente_id")
+  artigoId        String      @map("artigo_id")
+  quantidadeTotal Int         @map("quantidade_total")
+  prazoEntrega    DateTime    @map("prazo_entrega")
+  dataAbertura    DateTime    @default(now()) @map("data_abertura")
+  prioridade      String      @default("normal")
+  status          StatusOS    @default(aberta)
+  observacoes     String?
+  precoUnitario   Decimal?  @map("preco_unitario")     @db.Decimal(12, 2)
+  valorTotal      Decimal?  @map("valor_total")        @db.Decimal(14, 2)
+  numeroFiscal    String?   @map("numero_fiscal")
+  poCliente       String?   @map("po_cliente")
+  statusFiscal    String?   @map("status_fiscal")
+  valorRecebido   Decimal?  @map("valor_recebido")     @db.Decimal(14, 2)
+  dataNf          DateTime? @map("data_nf")
+  dataPagamento   DateTime? @map("data_pagamento")
+  criadoPorId     String      @map("criado_por_id")
+  criadoEm        DateTime    @default(now()) @map("criado_em")
+  atualizadoEm    DateTime    @updatedAt @map("atualizado_em")
+
+  cliente   Cliente    @relation(fields: [clienteId], references: [id])
+  artigo    Artigo     @relation(fields: [artigoId], references: [id])
+  criadoPor Pessoa     @relation("OSCriadaPor", fields: [criadoPorId], references: [id])
+  lotes     Lote[]
+  eventos   EventoOS[]
+
+  @@map("oses")
+}
+
+// ============================================================
+// LOTE
+// ============================================================
+
+model Lote {
+  id              String     @id @default(uuid())
+  osId            String     @map("os_id")
+  numeroLote      Int        @map("numero_lote")
+  quantidadePecas Int        @map("quantidade_pecas")
+  status          StatusLote @default(na_fila)
+  observacoes     String?
+  criadoEm        DateTime   @default(now()) @map("criado_em")
+  atualizadoEm    DateTime   @updatedAt @map("atualizado_em")
+
+  os              OS               @relation(fields: [osId], references: [id])
+  opsLote         OPLote[]
+  carimbos        Carimbo[]
+  controlesVolume ControleVolume[]
+  eventos         EventoOS[]
+
+  @@map("lotes")
+}
+
+// ============================================================
+// OP LOTE
+// ============================================================
+
+model OPLote {
+  id                  String       @id @default(uuid())
+  loteId              String       @map("lote_id")
+  operacaoArtigoId    String       @map("operacao_artigo_id")
+  etapaId             String       @map("etapa_id")
+  codigoGrvOp         String?      @map("codigo_grv_op")
+  ordem               Int
+  status              StatusOPLote @default(na_fila)
+  quantidadeConcluida Int          @default(0) @map("quantidade_concluida")
+  tempoUnitPlanejado  Int          @map("tempo_unit_planejado")
+  tempoTotalPlanejado Int          @map("tempo_total_planejado")
+  codigoOp            String       @map("codigo_op")
+  tipoServico         String       @map("tipo_servico")
+  exigeInspecao       Boolean      @default(false) @map("exige_inspecao")
+  observacoes         String?
+  criadoEm            DateTime     @default(now()) @map("criado_em")
+  atualizadoEm        DateTime     @updatedAt @map("atualizado_em")
+
+  lote           Lote                   @relation(fields: [loteId], references: [id])
+  operacaoArtigo OperacaoArtigo         @relation(fields: [operacaoArtigoId], references: [id])
+  etapa          Etapa                  @relation(fields: [etapaId], references: [id])
+  carimbos       Carimbo[]
+  processamentos ProcessamentoMaquina[]
+  inspecoes      InspecaoOP[]
+
+  @@map("ops_lote")
+}
+
+// ============================================================
+// CARIMBO
+// ============================================================
+
+model Carimbo {
+  id                    String    @id @default(uuid())
+  opLoteId              String    @map("op_lote_id")
+  loteId                String    @map("lote_id")
+  etapaId               String    @map("etapa_id")
+  maquinaId             String?   @map("maquina_id")
+  timestampEntrada      DateTime  @default(now()) @map("timestamp_entrada")
+  timestampSaida        DateTime? @map("timestamp_saida")
+  programadorId         String?   @map("programador_id")
+  operadorResponsavelId String?   @map("operador_responsavel_id")
+  quantidadeConcluida   Int       @default(0) @map("quantidade_concluida")
+  observacoes           String?
+  criadoEm              DateTime  @default(now()) @map("criado_em")
+  atualizadoEm          DateTime  @updatedAt @map("atualizado_em")
+
+  opLote              OPLote                @relation(fields: [opLoteId], references: [id])
+  lote                Lote                  @relation(fields: [loteId], references: [id])
+  etapa               Etapa                 @relation(fields: [etapaId], references: [id])
+  maquina             Maquina?              @relation(fields: [maquinaId], references: [id])
+  programador         Pessoa?               @relation("ProgramadorCarimbo", fields: [programadorId], references: [id])
+  operadorResponsavel Pessoa?               @relation("OperadorCarimbo", fields: [operadorResponsavelId], references: [id])
+  processamento       ProcessamentoMaquina?
+
+  @@map("carimbos")
+}
+
+// ============================================================
+// PROCESSAMENTO MAQUINA
+// ============================================================
+
+model ProcessamentoMaquina {
+  id            String              @id @default(uuid())
+  opLoteId      String              @map("op_lote_id")
+  maquinaId     String              @map("maquina_id")
+  carimboId     String              @unique @map("carimbo_id")
+  programadorId String              @map("programador_id")
+  operadorId    String              @map("operador_id")
+  inicio        DateTime            @default(now())
+  fim           DateTime?
+  status        StatusProcessamento @default(rodando)
+  criadoEm      DateTime            @default(now()) @map("criado_em")
+  atualizadoEm  DateTime            @updatedAt @map("atualizado_em")
+
+  opLote      OPLote  @relation(fields: [opLoteId], references: [id])
+  maquina     Maquina @relation(fields: [maquinaId], references: [id])
+  carimbo     Carimbo @relation(fields: [carimboId], references: [id])
+  programador Pessoa  @relation("ProgramadorProcessamento", fields: [programadorId], references: [id])
+  operador    Pessoa  @relation("OperadorProcessamento", fields: [operadorId], references: [id])
+
+  @@map("processamentos_maquina")
+}
+
+// ============================================================
+// APONTAMENTO TURNO
+// ============================================================
+
+model ApontamentoTurno {
+  id           String   @id @default(uuid())
+  operadorId   String   @map("operador_id")
+  data         DateTime @db.Date
+  producao     Json
+  observacoes  String?
+  criadoEm     DateTime @default(now()) @map("criado_em")
+  atualizadoEm DateTime @updatedAt @map("atualizado_em")
+
+  operador Pessoa @relation(fields: [operadorId], references: [id])
+
+  @@unique([operadorId, data])
+  @@map("apontamentos_turno")
+}
+
+// ============================================================
+// INSPECAO OP
+// ============================================================
+
+model InspecaoOP {
+  id                 String             @id @default(uuid())
+  opLoteId           String             @map("op_lote_id")
+  tipo               TipoInspecao
+  inspetorId         String?            @map("inspetor_id")
+  resultado          ResultadoInspecao?
+  fotoBucket         String?            @map("foto_bucket")
+  fotoKey            String?            @map("foto_key")
+  observacoesGerais  String?            @map("observacoes_gerais")
+  timestampIniciada  DateTime?          @map("timestamp_iniciada")
+  timestampConcluida DateTime?          @map("timestamp_concluida")
+  criadoEm           DateTime           @default(now()) @map("criado_em")
+  atualizadoEm       DateTime           @updatedAt @map("atualizado_em")
+
+  opLote   OPLote            @relation(fields: [opLoteId], references: [id])
+  inspetor Pessoa?           @relation(fields: [inspetorId], references: [id])
+  medicoes MedicaoInspecao[]
+
+  @@map("inspecoes_op")
+}
+
+// ============================================================
+// MEDICAO INSPECAO
+// ============================================================
+
+model MedicaoInspecao {
+  id                     String   @id @default(uuid())
+  inspecaoOpId           String   @map("inspecao_op_id")
+  cotaInspecaoId         String   @map("cota_inspecao_id")
+  numeroPecaInspecionada Int      @map("numero_peca_inspecionada")
+  valorMedido            Float    @map("valor_medido")
+  dentroTolerancia       Boolean  @map("dentro_tolerancia")
+  inspetorId             String   @map("inspetor_id")
+  observacoes            String?
+  timestamp              DateTime @default(now())
+
+  inspecaoOp   InspecaoOP   @relation(fields: [inspecaoOpId], references: [id], onDelete: Cascade)
+  cotaInspecao CotaInspecao @relation(fields: [cotaInspecaoId], references: [id])
+  inspetor     Pessoa       @relation(fields: [inspetorId], references: [id])
+
+  @@map("medicoes_inspecao")
+}
+
+// ============================================================
+// CONTROLE VOLUME
+// ============================================================
+
+model ControleVolume {
+  id                 String    @id @default(uuid())
+  loteId             String    @map("lote_id")
+  numeroPeca         Int       @map("numero_peca")
+  data               DateTime  @db.Date
+  volumeSolicitado   Float     @map("volume_solicitado")
+  volumeEncontrado   Float     @map("volume_encontrado")
+  correcaoNecessaria Float     @map("correcao_necessaria")
+  temperatura        Float?
+  horarioEntrada     DateTime  @map("horario_entrada")
+  horarioSaida       DateTime? @map("horario_saida")
+  responsavelId      String    @map("responsavel_id")
+  observacoes        String?
+  criadoEm           DateTime  @default(now()) @map("criado_em")
+  atualizadoEm       DateTime  @updatedAt @map("atualizado_em")
+
+  lote        Lote   @relation(fields: [loteId], references: [id])
+  responsavel Pessoa @relation(fields: [responsavelId], references: [id])
+
+  @@map("controles_volume")
+}
+
+// ============================================================
+// EVENTO OS
+// ============================================================
+
+model EventoOS {
+  id               String       @id @default(uuid())
+  osId             String       @map("os_id")
+  loteId           String?      @map("lote_id")
+  tipo             TipoEventoOS
+  autorId          String?      @map("autor_id")
+  payload          Json?
+  visivelDashboard Boolean      @default(true) @map("visivel_dashboard")
+  timestamp        DateTime     @default(now())
+
+  os    OS      @relation(fields: [osId], references: [id], onDelete: Cascade)
+  lote  Lote?   @relation(fields: [loteId], references: [id])
+  autor Pessoa? @relation(fields: [autorId], references: [id])
+
+  @@index([osId, timestamp])
+  @@map("eventos_os")
+}
+
+// ============================================================
+// ALERTAS
+// ============================================================
+
+model Alerta {
+  id             String           @id @default(uuid())
+  tipo           TipoAlerta
+  severidade     SeveridadeAlerta
+  entidadeTipo   String           @map("entidade_tipo")
+  entidadeId     String           @map("entidade_id")
+  destinatarioId String           @map("destinatario_id")
+  canal          CanalAlerta
+  mensagem       String
+  enviadoEm      DateTime?        @map("enviado_em")
+  visualizadoEm  DateTime?        @map("visualizado_em")
+  criadoEm       DateTime         @default(now()) @map("criado_em")
+
+  destinatario Pessoa @relation(fields: [destinatarioId], references: [id])
+
+  @@map("alertas")
+}

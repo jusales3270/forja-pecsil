@@ -1,0 +1,87 @@
+name: CI
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+
+jobs:
+  build-and-test:
+    name: Build & Test
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: forja
+          POSTGRES_PASSWORD: forja_dev_2026
+          POSTGRES_DB: forja_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: 9
+
+      - name: Get pnpm store directory
+        shell: bash
+        run: echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+
+      - name: Cache pnpm store
+        uses: actions/cache@v4
+        with:
+          path: ${{ env.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Generate Prisma Client
+        working-directory: backend
+        run: pnpm prisma generate
+
+      - name: Apply migrations (test DB)
+        working-directory: backend
+        env:
+          DATABASE_URL: postgresql://forja:forja_dev_2026@localhost:5432/forja_test
+        run: pnpm prisma migrate deploy || pnpm prisma db push
+
+      - name: Build shared
+        working-directory: shared
+        run: pnpm build
+
+      - name: Build backend
+        working-directory: backend
+        run: pnpm build
+
+      - name: Build frontend
+        working-directory: frontend
+        run: pnpm build
+
+      - name: Run backend tests
+        working-directory: backend
+        env:
+          DATABASE_URL: postgresql://forja:forja_dev_2026@localhost:5432/forja_test
+          JWT_SECRET: forja_test_secret_xxxxxxxx
+          NODE_ENV: test
+        run: pnpm test --if-present

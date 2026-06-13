@@ -1,0 +1,139 @@
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { LoginPage } from './pages/LoginPage';
+import { HomePage } from './pages/HomePage';
+import { TiposServicoPage } from './pages/TiposServicoPage';
+import { ToleranciasPage } from './pages/ToleranciasPage';
+import { ArtigosListPage } from './pages/Artigos/ArtigosListPage';
+import { ArtigoEditPage } from './pages/Artigos/ArtigoEditPage';
+import { OSListPage } from './pages/OS/OSListPage';
+import { OSDetailPage } from './pages/OS/OSDetailPage';
+import { SelecionarEstacaoPage } from './pages/Totem/SelecionarEstacaoPage';
+import { TotemEstacaoPage } from './pages/Totem/TotemEstacaoPage';
+import { useAuth } from './lib/auth-store';
+import { ToastContainer } from './components/Toast';
+import { RoleRoute } from './components/RoleRoute';
+import { rotaInicialPorPapel, type Papel } from './lib/permissions';
+
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      retry: 1,
+      refetchOnWindowFocus: false,
+    },
+  },
+});
+
+function ProtectedRoute({ children }: { children: React.ReactNode }) {
+  const isAuthenticated = useAuth((s) => s.isAuthenticated);
+  if (!isAuthenticated) return <Navigate to="/login" replace />;
+  return <>{children}</>;
+}
+
+function PublicRoute({ children }: { children: React.ReactNode }) {
+  const isAuthenticated = useAuth((s) => s.isAuthenticated);
+  if (isAuthenticated) return <Navigate to="/" replace />;
+  return <>{children}</>;
+}
+
+function HomeRedirect() {
+  const pessoa = useAuth((s) => s.pessoa);
+  const papel = pessoa?.papel as Papel | undefined;
+  const rota = rotaInicialPorPapel(papel);
+  if (rota !== '/') return <Navigate to={rota} replace />;
+  return <HomePage />;
+}
+
+export function App() {
+
+  return (
+    <QueryClientProvider client={queryClient}>
+      <BrowserRouter>
+        <Routes>
+          <Route
+            path="/login"
+            element={
+              <PublicRoute>
+                <LoginPage />
+              </PublicRoute>
+            }
+          />
+          <Route
+            path="/"
+            element={
+              <ProtectedRoute>
+                <HomeRedirect />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/tipos-servico"
+            element={
+              <RoleRoute requireCapability="cadastros_tipos_servico">
+                <TiposServicoPage />
+              </RoleRoute>
+            }
+          />
+          <Route
+            path="/tolerancias"
+            element={
+              <RoleRoute requireCapability="cadastros_tolerancias">
+                <ToleranciasPage />
+              </RoleRoute>
+            }
+          />
+          <Route
+            path="/artigos"
+            element={
+              <RoleRoute requireCapability="cadastros_artigos">
+                <ArtigosListPage />
+              </RoleRoute>
+            }
+          />
+          <Route
+            path="/artigos/:id"
+            element={
+              <RoleRoute requireCapability="cadastros_artigos">
+                <ArtigoEditPage />
+              </RoleRoute>
+            }
+          />
+          <Route
+            path="/os"
+            element={
+              <RoleRoute requireCapability="os_listar">
+                <OSListPage />
+              </RoleRoute>
+            }
+          />
+          <Route
+            path="/os/:id"
+            element={
+              <RoleRoute requireCapability="os_listar">
+                <OSDetailPage />
+              </RoleRoute>
+            }
+          />
+          <Route
+            path="/totem"
+            element={
+              <RoleRoute requireCapability="totem_acessar">
+                <SelecionarEstacaoPage />
+              </RoleRoute>
+            }
+          />
+          <Route
+            path="/totem/:etapaId"
+            element={
+              <RoleRoute requireCapability="totem_acessar">
+                <TotemEstacaoPage />
+              </RoleRoute>
+            }
+          />
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      </BrowserRouter>
+      <ToastContainer />
+    </QueryClientProvider>
+  );
+}
