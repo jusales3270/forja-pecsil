@@ -38,7 +38,7 @@ export function OSListPage() {
   const [criando, setCriando] = useState(false);
 
   const { data: clientesData } = useClientes();
-  const clientes = clientesData?.data ?? [];
+  const clientes = clientesData ?? [];
 
   const { data: osData, isLoading, isError } = useOSList({
     clienteId: clienteFiltro || undefined,

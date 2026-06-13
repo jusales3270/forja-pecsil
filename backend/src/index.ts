@@ -2,6 +2,7 @@ import Fastify from 'fastify';
 import cors from '@fastify/cors';
 import multipart from '@fastify/multipart';
 import { env } from './lib/env.js';
+import { ZodError } from 'zod';
 import { registerAuth } from './lib/auth.js';
 import { decorateSocketPlaceholder, attachSocketIO } from './lib/socket.js';
 import { authRoutes } from './routes/auth.js';
@@ -54,6 +55,23 @@ async function bootstrap() {
 
   // JWT
   await registerAuth(app);
+
+  // Error handler global: ZodError -> 400 (input invalido)
+  app.setErrorHandler((error, _request, reply) => {
+    if (error instanceof ZodError) {
+      return reply.code(400).send({
+        error: 'invalid_input',
+        message: 'Dados invalidos',
+        details: error.flatten(),
+      });
+    }
+    app.log.error(error);
+    const status = (error as any).statusCode ?? 500;
+    return reply.code(status).send({
+      error: status === 500 ? 'internal_error' : 'error',
+      message: error.message ?? 'Erro interno',
+    });
+  });
 
   // Healthcheck
   app.get('/health', async () => ({

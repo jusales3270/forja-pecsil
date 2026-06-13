@@ -31,6 +31,7 @@ export interface Artigo {
   atualizadoEm: string;
   cliente?: { id: string; nome: string };
   criadoPor?: { id: string; nome: string };
+  _count?: { desenhos: number; operacoes: number };
 }
 
 export interface CriarArtigoInput {
