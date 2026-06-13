@@ -18,6 +18,7 @@ import { osRoutes } from './routes/os.js';
 import { opLoteRoutes } from './routes/op-lote.js';
 import { maquinasRoutes } from './routes/maquinas.js';
 import { pessoasRoutes } from './routes/pessoas.js';
+import { lotesFantasmasRoutes } from './routes/lotes-fantasmas.js';
 
 import { prisma } from './db/prisma.js';
 
@@ -74,6 +75,7 @@ async function bootstrap() {
   await app.register(opLoteRoutes, { prefix: '/api' });
   await app.register(maquinasRoutes, { prefix: '/api' });
   await app.register(pessoasRoutes, { prefix: '/api' });
+  await app.register(lotesFantasmasRoutes, { prefix: '/api' });
 
   try {
     await app.listen({ port: env.PORT, host: '0.0.0.0' });

@@ -10,6 +10,7 @@ import { OSListPage } from './pages/OS/OSListPage';
 import { OSDetailPage } from './pages/OS/OSDetailPage';
 import { SelecionarEstacaoPage } from './pages/Totem/SelecionarEstacaoPage';
 import { TotemEstacaoPage } from './pages/Totem/TotemEstacaoPage';
+import LotesFantasmasPage from './pages/LotesFantasmasPage';
 import { useAuth } from './lib/auth-store';
 import { ToastContainer } from './components/Toast';
 import { RoleRoute } from './components/RoleRoute';
@@ -127,6 +128,14 @@ export function App() {
             element={
               <RoleRoute requireCapability="totem_acessar">
                 <TotemEstacaoPage />
+              </RoleRoute>
+            }
+          />
+          <Route
+            path="/lotes-fantasmas"
+            element={
+              <RoleRoute requireCapability="fantasmas_ver">
+                <LotesFantasmasPage />
               </RoleRoute>
             }
           />

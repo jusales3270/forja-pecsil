@@ -82,6 +82,17 @@ export function HomePage() {
               </p>
             </button>
             )}
+            {pode('fantasmas_ver') && (
+            <button
+              onClick={() => navigate('/lotes-fantasmas')}
+              className="text-left p-4 rounded-lg border border-red-500/30 hover:border-red-500 bg-red-500/5 hover:bg-red-500/10 transition-colors"
+            >
+              <p className="font-medium text-red-100">👻 Lotes Fantasmas</p>
+              <p className="text-xs text-neutral-400 mt-1">
+                OPs sem movimentação, máquinas sem registro e turnos não fechados
+              </p>
+            </button>
+            )}
           </div>
         </div>
 
