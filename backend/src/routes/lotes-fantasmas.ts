@@ -13,7 +13,7 @@ const querySchema = z.object({
 
 export async function lotesFantasmasRoutes(app: FastifyInstance) {
   // GET /api/lotes-fantasmas?horas=4
-  app.get('/lotes-fantasmas', async (request) => {
+  app.get('/lotes-fantasmas', { onRequest: [app.authenticate] }, async (request) => {
     const { horas } = querySchema.parse(request.query);
     const limite = new Date(Date.now() - horas * 60 * 60 * 1000);
 
