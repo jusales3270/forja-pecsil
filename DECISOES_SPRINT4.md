@@ -30,3 +30,20 @@ entre elas? Ou é um programador tocando o lote do início ao fim no mesmo PC?
   /api/lotes-fantasmas?horas=0). Padronizar tratamento de erro de input.
 - Bug de `.data` duplicado: corrigido em NovaOSModal.tsx; provável que persista
   em OSListPage.tsx (mesmo erro de tipo apontado pelo tsc).
+
+## Achados de design — LEVAR À VALIDAÇÃO PRESENCIAL (descobertos 13/06 no teste)
+
+1. **"+1 peça" credita a peça a quem está LOGADO no tótem, não ao operador
+   designado no carimbo.** No teste, o Japonês (programador) iniciou a OP
+   escolhendo Douglas como operador, mas as 3 peças foram creditadas ao Japonês
+   (quem clicou). Origem: apontamento-peca.ts usa request.user.pessoaId.
+
+2. **Conferência de turno é por "quem registrou", não por "quem operou"** —
+   consequência direta do item 1.
+
+Para "controle interno de produtividade" (resposta do Ricardo, pendência #1),
+isso pode estar TROCADO: a produtividade ficaria no nome do programador, não do
+operador que produziu. Decisão de negócio, não bug. Confirmar na fábrica:
+quem deve "assinar" a peça — quem está no tótem ou o operador da máquina?
+Se for o operador, mudar o registro para receber operadorId explícito (vindo
+do carimbo em andamento) em vez do usuário logado.
