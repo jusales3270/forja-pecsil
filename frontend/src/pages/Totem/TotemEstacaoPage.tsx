@@ -104,15 +104,23 @@ export function TotemEstacaoPage() {
               Programador: <span className="text-forja-400">{pessoa?.nome}</span>
             </p>
           </div>
-          <button
-            onClick={() => {
-              logout();
-              navigate('/login');
-            }}
-            className="px-4 py-2 text-sm text-neutral-400 hover:text-neutral-200 border border-neutral-800 rounded-lg"
-          >
-            Sair
-          </button>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => navigate('/fim-de-turno')}
+              className="px-4 py-2 text-sm text-forja-400 hover:text-forja-300 border border-forja-500/30 hover:border-forja-500 rounded-lg"
+            >
+              Fim de turno
+            </button>
+            <button
+              onClick={() => {
+                logout();
+                navigate('/login');
+              }}
+              className="px-4 py-2 text-sm text-neutral-400 hover:text-neutral-200 border border-neutral-800 rounded-lg"
+            >
+              Sair
+            </button>
+          </div>
         </div>
 
         {/* Busca */}

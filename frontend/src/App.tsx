@@ -11,6 +11,7 @@ import { OSDetailPage } from './pages/OS/OSDetailPage';
 import { SelecionarEstacaoPage } from './pages/Totem/SelecionarEstacaoPage';
 import { TotemEstacaoPage } from './pages/Totem/TotemEstacaoPage';
 import LotesFantasmasPage from './pages/LotesFantasmasPage';
+import ConferenciaTurnoPage from './pages/ConferenciaTurnoPage';
 import { useAuth } from './lib/auth-store';
 import { ToastContainer } from './components/Toast';
 import { RoleRoute } from './components/RoleRoute';
@@ -128,6 +129,14 @@ export function App() {
             element={
               <RoleRoute requireCapability="totem_acessar">
                 <TotemEstacaoPage />
+              </RoleRoute>
+            }
+          />
+          <Route
+            path="/fim-de-turno"
+            element={
+              <RoleRoute requireCapability="totem_acessar">
+                <ConferenciaTurnoPage />
               </RoleRoute>
             }
           />
