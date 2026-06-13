@@ -14,6 +14,7 @@ import {
   corPrazoOS,
 } from '../../hooks/useOPLote';
 import { useEtapasList } from '../../hooks/useEtapas';
+import { useApontamentosPeca, useRegistrarPeca, useDesfazerPeca } from '../../hooks/useApontamentoPeca';
 import { useAuth } from '../../lib/auth-store';
 import { getSocket, joinEstacao, leaveEstacao } from '../../lib/socket';
 import { useQueryClient } from '@tanstack/react-query';
@@ -378,7 +379,11 @@ function CardEmAndamento({
         </div>
       )}
 
-      <div className="flex items-center justify-end">
+      {carimbo && podeOperar && (
+        <BotaoMaisUmaPeca opLoteId={op.id} maquinaId={carimbo.maquina.id} />
+      )}
+
+      <div className="flex items-center justify-end mt-3">
         {podeOperar && (
           <button
             onClick={onEncerrar}
@@ -391,3 +396,47 @@ function CardEmAndamento({
     </div>
   );
 }
+
+
+// ============================================================
+// Bloco A (Sprint 4) - Botao "+1 peca"
+// ============================================================
+function BotaoMaisUmaPeca({
+  opLoteId,
+  maquinaId,
+}: {
+  opLoteId: string;
+  maquinaId: string;
+}) {
+  const { data } = useApontamentosPeca(opLoteId);
+  const registrar = useRegistrarPeca();
+  const desfazer = useDesfazerPeca();
+  const total = data?.data.total ?? 0;
+  const ocupado = registrar.isPending || desfazer.isPending;
+
+  return (
+    <div className="mt-3 pt-3 border-t border-amber-500/20">
+      <div className="flex items-center justify-between mb-2">
+        <span className="text-xs text-neutral-500">Peças registradas</span>
+        <span className="text-2xl font-bold text-forja-400 tabular-nums">{total}</span>
+      </div>
+      <div className="flex items-center gap-2">
+        <button
+          onClick={() => registrar.mutate({ opLoteId, maquinaId })}
+          disabled={ocupado}
+          className="flex-1 px-4 py-3 bg-forja-600 hover:bg-forja-700 disabled:opacity-50 text-white text-lg font-bold rounded-lg transition"
+        >
+          + 1 peça
+        </button>
+        <button
+          onClick={() => desfazer.mutate({ opLoteId, maquinaId })}
+          disabled={ocupado || total === 0}
+          className="px-4 py-3 bg-neutral-700 hover:bg-neutral-600 disabled:opacity-30 text-neutral-200 text-sm rounded-lg transition"
+        >
+          Desfazer
+        </button>
+      </div>
+    </div>
+  );
+}
+

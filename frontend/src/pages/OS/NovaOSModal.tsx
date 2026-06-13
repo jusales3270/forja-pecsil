@@ -46,7 +46,7 @@ export function NovaOSModal({ onClose, onCreated }: NovaOSModalProps) {
   const { data: clientesData } = useClientes();
 
   const artigos = (artigosData ?? []).filter((a) => a.status === 'ativo');
-  const clientes = clientesData?.data ?? [];
+  const clientes = clientesData ?? [];
 
   // Filtro de busca
   const sugestoes = useMemo(() => {
