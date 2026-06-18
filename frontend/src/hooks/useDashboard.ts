@@ -29,6 +29,10 @@ export interface DashboardData {
   osAtrasadas: OSAtrasada[];
   kanban: KanbanEtapa[];
   inspecao: Record<string, number>;
+  fantasmas: {
+    opsParadas: { codigoOp: string; codigoGrv: string; etapa: string; horasParado: number }[];
+    turnosNaoFechados: { operador: string }[];
+  };
 }
 
 export function useDashboard() {

@@ -96,6 +96,43 @@ export default function DashboardPage() {
         )}
       </div>
 
+      {/* Lotes Fantasmas v2 */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+        <div className={d.fantasmas.opsParadas.length > 0 ? 'card border-amber-500/40 bg-amber-500/5' : 'card'}>
+          <div className="flex items-center justify-between mb-2">
+            <h2 className="text-sm font-semibold text-neutral-100">OPs paradas (4h+)</h2>
+            <span className="badge bg-amber-500/15 text-amber-400 border-amber-500/30">{d.fantasmas.opsParadas.length}</span>
+          </div>
+          {d.fantasmas.opsParadas.length === 0 ? (
+            <p className="text-xs text-neutral-500">Nenhuma OP parada.</p>
+          ) : (
+            <div className="space-y-1 text-xs">
+              {d.fantasmas.opsParadas.map((op, i) => (
+                <div key={i} className="flex justify-between border-b border-neutral-800 py-1">
+                  <span className="text-neutral-300">{op.codigoGrv} · {op.codigoOp} ({op.etapa})</span>
+                  <span className="text-amber-400 font-semibold">{op.horasParado}h</span>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+        <div className={d.fantasmas.turnosNaoFechados.length > 0 ? 'card border-blue-500/40 bg-blue-500/5' : 'card'}>
+          <div className="flex items-center justify-between mb-2">
+            <h2 className="text-sm font-semibold text-neutral-100">Turnos não fechados (ontem)</h2>
+            <span className="badge bg-blue-500/15 text-blue-400 border-blue-500/30">{d.fantasmas.turnosNaoFechados.length}</span>
+          </div>
+          {d.fantasmas.turnosNaoFechados.length === 0 ? (
+            <p className="text-xs text-neutral-500">Todos fecharam.</p>
+          ) : (
+            <div className="space-y-1 text-xs text-neutral-300">
+              {d.fantasmas.turnosNaoFechados.map((t, i) => (
+                <div key={i} className="border-b border-neutral-800 py-1">{t.operador}</div>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
+
       {/* Kanban: OPs por etapa */}
       <div>
         <h2 className="text-lg font-semibold text-neutral-100 mb-3">Produção por etapa</h2>
