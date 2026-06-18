@@ -15,6 +15,8 @@ import {
 } from '../../hooks/useOPLote';
 import { useEtapasList } from '../../hooks/useEtapas';
 import { useApontamentosPeca, useRegistrarPeca, useDesfazerPeca } from '../../hooks/useApontamentoPeca';
+import { useAbrirInspecao } from '../../hooks/useInspecao';
+import { temCapacidade, type Papel } from '../../lib/permissions';
 import { useAuth } from '../../lib/auth-store';
 import { getSocket, joinEstacao, leaveEstacao } from '../../lib/socket';
 import { useQueryClient } from '@tanstack/react-query';
@@ -391,7 +393,8 @@ function CardEmAndamento({
         <BotaoMaisUmaPeca opLoteId={op.id} maquinaId={carimbo.maquina.id} />
       )}
 
-      <div className="flex items-center justify-end mt-3">
+      <div className="flex items-center justify-end gap-2 mt-3">
+        <BotaoInspecionar opLoteId={op.id} />
         {podeOperar && (
           <button
             onClick={onEncerrar}
@@ -448,3 +451,31 @@ function BotaoMaisUmaPeca({
   );
 }
 
+
+
+// ============================================================
+// Sprint 5 - Botao Inspecionar (visivel so pra quem inspeciona)
+// ============================================================
+function BotaoInspecionar({ opLoteId }: { opLoteId: string }) {
+  const navigate = useNavigate();
+  const pessoa = useAuth((s) => s.pessoa);
+  const papel = pessoa?.papel as Papel | undefined;
+  const abrir = useAbrirInspecao();
+
+  if (!temCapacidade(papel, 'inspecao_realizar')) return null;
+
+  async function handleInspecionar() {
+    const res = await abrir.mutateAsync({ opLoteId, tipo: 'amostragem' });
+    navigate(`/inspecao/${res.data.id}`);
+  }
+
+  return (
+    <button
+      onClick={handleInspecionar}
+      disabled={abrir.isPending}
+      className="px-4 py-2 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white text-sm font-medium rounded-lg transition"
+    >
+      {abrir.isPending ? 'Abrindo...' : 'Inspecionar'}
+    </button>
+  );
+}

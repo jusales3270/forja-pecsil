@@ -12,6 +12,7 @@ import { SelecionarEstacaoPage } from './pages/Totem/SelecionarEstacaoPage';
 import { TotemEstacaoPage } from './pages/Totem/TotemEstacaoPage';
 import LotesFantasmasPage from './pages/LotesFantasmasPage';
 import ConferenciaTurnoPage from './pages/ConferenciaTurnoPage';
+import InspecaoPage from './pages/InspecaoPage';
 import { useAuth } from './lib/auth-store';
 import { ToastContainer } from './components/Toast';
 import { RoleRoute } from './components/RoleRoute';
@@ -129,6 +130,14 @@ export function App() {
             element={
               <RoleRoute requireCapability="totem_acessar">
                 <TotemEstacaoPage />
+              </RoleRoute>
+            }
+          />
+          <Route
+            path="/inspecao/:id"
+            element={
+              <RoleRoute requireCapability="inspecao_realizar">
+                <InspecaoPage />
               </RoleRoute>
             }
           />
