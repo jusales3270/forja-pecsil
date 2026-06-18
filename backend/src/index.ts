@@ -24,6 +24,7 @@ import { apontamentoPecaRoutes } from './routes/apontamento-peca.js';
 import { conferenciaTurnoRoutes } from './routes/conferencia-turno.js';
 import { inspecaoRoutes } from './routes/inspecoes.js';
 import { controleVolumeRoutes } from './routes/controle-volume.js';
+import { dashboardRoutes } from './routes/dashboard.js';
 
 import { prisma } from './db/prisma.js';
 
@@ -102,6 +103,7 @@ async function bootstrap() {
   await app.register(conferenciaTurnoRoutes, { prefix: '/api' });
   await app.register(inspecaoRoutes, { prefix: '/api' });
   await app.register(controleVolumeRoutes, { prefix: '/api' });
+  await app.register(dashboardRoutes, { prefix: '/api' });
 
   try {
     await app.listen({ port: env.PORT, host: '0.0.0.0' });
