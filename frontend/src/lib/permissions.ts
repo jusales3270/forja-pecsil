@@ -44,7 +44,9 @@ export type Capacidade =
   // Admin
   | 'admin_configurar_sistema'
   // Lotes Fantasmas (Sprint 4 - Bloco D)
-  | 'fantasmas_ver';
+  | 'fantasmas_ver'
+  // Dashboard do chefe (Sprint 6)
+  | 'dashboard_ver';
 
 const MAPA: Record<Papel, Capacidade[]> = {
   admin: [
@@ -65,6 +67,7 @@ const MAPA: Record<Papel, Capacidade[]> = {
     'embalagem_confirmar',
     'admin_configurar_sistema',
     'fantasmas_ver',
+    'dashboard_ver',
   ],
 
   chefe: [
@@ -79,6 +82,7 @@ const MAPA: Record<Papel, Capacidade[]> = {
     'os_cancelar',
     'totem_acessar',
     'fantasmas_ver',
+    'dashboard_ver',
   ],
 
   pcp: [
@@ -95,6 +99,7 @@ const MAPA: Record<Papel, Capacidade[]> = {
     'totem_iniciar_op',
     'totem_encerrar_op',
     'fantasmas_ver',
+    'dashboard_ver',
   ],
 
   engenharia: [

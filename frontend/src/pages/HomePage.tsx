@@ -82,6 +82,17 @@ export function HomePage() {
               </p>
             </button>
             )}
+            {pode('dashboard_ver') && (
+            <button
+              onClick={() => navigate('/dashboard')}
+              className="text-left p-4 rounded-lg border border-forja-500/30 hover:border-forja-500 bg-forja-500/5 hover:bg-forja-500/10 transition-colors"
+            >
+              <p className="font-medium text-forja-50">Painel de Produção</p>
+              <p className="text-xs text-neutral-400 mt-1">
+                Visão macro: OS por status, atrasadas, produção por etapa, inspeção
+              </p>
+            </button>
+            )}
             {pode('fantasmas_ver') && (
             <button
               onClick={() => navigate('/lotes-fantasmas')}
