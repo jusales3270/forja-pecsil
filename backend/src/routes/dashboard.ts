@@ -13,12 +13,25 @@ export async function dashboardRoutes(app: FastifyInstance) {
     const agora = new Date();
 
     // OS por status
-    const osPorStatusRaw = await prisma.oS.groupBy({
-      by: ['status'],
-      _count: { _all: true },
+    const todasOS = await prisma.oS.findMany({
+      select: {
+        id: true,
+        codigoGrv: true,
+        prazoEntrega: true,
+        prioridade: true,
+        status: true,
+        quantidadeTotal: true,
+        cliente: { select: { nome: true } },
+        artigo: { select: { codigo: true, descricao: true } },
+      },
+      orderBy: { prazoEntrega: 'asc' },
     });
     const osPorStatus: Record<string, number> = {};
-    for (const r of osPorStatusRaw) osPorStatus[r.status] = r._count._all;
+    const osPorStatusLista: Record<string, typeof todasOS> = {};
+    for (const os of todasOS) {
+      osPorStatus[os.status] = (osPorStatus[os.status] ?? 0) + 1;
+      (osPorStatusLista[os.status] ??= []).push(os);
+    }
 
     // OS atrasadas: prazo vencido e nao finalizada/cancelada
     const osAtrasadas = await prisma.oS.findMany({
@@ -164,6 +177,7 @@ export async function dashboardRoutes(app: FastifyInstance) {
       data: {
         geradoEm: agora,
         osPorStatus,
+        osPorStatusLista,
         osAtrasadas,
         kanban,
         inspecao,

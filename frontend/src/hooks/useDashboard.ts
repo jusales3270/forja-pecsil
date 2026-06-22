@@ -26,6 +26,9 @@ export interface KanbanCard {
   prioridade: string;
   diasAtePrazo: number;
   semaforo: 'verde' | 'amarelo' | 'vermelho';
+  operador: string | null;
+  programador: string | null;
+  maquina: string | null;
 }
 
 export interface KanbanEtapa {
@@ -36,9 +39,21 @@ export interface KanbanEtapa {
   cards: KanbanCard[];
 }
 
+export interface OSResumo {
+  id: string;
+  codigoGrv: string;
+  prazoEntrega: string;
+  prioridade: string;
+  status: string;
+  quantidadeTotal: number;
+  cliente: { nome: string };
+  artigo: { codigo: string; descricao: string };
+}
+
 export interface DashboardData {
   geradoEm: string;
   osPorStatus: Record<string, number>;
+  osPorStatusLista: Record<string, OSResumo[]>;
   osAtrasadas: OSAtrasada[];
   kanban: KanbanEtapa[];
   inspecao: Record<string, number>;

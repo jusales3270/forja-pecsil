@@ -2,8 +2,9 @@
 // Forja - Dashboard do Chefe (Sprint 6) - visao TV
 // ============================================================
 
+import { useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useDashboard } from '../hooks/useDashboard';
+import { useDashboard, type KanbanCard } from '../hooks/useDashboard';
 
 const LABELS_STATUS_OS: Record<string, string> = {
   aberta: 'Abertas',
@@ -25,16 +26,41 @@ function diasAtraso(prazo: string): number {
   return Math.floor((Date.now() - new Date(prazo).getTime()) / 86_400_000);
 }
 
+function corSemaforo(s: string): string {
+  if (s === 'vermelho') return '#E24B4A';
+  if (s === 'amarelo') return '#EF9F27';
+  return '#1D9E75';
+}
+
+function textoPrazo(c: KanbanCard): string {
+  if (c.diasAtePrazo < 0) return Math.abs(c.diasAtePrazo) + 'd atraso';
+  return c.diasAtePrazo + 'd';
+}
+
+function cardBate(c: KanbanCard, termo: string, etapaNome: string): boolean {
+  if (!termo) return true;
+  const t = termo.toLowerCase();
+  if ((t === 'atrasada' || t === 'atrasadas' || t === 'atrasado' || t === 'atrasados') && c.diasAtePrazo < 0) return true;
+  if ((t === 'urgente' || t === 'urgentes') && c.prioridade === 'urgente') return true;
+  const campos = [c.codigoGrv, c.codigoOp, c.cliente, c.artigo, c.status, c.operador || '', c.programador || '', c.maquina || '', etapaNome].join(' ').toLowerCase();
+  return campos.includes(t);
+}
+
 export default function DashboardPage() {
   const navigate = useNavigate();
   const { data, isLoading, isError } = useDashboard();
+  const [busca, setBusca] = useState('');
+  const [modal, setModal] = useState<{ titulo: string; tipo: 'lista' | 'os'; itens?: any[]; os?: any } | null>(null);
+  const kanbanFiltrado = useMemo(() => {
+    if (!data) return [];
+    return data.data.kanban.map((et) => ({ ...et, cards: et.cards.filter((c) => cardBate(c, busca.trim(), et.nome)) }));
+  }, [data, busca]);
 
   if (isLoading) return <div className="p-6 text-neutral-400">Carregando...</div>;
   if (isError || !data) return <div className="p-6 error-message">Erro ao carregar o dashboard.</div>;
 
   const d = data.data;
   const totalAtrasadas = d.osAtrasadas.length;
-  const etapasComCard = d.kanban.filter((et) => et.total > 0);
 
   return (
     <div className="max-w-6xl mx-auto p-6 space-y-6">
@@ -53,58 +79,31 @@ export default function DashboardPage() {
         </button>
       </div>
 
+      <div>
+        <input
+          type="text"
+          value={busca}
+          onChange={(e) => setBusca(e.target.value)}
+          placeholder="Buscar: cliente, OS, etapa, operador, atrasadas..."
+          className="input w-full"
+        />
+        {busca.trim() && (
+          <button className="text-xs text-forja-400 hover:underline mt-1" onClick={() => setBusca('')}>limpar busca</button>
+        )}
+      </div>
+
       {/* Cards de status de OS */}
       <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
         {Object.entries(LABELS_STATUS_OS).map(([k, label]) => (
-          <div key={k} className="card text-center">
+          <button
+            key={k}
+            onClick={() => setModal({ titulo: label, tipo: 'lista', itens: d.osPorStatusLista[k] ?? [] })}
+            className="card text-center hover:border-forja-500/50 transition-colors cursor-pointer"
+          >
             <div className="text-3xl font-bold text-neutral-100">{d.osPorStatus[k] ?? 0}</div>
             <div className="text-xs text-neutral-500 mt-1">{label}</div>
-          </div>
+          </button>
         ))}
-      </div>
-
-      {/* OS atrasadas em destaque */}
-      <div className={totalAtrasadas > 0 ? 'card border-red-500/40 bg-red-500/5' : 'card'}>
-        <div className="flex items-center justify-between mb-3">
-          <h2 className="text-lg font-semibold text-neutral-100">OS atrasadas</h2>
-          <span className={totalAtrasadas > 0 ? 'badge bg-red-500/15 text-red-400 border-red-500/30' : 'badge'}>
-            {totalAtrasadas}
-          </span>
-        </div>
-        {totalAtrasadas === 0 ? (
-          <p className="text-sm text-neutral-500">Nenhuma OS atrasada.</p>
-        ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm">
-              <thead className="text-neutral-400 text-left">
-                <tr>
-                  <th className="py-2 pr-4">OS</th>
-                  <th className="py-2 pr-4">Cliente / Artigo</th>
-                  <th className="py-2 pr-4">Prazo</th>
-                  <th className="py-2 pr-4">Atraso</th>
-                  <th className="py-2 pr-4">Prioridade</th>
-                </tr>
-              </thead>
-              <tbody className="text-neutral-200">
-                {d.osAtrasadas.map((os) => (
-                  <tr key={os.id} className="border-t border-neutral-800">
-                    <td className="py-2 pr-4 font-mono">{os.codigoGrv}</td>
-                    <td className="py-2 pr-4">{os.cliente.nome} · {os.artigo.codigo}</td>
-                    <td className="py-2 pr-4">{new Date(os.prazoEntrega).toLocaleDateString('pt-BR')}</td>
-                    <td className="py-2 pr-4 text-red-400 font-semibold">{diasAtraso(os.prazoEntrega)}d</td>
-                    <td className="py-2 pr-4">
-                      {os.prioridade === 'urgente' ? (
-                        <span className="text-red-400">urgente</span>
-                      ) : (
-                        <span className="text-neutral-400">normal</span>
-                      )}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        )}
       </div>
 
       {/* Lotes Fantasmas v2 */}
@@ -147,11 +146,11 @@ export default function DashboardPage() {
       {/* Kanban: mapa de lotes por etapa */}
       <div>
         <h2 className="text-lg font-semibold text-neutral-100 mb-3">Onde está cada lote</h2>
-        {etapasComCard.length === 0 ? (
+        {kanbanFiltrado.every((et) => et.cards.length === 0) ? (
           <div className="card"><p className="text-sm text-neutral-500">Nenhum lote em produção.</p></div>
         ) : (
           <div className="flex gap-3 overflow-x-auto pb-2">
-            {etapasComCard.map((et) => (
+            {kanbanFiltrado.map((et) => (
               <div key={et.etapaId} className="min-w-[260px] w-[260px] flex-shrink-0">
                 <div className="flex items-center justify-between mb-2 px-1">
                   <span className="font-medium text-neutral-100">{et.nome}</span>
@@ -161,8 +160,9 @@ export default function DashboardPage() {
                   {et.cards.map((c) => (
                     <div
                       key={c.opLoteId}
+                      onClick={() => setModal({ titulo: c.codigoGrv, tipo: 'os', os: c })}
                       className={
-                        'rounded-lg border-l-4 bg-neutral-800/40 p-3 ' +
+                        'rounded-lg border-l-4 bg-neutral-800/40 p-3 cursor-pointer hover:bg-neutral-800/70 ' +
                         (c.semaforo === 'vermelho'
                           ? 'border-red-500'
                           : c.semaforo === 'amarelo'
@@ -218,6 +218,99 @@ export default function DashboardPage() {
           </div>
         </div>
       </div>
+
+      {modal && (
+        <div
+          className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4"
+          onClick={() => setModal(null)}
+        >
+          <div
+            className="bg-neutral-900 border border-neutral-700 rounded-xl max-w-2xl w-full max-h-[80vh] overflow-y-auto p-5"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-lg font-semibold text-neutral-100">{modal.titulo}</h2>
+              <button onClick={() => setModal(null)} className="text-neutral-500 hover:text-neutral-200 text-xl leading-none">x</button>
+            </div>
+
+            {modal.tipo === 'lista' && (
+              modal.itens && modal.itens.length > 0 ? (
+                <table className="w-full text-sm">
+                  <thead className="text-neutral-400 text-left">
+                    <tr>
+                      <th className="py-1 pr-3">OS</th>
+                      <th className="py-1 pr-3">Cliente</th>
+                      <th className="py-1 pr-3">Artigo</th>
+                      <th className="py-1 pr-3">Qtd</th>
+                      <th className="py-1 pr-3">Prazo</th>
+                    </tr>
+                  </thead>
+                  <tbody className="text-neutral-200">
+                    {modal.itens.map((os) => (
+                      <tr key={os.id} className="border-t border-neutral-800">
+                        <td className="py-1.5 pr-3 font-mono">{os.codigoGrv}</td>
+                        <td className="py-1.5 pr-3">{os.cliente.nome}</td>
+                        <td className="py-1.5 pr-3">{os.artigo.codigo}</td>
+                        <td className="py-1.5 pr-3">{os.quantidadeTotal}</td>
+                        <td className="py-1.5 pr-3">{new Date(os.prazoEntrega).toLocaleDateString('pt-BR')}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              ) : (
+                <p className="text-sm text-neutral-500">Nenhuma OS neste status.</p>
+              )
+            )}
+
+            {modal.tipo === 'os' && modal.os && (
+              <div className="space-y-2 text-sm">
+                <div className="flex justify-between border-b border-neutral-800 pb-2">
+                  <span className="text-neutral-500">Cliente</span>
+                  <span className="text-neutral-200">{modal.os.cliente}</span>
+                </div>
+                <div className="flex justify-between border-b border-neutral-800 pb-2">
+                  <span className="text-neutral-500">Artigo</span>
+                  <span className="text-neutral-200">{modal.os.artigo}</span>
+                </div>
+                <div className="flex justify-between border-b border-neutral-800 pb-2">
+                  <span className="text-neutral-500">Lote</span>
+                  <span className="text-neutral-200">{modal.os.numeroLote}</span>
+                </div>
+                <div className="flex justify-between border-b border-neutral-800 pb-2">
+                  <span className="text-neutral-500">OP</span>
+                  <span className="text-neutral-200">{modal.os.codigoOp}</span>
+                </div>
+                <div className="flex justify-between border-b border-neutral-800 pb-2">
+                  <span className="text-neutral-500">Status</span>
+                  <span className="text-neutral-200">{modal.os.status}</span>
+                </div>
+                <div className="flex justify-between border-b border-neutral-800 pb-2">
+                  <span className="text-neutral-500">Prazo</span>
+                  <span className="text-neutral-200">{modal.os.diasAtePrazo < 0 ? Math.abs(modal.os.diasAtePrazo) + 'd atrasado' : modal.os.diasAtePrazo + 'd restantes'}</span>
+                </div>
+                {modal.os.operador && (
+                  <div className="flex justify-between border-b border-neutral-800 pb-2">
+                    <span className="text-neutral-500">Operador</span>
+                    <span className="text-neutral-200">{modal.os.operador}</span>
+                  </div>
+                )}
+                {modal.os.programador && (
+                  <div className="flex justify-between border-b border-neutral-800 pb-2">
+                    <span className="text-neutral-500">Programador</span>
+                    <span className="text-neutral-200">{modal.os.programador}</span>
+                  </div>
+                )}
+                {modal.os.maquina && (
+                  <div className="flex justify-between">
+                    <span className="text-neutral-500">Maquina</span>
+                    <span className="text-neutral-200">{modal.os.maquina}</span>
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 }
