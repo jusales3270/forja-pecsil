@@ -106,7 +106,7 @@ async function bootstrap() {
   await app.register(dashboardRoutes, { prefix: '/api' });
 
   try {
-    await app.listen({ port: env.PORT, host: '0.0.0.0' });
+    await app.listen({ port: env.PORT, host: 'localhost' });
 
     // Socket.IO acoplado ao mesmo servidor HTTP (atribuído em app.io)
     attachSocketIO(app, {

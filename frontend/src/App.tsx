@@ -137,7 +137,7 @@ export function App() {
           <Route
             path="/dashboard"
             element={
-              <RoleRoute requireCapability="dashboard_ver">
+              <RoleRoute requireCapability="dashboard_chefe">
                 <DashboardPage />
               </RoleRoute>
             }

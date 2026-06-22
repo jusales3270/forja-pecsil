@@ -2,6 +2,7 @@
 // Forja - Dashboard do Chefe (Sprint 6) - visao TV
 // ============================================================
 
+import { useNavigate } from 'react-router-dom';
 import { useDashboard } from '../hooks/useDashboard';
 
 const LABELS_STATUS_OS: Record<string, string> = {
@@ -25,6 +26,7 @@ function diasAtraso(prazo: string): number {
 }
 
 export default function DashboardPage() {
+  const navigate = useNavigate();
   const { data, isLoading, isError } = useDashboard();
 
   if (isLoading) return <div className="p-6 text-neutral-400">Carregando...</div>;
@@ -35,11 +37,19 @@ export default function DashboardPage() {
 
   return (
     <div className="max-w-6xl mx-auto p-6 space-y-6">
-      <div>
-        <h1 className="text-3xl font-bold text-neutral-100">Painel de Produção</h1>
-        <p className="text-sm text-neutral-500 mt-1">
-          Atualiza sozinho a cada 30s · {new Date(d.geradoEm).toLocaleTimeString('pt-BR')}
-        </p>
+      <div className="flex items-start justify-between">
+        <div>
+          <h1 className="text-3xl font-bold text-neutral-100">Painel de Produção</h1>
+          <p className="text-sm text-neutral-500 mt-1">
+            Atualiza sozinho a cada 30s · {new Date(d.geradoEm).toLocaleTimeString('pt-BR')}
+          </p>
+        </div>
+        <button
+          onClick={() => navigate('/')}
+          className="px-4 py-2 text-sm text-neutral-400 hover:text-neutral-200 border border-neutral-800 rounded-lg"
+        >
+          ← Voltar
+        </button>
       </div>
 
       {/* Cards de status de OS */}

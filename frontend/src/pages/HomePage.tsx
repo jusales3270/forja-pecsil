@@ -82,7 +82,7 @@ export function HomePage() {
               </p>
             </button>
             )}
-            {pode('dashboard_ver') && (
+            {pode('dashboard_chefe') && (
             <button
               onClick={() => navigate('/dashboard')}
               className="text-left p-4 rounded-lg border border-forja-500/30 hover:border-forja-500 bg-forja-500/5 hover:bg-forja-500/10 transition-colors"

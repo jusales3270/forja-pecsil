@@ -40,24 +40,62 @@ export async function dashboardRoutes(app: FastifyInstance) {
     });
 
     // OPs por etapa x status (Kanban)
-    const opsRaw = await prisma.oPLote.groupBy({
-      by: ['etapaId', 'status'],
-      _count: { _all: true },
+    // Kanban: lotes reais por etapa (cada OP vira um card), exceto concluidas
+    const etapas = await prisma.etapa.findMany({
+      select: { id: true, nome: true, ordemPadrao: true },
+      orderBy: { ordemPadrao: 'asc' },
     });
-    const etapas = await prisma.etapa.findMany({ select: { id: true, nome: true, ordemPadrao: true } });
-    const mapaEtapa = new Map(etapas.map((e) => [e.id, e]));
 
-    const opsPorEtapa: Record<string, { etapaId: string; nome: string; ordemPadrao: number; total: number; porStatus: Record<string, number> }> = {};
-    for (const r of opsRaw) {
-      const et = mapaEtapa.get(r.etapaId);
-      if (!et) continue;
-      if (!opsPorEtapa[r.etapaId]) {
-        opsPorEtapa[r.etapaId] = { etapaId: r.etapaId, nome: et.nome, ordemPadrao: et.ordemPadrao, total: 0, porStatus: {} };
-      }
-      opsPorEtapa[r.etapaId].porStatus[r.status] = r._count._all;
-      opsPorEtapa[r.etapaId].total += r._count._all;
-    }
-    const kanban = Object.values(opsPorEtapa).sort((a, b) => a.ordemPadrao - b.ordemPadrao);
+    const opsAtivas = await prisma.oPLote.findMany({
+      where: { status: { notIn: ['concluida'] } },
+      select: {
+        id: true,
+        codigoOp: true,
+        etapaId: true,
+        status: true,
+        criadoEm: true,
+        lote: {
+          select: {
+            numeroLote: true,
+            os: {
+              select: {
+                codigoGrv: true,
+                prazoEntrega: true,
+                prioridade: true,
+                cliente: { select: { nome: true } },
+                artigo: { select: { codigo: true } },
+              },
+            },
+          },
+        },
+      },
+      orderBy: { criadoEm: 'asc' },
+    });
+
+    const kanban = etapas.map((et) => {
+      const cards = opsAtivas
+        .filter((op) => op.etapaId === et.id)
+        .map((op) => {
+          const prazo = op.lote.os.prazoEntrega;
+          const diasAtePrazo = Math.ceil((new Date(prazo).getTime() - Date.now()) / 86_400_000);
+          let semaforo: 'verde' | 'amarelo' | 'vermelho' = 'verde';
+          if (diasAtePrazo < 0 || diasAtePrazo < 3) semaforo = 'vermelho';
+          else if (diasAtePrazo < 7) semaforo = 'amarelo';
+          return {
+            opLoteId: op.id,
+            codigoOp: op.codigoOp,
+            codigoGrv: op.lote.os.codigoGrv,
+            numeroLote: op.lote.numeroLote,
+            cliente: op.lote.os.cliente.nome,
+            artigo: op.lote.os.artigo.codigo,
+            status: op.status,
+            prioridade: op.lote.os.prioridade,
+            diasAtePrazo,
+            semaforo,
+          };
+        });
+      return { etapaId: et.id, nome: et.nome, ordemPadrao: et.ordemPadrao, total: cards.length, cards };
+    });
 
     // Resumo de inspecao (ultimas concluidas)
     const inspecaoRaw = await prisma.inspecaoOP.groupBy({
