@@ -34,6 +34,7 @@ export default function DashboardPage() {
 
   const d = data.data;
   const totalAtrasadas = d.osAtrasadas.length;
+  const etapasComCard = d.kanban.filter((et) => et.total > 0);
 
   return (
     <div className="max-w-6xl mx-auto p-6 space-y-6">
@@ -143,24 +144,53 @@ export default function DashboardPage() {
         </div>
       </div>
 
-      {/* Kanban: OPs por etapa */}
+      {/* Kanban: mapa de lotes por etapa */}
       <div>
-        <h2 className="text-lg font-semibold text-neutral-100 mb-3">Produção por etapa</h2>
-        {d.kanban.length === 0 ? (
-          <div className="card"><p className="text-sm text-neutral-500">Nenhuma OP em produção.</p></div>
+        <h2 className="text-lg font-semibold text-neutral-100 mb-3">Onde está cada lote</h2>
+        {etapasComCard.length === 0 ? (
+          <div className="card"><p className="text-sm text-neutral-500">Nenhum lote em produção.</p></div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-3">
-            {d.kanban.map((et) => (
-              <div key={et.etapaId} className="card">
-                <div className="flex items-center justify-between mb-2">
+          <div className="flex gap-3 overflow-x-auto pb-2">
+            {etapasComCard.map((et) => (
+              <div key={et.etapaId} className="min-w-[260px] w-[260px] flex-shrink-0">
+                <div className="flex items-center justify-between mb-2 px-1">
                   <span className="font-medium text-neutral-100">{et.nome}</span>
-                  <span className="text-2xl font-bold text-forja-400">{et.total}</span>
+                  <span className="badge bg-neutral-700/50 text-neutral-300">{et.total}</span>
                 </div>
-                <div className="space-y-1 text-xs">
-                  {Object.entries(et.porStatus).map(([s, n]) => (
-                    <div key={s} className="flex justify-between text-neutral-400">
-                      <span>{LABELS_STATUS_OP[s] ?? s}</span>
-                      <span className="text-neutral-200">{n}</span>
+                <div className="space-y-2">
+                  {et.cards.map((c) => (
+                    <div
+                      key={c.opLoteId}
+                      className={
+                        'rounded-lg border-l-4 bg-neutral-800/40 p-3 ' +
+                        (c.semaforo === 'vermelho'
+                          ? 'border-red-500'
+                          : c.semaforo === 'amarelo'
+                          ? 'border-amber-500'
+                          : 'border-emerald-500')
+                      }
+                    >
+                      <div className="flex items-center justify-between">
+                        <span className="font-mono font-semibold text-neutral-100">{c.codigoGrv}</span>
+                        {c.prioridade === 'urgente' && (
+                          <span className="text-[10px] uppercase text-red-400 font-bold">urgente</span>
+                        )}
+                      </div>
+                      <div className="text-sm text-neutral-300 mt-0.5">{c.cliente} · {c.artigo}</div>
+                      <div className="flex items-center justify-between mt-1 text-xs">
+                        <span className="text-neutral-500">OP {c.codigoOp} · Lote {c.numeroLote}</span>
+                        <span
+                          className={
+                            c.semaforo === 'vermelho'
+                              ? 'text-red-400 font-semibold'
+                              : c.semaforo === 'amarelo'
+                              ? 'text-amber-400'
+                              : 'text-emerald-400'
+                          }
+                        >
+                          {c.diasAtePrazo < 0 ? `${Math.abs(c.diasAtePrazo)}d atrasado` : `${c.diasAtePrazo}d`}
+                        </span>
+                      </div>
                     </div>
                   ))}
                 </div>

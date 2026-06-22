@@ -54,6 +54,16 @@ export async function dashboardRoutes(app: FastifyInstance) {
         etapaId: true,
         status: true,
         criadoEm: true,
+        carimbos: {
+          where: { timestampSaida: null },
+          orderBy: { timestampEntrada: 'desc' },
+          take: 1,
+          select: {
+            maquina: { select: { nome: true } },
+            operadorResponsavel: { select: { nome: true } },
+            programador: { select: { nome: true } },
+          },
+        },
         lote: {
           select: {
             numeroLote: true,
@@ -81,6 +91,7 @@ export async function dashboardRoutes(app: FastifyInstance) {
           let semaforo: 'verde' | 'amarelo' | 'vermelho' = 'verde';
           if (diasAtePrazo < 0 || diasAtePrazo < 3) semaforo = 'vermelho';
           else if (diasAtePrazo < 7) semaforo = 'amarelo';
+          const carimbo = op.carimbos[0];
           return {
             opLoteId: op.id,
             codigoOp: op.codigoOp,
@@ -92,6 +103,9 @@ export async function dashboardRoutes(app: FastifyInstance) {
             prioridade: op.lote.os.prioridade,
             diasAtePrazo,
             semaforo,
+            operador: carimbo?.operadorResponsavel?.nome ?? null,
+            programador: carimbo?.programador?.nome ?? null,
+            maquina: carimbo?.maquina?.nome ?? null,
           };
         });
       return { etapaId: et.id, nome: et.nome, ordemPadrao: et.ordemPadrao, total: cards.length, cards };

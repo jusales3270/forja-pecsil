@@ -15,12 +15,25 @@ export interface OSAtrasada {
   artigo: { codigo: string; descricao: string };
 }
 
+export interface KanbanCard {
+  opLoteId: string;
+  codigoOp: string;
+  codigoGrv: string;
+  numeroLote: number;
+  cliente: string;
+  artigo: string;
+  status: string;
+  prioridade: string;
+  diasAtePrazo: number;
+  semaforo: 'verde' | 'amarelo' | 'vermelho';
+}
+
 export interface KanbanEtapa {
   etapaId: string;
   nome: string;
   ordemPadrao: number;
   total: number;
-  porStatus: Record<string, number>;
+  cards: KanbanCard[];
 }
 
 export interface DashboardData {
