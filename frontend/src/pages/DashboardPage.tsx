@@ -5,6 +5,7 @@
 import { useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDashboard, type KanbanCard } from '../hooks/useDashboard';
+import { useTheme } from '../lib/theme-store';
 
 const LABELS_STATUS_OS: Record<string, string> = {
   aberta: 'Abertas',
@@ -33,7 +34,7 @@ export default function DashboardPage() {
   const navigate = useNavigate();
   const { data, isLoading, isError } = useDashboard();
   const [busca, setBusca] = useState('');
-  const [claro, setClaro] = useState(false);
+  const { claro, toggleTema } = useTheme();
   const [modal, setModal] = useState<{ titulo: string; tipo: 'lista' | 'os'; itens?: any[]; os?: any } | null>(null);
   const kanbanFiltrado = useMemo(() => {
     if (!data) return [];
@@ -97,7 +98,7 @@ export default function DashboardPage() {
         </div>
         <div className="flex gap-2">
           <button
-            onClick={() => setClaro((v) => !v)}
+            onClick={() => toggleTema()}
             className={`px-3 py-2 text-sm rounded-lg ${T.btn}`}
             title="Alternar tema"
           >

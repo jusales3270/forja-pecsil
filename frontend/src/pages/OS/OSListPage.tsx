@@ -4,6 +4,7 @@
 
 import { useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTheme } from '../../lib/theme-store';
 import {
   useOSList,
   LABELS_STATUS_OS,
@@ -32,6 +33,7 @@ function formatarMoeda(valor: string | number | null | undefined): string {
 
 export function OSListPage() {
   const navigate = useNavigate();
+  const { claro } = useTheme();
   const [busca, setBusca] = useState('');
   const [clienteFiltro, setClienteFiltro] = useState('');
   const [statusFiltro, setStatusFiltro] = useState('');
@@ -59,20 +61,67 @@ export function OSListPage() {
     }, 0);
   }, [filtradas]);
 
+  // Paleta por tema
+  const T = claro
+    ? {
+        bg: 'bg-slate-100',
+        texto: 'text-slate-900',
+        sub: 'text-slate-500',
+        voltarBtn: 'text-slate-500 hover:text-slate-900',
+        titulo: 'text-forja-600',
+        tituloSub: 'text-slate-500',
+        filtrosBg: 'bg-white border-slate-200',
+        filtroBg: 'bg-slate-50 border-slate-200 text-slate-900',
+        filtroLabel: 'text-slate-500',
+        resumoBg: 'bg-white border-slate-200',
+        resumoLabel: 'text-slate-500',
+        resumoValor: 'text-slate-900',
+        tabelaBg: 'bg-white border-slate-200',
+        tabelaHeader: 'bg-slate-50 text-slate-500',
+        tabelaDivide: 'divide-slate-200',
+        tabelaHover: 'hover:bg-slate-50',
+        tabelaTexto: 'text-slate-800',
+        tabelaSub: 'text-slate-500',
+        monoTexto: 'text-slate-900',
+        forjaTexto: 'text-forja-600',
+      }
+    : {
+        bg: 'bg-neutral-950',
+        texto: 'text-neutral-100',
+        sub: 'text-neutral-500',
+        voltarBtn: 'text-neutral-400 hover:text-neutral-100',
+        titulo: 'text-forja-50',
+        tituloSub: 'text-neutral-400',
+        filtrosBg: 'bg-neutral-900 border-neutral-800',
+        filtroBg: 'bg-neutral-800 border-neutral-700 text-sm',
+        filtroLabel: 'text-neutral-400',
+        resumoBg: 'bg-neutral-900 border-neutral-800',
+        resumoLabel: 'text-neutral-400',
+        resumoValor: 'text-neutral-100',
+        tabelaBg: 'bg-neutral-900 border-neutral-800',
+        tabelaHeader: 'bg-neutral-950/50 text-neutral-400',
+        tabelaDivide: 'divide-neutral-800',
+        tabelaHover: 'hover:bg-neutral-800/50',
+        tabelaTexto: 'text-neutral-300',
+        tabelaSub: 'text-neutral-500',
+        monoTexto: 'text-neutral-100',
+        forjaTexto: 'text-forja-400',
+      };
+
   return (
-    <div className="min-h-screen bg-neutral-950 text-neutral-100">
+    <div className={`min-h-screen ${T.bg} ${T.texto}`}>
       <div className="max-w-7xl mx-auto px-6 py-8">
         {/* Header */}
         <button
           onClick={() => navigate('/')}
-          className="text-sm text-neutral-400 hover:text-neutral-100 transition-colors mb-3 flex items-center gap-1"
+          className={`text-sm transition-colors mb-3 flex items-center gap-1 ${T.voltarBtn}`}
         >
           <span className="text-base leading-none">←</span> Voltar para o início
         </button>
         <div className="flex items-start justify-between mb-8">
           <div>
-            <h1 className="text-3xl font-bold text-forja-50">Ordens de Serviço</h1>
-            <p className="text-neutral-400 mt-1">
+            <h1 className={`text-3xl font-bold ${T.titulo}`}>Ordens de Serviço</h1>
+            <p className={`mt-1 ${T.tituloSub}`}>
               Gerencie as OS abertas, em produção e finalizadas.
             </p>
           </div>
@@ -89,10 +138,10 @@ export function OSListPage() {
         </div>
 
         {/* Filtros */}
-        <div className="bg-neutral-900 border border-neutral-800 rounded-xl p-4 mb-6">
+        <div className={`border rounded-xl p-4 mb-6 ${T.filtrosBg}`}>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
-              <label className="block text-xs font-medium uppercase tracking-wide text-neutral-400 mb-1">
+              <label className={`block text-xs font-medium uppercase tracking-wide mb-1 ${T.filtroLabel}`}>
                 Buscar
               </label>
               <input
@@ -100,18 +149,18 @@ export function OSListPage() {
                 value={busca}
                 onChange={(e) => setBusca(e.target.value)}
                 placeholder="Código GRV, artigo..."
-                className="w-full px-3 py-2 bg-neutral-800 border border-neutral-700 rounded-lg text-sm focus:border-forja-500 focus:outline-none"
+                className={`w-full px-3 py-2 border rounded-lg text-sm focus:border-forja-500 focus:outline-none ${T.filtroBg}`}
               />
             </div>
 
             <div>
-              <label className="block text-xs font-medium uppercase tracking-wide text-neutral-400 mb-1">
+              <label className={`block text-xs font-medium uppercase tracking-wide mb-1 ${T.filtroLabel}`}>
                 Cliente
               </label>
               <select
                 value={clienteFiltro}
                 onChange={(e) => setClienteFiltro(e.target.value)}
-                className="w-full px-3 py-2 bg-neutral-800 border border-neutral-700 rounded-lg text-sm focus:border-forja-500 focus:outline-none"
+                className={`w-full px-3 py-2 border rounded-lg text-sm focus:border-forja-500 focus:outline-none ${T.filtroBg}`}
               >
                 <option value="">Todos</option>
                 {clientes.map((c) => (
@@ -123,13 +172,13 @@ export function OSListPage() {
             </div>
 
             <div>
-              <label className="block text-xs font-medium uppercase tracking-wide text-neutral-400 mb-1">
+              <label className={`block text-xs font-medium uppercase tracking-wide mb-1 ${T.filtroLabel}`}>
                 Status
               </label>
               <select
                 value={statusFiltro}
                 onChange={(e) => setStatusFiltro(e.target.value)}
-                className="w-full px-3 py-2 bg-neutral-800 border border-neutral-700 rounded-lg text-sm focus:border-forja-500 focus:outline-none"
+                className={`w-full px-3 py-2 border rounded-lg text-sm focus:border-forja-500 focus:outline-none ${T.filtroBg}`}
               >
                 <option value="">Todos</option>
                 {STATUS_OS.map((s) => (
@@ -145,22 +194,22 @@ export function OSListPage() {
         {/* Resumo */}
         {!isLoading && !isError && filtradas.length > 0 && (
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-            <div className="bg-neutral-900 border border-neutral-800 rounded-xl p-4">
-              <div className="text-xs uppercase tracking-wide text-neutral-400">
+            <div className={`border rounded-xl p-4 ${T.resumoBg}`}>
+              <div className={`text-xs uppercase tracking-wide ${T.resumoLabel}`}>
                 Total de OS
               </div>
-              <div className="text-2xl font-bold mt-1">{filtradas.length}</div>
+              <div className={`text-2xl font-bold mt-1 ${T.resumoValor}`}>{filtradas.length}</div>
             </div>
-            <div className="bg-neutral-900 border border-neutral-800 rounded-xl p-4">
-              <div className="text-xs uppercase tracking-wide text-neutral-400">
+            <div className={`border rounded-xl p-4 ${T.resumoBg}`}>
+              <div className={`text-xs uppercase tracking-wide ${T.resumoLabel}`}>
                 Em produção
               </div>
               <div className="text-2xl font-bold mt-1 text-amber-400">
                 {filtradas.filter((o) => o.status === 'em_producao').length}
               </div>
             </div>
-            <div className="bg-neutral-900 border border-neutral-800 rounded-xl p-4">
-              <div className="text-xs uppercase tracking-wide text-neutral-400">
+            <div className={`border rounded-xl p-4 ${T.resumoBg}`}>
+              <div className={`text-xs uppercase tracking-wide ${T.resumoLabel}`}>
                 Atrasadas
               </div>
               <div className="text-2xl font-bold mt-1 text-red-400">
@@ -174,8 +223,8 @@ export function OSListPage() {
                 }
               </div>
             </div>
-            <div className="bg-neutral-900 border border-neutral-800 rounded-xl p-4">
-              <div className="text-xs uppercase tracking-wide text-neutral-400">
+            <div className={`border rounded-xl p-4 ${T.resumoBg}`}>
+              <div className={`text-xs uppercase tracking-wide ${T.resumoLabel}`}>
                 Valor total
               </div>
               <div className="text-2xl font-bold mt-1 text-forja-400">
@@ -186,9 +235,9 @@ export function OSListPage() {
         )}
 
         {/* Tabela */}
-        <div className="bg-neutral-900 border border-neutral-800 rounded-xl overflow-hidden">
+        <div className={`border rounded-xl overflow-hidden ${T.tabelaBg}`}>
           {isLoading && (
-            <div className="p-12 text-center text-neutral-400">Carregando OS...</div>
+            <div className={`p-12 text-center ${T.sub}`}>Carregando OS...</div>
           )}
           {isError && (
             <div className="p-12 text-center text-red-400">
@@ -196,14 +245,14 @@ export function OSListPage() {
             </div>
           )}
           {!isLoading && !isError && filtradas.length === 0 && (
-            <div className="p-12 text-center text-neutral-400">
+            <div className={`p-12 text-center ${T.sub}`}>
               Nenhuma OS encontrada.
             </div>
           )}
           {!isLoading && !isError && filtradas.length > 0 && (
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
-                <thead className="bg-neutral-950/50 text-neutral-400 text-xs uppercase tracking-wide">
+                <thead className={`${T.tabelaHeader} text-xs uppercase tracking-wide`}>
                   <tr>
                     <th className="px-4 py-3 text-left font-medium">Código GRV</th>
                     <th className="px-4 py-3 text-left font-medium">Cliente</th>
@@ -215,12 +264,13 @@ export function OSListPage() {
                     <th className="px-4 py-3 text-center font-medium">Obs</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-neutral-800">
+                <tbody className={T.tabelaDivide}>
                   {filtradas.map((os) => (
                     <OSRow
                       key={os.id}
                       os={os}
                       onClick={() => navigate(`/os/${os.id}`)}
+                      T={T}
                     />
                   ))}
                 </tbody>
@@ -243,14 +293,14 @@ export function OSListPage() {
   );
 }
 
-function OSRow({ os, onClick }: { os: OS; onClick: () => void }) {
+function OSRow({ os, onClick, T }: { os: OS; onClick: () => void; T: Record<string, string> }) {
   const dias = diasAtePrazo(os.prazoEntrega);
   const isUrgente = os.prioridade === 'urgente';
 
   return (
     <tr
       onClick={onClick}
-      className="hover:bg-neutral-800/50 cursor-pointer transition"
+      className={`${T.tabelaHover} cursor-pointer transition`}
     >
       <td className="px-4 py-3 font-mono text-sm">
         <div className="flex items-center gap-2">
@@ -259,17 +309,17 @@ function OSRow({ os, onClick }: { os: OS; onClick: () => void }) {
               !
             </span>
           )}
-          <span className="text-forja-400">{os.codigoGrv}</span>
+          <span className={T.forjaTexto}>{os.codigoGrv}</span>
         </div>
       </td>
-      <td className="px-4 py-3 text-neutral-300">{os.cliente?.nome ?? '—'}</td>
+      <td className={`px-4 py-3 ${T.tabelaTexto}`}>{os.cliente?.nome ?? '—'}</td>
       <td className="px-4 py-3">
-        <div className="text-neutral-100 font-medium">
+        <div className={`font-medium ${T.monoTexto}`}>
           {os.artigo?.codigo ?? '—'}
         </div>
-        <div className="text-xs text-neutral-500">{os.artigo?.descricao ?? ''}</div>
+        <div className={`text-xs ${T.tabelaSub}`}>{os.artigo?.descricao ?? ''}</div>
       </td>
-      <td className="px-4 py-3 text-center font-mono">{os.quantidadeTotal}</td>
+      <td className={`px-4 py-3 text-center font-mono ${T.monoTexto}`}>{os.quantidadeTotal}</td>
       <td className={`px-4 py-3 font-medium ${corPrazo(os.prazoEntrega, os.status)}`}>
         <div>{formatarPrazo(os.prazoEntrega)}</div>
         {dias >= 0 && os.status !== 'finalizada' && os.status !== 'cancelada' && (
@@ -286,7 +336,7 @@ function OSRow({ os, onClick }: { os: OS; onClick: () => void }) {
           {LABELS_STATUS_OS[os.status]}
         </span>
       </td>
-      <td className="px-4 py-3 text-right font-mono text-neutral-300">
+      <td className={`px-4 py-3 text-right font-mono ${T.tabelaTexto}`}>
         {formatarMoeda(os.valorTotal)}
       </td>
       <td className="px-4 py-3 text-center">

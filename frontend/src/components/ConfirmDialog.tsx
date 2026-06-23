@@ -5,6 +5,7 @@
 // ============================================================
 
 import { Modal } from './Modal';
+import { useTheme } from '../lib/theme-store';
 
 interface ConfirmDialogProps {
   open: boolean;
@@ -33,6 +34,7 @@ export function ConfirmDialog({
   onConfirm,
   onCancel,
 }: ConfirmDialogProps) {
+  const { claro } = useTheme();
   const confirmClass =
     variant === 'danger'
       ? 'btn bg-red-600 hover:bg-red-700 text-white px-4 py-2 text-sm'
@@ -63,7 +65,7 @@ export function ConfirmDialog({
         </>
       }
     >
-      <p className="text-neutral-300 text-sm leading-relaxed">{message}</p>
+      <p className={`text-sm leading-relaxed ${claro ? 'text-slate-600' : 'text-neutral-300'}`}>{message}</p>
     </Modal>
   );
 }

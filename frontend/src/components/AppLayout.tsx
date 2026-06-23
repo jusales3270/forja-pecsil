@@ -1,6 +1,7 @@
 import { type ReactNode } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../lib/auth-store';
+import { useTheme } from '../lib/theme-store';
 import { PAPEL_LABEL } from '@forja/shared';
 
 export interface BreadcrumbItem {
@@ -31,6 +32,7 @@ export function AppLayout({
   breadcrumb,
 }: AppLayoutProps) {
   const { pessoa, logout } = useAuth();
+  const { claro, toggleTema } = useTheme();
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -44,17 +46,54 @@ export function AppLayout({
     else navigate(voltarPara);
   };
 
+  // Paleta por tema — mesmo padrão do DashboardPage
+  const T = claro
+    ? {
+        bg: 'bg-slate-100',
+        texto: 'text-slate-900',
+        sub: 'text-slate-500',
+        headerBg: 'bg-slate-50/80',
+        headerBorder: 'border-slate-200',
+        logoTexto: 'text-forja-500 hover:text-forja-600',
+        userTexto: 'text-slate-900',
+        userSub: 'text-slate-500',
+        breadcrumbSep: 'text-slate-300',
+        breadcrumbLink: 'text-slate-500 hover:text-slate-900',
+        breadcrumbAtivo: 'text-slate-900',
+        voltarBtn: 'text-slate-500 hover:text-slate-900 border-slate-300 hover:border-slate-400',
+        footerBorder: 'border-slate-200',
+        footerTexto: 'text-slate-400',
+        temaBtn: 'text-slate-500 hover:text-slate-900 border border-slate-300 hover:border-slate-400',
+      }
+    : {
+        bg: 'bg-neutral-950',
+        texto: 'text-neutral-100',
+        sub: 'text-neutral-500',
+        headerBg: 'bg-neutral-950/80',
+        headerBorder: 'border-neutral-800',
+        logoTexto: 'text-forja-500 hover:text-forja-600',
+        userTexto: 'text-neutral-100',
+        userSub: 'text-neutral-500',
+        breadcrumbSep: 'text-neutral-700',
+        breadcrumbLink: 'text-neutral-400 hover:text-neutral-100',
+        breadcrumbAtivo: 'text-neutral-100',
+        voltarBtn: 'text-neutral-400 hover:text-neutral-100 border-neutral-800 hover:border-neutral-700',
+        footerBorder: 'border-neutral-900',
+        footerTexto: 'text-neutral-600',
+        temaBtn: 'text-neutral-400 hover:text-neutral-200 border border-neutral-800 hover:border-neutral-700',
+      };
+
   return (
-    <div className="min-h-screen bg-neutral-950 text-neutral-100 flex flex-col">
+    <div className={`min-h-screen ${T.bg} ${T.texto} flex flex-col ${claro ? 'theme-light' : ''}`}>
       {/* Header */}
-      <header className="border-b border-neutral-800 bg-neutral-950/80 backdrop-blur sticky top-0 z-10">
+      <header className={`border-b ${T.headerBorder} ${T.headerBg} backdrop-blur sticky top-0 z-10`}>
         <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between gap-6">
           {/* Lado esquerdo: voltar + logo + title/breadcrumb */}
           <div className="flex items-center gap-3 min-w-0">
             {voltarPara && (
               <button
                 onClick={handleVoltar}
-                className="flex items-center gap-1 text-sm text-neutral-400 hover:text-neutral-100 transition-colors shrink-0 px-2 py-1 rounded border border-neutral-800 hover:border-neutral-700"
+                className={`flex items-center gap-1 text-sm transition-colors shrink-0 px-2 py-1 rounded border ${T.voltarBtn}`}
                 title="Voltar"
               >
                 <span className="text-base leading-none">←</span>
@@ -63,7 +102,7 @@ export function AppLayout({
             )}
             <button
               onClick={() => navigate('/')}
-              className="text-2xl font-extrabold text-forja-500 tracking-tight hover:text-forja-600 transition-colors shrink-0"
+              className={`text-2xl font-extrabold tracking-tight transition-colors shrink-0 ${T.logoTexto}`}
             >
               FORJA
             </button>
@@ -73,18 +112,18 @@ export function AppLayout({
                   const ultimo = idx === breadcrumb.length - 1;
                   return (
                     <span key={idx} className="flex items-center gap-2 min-w-0">
-                      <span className="text-neutral-700 shrink-0">/</span>
+                      <span className={`${T.breadcrumbSep} shrink-0`}>/</span>
                       {item.to && !ultimo ? (
                         <button
                           onClick={() => navigate(item.to!)}
-                          className="text-neutral-400 hover:text-neutral-100 transition-colors truncate"
+                          className={`${T.breadcrumbLink} transition-colors truncate`}
                         >
                           {item.label}
                         </button>
                       ) : (
                         <span
                           className={`truncate ${
-                            ultimo ? 'text-neutral-100 font-medium' : 'text-neutral-400'
+                            ultimo ? `${T.breadcrumbAtivo} font-medium` : T.breadcrumbLink
                           }`}
                         >
                           {item.label}
@@ -96,25 +135,32 @@ export function AppLayout({
               </nav>
             ) : title ? (
               <>
-                <span className="text-neutral-700 shrink-0">/</span>
-                <h1 className="text-lg font-medium text-neutral-200 truncate">
+                <span className={`${T.breadcrumbSep} shrink-0`}>/</span>
+                <h1 className={`text-lg font-medium truncate ${claro ? 'text-slate-700' : 'text-neutral-200'}`}>
                   {title}
                 </h1>
               </>
             ) : null}
           </div>
 
-          {/* Lado direito: usuário + sair */}
+          {/* Lado direito: tema + usuário + sair */}
           <div className="flex items-center gap-4 shrink-0">
+            <button
+              onClick={toggleTema}
+              className={`px-3 py-2 text-sm rounded-lg transition-colors ${T.temaBtn}`}
+              title="Alternar tema"
+            >
+              {claro ? '🌙 Escuro' : '☀️ Claro'}
+            </button>
             <div className="text-right leading-tight">
-              <p className="text-sm font-medium text-neutral-100">
+              <p className={`text-sm font-medium ${T.userTexto}`}>
                 {pessoa?.nome}
               </p>
-              <p className="text-xs text-neutral-500">
+              <p className={`text-xs ${T.userSub}`}>
                 {PAPEL_LABEL[pessoa?.papel ?? 'admin']}
               </p>
             </div>
-            <button onClick={handleLogout} className="btn-ghost px-3 py-2 text-sm">
+            <button onClick={handleLogout} className={`btn-ghost px-3 py-2 text-sm ${claro ? 'text-slate-600 hover:bg-slate-100' : ''}`}>
               Sair
             </button>
           </div>
@@ -127,8 +173,8 @@ export function AppLayout({
       </main>
 
       {/* Footer simples */}
-      <footer className="border-t border-neutral-900 py-4">
-        <div className="max-w-7xl mx-auto px-6 text-center text-xs text-neutral-600">
+      <footer className={`border-t ${T.footerBorder} py-4`}>
+        <div className={`max-w-7xl mx-auto px-6 text-center text-xs ${T.footerTexto}`}>
           Forja · Antigravity · Pecsil
         </div>
       </footer>

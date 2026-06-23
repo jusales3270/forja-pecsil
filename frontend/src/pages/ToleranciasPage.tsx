@@ -4,6 +4,7 @@
 // ============================================================
 
 import { useState, useEffect, type FormEvent } from 'react';
+import { useTheme } from '../lib/theme-store';
 import { AppLayout } from '../components/AppLayout';
 import { Modal } from '../components/Modal';
 import { ConfirmDialog } from '../components/ConfirmDialog';
@@ -17,6 +18,7 @@ import {
 } from '../hooks/useToleranciasGerais';
 
 export function ToleranciasPage() {
+  const { claro } = useTheme();
   const [clienteId, setClienteId] = useState<string>('');
   const [criando, setCriando] = useState(false);
   const [editando, setEditando] = useState<ToleranciaGeral | null>(null);
@@ -93,14 +95,14 @@ export function ToleranciasPage() {
 
         {/* Estado: nenhum cliente selecionado */}
         {!clienteId && !clientesLoading && (
-          <div className="card text-center text-neutral-400">
+          <div className={`card text-center ${claro ? 'text-slate-400' : 'text-neutral-400'}`}>
             Selecione um cliente acima para ver suas tolerâncias.
           </div>
         )}
 
         {/* Estado: carregando tolerâncias */}
         {clienteId && isLoading && (
-          <div className="card text-neutral-400 text-center">Carregando...</div>
+          <div className={`card text-center ${claro ? 'text-slate-400' : 'text-neutral-400'}`}>Carregando...</div>
         )}
 
         {/* Estado: erro ao carregar */}
@@ -112,9 +114,9 @@ export function ToleranciasPage() {
 
         {/* Estado: vazio */}
         {clienteId && !isLoading && !isError && tolerancias?.length === 0 && (
-          <div className="card text-center text-neutral-400">
+          <div className={`card text-center ${claro ? 'text-slate-400' : 'text-neutral-400'}`}>
             Nenhuma tolerância cadastrada para{' '}
-            <strong className="text-neutral-200">
+            <strong className={claro ? 'text-slate-700' : 'text-neutral-200'}>
               {clienteSelecionado?.nome}
             </strong>
             . Clique em "Nova Tolerância" para começar.
@@ -125,7 +127,7 @@ export function ToleranciasPage() {
         {clienteId && !isLoading && tolerancias && tolerancias.length > 0 && (
           <div className="card p-0 overflow-hidden">
             <table className="w-full text-sm">
-              <thead className="bg-neutral-950 text-neutral-400 text-xs uppercase tracking-wide">
+              <thead className={`text-xs uppercase tracking-wide ${claro ? 'bg-slate-50 text-slate-500' : 'bg-neutral-950 text-neutral-400'}`}>
                 <tr>
                   <th className="text-left px-4 py-3">Faixa (mm)</th>
                   <th className="text-left px-4 py-3">Tolerância +</th>
@@ -134,19 +136,19 @@ export function ToleranciasPage() {
                   <th className="text-right px-4 py-3">Ações</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-neutral-800">
+              <tbody className={`divide-y ${claro ? 'divide-slate-200' : 'divide-neutral-800'}`}>
                 {tolerancias.map((t) => (
-                  <tr key={t.id} className="hover:bg-neutral-800/30">
-                    <td className="px-4 py-3 font-medium text-neutral-100">
+                  <tr key={t.id} className={claro ? 'hover:bg-slate-50' : 'hover:bg-neutral-800/30'}>
+                    <td className={`px-4 py-3 font-medium ${claro ? 'text-slate-900' : 'text-neutral-100'}`}>
                       {t.faixaMin} → {t.faixaMax}
                     </td>
-                    <td className="px-4 py-3 text-neutral-300">
+                    <td className={`px-4 py-3 ${claro ? 'text-slate-600' : 'text-neutral-300'}`}>
                       +{t.toleranciaMais}
                     </td>
-                    <td className="px-4 py-3 text-neutral-300">
+                    <td className={`px-4 py-3 ${claro ? 'text-slate-600' : 'text-neutral-300'}`}>
                       −{t.toleranciaMenos}
                     </td>
-                    <td className="px-4 py-3 text-neutral-400 text-xs">
+                    <td className={`px-4 py-3 text-xs ${claro ? 'text-slate-400' : 'text-neutral-400'}`}>
                       {t.observacoes || '—'}
                     </td>
                     <td className="px-4 py-3 text-right">

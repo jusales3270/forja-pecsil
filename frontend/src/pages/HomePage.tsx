@@ -1,38 +1,91 @@
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../lib/auth-store';
+import { useTheme } from '../lib/theme-store';
 import { AppLayout } from '../components/AppLayout';
 import { PAPEL_LABEL } from '@forja/shared';
 import { temCapacidade, type Papel } from '../lib/permissions';
 
 export function HomePage() {
   const { pessoa } = useAuth();
+  const { claro } = useTheme();
   const navigate = useNavigate();
   const papel = pessoa?.papel as Papel | undefined;
   const pode = (cap: Parameters<typeof temCapacidade>[1]) => temCapacidade(papel, cap);
+
+  // Classes por tema
+  const T = claro
+    ? {
+        cardTexto: 'text-slate-900',
+        cardSub: 'text-slate-500',
+        titulo: 'text-forja-600',
+        itemBorder: 'border-slate-200 hover:border-forja-500/50 hover:bg-slate-50',
+        itemTexto: 'text-slate-900',
+        itemSub: 'text-slate-500',
+        totemBorder: 'border-forja-500/30 hover:border-forja-500 bg-forja-50 hover:bg-forja-100/50',
+        totemTexto: 'text-forja-700',
+        totemSub: 'text-slate-500',
+        dashBorder: 'border-forja-500/30 hover:border-forja-500 bg-forja-50 hover:bg-forja-100/50',
+        dashTexto: 'text-forja-700',
+        dashSub: 'text-slate-500',
+        fantasmaBorder: 'border-red-400/30 hover:border-red-400 bg-red-50 hover:bg-red-100/50',
+        fantasmaTexto: 'text-red-700',
+        fantasmaSub: 'text-slate-500',
+        checkOk: 'text-emerald-600',
+        checkPending: 'text-slate-300',
+        checkLabel: 'text-slate-700',
+        checkPendingLabel: 'text-slate-400',
+        atalhosBorder: 'border-slate-200 hover:border-slate-300',
+        atalhosTexto: 'text-slate-700',
+        atalhosSub: 'text-slate-400',
+      }
+    : {
+        cardTexto: 'text-neutral-100',
+        cardSub: 'text-neutral-400',
+        titulo: 'text-forja-500',
+        itemBorder: 'border-neutral-800 hover:border-forja-500/50 hover:bg-neutral-800/30',
+        itemTexto: 'text-neutral-100',
+        itemSub: 'text-neutral-500',
+        totemBorder: 'border-forja-500/30 hover:border-forja-500 bg-forja-500/5 hover:bg-forja-500/10',
+        totemTexto: 'text-forja-50',
+        totemSub: 'text-neutral-400',
+        dashBorder: 'border-forja-500/30 hover:border-forja-500 bg-forja-500/5 hover:bg-forja-500/10',
+        dashTexto: 'text-forja-50',
+        dashSub: 'text-neutral-400',
+        fantasmaBorder: 'border-red-500/30 hover:border-red-500 bg-red-500/5 hover:bg-red-500/10',
+        fantasmaTexto: 'text-red-100',
+        fantasmaSub: 'text-neutral-400',
+        checkOk: 'text-emerald-400',
+        checkPending: 'text-neutral-600',
+        checkLabel: 'text-neutral-300',
+        checkPendingLabel: 'text-neutral-500',
+        atalhosBorder: 'border-neutral-800 hover:border-neutral-700',
+        atalhosTexto: 'text-neutral-200',
+        atalhosSub: 'text-neutral-500',
+      };
 
   return (
     <AppLayout>
       <div className="space-y-6">
         {/* Card de boas-vindas */}
         <div className="card">
-          <p className="text-neutral-400 text-sm mb-1">Bem-vindo,</p>
-          <h2 className="text-3xl font-bold mb-1">{pessoa?.nome}</h2>
-          <p className="text-forja-500 font-semibold">
+          <p className={`text-sm mb-1 ${T.cardSub}`}>Bem-vindo,</p>
+          <h2 className={`text-3xl font-bold mb-1 ${T.cardTexto}`}>{pessoa?.nome}</h2>
+          <p className={`font-semibold ${T.titulo}`}>
             {PAPEL_LABEL[pessoa?.papel ?? 'admin']}
           </p>
         </div>
 
         {/* Backoffice — cadastros */}
         <div className="card">
-          <h3 className="text-lg font-semibold mb-4">Backoffice</h3>
+          <h3 className={`text-lg font-semibold mb-4 ${T.cardTexto}`}>Backoffice</h3>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-sm">
             {pode('cadastros_tipos_servico') && (
             <button
               onClick={() => navigate('/tipos-servico')}
-              className="text-left p-4 rounded-lg border border-neutral-800 hover:border-forja-500/50 hover:bg-neutral-800/30 transition-colors"
+              className={`text-left p-4 rounded-lg border transition-colors ${T.itemBorder}`}
             >
-              <p className="font-medium text-neutral-100">Tipos de Serviço</p>
-              <p className="text-xs text-neutral-500 mt-1">
+              <p className={`font-medium ${T.itemTexto}`}>Tipos de Serviço</p>
+              <p className={`text-xs mt-1 ${T.itemSub}`}>
                 Catálogo de operações reutilizáveis (torneamento, desbaste,
                 vertiflow...)
               </p>
@@ -43,10 +96,10 @@ export function HomePage() {
             {pode('cadastros_tolerancias') && (
             <button
               onClick={() => navigate('/tolerancias')}
-              className="text-left p-4 rounded-lg border border-neutral-800 hover:border-forja-500/50 hover:bg-neutral-800/30 transition-colors"
+              className={`text-left p-4 rounded-lg border transition-colors ${T.itemBorder}`}
             >
-              <p className="font-medium text-neutral-100">Tolerâncias por Cliente</p>
-              <p className="text-xs text-neutral-500 mt-1">
+              <p className={`font-medium ${T.itemTexto}`}>Tolerâncias por Cliente</p>
+              <p className={`text-xs mt-1 ${T.itemSub}`}>
                 Faixas de tolerância padrão por cliente (fallback das cotas)
               </p>
             </button>
@@ -54,10 +107,10 @@ export function HomePage() {
             {pode('cadastros_artigos') && (
             <button
               onClick={() => navigate('/artigos')}
-              className="text-left p-4 rounded-lg border border-neutral-800 hover:border-forja-500/50 hover:bg-neutral-800/30 transition-colors"
+              className={`text-left p-4 rounded-lg border transition-colors ${T.itemBorder}`}
             >
-              <p className="font-medium text-neutral-100">Artigos</p>
-              <p className="text-xs text-neutral-500 mt-1">
+              <p className={`font-medium ${T.itemTexto}`}>Artigos</p>
+              <p className={`text-xs mt-1 ${T.itemSub}`}>
                 Biblioteca de peças com desenhos, OPs e plano de inspeção
               </p>
             </button>
@@ -65,19 +118,19 @@ export function HomePage() {
             {pode('totem_acessar') && (
             <button
               onClick={() => navigate('/totem')}
-              className="text-left p-4 rounded-lg border border-forja-500/30 hover:border-forja-500 bg-forja-500/5 hover:bg-forja-500/10 transition-colors"
+              className={`text-left p-4 rounded-lg border transition-colors ${T.totemBorder}`}
             >
-              <p className="font-medium text-forja-50">Tótem (Sprint 3)</p>
-              <p className="text-xs text-neutral-400 mt-1">Programador inicia e encerra OPs no chão de fábrica</p>
+              <p className={`font-medium ${T.totemTexto}`}>Tótem (Sprint 3)</p>
+              <p className={`text-xs mt-1 ${T.totemSub}`}>Programador inicia e encerra OPs no chão de fábrica</p>
             </button>
             )}
             {pode('os_listar') && (
             <button
               onClick={() => navigate('/os')}
-              className="text-left p-4 rounded-lg border border-neutral-800 hover:border-forja-500/50 hover:bg-neutral-800/30 transition-colors"
+              className={`text-left p-4 rounded-lg border transition-colors ${T.itemBorder}`}
             >
-              <p className="font-medium text-neutral-100">Ordens de Serviço</p>
-              <p className="text-xs text-neutral-500 mt-1">
+              <p className={`font-medium ${T.itemTexto}`}>Ordens de Serviço</p>
+              <p className={`text-xs mt-1 ${T.itemSub}`}>
                 Abertura e acompanhamento de OS de produção
               </p>
             </button>
@@ -85,10 +138,10 @@ export function HomePage() {
             {pode('dashboard_chefe') && (
             <button
               onClick={() => navigate('/dashboard')}
-              className="text-left p-4 rounded-lg border border-forja-500/30 hover:border-forja-500 bg-forja-500/5 hover:bg-forja-500/10 transition-colors"
+              className={`text-left p-4 rounded-lg border transition-colors ${T.dashBorder}`}
             >
-              <p className="font-medium text-forja-50">Painel de Produção</p>
-              <p className="text-xs text-neutral-400 mt-1">
+              <p className={`font-medium ${T.dashTexto}`}>Painel de Produção</p>
+              <p className={`text-xs mt-1 ${T.dashSub}`}>
                 Visão macro: OS por status, atrasadas, produção por etapa, inspeção
               </p>
             </button>
@@ -96,10 +149,10 @@ export function HomePage() {
             {pode('fantasmas_ver') && (
             <button
               onClick={() => navigate('/lotes-fantasmas')}
-              className="text-left p-4 rounded-lg border border-red-500/30 hover:border-red-500 bg-red-500/5 hover:bg-red-500/10 transition-colors"
+              className={`text-left p-4 rounded-lg border transition-colors ${T.fantasmaBorder}`}
             >
-              <p className="font-medium text-red-100">👻 Lotes Fantasmas</p>
-              <p className="text-xs text-neutral-400 mt-1">
+              <p className={`font-medium ${T.fantasmaTexto}`}>👻 Lotes Fantasmas</p>
+              <p className={`text-xs mt-1 ${T.fantasmaSub}`}>
                 OPs sem movimentação, máquinas sem registro e turnos não fechados
               </p>
             </button>
@@ -112,30 +165,30 @@ export function HomePage() {
           <div className="card">
             <div className="flex items-center gap-3 mb-4">
               <span className="badge-forja">Sprint 2a</span>
-              <h3 className="text-lg font-semibold">Backoffice de Artigos</h3>
+              <h3 className={`text-lg font-semibold ${T.cardTexto}`}>Backoffice de Artigos</h3>
             </div>
-            <ul className="space-y-2 text-sm text-neutral-300">
+            <ul className="space-y-2 text-sm">
               <li className="flex items-start gap-2">
-                <span className="text-emerald-400 mt-0.5">✓</span>
-                <span>Backend completo: 8 entidades, 42 testes verdes</span>
+                <span className={`mt-0.5 ${T.checkOk}`}>✓</span>
+                <span className={T.checkLabel}>Backend completo: 8 entidades, 42 testes verdes</span>
               </li>
               <li className="flex items-start gap-2">
-                <span className="text-emerald-400 mt-0.5">✓</span>
-                <span>Upload de desenhos para MinIO</span>
+                <span className={`mt-0.5 ${T.checkOk}`}>✓</span>
+                <span className={T.checkLabel}>Upload de desenhos para MinIO</span>
               </li>
               <li className="flex items-start gap-2">
-                <span className="text-emerald-400 mt-0.5">✓</span>
-                <span>Tela de Tipos de Serviço (frontend)</span>
+                <span className={`mt-0.5 ${T.checkOk}`}>✓</span>
+                <span className={T.checkLabel}>Tela de Tipos de Serviço (frontend)</span>
               </li>
               <li className="flex items-start gap-2">
-                <span className="text-neutral-600 mt-0.5">○</span>
-                <span className="text-neutral-500">
+                <span className={`mt-0.5 ${T.checkPending}`}>○</span>
+                <span className={T.checkPendingLabel}>
                   Tela de Tolerâncias por Cliente
                 </span>
               </li>
               <li className="flex items-start gap-2">
-                <span className="text-neutral-600 mt-0.5">○</span>
-                <span className="text-neutral-500">Tela de Artigos (4 abas)</span>
+                <span className={`mt-0.5 ${T.checkPending}`}>○</span>
+                <span className={T.checkPendingLabel}>Tela de Artigos (4 abas)</span>
               </li>
             </ul>
           </div>
@@ -143,13 +196,13 @@ export function HomePage() {
           <div className="card">
             <div className="flex items-center gap-3 mb-4">
               <span className="badge-neutral">Próximo</span>
-              <h3 className="text-lg font-semibold">Sprint 2b</h3>
+              <h3 className={`text-lg font-semibold ${T.cardTexto}`}>Sprint 2b</h3>
             </div>
-            <p className="text-sm text-neutral-400 mb-3">
+            <p className={`text-sm mb-3 ${T.cardSub}`}>
               Abertura de Ordens de Serviço, com geração automática de lotes e
               operações herdadas do Artigo cadastrado.
             </p>
-            <p className="text-xs text-neutral-500">
+            <p className={`text-xs ${T.itemSub}`}>
               Esse é o módulo que conecta o cadastro de Artigos ao fluxo
               produtivo real.
             </p>
@@ -159,16 +212,16 @@ export function HomePage() {
         {/* Info adicional pro admin */}
         {pessoa?.papel === 'admin' && (
           <div className="card">
-            <h3 className="text-lg font-semibold mb-4">Atalhos do Sistema</h3>
+            <h3 className={`text-lg font-semibold mb-4 ${T.cardTexto}`}>Atalhos do Sistema</h3>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-sm">
               <a
                 href="http://localhost:3001/health"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="block p-3 rounded-lg border border-neutral-800 hover:border-neutral-700 transition-colors"
+                className={`block p-3 rounded-lg border transition-colors ${T.atalhosBorder}`}
               >
-                <p className="font-medium text-neutral-200">Backend Health</p>
-                <p className="text-xs text-neutral-500 mt-1">
+                <p className={`font-medium ${T.atalhosTexto}`}>Backend Health</p>
+                <p className={`text-xs mt-1 ${T.atalhosSub}`}>
                   localhost:3001/health
                 </p>
               </a>
@@ -176,14 +229,14 @@ export function HomePage() {
                 href="http://localhost:9101"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="block p-3 rounded-lg border border-neutral-800 hover:border-neutral-700 transition-colors"
+                className={`block p-3 rounded-lg border transition-colors ${T.atalhosBorder}`}
               >
-                <p className="font-medium text-neutral-200">MinIO Console</p>
-                <p className="text-xs text-neutral-500 mt-1">localhost:9101</p>
+                <p className={`font-medium ${T.atalhosTexto}`}>MinIO Console</p>
+                <p className={`text-xs mt-1 ${T.atalhosSub}`}>localhost:9101</p>
               </a>
-              <div className="block p-3 rounded-lg border border-neutral-800">
-                <p className="font-medium text-neutral-200">Prisma Studio</p>
-                <p className="text-xs text-neutral-500 mt-1">
+              <div className={`block p-3 rounded-lg border ${claro ? 'border-slate-200' : 'border-neutral-800'}`}>
+                <p className={`font-medium ${T.atalhosTexto}`}>Prisma Studio</p>
+                <p className={`text-xs mt-1 ${T.atalhosSub}`}>
                   pnpm db:studio
                 </p>
               </div>

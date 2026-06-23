@@ -4,6 +4,7 @@
 // ============================================================
 
 import { useState, useMemo, useEffect, type FormEvent } from 'react';
+import { useTheme } from '../lib/theme-store';
 import { AppLayout } from '../components/AppLayout';
 import { Modal } from '../components/Modal';
 import { ConfirmDialog } from '../components/ConfirmDialog';
@@ -17,6 +18,7 @@ import {
 import { useEtapasList } from '../hooks/useEtapas';
 
 export function TiposServicoPage() {
+  const { claro } = useTheme();
   const [busca, setBusca] = useState('');
   const [editando, setEditando] = useState<TipoServico | null>(null);
   const [criando, setCriando] = useState(false);
@@ -59,7 +61,7 @@ export function TiposServicoPage() {
             onChange={(e) => setBusca(e.target.value)}
             className="input max-w-md"
           />
-          <label className="flex items-center gap-2 text-sm text-neutral-300 select-none cursor-pointer">
+          <label className={`flex items-center gap-2 text-sm select-none cursor-pointer ${claro ? 'text-slate-600' : 'text-neutral-300'}`}>
             <input
               type="checkbox"
               checked={mostrarInativos}
@@ -84,7 +86,7 @@ export function TiposServicoPage() {
 
         {/* Conteúdo */}
         {isLoading && (
-          <div className="card text-neutral-400 text-center">Carregando...</div>
+          <div className={`card text-center ${claro ? 'text-slate-400' : 'text-neutral-400'}`}>Carregando...</div>
         )}
 
         {isError && (
@@ -94,7 +96,7 @@ export function TiposServicoPage() {
         )}
 
         {!isLoading && !isError && tiposFiltrados.length === 0 && (
-          <div className="card text-center text-neutral-400">
+          <div className={`card text-center ${claro ? 'text-slate-400' : 'text-neutral-400'}`}>
             {busca ? (
               <>Nenhum tipo encontrado para "{busca}".</>
             ) : (
@@ -109,7 +111,7 @@ export function TiposServicoPage() {
         {!isLoading && tiposFiltrados.length > 0 && (
           <div className="card p-0 overflow-hidden">
             <table className="w-full text-sm">
-              <thead className="bg-neutral-950 text-neutral-400 text-xs uppercase tracking-wide">
+              <thead className={`text-xs uppercase tracking-wide ${claro ? 'bg-slate-50 text-slate-500' : 'bg-neutral-950 text-neutral-400'}`}>
                 <tr>
                   <th className="text-left px-4 py-3">Nome</th>
                   <th className="text-left px-4 py-3">Etapa</th>
@@ -118,13 +120,13 @@ export function TiposServicoPage() {
                   <th className="text-right px-4 py-3">Ações</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-neutral-800">
+              <tbody className={`divide-y ${claro ? 'divide-slate-200' : 'divide-neutral-800'}`}>
                 {tiposFiltrados.map((t) => (
-                  <tr key={t.id} className="hover:bg-neutral-800/30">
-                    <td className="px-4 py-3 font-medium text-neutral-100">
+                  <tr key={t.id} className={claro ? 'hover:bg-slate-50' : 'hover:bg-neutral-800/30'}>
+                    <td className={`px-4 py-3 font-medium ${claro ? 'text-slate-900' : 'text-neutral-100'}`}>
                       {t.nome}
                     </td>
-                    <td className="px-4 py-3 text-neutral-300">
+                    <td className={`px-4 py-3 ${claro ? 'text-slate-600' : 'text-neutral-300'}`}>
                       {t.etapa?.nome ?? '—'}
                     </td>
                     <td className="px-4 py-3">
@@ -150,7 +152,7 @@ export function TiposServicoPage() {
                       </button>
                       <button
                         onClick={() => setDeletando(t)}
-                        className="btn px-3 py-1.5 text-xs bg-neutral-800 hover:bg-neutral-700 text-neutral-200"
+                        className={`btn px-3 py-1.5 text-xs ${claro ? 'bg-slate-200 hover:bg-slate-300 text-slate-700' : 'bg-neutral-800 hover:bg-neutral-700 text-neutral-200'}`}
                       >
                         Desativar
                       </button>
@@ -340,7 +342,7 @@ function TipoServicoModal({ open, tipo, onClose }: TipoServicoModalProps) {
             onChange={(e) => setExigeInspecao(e.target.checked)}
             className="w-4 h-4 accent-forja-500"
           />
-          <label htmlFor="exige-inspecao" className="text-sm text-neutral-300">
+          <label htmlFor="exige-inspecao" className="text-sm text-neutral-300 dark:text-neutral-300">
             Exige inspeção dimensional
           </label>
         </div>

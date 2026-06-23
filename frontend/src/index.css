@@ -84,4 +84,48 @@
   .info-message {
     @apply text-sm text-blue-300 bg-blue-900/30 border border-blue-700/50 rounded-lg px-4 py-3;
   }
+
+  /* =============================================
+   * Modo claro — ativado com .theme-light no root
+   * ============================================= */
+
+  .theme-light .card {
+    @apply bg-white border-slate-200;
+  }
+
+  .theme-light .card-hover {
+    @apply bg-white border-slate-200 hover:border-slate-300;
+  }
+
+  .theme-light .input {
+    @apply bg-white border-slate-300 text-slate-900 placeholder-slate-400 focus:border-forja-500;
+  }
+
+  .theme-light .btn-primary {
+    @apply bg-forja-500 hover:bg-forja-600 text-white focus:ring-offset-white;
+  }
+
+  .theme-light .btn-secondary {
+    @apply bg-slate-200 hover:bg-slate-300 text-slate-800;
+  }
+
+  .theme-light .btn-ghost {
+    @apply bg-transparent hover:bg-slate-100 text-slate-600;
+  }
+
+  .theme-light .badge-forja {
+    @apply bg-forja-500/10 text-forja-700 border-forja-500/20;
+  }
+
+  .theme-light .badge-neutral {
+    @apply bg-slate-100 text-slate-600 border-slate-200;
+  }
+
+  .theme-light .error-message {
+    @apply text-red-700 bg-red-50 border-red-200;
+  }
+
+  .theme-light .info-message {
+    @apply text-blue-700 bg-blue-50 border-blue-200;
+  }
 }

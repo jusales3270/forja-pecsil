@@ -5,6 +5,7 @@
 // ============================================================
 
 import { type ReactNode, useEffect } from 'react';
+import { useTheme } from '../lib/theme-store';
 
 interface ModalProps {
   open: boolean;
@@ -38,6 +39,8 @@ export function Modal({
   size = 'md',
   footer,
 }: ModalProps) {
+  const { claro } = useTheme();
+
   // ESC fecha
   useEffect(() => {
     if (!open) return;
@@ -60,6 +63,22 @@ export function Modal({
 
   if (!open) return null;
 
+  const T = claro
+    ? {
+        modalBg: 'bg-white border-slate-200',
+        headerBorder: 'border-slate-200',
+        headerTexto: 'text-slate-900',
+        closeBtn: 'text-slate-400 hover:text-slate-700',
+        footerBorder: 'border-slate-200',
+      }
+    : {
+        modalBg: 'bg-neutral-900 border-neutral-800',
+        headerBorder: 'border-neutral-800',
+        headerTexto: 'text-neutral-100',
+        closeBtn: 'text-neutral-500 hover:text-neutral-200',
+        footerBorder: 'border-neutral-800',
+      };
+
   return (
     <div
       className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm"
@@ -69,15 +88,15 @@ export function Modal({
       aria-label={title}
     >
       <div
-        className={`w-full ${SIZE_CLASS[size]} bg-neutral-900 border border-neutral-800 rounded-xl shadow-2xl flex flex-col max-h-[90vh]`}
+        className={`w-full ${SIZE_CLASS[size]} ${T.modalBg} border rounded-xl shadow-2xl flex flex-col max-h-[90vh]`}
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
-        <header className="flex items-center justify-between px-6 py-4 border-b border-neutral-800 shrink-0">
-          <h2 className="text-lg font-semibold text-neutral-100">{title}</h2>
+        <header className={`flex items-center justify-between px-6 py-4 border-b ${T.headerBorder} shrink-0`}>
+          <h2 className={`text-lg font-semibold ${T.headerTexto}`}>{title}</h2>
           <button
             onClick={onClose}
-            className="text-neutral-500 hover:text-neutral-200 text-2xl leading-none transition-colors"
+            className={`${T.closeBtn} text-2xl leading-none transition-colors`}
             aria-label="Fechar"
           >
             ×
@@ -89,7 +108,7 @@ export function Modal({
 
         {/* Footer opcional */}
         {footer && (
-          <footer className="flex items-center justify-end gap-3 px-6 py-4 border-t border-neutral-800 shrink-0">
+          <footer className={`flex items-center justify-end gap-3 px-6 py-4 border-t ${T.footerBorder} shrink-0`}>
             {footer}
           </footer>
         )}
