@@ -47,7 +47,7 @@ async function main() {
   const pessoas = await Promise.all([
     prisma.pessoa.create({
       data: {
-        nome: 'Junior (Admin)',
+        nome: 'Administrador',
         codigoPessoal: '0001',
         pinHash: await hashPin('1234'),
         papel: 'admin',
@@ -55,7 +55,7 @@ async function main() {
     }),
     prisma.pessoa.create({
       data: {
-        nome: 'Ricardo (Chefe)',
+        nome: 'Chefe',
         codigoPessoal: '0002',
         pinHash: await hashPin('1234'),
         papel: 'chefe',
@@ -63,7 +63,7 @@ async function main() {
     }),
     prisma.pessoa.create({
       data: {
-        nome: 'Rafael (PCP)',
+        nome: 'PCP',
         codigoPessoal: '0003',
         pinHash: await hashPin('1234'),
         papel: 'pcp',
@@ -71,7 +71,7 @@ async function main() {
     }),
     prisma.pessoa.create({
       data: {
-        nome: 'Japonês',
+        nome: 'Programador 1',
         codigoPessoal: '0010',
         pinHash: await hashPin('1234'),
         papel: 'programador',
@@ -79,7 +79,7 @@ async function main() {
     }),
     prisma.pessoa.create({
       data: {
-        nome: 'Adriano',
+        nome: 'Programador 2',
         codigoPessoal: '0011',
         pinHash: await hashPin('1234'),
         papel: 'programador',
@@ -87,7 +87,7 @@ async function main() {
     }),
     prisma.pessoa.create({
       data: {
-        nome: 'Douglas',
+        nome: 'Operador 1',
         codigoPessoal: '0020',
         pinHash: await hashPin('1234'),
         papel: 'operador',
@@ -103,7 +103,7 @@ async function main() {
     }),
     prisma.pessoa.create({
       data: {
-        nome: 'Nicolas (Volumetria)',
+        nome: 'Inspetor 1',
         codigoPessoal: '0030',
         pinHash: await hashPin('1234'),
         papel: 'inspetor',
@@ -111,7 +111,7 @@ async function main() {
     }),
     prisma.pessoa.create({
       data: {
-        nome: 'Pedro (Dimensional)',
+        nome: 'Inspetor 2',
         codigoPessoal: '0031',
         pinHash: await hashPin('1234'),
         papel: 'inspetor',
@@ -119,7 +119,7 @@ async function main() {
     }),
     prisma.pessoa.create({
       data: {
-        nome: 'Biriro',
+        nome: 'Embalador',
         codigoPessoal: '0040',
         pinHash: await hashPin('1234'),
         papel: 'embalador',
@@ -332,13 +332,13 @@ async function main() {
   console.log(`   Máquinas: ${maquinas.length}`);
   console.log(`   Artigos: 0 (serão cadastrados pelo PCP no backoffice — Sprint 2a)`);
   console.log('\n🔑 PINs de teste (todos: 1234):');
-  console.log('   Admin (Junior): código 0001');
-  console.log('   Chefe (Ricardo): código 0002');
-  console.log('   PCP (Rafael): código 0003');
-  console.log('   Programador (Japonês): código 0010');
-  console.log('   Operador (Douglas): código 0020');
-  console.log('   Inspetor (Nicolas): código 0030');
-  console.log('   Embalador (Biriro): código 0040\n');
+  console.log('   Administrador: código 0001');
+  console.log('   Chefe: código 0002');
+  console.log('   PCP: código 0003');
+  console.log('   Programador 1: código 0010');
+  console.log('   Operador 1: código 0020');
+  console.log('   Inspetor 1: código 0030');
+  console.log('   Embalador: código 0040\n');
 }
 
 main()
