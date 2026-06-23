@@ -10,12 +10,25 @@ import { randomUUID } from 'node:crypto';
 import { env } from './env.js';
 
 const protocol = env.MINIO_USE_SSL ? 'https' : 'http';
-const endpoint = `${protocol}://${env.MINIO_ENDPOINT}:${env.MINIO_PORT}`;
+const endpointInterno = `${protocol}://${env.MINIO_ENDPOINT}:${env.MINIO_PORT}`;
 
+// Client interno: usado pra upload/delete (fala direto com o MinIO na rede docker)
 export const s3 = new S3Client({
-  endpoint,
-  region: 'us-east-1', // MinIO ignora mas SDK exige
-  forcePathStyle: true, // MinIO precisa disso
+  endpoint: endpointInterno,
+  region: 'us-east-1',
+  forcePathStyle: true,
+  credentials: {
+    accessKeyId: env.MINIO_ACCESS_KEY,
+    secretAccessKey: env.MINIO_SECRET_KEY,
+  },
+});
+
+// Client publico: usado SO pra gerar URLs assinadas que o navegador alcanca.
+// Em producao aponta pro dominio publico (ex: https://host/storage).
+const s3Publico = new S3Client({
+  endpoint: env.MINIO_PUBLIC_URL,
+  region: 'us-east-1',
+  forcePathStyle: true,
   credentials: {
     accessKeyId: env.MINIO_ACCESS_KEY,
     secretAccessKey: env.MINIO_SECRET_KEY,
@@ -71,7 +84,7 @@ export async function gerarUrlAssinada(
     Key: key,
   });
 
-  return getSignedUrl(s3, command, { expiresIn: expirarEmSegundos });
+  return getSignedUrl(s3Publico, command, { expiresIn: expirarEmSegundos });
 }
 
 /**
