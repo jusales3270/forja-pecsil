@@ -80,6 +80,7 @@ export function useArtigosList(filtros?: ListaArtigosFiltros) {
       });
       return data.data;
     },
+    refetchOnWindowFocus: true,
   });
 }
 

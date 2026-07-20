@@ -109,7 +109,7 @@ export function OSListPage() {
       };
 
   return (
-    <div className={`min-h-screen ${T.bg} ${T.texto}`}>
+    <div className={`min-h-screen ${T.bg} ${T.texto} ${claro ? 'theme-light' : ''}`}>
       <div className="max-w-7xl mx-auto px-6 py-8">
         {/* Header */}
         <button

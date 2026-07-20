@@ -81,7 +81,7 @@ export function IniciarOPModal({ op, etapaId, onClose }: Props) {
         <>
           <button
             onClick={onClose}
-            className="px-4 py-2 text-neutral-300 hover:text-neutral-100 transition"
+            className="btn-ghost px-4 py-2"
           >
             Cancelar (Esc)
           </button>
@@ -97,7 +97,7 @@ export function IniciarOPModal({ op, etapaId, onClose }: Props) {
     >
       <div className="space-y-4" onKeyDown={onKeyDown}>
         {/* Resumo da OP */}
-        <div className="bg-neutral-950/50 border border-neutral-800 rounded-lg p-3 text-sm">
+        <div className="subcard p-3 text-sm">
           <div className="text-neutral-100 font-medium">
             {op.lote.os.artigo.codigo}
           </div>
@@ -119,14 +119,14 @@ export function IniciarOPModal({ op, etapaId, onClose }: Props) {
 
         {/* Máquina */}
         <div>
-          <label className="block text-xs font-medium uppercase tracking-wide text-neutral-400 mb-1">
+          <label className="label-compact">
             Máquina
           </label>
           <select
             ref={maquinaRef}
             value={maquinaId}
             onChange={(e) => setMaquinaId(e.target.value)}
-            className="w-full px-3 py-2 bg-neutral-800 border border-neutral-700 rounded-lg text-base focus:border-forja-500 focus:outline-none"
+            className="input py-2 text-base"
           >
             <option value="">Selecione...</option>
             {maquinas.map((m) => (
@@ -139,13 +139,13 @@ export function IniciarOPModal({ op, etapaId, onClose }: Props) {
 
         {/* Operador */}
         <div>
-          <label className="block text-xs font-medium uppercase tracking-wide text-neutral-400 mb-1">
+          <label className="label-compact">
             Operador responsável
           </label>
           <select
             value={operadorId}
             onChange={(e) => setOperadorId(e.target.value)}
-            className="w-full px-3 py-2 bg-neutral-800 border border-neutral-700 rounded-lg text-base focus:border-forja-500 focus:outline-none"
+            className="input py-2 text-base"
           >
             <option value="">Selecione...</option>
             {operadores.map((p) => (
@@ -158,7 +158,7 @@ export function IniciarOPModal({ op, etapaId, onClose }: Props) {
 
         {/* Observações */}
         <div>
-          <label className="block text-xs font-medium uppercase tracking-wide text-neutral-400 mb-1">
+          <label className="label-compact">
             Observações (opcional)
           </label>
           <textarea
@@ -166,16 +166,12 @@ export function IniciarOPModal({ op, etapaId, onClose }: Props) {
             onChange={(e) => setObservacoes(e.target.value)}
             rows={2}
             placeholder="Ex: programação ajustada, ferramenta nova..."
-            className="w-full px-3 py-2 bg-neutral-800 border border-neutral-700 rounded-lg text-sm focus:border-forja-500 focus:outline-none resize-none"
+            className="input py-2 text-sm resize-none"
           />
         </div>
 
         {/* Erro */}
-        {erro && (
-          <div className="px-3 py-2 bg-red-500/10 border border-red-500/30 text-red-400 text-sm rounded-lg">
-            {erro}
-          </div>
-        )}
+        {erro && <div className="error-message">{erro}</div>}
       </div>
     </Modal>
   );

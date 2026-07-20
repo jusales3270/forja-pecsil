@@ -93,7 +93,7 @@ export function EncerrarOPModal({ op, onClose }: Props) {
         <>
           <button
             onClick={onClose}
-            className="px-4 py-2 text-neutral-300 hover:text-neutral-100 transition"
+            className="btn-ghost px-4 py-2"
           >
             Cancelar (Esc)
           </button>
@@ -109,7 +109,7 @@ export function EncerrarOPModal({ op, onClose }: Props) {
     >
       <div className="space-y-4" onKeyDown={onKeyDown}>
         {/* Resumo */}
-        <div className="bg-neutral-950/50 border border-neutral-800 rounded-lg p-3 text-sm space-y-1">
+        <div className="subcard p-3 text-sm space-y-1">
           <div className="text-neutral-100 font-medium">
             {op.lote.os.artigo.codigo}
           </div>
@@ -138,7 +138,7 @@ export function EncerrarOPModal({ op, onClose }: Props) {
 
         {/* Quantidade concluída */}
         <div>
-          <label className="block text-xs font-medium uppercase tracking-wide text-neutral-400 mb-1">
+          <label className="label-compact">
             Quantidade concluída
           </label>
           <div className="flex items-baseline gap-3">
@@ -149,7 +149,7 @@ export function EncerrarOPModal({ op, onClose }: Props) {
               max={total}
               value={quantidade}
               onChange={(e) => setQuantidade(e.target.value)}
-              className="w-32 px-3 py-2 bg-neutral-800 border border-neutral-700 rounded-lg text-2xl font-mono text-right focus:border-forja-500 focus:outline-none"
+              className="input w-32 py-2 text-2xl font-mono text-right"
             />
             <span className="text-neutral-500">de {total} peças</span>
           </div>
@@ -163,7 +163,7 @@ export function EncerrarOPModal({ op, onClose }: Props) {
 
         {/* Observações */}
         <div>
-          <label className="block text-xs font-medium uppercase tracking-wide text-neutral-400 mb-1">
+          <label className="label-compact">
             Observações (opcional)
           </label>
           <textarea
@@ -171,15 +171,11 @@ export function EncerrarOPModal({ op, onClose }: Props) {
             onChange={(e) => setObservacoes(e.target.value)}
             rows={2}
             placeholder="Ex: parou pra trocar pastilha, retomar amanhã..."
-            className="w-full px-3 py-2 bg-neutral-800 border border-neutral-700 rounded-lg text-sm focus:border-forja-500 focus:outline-none resize-none"
+            className="input py-2 text-sm resize-none"
           />
         </div>
 
-        {erro && (
-          <div className="px-3 py-2 bg-red-500/10 border border-red-500/30 text-red-400 text-sm rounded-lg">
-            {erro}
-          </div>
-        )}
+        {erro && <div className="error-message">{erro}</div>}
       </div>
     </Modal>
   );

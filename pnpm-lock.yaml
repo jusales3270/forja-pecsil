@@ -95,6 +95,9 @@ importers:
       socket.io-client:
         specifier: ^4.7.5
         version: 4.8.3
+      workbox-window:
+        specifier: ^7.4.1
+        version: 7.4.1
       zustand:
         specifier: ^4.5.2
         version: 4.5.7(@types/react@18.3.28)(react@18.3.1)

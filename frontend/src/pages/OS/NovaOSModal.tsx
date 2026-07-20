@@ -195,7 +195,7 @@ export function NovaOSModal({ onClose, onCreated }: NovaOSModalProps) {
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* ============ BUSCA DE ARTIGO ============ */}
         <div>
-          <label className="block text-xs font-medium uppercase tracking-wide text-neutral-400 mb-1">
+          <label className="label-compact">
             Artigo *
           </label>
           <div className="relative">
@@ -207,7 +207,7 @@ export function NovaOSModal({ onClose, onCreated }: NovaOSModalProps) {
                 if (artigoId) setArtigoId(null);
               }}
               placeholder="Digite código ou descrição..."
-              className="w-full px-3 py-2 bg-neutral-800 border border-neutral-700 rounded-lg text-sm focus:border-forja-500 focus:outline-none"
+              className="input py-2 text-sm"
               autoFocus
             />
             {artigoId && (
@@ -220,13 +220,13 @@ export function NovaOSModal({ onClose, onCreated }: NovaOSModalProps) {
               </button>
             )}
             {sugestoes.length > 0 && (
-              <div className="absolute z-10 left-0 right-0 mt-1 bg-neutral-800 border border-neutral-700 rounded-lg shadow-lg max-h-64 overflow-y-auto">
+              <div className="dropdown-panel absolute z-10 left-0 right-0 mt-1 max-h-64 overflow-y-auto">
                 {sugestoes.map((a) => (
                   <button
                     key={a.id}
                     type="button"
                     onClick={() => selecionarArtigo(a.id, a.codigo, a.descricao)}
-                    className="w-full text-left px-3 py-2 hover:bg-neutral-700 text-sm border-b border-neutral-700/50 last:border-b-0"
+                    className="dropdown-panel-item w-full text-left px-3 py-2 text-sm"
                   >
                     <div className="font-mono text-forja-400">{a.codigo}</div>
                     <div className="text-xs text-neutral-400">{a.descricao}</div>
@@ -239,7 +239,7 @@ export function NovaOSModal({ onClose, onCreated }: NovaOSModalProps) {
 
         {/* ============ PREVIEW DO ARTIGO ============ */}
         {artigoSelecionado && (
-          <div className="bg-neutral-800/50 border border-neutral-700 rounded-lg p-3 text-sm space-y-1">
+          <div className="subcard p-3 text-sm space-y-1">
             <div className="flex gap-4">
               <span className="text-neutral-400">Tipo:</span>
               <span className="text-neutral-200">
@@ -270,7 +270,7 @@ export function NovaOSModal({ onClose, onCreated }: NovaOSModalProps) {
         {/* ============ IDENTIFICAÇÃO ============ */}
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <label className="block text-xs font-medium uppercase tracking-wide text-neutral-400 mb-1">
+            <label className="label-compact">
               Código GRV *
             </label>
             <input
@@ -278,18 +278,18 @@ export function NovaOSModal({ onClose, onCreated }: NovaOSModalProps) {
               value={codigoGrv}
               onChange={(e) => setCodigoGrv(e.target.value)}
               placeholder="ex: 1-11638/001"
-              className="w-full px-3 py-2 bg-neutral-800 border border-neutral-700 rounded-lg text-sm font-mono focus:border-forja-500 focus:outline-none"
+              className="input py-2 text-sm font-mono"
             />
           </div>
 
           <div>
-            <label className="block text-xs font-medium uppercase tracking-wide text-neutral-400 mb-1">
+            <label className="label-compact">
               Cliente *
             </label>
             <select
               value={clienteId}
               onChange={(e) => setClienteId(e.target.value)}
-              className="w-full px-3 py-2 bg-neutral-800 border border-neutral-700 rounded-lg text-sm focus:border-forja-500 focus:outline-none"
+              className="input py-2 text-sm"
             >
               <option value="">Selecione...</option>
               {clientes.map((c) => (
@@ -301,7 +301,7 @@ export function NovaOSModal({ onClose, onCreated }: NovaOSModalProps) {
           </div>
 
           <div>
-            <label className="block text-xs font-medium uppercase tracking-wide text-neutral-400 mb-1">
+            <label className="label-compact">
               Quantidade Total *
             </label>
             <input
@@ -310,26 +310,26 @@ export function NovaOSModal({ onClose, onCreated }: NovaOSModalProps) {
               value={quantidadeTotal}
               onChange={(e) => setQuantidadeTotal(e.target.value)}
               placeholder="ex: 6"
-              className="w-full px-3 py-2 bg-neutral-800 border border-neutral-700 rounded-lg text-sm font-mono focus:border-forja-500 focus:outline-none"
+              className="input py-2 text-sm font-mono"
             />
           </div>
 
           <div>
-            <label className="block text-xs font-medium uppercase tracking-wide text-neutral-400 mb-1">
+            <label className="label-compact">
               Prazo de Entrega *
             </label>
             <input
               type="date"
               value={prazoEntrega}
               onChange={(e) => setPrazoEntrega(e.target.value)}
-              className="w-full px-3 py-2 bg-neutral-800 border border-neutral-700 rounded-lg text-sm focus:border-forja-500 focus:outline-none"
+              className="input py-2 text-sm"
             />
           </div>
         </div>
 
         {/* Prioridade */}
         <div>
-          <label className="block text-xs font-medium uppercase tracking-wide text-neutral-400 mb-2">
+          <label className="label-compact mb-2">
             Prioridade
           </label>
           <div className="flex gap-3">
@@ -360,20 +360,20 @@ export function NovaOSModal({ onClose, onCreated }: NovaOSModalProps) {
 
         {/* Observações */}
         <div>
-          <label className="block text-xs font-medium uppercase tracking-wide text-neutral-400 mb-1">
+          <label className="label-compact">
             Observações
           </label>
           <textarea
             value={observacoes}
             onChange={(e) => setObservacoes(e.target.value)}
             rows={2}
-            className="w-full px-3 py-2 bg-neutral-800 border border-neutral-700 rounded-lg text-sm focus:border-forja-500 focus:outline-none resize-none"
+            className="input py-2 text-sm resize-none"
           />
         </div>
 
         {/* ============ DIVISÃO DE LOTES ============ */}
-        <div className="bg-neutral-800/30 border border-neutral-700 rounded-lg p-4">
-          <div className="text-xs font-medium uppercase tracking-wide text-neutral-400 mb-3">
+        <div className="subcard p-4">
+          <div className="label-compact mb-3">
             Divisão de Lotes
           </div>
           <div className="space-y-2">
@@ -406,7 +406,7 @@ export function NovaOSModal({ onClose, onCreated }: NovaOSModalProps) {
                     max="100"
                     value={quantidadeLotes}
                     onChange={(e) => setQuantidadeLotes(e.target.value)}
-                    className="w-16 px-2 py-1 bg-neutral-800 border border-neutral-700 rounded text-sm font-mono"
+                    className="input w-16 py-1 px-2 text-sm font-mono"
                   />
                   <span className="text-sm text-neutral-400">lotes</span>
                 </>
@@ -430,7 +430,7 @@ export function NovaOSModal({ onClose, onCreated }: NovaOSModalProps) {
                     min="1"
                     value={tamanhoLote}
                     onChange={(e) => setTamanhoLote(e.target.value)}
-                    className="w-16 px-2 py-1 bg-neutral-800 border border-neutral-700 rounded text-sm font-mono"
+                    className="input w-16 py-1 px-2 text-sm font-mono"
                   />
                   <span className="text-sm text-neutral-400">peças por lote</span>
                 </>
@@ -450,11 +450,11 @@ export function NovaOSModal({ onClose, onCreated }: NovaOSModalProps) {
         </div>
 
         {/* ============ FINANCEIRO (colapsável) ============ */}
-        <div className="border border-neutral-700 rounded-lg overflow-hidden">
+        <div className="subcard overflow-hidden">
           <button
             type="button"
             onClick={() => setFinanceiroAberto(!financeiroAberto)}
-            className="w-full px-4 py-3 bg-neutral-800/50 hover:bg-neutral-800 flex items-center justify-between text-sm font-medium transition"
+            className="subcard-toggle w-full px-4 py-3 flex items-center justify-between text-sm font-medium transition"
           >
             <span className="flex items-center gap-2">
               <svg
@@ -484,9 +484,9 @@ export function NovaOSModal({ onClose, onCreated }: NovaOSModalProps) {
           </button>
 
           {financeiroAberto && (
-            <div className="p-4 bg-neutral-900 grid grid-cols-2 gap-3">
+            <div className="p-4 border-t border-neutral-700 grid grid-cols-2 gap-3">
               <div>
-                <label className="block text-xs font-medium uppercase tracking-wide text-neutral-400 mb-1">
+                <label className="label-compact">
                   Preço unitário
                 </label>
                 <input
@@ -496,14 +496,14 @@ export function NovaOSModal({ onClose, onCreated }: NovaOSModalProps) {
                   value={precoUnitario}
                   onChange={(e) => setPrecoUnitario(e.target.value)}
                   placeholder="0.00"
-                  className="w-full px-3 py-2 bg-neutral-800 border border-neutral-700 rounded-lg text-sm font-mono focus:border-forja-500 focus:outline-none"
+                  className="input py-2 text-sm font-mono"
                 />
               </div>
               <div>
-                <label className="block text-xs font-medium uppercase tracking-wide text-neutral-400 mb-1">
+                <label className="label-compact">
                   Valor total
                 </label>
-                <div className="w-full px-3 py-2 bg-neutral-800/30 border border-neutral-700/50 rounded-lg text-sm font-mono text-forja-400">
+                <div className="field-readonly py-2 text-sm">
                   {valorTotalCalculado !== null
                     ? valorTotalCalculado.toLocaleString('pt-BR', {
                         style: 'currency',
@@ -513,18 +513,18 @@ export function NovaOSModal({ onClose, onCreated }: NovaOSModalProps) {
                 </div>
               </div>
               <div>
-                <label className="block text-xs font-medium uppercase tracking-wide text-neutral-400 mb-1">
+                <label className="label-compact">
                   PO do cliente
                 </label>
                 <input
                   type="text"
                   value={poCliente}
                   onChange={(e) => setPoCliente(e.target.value)}
-                  className="w-full px-3 py-2 bg-neutral-800 border border-neutral-700 rounded-lg text-sm focus:border-forja-500 focus:outline-none"
+                  className="input py-2 text-sm"
                 />
               </div>
               <div>
-                <label className="block text-xs font-medium uppercase tracking-wide text-neutral-400 mb-1">
+                <label className="label-compact">
                   Status fiscal
                 </label>
                 <input
@@ -532,18 +532,18 @@ export function NovaOSModal({ onClose, onCreated }: NovaOSModalProps) {
                   value={statusFiscal}
                   onChange={(e) => setStatusFiscal(e.target.value)}
                   placeholder="FERRO, OK, PASIFER..."
-                  className="w-full px-3 py-2 bg-neutral-800 border border-neutral-700 rounded-lg text-sm focus:border-forja-500 focus:outline-none"
+                  className="input py-2 text-sm"
                 />
               </div>
               <div className="col-span-2">
-                <label className="block text-xs font-medium uppercase tracking-wide text-neutral-400 mb-1">
+                <label className="label-compact">
                   Nº fiscal (NF)
                 </label>
                 <input
                   type="text"
                   value={numeroFiscal}
                   onChange={(e) => setNumeroFiscal(e.target.value)}
-                  className="w-full px-3 py-2 bg-neutral-800 border border-neutral-700 rounded-lg text-sm focus:border-forja-500 focus:outline-none"
+                  className="input py-2 text-sm"
                 />
               </div>
             </div>
@@ -551,25 +551,21 @@ export function NovaOSModal({ onClose, onCreated }: NovaOSModalProps) {
         </div>
 
         {/* Erro */}
-        {erro && (
-          <div className="bg-red-500/10 border border-red-500/30 rounded-lg p-3 text-sm text-red-400">
-            {erro}
-          </div>
-        )}
+        {erro && <div className="error-message">{erro}</div>}
 
         {/* Footer */}
         <div className="flex items-center justify-end gap-2 pt-4 border-t border-neutral-800">
           <button
             type="button"
             onClick={onClose}
-            className="px-4 py-2 bg-neutral-800 hover:bg-neutral-700 text-neutral-200 rounded-lg text-sm transition"
+            className="btn-secondary px-4 py-2 text-sm"
           >
             Cancelar
           </button>
           <button
             type="submit"
             disabled={!formValido || createOS.isPending}
-            className="px-4 py-2 bg-forja-500 hover:bg-forja-600 disabled:bg-neutral-700 disabled:cursor-not-allowed text-white rounded-lg font-medium text-sm transition"
+            className="btn-primary px-4 py-2 text-sm disabled:bg-neutral-700"
           >
             {createOS.isPending ? 'Criando...' : 'Criar OS'}
           </button>

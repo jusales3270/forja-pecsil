@@ -128,14 +128,14 @@ export function DadosOSTab({ os, podeEditar }: DadosOSTabProps) {
   return (
     <form onSubmit={handleSubmit} className="space-y-6 max-w-4xl">
       {/* ============ DADOS GERAIS ============ */}
-      <section className="bg-neutral-900 border border-neutral-800 rounded-xl p-5">
+      <section className="card p-5">
         <h3 className="text-sm font-semibold text-neutral-200 uppercase tracking-wide mb-4">
           Dados Gerais
         </h3>
 
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <label className="block text-xs font-medium uppercase tracking-wide text-neutral-400 mb-1">
+            <label className="label-compact">
               Prazo de entrega
             </label>
             <input
@@ -143,11 +143,11 @@ export function DadosOSTab({ os, podeEditar }: DadosOSTabProps) {
               value={prazoEntrega}
               onChange={(e) => setPrazoEntrega(e.target.value)}
               disabled={!podeEditar}
-              className="w-full px-3 py-2 bg-neutral-800 border border-neutral-700 rounded-lg text-sm disabled:opacity-50 focus:border-forja-500 focus:outline-none"
+              className="input py-2 text-sm disabled:opacity-50"
             />
           </div>
           <div>
-            <label className="block text-xs font-medium uppercase tracking-wide text-neutral-400 mb-2">
+            <label className="label-compact mb-2">
               Prioridade
             </label>
             <div className="flex gap-3 mt-2">
@@ -176,7 +176,7 @@ export function DadosOSTab({ os, podeEditar }: DadosOSTabProps) {
             </div>
           </div>
           <div className="col-span-2">
-            <label className="block text-xs font-medium uppercase tracking-wide text-neutral-400 mb-1">
+            <label className="label-compact">
               Observações
             </label>
             <textarea
@@ -184,21 +184,21 @@ export function DadosOSTab({ os, podeEditar }: DadosOSTabProps) {
               onChange={(e) => setObservacoes(e.target.value)}
               disabled={!podeEditar}
               rows={3}
-              className="w-full px-3 py-2 bg-neutral-800 border border-neutral-700 rounded-lg text-sm disabled:opacity-50 focus:border-forja-500 focus:outline-none resize-none"
+              className="input py-2 text-sm disabled:opacity-50 resize-none"
             />
           </div>
         </div>
       </section>
 
       {/* ============ FINANCEIRO ============ */}
-      <section className="bg-neutral-900 border border-neutral-800 rounded-xl p-5">
+      <section className="card p-5">
         <h3 className="text-sm font-semibold text-neutral-200 uppercase tracking-wide mb-4">
           Financeiro / Comercial
         </h3>
 
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <label className="block text-xs font-medium uppercase tracking-wide text-neutral-400 mb-1">
+            <label className="label-compact">
               Preço unitário
             </label>
             <input
@@ -209,14 +209,14 @@ export function DadosOSTab({ os, podeEditar }: DadosOSTabProps) {
               onChange={(e) => setPrecoUnitario(e.target.value)}
               disabled={!podeEditar}
               placeholder="0.00"
-              className="w-full px-3 py-2 bg-neutral-800 border border-neutral-700 rounded-lg text-sm font-mono disabled:opacity-50 focus:border-forja-500 focus:outline-none"
+              className="input py-2 text-sm font-mono disabled:opacity-50"
             />
           </div>
           <div>
-            <label className="block text-xs font-medium uppercase tracking-wide text-neutral-400 mb-1">
+            <label className="label-compact">
               Valor total <span className="text-neutral-600">(calculado)</span>
             </label>
-            <div className="w-full px-3 py-2 bg-neutral-800/30 border border-neutral-700/50 rounded-lg text-sm font-mono text-forja-400">
+            <div className="field-readonly py-2 text-sm">
               {valorTotalCalculado !== null
                 ? valorTotalCalculado.toLocaleString('pt-BR', {
                     style: 'currency',
@@ -226,7 +226,7 @@ export function DadosOSTab({ os, podeEditar }: DadosOSTabProps) {
             </div>
           </div>
           <div>
-            <label className="block text-xs font-medium uppercase tracking-wide text-neutral-400 mb-1">
+            <label className="label-compact">
               PO do cliente
             </label>
             <input
@@ -234,11 +234,11 @@ export function DadosOSTab({ os, podeEditar }: DadosOSTabProps) {
               value={poCliente}
               onChange={(e) => setPoCliente(e.target.value)}
               disabled={!podeEditar}
-              className="w-full px-3 py-2 bg-neutral-800 border border-neutral-700 rounded-lg text-sm disabled:opacity-50 focus:border-forja-500 focus:outline-none"
+              className="input py-2 text-sm disabled:opacity-50"
             />
           </div>
           <div>
-            <label className="block text-xs font-medium uppercase tracking-wide text-neutral-400 mb-1">
+            <label className="label-compact">
               Status fiscal
             </label>
             <input
@@ -247,11 +247,11 @@ export function DadosOSTab({ os, podeEditar }: DadosOSTabProps) {
               onChange={(e) => setStatusFiscal(e.target.value)}
               disabled={!podeEditar}
               placeholder="FERRO, OK, PASIFER..."
-              className="w-full px-3 py-2 bg-neutral-800 border border-neutral-700 rounded-lg text-sm disabled:opacity-50 focus:border-forja-500 focus:outline-none"
+              className="input py-2 text-sm disabled:opacity-50"
             />
           </div>
           <div>
-            <label className="block text-xs font-medium uppercase tracking-wide text-neutral-400 mb-1">
+            <label className="label-compact">
               Nº fiscal (NF)
             </label>
             <input
@@ -259,11 +259,11 @@ export function DadosOSTab({ os, podeEditar }: DadosOSTabProps) {
               value={numeroFiscal}
               onChange={(e) => setNumeroFiscal(e.target.value)}
               disabled={!podeEditar}
-              className="w-full px-3 py-2 bg-neutral-800 border border-neutral-700 rounded-lg text-sm disabled:opacity-50 focus:border-forja-500 focus:outline-none"
+              className="input py-2 text-sm disabled:opacity-50"
             />
           </div>
           <div>
-            <label className="block text-xs font-medium uppercase tracking-wide text-neutral-400 mb-1">
+            <label className="label-compact">
               Data emissão NF
             </label>
             <input
@@ -271,11 +271,11 @@ export function DadosOSTab({ os, podeEditar }: DadosOSTabProps) {
               value={dataNf}
               onChange={(e) => setDataNf(e.target.value)}
               disabled={!podeEditar}
-              className="w-full px-3 py-2 bg-neutral-800 border border-neutral-700 rounded-lg text-sm disabled:opacity-50 focus:border-forja-500 focus:outline-none"
+              className="input py-2 text-sm disabled:opacity-50"
             />
           </div>
           <div>
-            <label className="block text-xs font-medium uppercase tracking-wide text-neutral-400 mb-1">
+            <label className="label-compact">
               Valor recebido
             </label>
             <input
@@ -286,11 +286,11 @@ export function DadosOSTab({ os, podeEditar }: DadosOSTabProps) {
               onChange={(e) => setValorRecebido(e.target.value)}
               disabled={!podeEditar}
               placeholder="0.00"
-              className="w-full px-3 py-2 bg-neutral-800 border border-neutral-700 rounded-lg text-sm font-mono disabled:opacity-50 focus:border-forja-500 focus:outline-none"
+              className="input py-2 text-sm font-mono disabled:opacity-50"
             />
           </div>
           <div>
-            <label className="block text-xs font-medium uppercase tracking-wide text-neutral-400 mb-1">
+            <label className="label-compact">
               Data pagamento
             </label>
             <input
@@ -298,34 +298,30 @@ export function DadosOSTab({ os, podeEditar }: DadosOSTabProps) {
               value={dataPagamento}
               onChange={(e) => setDataPagamento(e.target.value)}
               disabled={!podeEditar}
-              className="w-full px-3 py-2 bg-neutral-800 border border-neutral-700 rounded-lg text-sm disabled:opacity-50 focus:border-forja-500 focus:outline-none"
+              className="input py-2 text-sm disabled:opacity-50"
             />
           </div>
         </div>
       </section>
 
       {/* Erro / Sucesso */}
-      {erro && (
-        <div className="bg-red-500/10 border border-red-500/30 rounded-lg p-3 text-sm text-red-400">
-          {erro}
-        </div>
-      )}
+      {erro && <div className="error-message">{erro}</div>}
       {salvoComSucesso && (
-        <div className="bg-emerald-500/10 border border-emerald-500/30 rounded-lg p-3 text-sm text-emerald-400">
+        <div className="success-message">
           Alterações salvas com sucesso.
         </div>
       )}
 
       {/* Botão salvar */}
       {podeEditar && (
-        <div className="flex items-center justify-end gap-2 sticky bottom-4 bg-neutral-950/80 backdrop-blur-sm p-3 -mx-3 rounded-lg">
+        <div className="sticky-bar flex items-center justify-end gap-2 sticky bottom-4 p-3 -mx-3 rounded-lg">
           {mudou && (
             <span className="text-xs text-amber-400">Você tem alterações não salvas</span>
           )}
           <button
             type="submit"
             disabled={!mudou || updateOS.isPending}
-            className="px-4 py-2 bg-forja-500 hover:bg-forja-600 disabled:bg-neutral-700 disabled:cursor-not-allowed text-white rounded-lg font-medium text-sm transition"
+            className="btn-primary px-4 py-2 text-sm disabled:bg-neutral-700"
           >
             {updateOS.isPending ? 'Salvando...' : 'Salvar alterações'}
           </button>
@@ -333,7 +329,7 @@ export function DadosOSTab({ os, podeEditar }: DadosOSTabProps) {
       )}
 
       {!podeEditar && (
-        <div className="bg-neutral-800/50 border border-neutral-700 rounded-lg p-3 text-sm text-neutral-400">
+        <div className="subcard p-3 text-sm text-neutral-400">
           OS está com status "{os.status}" e não pode ser editada.
         </div>
       )}

@@ -200,13 +200,13 @@ export function DadosBasicosTab({ artigo }: DadosBasicosTabProps) {
             autoComplete="off"
           />
           {sugestoesCliente.length > 0 && (
-            <div className="absolute z-10 left-0 right-0 mt-1 bg-neutral-800 border border-neutral-700 rounded-lg shadow-lg max-h-56 overflow-y-auto">
+            <div className="dropdown-panel absolute z-10 left-0 right-0 mt-1 max-h-56 overflow-y-auto">
               {sugestoesCliente.map((c) => (
                 <button
                   key={c.id}
                   type="button"
                   onClick={() => selecionarCliente(c.id, c.nome)}
-                  className="w-full text-left px-3 py-2 hover:bg-neutral-700 text-sm border-b border-neutral-700/50 last:border-b-0"
+                  className="dropdown-panel-item w-full text-left px-3 py-2 text-sm"
                 >
                   {c.nome}
                 </button>

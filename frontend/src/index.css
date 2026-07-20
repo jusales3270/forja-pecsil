@@ -54,6 +54,40 @@
     @apply block text-sm font-medium text-neutral-300 mb-2;
   }
 
+  /* Label compacto (formulários densos: Nova OS, Tótem, abas de detalhe) */
+  .label-compact {
+    @apply block text-xs font-medium uppercase tracking-wide text-neutral-400 mb-1;
+  }
+
+  /* Painel secundário dentro de formulário (resumo, preview, bloco colapsável) */
+  .subcard {
+    @apply bg-neutral-800/50 border border-neutral-700 rounded-lg;
+  }
+
+  /* Valor calculado / somente leitura dentro de formulário */
+  .field-readonly {
+    @apply w-full px-3 py-2 bg-neutral-800/30 border border-neutral-700/50 rounded-lg font-mono text-forja-500;
+  }
+
+  /* Barra fixa (ex: botão salvar grudado no fim do formulário) */
+  .sticky-bar {
+    @apply bg-neutral-950/80 backdrop-blur-sm;
+  }
+
+  /* Painel flutuante de sugestões (autocomplete) */
+  .dropdown-panel {
+    @apply bg-neutral-800 border border-neutral-700 rounded-lg shadow-lg;
+  }
+
+  .dropdown-panel-item {
+    @apply hover:bg-neutral-700 border-b border-neutral-700/50 last:border-b-0;
+  }
+
+  /* Cabeçalho clicável de um .subcard (ex: bloco Financeiro colapsável) */
+  .subcard-toggle {
+    @apply hover:bg-neutral-800;
+  }
+
   /* Cards */
   .card {
     @apply bg-neutral-900 border border-neutral-800 rounded-xl p-6;
@@ -83,6 +117,10 @@
 
   .info-message {
     @apply text-sm text-blue-300 bg-blue-900/30 border border-blue-700/50 rounded-lg px-4 py-3;
+  }
+
+  .success-message {
+    @apply text-sm text-emerald-300 bg-emerald-900/30 border border-emerald-700/50 rounded-lg px-4 py-3;
   }
 
   /* =============================================
@@ -127,6 +165,38 @@
 
   .theme-light .info-message {
     @apply text-blue-700 bg-blue-50 border-blue-200;
+  }
+
+  .theme-light .success-message {
+    @apply text-emerald-700 bg-emerald-50 border-emerald-200;
+  }
+
+  .theme-light .subcard {
+    @apply bg-slate-50 border-slate-200;
+  }
+
+  .theme-light .subcard-toggle {
+    @apply hover:bg-slate-100;
+  }
+
+  .theme-light .field-readonly {
+    @apply bg-slate-50 border-slate-200 text-forja-600;
+  }
+
+  .theme-light .dropdown-panel {
+    @apply bg-white border-slate-200;
+  }
+
+  .theme-light .dropdown-panel-item {
+    @apply hover:bg-slate-50 border-slate-200/70;
+  }
+
+  .theme-light .label-compact {
+    @apply text-slate-500;
+  }
+
+  .theme-light .sticky-bar {
+    @apply bg-white/80;
   }
 
   /* Tabela de artigos — contraste no modo claro */
