@@ -19,11 +19,16 @@ import {
 } from '../../hooks/useArtigos';
 
 const TIPOS_PRODUTO: { value: TipoProduto; label: string }[] = [
-  { value: 'forma', label: 'Forma' },
+  { value: 'arruela', label: 'Arruela' },
   { value: 'bloco', label: 'Bloco' },
-  { value: 'fundo_forma', label: 'Fundo de Forma' },
+  { value: 'cabeca_sopro', label: 'Cabeça de Sopro' },
+  { value: 'forma', label: 'Forma' },
+  { value: 'forminha', label: 'Forminha' },
   { value: 'fundo_bloco', label: 'Fundo de Bloco' },
+  { value: 'fundo_forma', label: 'Fundo de Forma' },
+  { value: 'funil', label: 'Funil' },
   { value: 'molde', label: 'Molde' },
+  { value: 'puncao', label: 'Punção' },
 ];
 
 const LABELS_TIPO: Record<TipoProduto, string> = {
@@ -32,6 +37,11 @@ const LABELS_TIPO: Record<TipoProduto, string> = {
   fundo_forma: 'Fundo de Forma',
   fundo_bloco: 'Fundo de Bloco',
   molde: 'Molde',
+  arruela: 'Arruela',
+  cabeca_sopro: 'Cabeça de Sopro',
+  forminha: 'Forminha',
+  puncao: 'Punção',
+  funil: 'Funil',
 };
 
 const LABELS_STATUS: Record<string, string> = {
@@ -58,13 +68,18 @@ export function ArtigosListPage() {
   // Busca client-side (código + descrição)
   const artigosFiltrados = useMemo(() => {
     if (!artigos) return [];
+    let lista = [...artigos];
     const buscaLower = busca.trim().toLowerCase();
-    if (!buscaLower) return artigos;
-    return artigos.filter(
-      (a) =>
-        a.codigo.toLowerCase().includes(buscaLower) ||
-        a.descricao.toLowerCase().includes(buscaLower)
-    );
+    if (buscaLower) {
+      lista = lista.filter(
+        (a) =>
+          a.codigo.toLowerCase().includes(buscaLower) ||
+          a.descricao.toLowerCase().includes(buscaLower)
+      );
+    }
+    // Ordenar alfabeticamente pela descrição
+    lista.sort((a, b) => a.descricao.localeCompare(b.descricao, 'pt-BR'));
+    return lista;
   }, [artigos, busca]);
 
   const handleConfirmarDelete = async () => {
@@ -175,7 +190,7 @@ export function ArtigosListPage() {
                     <td className="px-4 py-3 font-mono text-neutral-100">
                       <span className="inline-flex items-center gap-1.5">{a.codigo}<ObservacaoBadge texto={a.observacoes} /></span>
                     </td>
-                    <td className="px-4 py-3 text-neutral-200">
+                    <td className="px-4 py-3 text-neutral-200 artigo-descricao">
                       {a.descricao}
                     </td>
                     <td className="px-4 py-3 text-neutral-300 text-xs">
@@ -263,19 +278,19 @@ interface NovoArtigoModalProps {
 function NovoArtigoModal({ open, onClose, onCreated }: NovoArtigoModalProps) {
   const [codigo, setCodigo] = useState('');
   const [descricao, setDescricao] = useState('');
-  const [tipoProduto, setTipoProduto] = useState<TipoProduto>('forma');
-  const [clienteId, setClienteId] = useState('');
+  const [tipoProduto, setTipoProduto] = useState<TipoProduto | ''>('');
+  const [clienteNome, setClienteNome] = useState('');
   const [erro, setErro] = useState<string | null>(null);
 
-  const { data: clientes } = useClientesList();
+
   const createMut = useCreateArtigo();
 
   useEffect(() => {
     if (open) {
       setCodigo('');
       setDescricao('');
-      setTipoProduto('forma');
-      setClienteId('');
+      setTipoProduto('');
+      setClienteNome('');
       setErro(null);
     }
   }, [open]);
@@ -292,8 +307,12 @@ function NovoArtigoModal({ open, onClose, onCreated }: NovoArtigoModalProps) {
       setErro('Descrição é obrigatória');
       return;
     }
-    if (!clienteId) {
-      setErro('Selecione um cliente');
+    if (!tipoProduto) {
+      setErro('Selecione um tipo de produto');
+      return;
+    }
+    if (!clienteNome.trim()) {
+      setErro('Informe o nome do cliente');
       return;
     }
 
@@ -301,8 +320,8 @@ function NovoArtigoModal({ open, onClose, onCreated }: NovoArtigoModalProps) {
       const artigo = await createMut.mutateAsync({
         codigo: codigo.trim(),
         descricao: descricao.trim(),
-        tipoProduto,
-        clienteId,
+        tipoProduto: tipoProduto as TipoProduto,
+        clienteNome: clienteNome.trim(),
       });
       onCreated(artigo.id);
     } catch (err: any) {
@@ -376,6 +395,7 @@ function NovoArtigoModal({ open, onClose, onCreated }: NovoArtigoModalProps) {
             onChange={(e) => setTipoProduto(e.target.value as TipoProduto)}
             className="input"
           >
+            <option value=""></option>
             {TIPOS_PRODUTO.map((t) => (
               <option key={t.value} value={t.value}>
                 {t.label}
@@ -386,18 +406,13 @@ function NovoArtigoModal({ open, onClose, onCreated }: NovoArtigoModalProps) {
 
         <div>
           <label className="label">Cliente *</label>
-          <select
-            value={clienteId}
-            onChange={(e) => setClienteId(e.target.value)}
+          <input
+            type="text"
+            value={clienteNome}
+            onChange={(e) => setClienteNome(e.target.value)}
             className="input"
-          >
-            <option value="">Selecione...</option>
-            {clientes?.map((c) => (
-              <option key={c.id} value={c.id}>
-                {c.nome}
-              </option>
-            ))}
-          </select>
+            placeholder="Digite o nome do cliente"
+          />
         </div>
 
         <p className="text-xs text-neutral-500">

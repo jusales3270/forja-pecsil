@@ -11,7 +11,12 @@ export type TipoProduto =
   | 'bloco'
   | 'fundo_forma'
   | 'fundo_bloco'
-  | 'molde';
+  | 'molde'
+  | 'arruela'
+  | 'cabeca_sopro'
+  | 'forminha'
+  | 'puncao'
+  | 'funil';
 
 export type StatusArtigo = 'rascunho' | 'ativo' | 'arquivado';
 
@@ -38,7 +43,8 @@ export interface CriarArtigoInput {
   codigo: string;
   descricao: string;
   tipoProduto: TipoProduto;
-  clienteId: string;
+  clienteId?: string;
+  clienteNome?: string;
   material?: string | null;
   poPadrao?: string | null;
   observacoes?: string | null;

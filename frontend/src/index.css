@@ -128,4 +128,21 @@
   .theme-light .info-message {
     @apply text-blue-700 bg-blue-50 border-blue-200;
   }
+
+  /* Tabela de artigos — contraste no modo claro */
+  .theme-light table thead {
+    @apply bg-slate-100 text-slate-600;
+  }
+  .theme-light table tbody {
+    @apply divide-slate-200;
+  }
+  .theme-light table tbody tr {
+    @apply hover:bg-slate-50;
+  }
+  .theme-light table td {
+    @apply text-slate-900;
+  }
+  .theme-light .label {
+    @apply text-slate-700;
+  }
 }

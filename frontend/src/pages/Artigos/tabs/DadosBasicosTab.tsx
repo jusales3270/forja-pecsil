@@ -3,7 +3,7 @@
 // Edição direta dos campos cadastrais
 // ============================================================
 
-import { useState, useEffect, type FormEvent } from 'react';
+import { useState, useEffect, useMemo, type FormEvent } from 'react';
 import { useClientesList } from '../../../hooks/useClientes';
 import {
   useUpdateArtigo,
@@ -12,11 +12,16 @@ import {
 } from '../../../hooks/useArtigos';
 
 const TIPOS_PRODUTO: { value: TipoProduto; label: string }[] = [
-  { value: 'forma', label: 'Forma' },
+  { value: 'arruela', label: 'Arruela' },
   { value: 'bloco', label: 'Bloco' },
-  { value: 'fundo_forma', label: 'Fundo de Forma' },
+  { value: 'cabeca_sopro', label: 'Cabeça de Sopro' },
+  { value: 'forma', label: 'Forma' },
+  { value: 'forminha', label: 'Forminha' },
   { value: 'fundo_bloco', label: 'Fundo de Bloco' },
+  { value: 'fundo_forma', label: 'Fundo de Forma' },
+  { value: 'funil', label: 'Funil' },
   { value: 'molde', label: 'Molde' },
+  { value: 'puncao', label: 'Punção' },
 ];
 
 interface DadosBasicosTabProps {
@@ -31,6 +36,7 @@ export function DadosBasicosTab({ artigo }: DadosBasicosTabProps) {
   const [descricao, setDescricao] = useState(artigo.descricao);
   const [tipoProduto, setTipoProduto] = useState<TipoProduto>(artigo.tipoProduto);
   const [clienteId, setClienteId] = useState(artigo.clienteId);
+  const [clienteBusca, setClienteBusca] = useState('');
   const [material, setMaterial] = useState(artigo.material ?? '');
   const [poPadrao, setPoPadrao] = useState(artigo.poPadrao ?? '');
   const [observacoes, setObservacoes] = useState(artigo.observacoes ?? '');
@@ -44,6 +50,7 @@ export function DadosBasicosTab({ artigo }: DadosBasicosTabProps) {
     setDescricao(artigo.descricao);
     setTipoProduto(artigo.tipoProduto);
     setClienteId(artigo.clienteId);
+    setClienteBusca('');
     setMaterial(artigo.material ?? '');
     setPoPadrao(artigo.poPadrao ?? '');
     setObservacoes(artigo.observacoes ?? '');
@@ -107,11 +114,29 @@ export function DadosBasicosTab({ artigo }: DadosBasicosTabProps) {
     setDescricao(artigo.descricao);
     setTipoProduto(artigo.tipoProduto);
     setClienteId(artigo.clienteId);
+    setClienteBusca('');
     setMaterial(artigo.material ?? '');
     setPoPadrao(artigo.poPadrao ?? '');
     setObservacoes(artigo.observacoes ?? '');
     setErro(null);
   };
+
+  // Sugestões de cliente por nome, enquanto o usuário digita
+  const sugestoesCliente = useMemo(() => {
+    const termo = clienteBusca.trim().toLowerCase();
+    if (!termo) return [];
+    return (clientes ?? [])
+      .filter((c) => c.nome.toLowerCase().includes(termo))
+      .slice(0, 8);
+  }, [clienteBusca, clientes]);
+
+  const nomeClienteAtual =
+    artigo.cliente?.nome ?? clientes?.find((c) => c.id === clienteId)?.nome ?? null;
+
+  function selecionarCliente(id: string, nome: string) {
+    setClienteId(id);
+    setClienteBusca(nome);
+  }
 
   const loading = updateMut.isPending;
 
@@ -165,17 +190,34 @@ export function DadosBasicosTab({ artigo }: DadosBasicosTabProps) {
       {/* Cliente */}
       <div>
         <label className="label">Cliente *</label>
-        <select
-          value={clienteId}
-          onChange={(e) => setClienteId(e.target.value)}
-          className="input"
-        >
-          {clientes?.map((c) => (
-            <option key={c.id} value={c.id}>
-              {c.nome}
-            </option>
-          ))}
-        </select>
+        <div className="relative">
+          <input
+            type="text"
+            value={clienteBusca}
+            onChange={(e) => setClienteBusca(e.target.value)}
+            className="input"
+            placeholder="Digite o nome do cliente..."
+            autoComplete="off"
+          />
+          {sugestoesCliente.length > 0 && (
+            <div className="absolute z-10 left-0 right-0 mt-1 bg-neutral-800 border border-neutral-700 rounded-lg shadow-lg max-h-56 overflow-y-auto">
+              {sugestoesCliente.map((c) => (
+                <button
+                  key={c.id}
+                  type="button"
+                  onClick={() => selecionarCliente(c.id, c.nome)}
+                  className="w-full text-left px-3 py-2 hover:bg-neutral-700 text-sm border-b border-neutral-700/50 last:border-b-0"
+                >
+                  {c.nome}
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+        <p className="text-xs text-neutral-500 mt-1">
+          Cliente atual: {nomeClienteAtual ?? '—'}
+          {clienteId !== artigo.clienteId && ' (alteração pendente de salvar)'}
+        </p>
       </div>
 
       {/* Linha: material + PO padrão */}

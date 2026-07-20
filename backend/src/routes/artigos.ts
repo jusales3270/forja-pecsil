@@ -29,9 +29,14 @@ const tipoProdutoEnum = z.enum([
   'fundo_forma',
   'fundo_bloco',
   'molde',
+  'arruela',
+  'cabeca_sopro',
+  'forminha',
+  'puncao',
+  'funil',
 ]);
 
-const criarArtigoSchema = z.object({
+const artigoBaseSchema = z.object({
   codigo: z
     .string()
     .min(1, 'Código é obrigatório')
@@ -41,13 +46,19 @@ const criarArtigoSchema = z.object({
     .min(1, 'Descrição é obrigatória')
     .max(500, 'Descrição muito longa'),
   tipoProduto: tipoProdutoEnum,
-  clienteId: z.string().uuid('clienteId inválido'),
+  clienteId: z.string().uuid('clienteId inválido').optional(),
+  clienteNome: z.string().min(1).max(200).optional(),
   material: z.string().max(200).nullable().optional(),
   poPadrao: z.string().max(100).nullable().optional(),
   observacoes: z.string().nullable().optional(),
 });
 
-const atualizarArtigoSchema = criarArtigoSchema.partial();
+const criarArtigoSchema = artigoBaseSchema.refine(
+  (d) => d.clienteId || d.clienteNome,
+  { message: 'clienteId ou clienteNome é obrigatório', path: ['clienteId'] },
+);
+
+const atualizarArtigoSchema = artigoBaseSchema.partial();
 
 const statusArtigoEnum = z.enum(['rascunho', 'ativo', 'arquivado']);
 
@@ -167,16 +178,31 @@ export async function artigosRoutes(app: FastifyInstance) {
         });
       }
 
-      // Verifica se cliente existe
-      const cliente = await prisma.cliente.findUnique({
-        where: { id: parsed.data.clienteId },
-      });
+      // Resolver clienteId: se veio clienteNome, faz find-or-create
+      let clienteId = parsed.data.clienteId;
 
-      if (!cliente) {
-        return reply.code(404).send({
-          error: 'cliente_not_found',
-          message: 'Cliente não encontrado',
+      if (!clienteId && parsed.data.clienteNome) {
+        const nomeNormalizado = parsed.data.clienteNome.trim();
+        let cliente = await prisma.cliente.findFirst({
+          where: { nome: { equals: nomeNormalizado, mode: 'insensitive' } },
         });
+        if (!cliente) {
+          cliente = await prisma.cliente.create({
+            data: { nome: nomeNormalizado },
+          });
+        }
+        clienteId = cliente.id;
+      } else {
+        // Verifica se cliente existe pelo ID
+        const cliente = await prisma.cliente.findUnique({
+          where: { id: clienteId! },
+        });
+        if (!cliente) {
+          return reply.code(404).send({
+            error: 'cliente_not_found',
+            message: 'Cliente não encontrado',
+          });
+        }
       }
 
       // Verifica unicidade de código + cliente
@@ -184,7 +210,7 @@ export async function artigosRoutes(app: FastifyInstance) {
         where: {
           codigo_clienteId: {
             codigo: parsed.data.codigo,
-            clienteId: parsed.data.clienteId,
+            clienteId: clienteId!,
           },
         },
       });
@@ -199,9 +225,11 @@ export async function artigosRoutes(app: FastifyInstance) {
       // Pega usuário autenticado (do JWT)
       const pessoaId = (request.user as any).pessoaId;
 
+      const { clienteNome, ...dadosLimpos } = parsed.data;
       const artigo = await prisma.artigo.create({
         data: {
-          ...parsed.data,
+          ...dadosLimpos,
+          clienteId: clienteId!,
           status: 'rascunho',
           criadoPorId: pessoaId,
         },
