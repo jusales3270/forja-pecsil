@@ -1,0 +1,612 @@
+[
+  {
+    "codigo": "5-10-00001",
+    "descricao": "CABEÇA DE SOPRO 026-0550-LA08 SS-812",
+    "tipoProduto": "cabeca_sopro"
+  },
+  {
+    "codigo": "5-10-00002",
+    "descricao": "CABEÇA DE SOPRO ARJEK BR1 / BR2-63 FOFO GG-25",
+    "tipoProduto": "cabeca_sopro"
+  },
+  {
+    "codigo": "5-10-00003",
+    "descricao": "CABEÇA DE SOPRO 026-0540-LA01 CI-800",
+    "tipoProduto": "cabeca_sopro"
+  },
+  {
+    "codigo": "5-10-00004",
+    "descricao": "CABEÇA DE SOPRO 026-0600-6 CI-800",
+    "tipoProduto": "cabeca_sopro"
+  },
+  {
+    "codigo": "5-10-00005",
+    "descricao": "CABEÇA DE SOPRO 030-1680-LA36 [PP-30] SS-812",
+    "tipoProduto": "cabeca_sopro"
+  },
+  {
+    "codigo": "5-10-00006",
+    "descricao": "CABEÇA DE SOPRO GROWLER 2000 ML ART. 4583 FOFO CI-800 042-3122-LA01",
+    "tipoProduto": "cabeca_sopro"
+  },
+  {
+    "codigo": "5-10-00007",
+    "descricao": "CABEÇA DE SOPRO 026-0611-LA02 FOFO CI-800",
+    "tipoProduto": "cabeca_sopro"
+  },
+  {
+    "codigo": "5-10-00008",
+    "descricao": "CABEÇA DE SOPRO 38-2000-LA01 (JUMEX) SS-812",
+    "tipoProduto": "cabeca_sopro"
+  },
+  {
+    "codigo": "5-10-00010",
+    "descricao": "CABEÇA DE SOPRO 026-0640-01 FOFO CI-800",
+    "tipoProduto": "cabeca_sopro"
+  },
+  {
+    "codigo": "5-10-00009",
+    "descricao": "CABEÇA DE SOPRO 032-3153-LA02 FOFO CI-800",
+    "tipoProduto": "cabeca_sopro"
+  },
+  {
+    "codigo": "5-10-00011",
+    "descricao": "CABEÇA DE SOPRO 033-3141-LA01 B&B FOFO CI-800",
+    "tipoProduto": "cabeca_sopro"
+  },
+  {
+    "codigo": "5-10-00012",
+    "descricao": "CABEÇA DE SOPRO 030-1680-LA05 FOFO CI-800",
+    "tipoProduto": "cabeca_sopro"
+  },
+  {
+    "codigo": "5-10-00013",
+    "descricao": "CABEÇA DE SOPRO 028-MCA1-LA01 FOFO CI-800",
+    "tipoProduto": "cabeca_sopro"
+  },
+  {
+    "codigo": "5-10-00014",
+    "descricao": "CABEÇA DE SOPRO 028-MCA-2-3 FOFO CI-800",
+    "tipoProduto": "cabeca_sopro"
+  },
+  {
+    "codigo": "5-10-00015",
+    "descricao": "CABEÇA DE SOPRO 026-0502-LA03 FOFO CI-800",
+    "tipoProduto": "cabeca_sopro"
+  },
+  {
+    "codigo": "5-10-00016",
+    "descricao": "CABEÇA DE SOPRO 026-0655-R002 FOFO CI-800",
+    "tipoProduto": "cabeca_sopro"
+  },
+  {
+    "codigo": "5-10-00017",
+    "descricao": "CABEÇA DE SOPRO 026-0600-LA11 FOFO CI-800",
+    "tipoProduto": "cabeca_sopro"
+  },
+  {
+    "codigo": "5-10-00018",
+    "descricao": "CABEÇA DE SOPRO 030-GUALA-LA20 SS-812",
+    "tipoProduto": "cabeca_sopro"
+  },
+  {
+    "codigo": "5-10-00019",
+    "descricao": "CABEÇA DE SOPRO 068-ARJEK-BR-63 FOFO CI-800",
+    "tipoProduto": "cabeca_sopro"
+  },
+  {
+    "codigo": "5-10-00020",
+    "descricao": "CABEÇA DE SOPRO 026-0550-LA05 SS-812",
+    "tipoProduto": "cabeca_sopro"
+  },
+  {
+    "codigo": "5-10-00021",
+    "descricao": "CABEÇA DE SOPRO FRASCO EKOS POTI II 100 ML ART. 401 SAE 1045",
+    "tipoProduto": "cabeca_sopro"
+  },
+  {
+    "codigo": "5-10-00022",
+    "descricao": "CABEÇA DE SOPRO POTE DAWN JAR 200 G 808 ML ART. 943 SAE 1045",
+    "tipoProduto": "cabeca_sopro"
+  },
+  {
+    "codigo": "5-10-00023",
+    "descricao": "CABEÇA DE SOPRO POTE DAWN JAR 100 G 408 ML ART. 944 SAE 1045",
+    "tipoProduto": "cabeca_sopro"
+  },
+  {
+    "codigo": "5-10-00024",
+    "descricao": "CABEÇA DE SOPRO POTE CONSERVA 600 ML ART. 2000 SAE 1045",
+    "tipoProduto": "cabeca_sopro"
+  },
+  {
+    "codigo": "5-10-00025",
+    "descricao": "CABEÇA DE SOPRO 026-0600-LA02 SAE 1045",
+    "tipoProduto": "cabeca_sopro"
+  },
+  {
+    "codigo": "5-10-00026",
+    "descricao": "CABEÇA DE SOPRO POTE DAWN JAR 50 ART.204 SAE 1045",
+    "tipoProduto": "cabeca_sopro"
+  },
+  {
+    "codigo": "5-10-00027",
+    "descricao": "CABEÇA DE SOPRO POTE AZEITONA 200G ART. 3000 SAE 1045",
+    "tipoProduto": "cabeca_sopro"
+  },
+  {
+    "codigo": "5-10-00028",
+    "descricao": "CABEÇA DE SOPRO 058-ARJEK-LA02 FOFO CI-800",
+    "tipoProduto": "cabeca_sopro"
+  },
+  {
+    "codigo": "5-10-00029",
+    "descricao": "CABEÇA DE SOPRO 026-0640-LA01 SS-812",
+    "tipoProduto": "cabeca_sopro"
+  },
+  {
+    "codigo": "5-10-00030",
+    "descricao": "CABEÇA DE SOPRO 026-0650-LA13 FOFO CI-800",
+    "tipoProduto": "cabeca_sopro"
+  },
+  {
+    "codigo": "5-10-00031",
+    "descricao": "CABEÇA DE SOPRO 038-2000-R030 FOFO CI-800",
+    "tipoProduto": "cabeca_sopro"
+  },
+  {
+    "codigo": "5-10-00032",
+    "descricao": "CABEÇA DE SOPRO 030-1683-LA05 FOFO CI-800",
+    "tipoProduto": "cabeca_sopro"
+  },
+  {
+    "codigo": "5-10-00033",
+    "descricao": "CABEÇA DE SOPRO CERV. BUD CADILLAC 550 ML 026-600 ART. 18022 AÇO",
+    "tipoProduto": "cabeca_sopro"
+  },
+  {
+    "codigo": "5-10-00034",
+    "descricao": "CABEÇA DE SOPRO CERV. COROA 300 ML 26-600 ART. 18030 AÇO",
+    "tipoProduto": "cabeca_sopro"
+  },
+  {
+    "codigo": "5-10-00035",
+    "descricao": "CABEÇA DE SOPRO 026-0640-LA01 ST-807 - ARG",
+    "tipoProduto": "cabeca_sopro"
+  },
+  {
+    "codigo": "5-10-00036",
+    "descricao": "MOLDES PARA VIDRO - MOLDES CABEÇA DE SOPRO 026-0600-LA11 ST-807",
+    "tipoProduto": "cabeca_sopro"
+  },
+  {
+    "codigo": "5-10-00037",
+    "descricao": "CABEÇA DE SOPRO 028-GUALA-LA01 ST-807",
+    "tipoProduto": "cabeca_sopro"
+  },
+  {
+    "codigo": "5-10-00038",
+    "descricao": "CABEÇA DE SOPRO CERV. RETORNAVEL 635ML ART. 19022 FOFO 96A",
+    "tipoProduto": "cabeca_sopro"
+  },
+  {
+    "codigo": "5-10-00045",
+    "descricao": "CABEÇA DE SOPRO 030-GUALA-LA34 SS-812 OI-PE",
+    "tipoProduto": "cabeca_sopro"
+  },
+  {
+    "codigo": "5-10-00042",
+    "descricao": "CABEÇA DE SOPRO CERV. REETORNAVEL 635ML ART.1219",
+    "tipoProduto": "cabeca_sopro"
+  },
+  {
+    "codigo": "5-10-00039",
+    "descricao": "CABEÇA DE SOPRO CERV. NEW BEBETO ART. 999 FOFO NODULAR",
+    "tipoProduto": "cabeca_sopro"
+  },
+  {
+    "codigo": "5-10-00040",
+    "descricao": "CABEÇA DE SOPRO 030-1680-LA62 OI-SP",
+    "tipoProduto": "cabeca_sopro"
+  },
+  {
+    "codigo": "5-10-00041",
+    "descricao": "CABEÇA DE SOPRO CERV. BRAHMA BELL 355ML ART. 19046 FOFO NODULAR",
+    "tipoProduto": "cabeca_sopro"
+  },
+  {
+    "codigo": "5-10-00043",
+    "descricao": "CABEÇA DE SOPRO 026-0600-LA14 FOFO CI-800",
+    "tipoProduto": "cabeca_sopro"
+  },
+  {
+    "codigo": "5-10-00044",
+    "descricao": "CABEÇA DE SOPRO 030-1680-LA69 ST-807",
+    "tipoProduto": "cabeca_sopro"
+  },
+  {
+    "codigo": "5-10-0040",
+    "descricao": "CABEÇA DE SOPRO CERV. BUD CADILLAC 330 ML ART. A17066 FOFO",
+    "tipoProduto": "cabeca_sopro"
+  },
+  {
+    "codigo": "5-10-00046",
+    "descricao": "CABEÇA DE SOPRO CERV. BOHEMIA 355ML NNPB ART. 19048 FOFO NODULAR",
+    "tipoProduto": "cabeca_sopro"
+  },
+  {
+    "codigo": "5-10-00047",
+    "descricao": "CABEÇA DE SOPRO CERV. CERV. BOHEMIA 355ML B&B ART. A20011 FOFO NODULAR",
+    "tipoProduto": "cabeca_sopro"
+  },
+  {
+    "codigo": "5-10-00048",
+    "descricao": "CABEÇA DE SOPRO CERV. FLOPPY 340ML ART. 20018 FOFO NODULAR",
+    "tipoProduto": "cabeca_sopro"
+  },
+  {
+    "codigo": "5-10-00049",
+    "descricao": "CABEÇA DE SOPRO 028-MCA2-LA05 INOX AISI 420",
+    "tipoProduto": "cabeca_sopro"
+  },
+  {
+    "codigo": "5-10-00050",
+    "descricao": "CABEÇA DE SOPRO CERV. BRAHMA DUPLO MALTE 330ML ART. 21021 FOFO NODULAR",
+    "tipoProduto": "cabeca_sopro"
+  },
+  {
+    "codigo": "5-10-00051",
+    "descricao": "CABEÇA DE SOPRO 030-1683-LA03 ST-803",
+    "tipoProduto": "cabeca_sopro"
+  },
+  {
+    "codigo": "5-10-00052",
+    "descricao": "CABEÇA DE SOPRO CERV. BUD CADILLAC 550ML TG ART. A20022 FOFO NODULAR",
+    "tipoProduto": "cabeca_sopro"
+  },
+  {
+    "codigo": "5-10-00053",
+    "descricao": "CABEÇA DE SOPRO CERV. LN CRAFT STD 355ML ART. A20027 FOFO NODULAR",
+    "tipoProduto": "cabeca_sopro"
+  },
+  {
+    "codigo": "5-10-00054",
+    "descricao": "CABEÇA DE SOPRO CERV. 600ML ART. A20023 FOFO NODULAR",
+    "tipoProduto": "cabeca_sopro"
+  },
+  {
+    "codigo": "5-10-00055",
+    "descricao": "CABEÇA DE SOPRO CERV. STELLA ARTOIS 330ML ART. 562688 FOFO CI-800",
+    "tipoProduto": "cabeca_sopro"
+  },
+  {
+    "codigo": "5-10-00056",
+    "descricao": "CABEÇA DE SOPRO CERV. NEW BEBETO 300ML NNPB ART. A20030 FOFO NODULAR",
+    "tipoProduto": "cabeca_sopro"
+  },
+  {
+    "codigo": "5-10-00057",
+    "descricao": "CABEÇA DE SOPRO CERV. NEW BEBETO 300ML B&B ART. A18021 FOFO NODULAR",
+    "tipoProduto": "cabeca_sopro"
+  },
+  {
+    "codigo": "5-10-00058",
+    "descricao": "CABEÇA DE SOPRO POTE HERO QUEENSBERRY 290ML ART. 563507 - FOFO CI-800",
+    "tipoProduto": "cabeca_sopro"
+  },
+  {
+    "codigo": "5-10-00063",
+    "descricao": "CABEÇA DE SOPRO GFA. CERV. JEEP 1000 ML ART. A20031 - FOFO NODULAR",
+    "tipoProduto": "cabeca_sopro"
+  },
+  {
+    "codigo": "5-10-00059",
+    "descricao": "CABEÇA DE SOPRO 028-GUALA-LA01 FOFO CI-800 - OI-RJ",
+    "tipoProduto": "cabeca_sopro"
+  },
+  {
+    "codigo": "5-10-00060",
+    "descricao": "CABEÇA DE SOPRO 026-0540-LA01 CI-800 OI-SP",
+    "tipoProduto": "cabeca_sopro"
+  },
+  {
+    "codigo": "5-10-00061",
+    "descricao": "CABEÇA DE SOPRO CERV. CADILLAC 550ML 400GR ART. 20010 FOFO NODULAR",
+    "tipoProduto": "cabeca_sopro"
+  },
+  {
+    "codigo": "5-10-00062",
+    "descricao": "CABEÇA DE SOPRO CERV. BRAHMA DUPLO MALTE 330ML ART. 21M003 FOFO NODULAR",
+    "tipoProduto": "cabeca_sopro"
+  },
+  {
+    "codigo": "5-10-00064",
+    "descricao": "CABEÇA DE SOPRO CERV. BEBETO 300ML 215GR NNPB TG ART. 21M001 - NODULAR",
+    "tipoProduto": "cabeca_sopro"
+  },
+  {
+    "codigo": "5-10-00065",
+    "descricao": "CABEÇA DE SOPRO 031-1651-LA20 AISI 303 PE",
+    "tipoProduto": "cabeca_sopro"
+  },
+  {
+    "codigo": "5-10-00066",
+    "descricao": "CABEÇA DE SOPRO CERV. RET. ESMERALDA 600ML 420GR BB ART. 21M023 - NODULAR",
+    "tipoProduto": "cabeca_sopro"
+  },
+  {
+    "codigo": "5-10-00067",
+    "descricao": "CABEÇA DE SOPRO CERV. STELLA ARTOIS 330ML NNPB TG ART. 21M021 - NODULAR",
+    "tipoProduto": "cabeca_sopro"
+  },
+  {
+    "codigo": "5-10-00068",
+    "descricao": "CABEÇA DE SOPRO 030-1680-LA40 AISI 303 PE",
+    "tipoProduto": "cabeca_sopro"
+  },
+  {
+    "codigo": "5-10-00069",
+    "descricao": "CABEÇA DE SOPRO 026-0655-LA14 FOFO CI-800 SP",
+    "tipoProduto": "cabeca_sopro"
+  },
+  {
+    "codigo": "5-10-00070",
+    "descricao": "CABEÇA DE SOPRO 030-1680-LA40 FOFO CI-800 RJ",
+    "tipoProduto": "cabeca_sopro"
+  },
+  {
+    "codigo": "5-10-00071",
+    "descricao": "CABEÇA DE SOPRO VASO REDONDO 700ML ART. 013 SAE 1045",
+    "tipoProduto": "cabeca_sopro"
+  },
+  {
+    "codigo": "5-10-00072",
+    "descricao": "CABEÇA DE SOPRO 026-0650-LA13 AISI SS-808 OI-PE",
+    "tipoProduto": "cabeca_sopro"
+  },
+  {
+    "codigo": "5-10-00073",
+    "descricao": "CABEÇA DE SOPRO CERV. BECK´S 600ML 420GR BB ART. 22M012 - NODULAR",
+    "tipoProduto": "cabeca_sopro"
+  },
+  {
+    "codigo": "5-10-00074",
+    "descricao": "MOLDES PARA VIDRO - CABEÇA DE SOPRO 026-0650-LA06 ST-807",
+    "tipoProduto": "cabeca_sopro"
+  },
+  {
+    "codigo": "5-10-00075",
+    "descricao": "CABEÇA DE SOPRO 030-1680-LA78 FOFO CI-800 SP",
+    "tipoProduto": "cabeca_sopro"
+  },
+  {
+    "codigo": "5-10-00076",
+    "descricao": "CABEÇA DE SOPRO 030-GUALA-LA05 FOFO CI-800 SP",
+    "tipoProduto": "cabeca_sopro"
+  },
+  {
+    "codigo": "5-10-00077",
+    "descricao": "CABEÇA DE SOPRO 031-1621-LA02 AISI SS-812 OI-PE",
+    "tipoProduto": "cabeca_sopro"
+  },
+  {
+    "codigo": "5-10-00078",
+    "descricao": "CABEÇA DE SOPRO CERV. SPATEN RET. 330ML NNPB TG ART. 23M001 - NODULAR",
+    "tipoProduto": "cabeca_sopro"
+  },
+  {
+    "codigo": "5-10-00079",
+    "descricao": "CABEÇA DE SOPRO CERV. STELLA ARTOIS 330ML NNPB 197GR ART. 22M017 - NODULAR",
+    "tipoProduto": "cabeca_sopro"
+  },
+  {
+    "codigo": "5-10-00080",
+    "descricao": "CABEÇA DE SOPRO 026-0650-LA01 FOFO CI-800",
+    "tipoProduto": "cabeca_sopro"
+  },
+  {
+    "codigo": "5-10-00081",
+    "descricao": "CABEÇA DE SOPRO CERV. CORONA NRB 330ML NNPB TG ART. 23M013 FOFO NODULAR",
+    "tipoProduto": "cabeca_sopro"
+  },
+  {
+    "codigo": "5-10-00082",
+    "descricao": "CABEÇA DE SOPRO 026-0655-LA14 FOFO CI-800 RJ",
+    "tipoProduto": "cabeca_sopro"
+  },
+  {
+    "codigo": "5-10-00083",
+    "descricao": "CABEÇA DE SOPRO POTE MULTIUSO 350ML ART. 020 SAE 1045",
+    "tipoProduto": "cabeca_sopro"
+  },
+  {
+    "codigo": "5-10-00084",
+    "descricao": "CABEÇA DE SOPRO CERV. BUD CADILLAC 330ML 197GR NNPB VR1 ART. 23M016 FOFO NODULAR",
+    "tipoProduto": "cabeca_sopro"
+  },
+  {
+    "codigo": "5-10-00085",
+    "descricao": "CABEÇA DE SOPRO CERV. BUD CADILLAC 330ML 190GR NNPB VR1 ART. 23M017 FOFO NODULAR",
+    "tipoProduto": "cabeca_sopro"
+  },
+  {
+    "codigo": "5-10-00086",
+    "descricao": "CABEÇA DE SOPRO 026-0550-LA04 GS-800",
+    "tipoProduto": "cabeca_sopro"
+  },
+  {
+    "codigo": "5-10-00087",
+    "descricao": "CABEÇA DE SOPRO 026-0655-LA02 CI-800 SP",
+    "tipoProduto": "cabeca_sopro"
+  },
+  {
+    "codigo": "5-10-00088",
+    "descricao": "CABEÇA DE SOPRO BIG POTE 3 KG ART. 3959 FOFO CI-800",
+    "tipoProduto": "cabeca_sopro"
+  },
+  {
+    "codigo": "5-10-00089",
+    "descricao": "CABEÇA DE SOPRO 030-1680-LA62 CI-800 SP",
+    "tipoProduto": "cabeca_sopro"
+  },
+  {
+    "codigo": "5-10-00090",
+    "descricao": "CABEÇA DE SOPRO 030-3113-LA09 CI-800 SP",
+    "tipoProduto": "cabeca_sopro"
+  },
+  {
+    "codigo": "5-10-00091",
+    "descricao": "CABEÇA DE SOPRO 030-1680-LA28 CI-800",
+    "tipoProduto": "cabeca_sopro"
+  },
+  {
+    "codigo": "5-10-00092",
+    "descricao": "CABEÇA DE SOPRO 030-3110-LA02 CI-800",
+    "tipoProduto": "cabeca_sopro"
+  },
+  {
+    "codigo": "5-10-00093",
+    "descricao": "CABEÇA DE SOPRO 030-1680-LA49 CI-800",
+    "tipoProduto": "cabeca_sopro"
+  },
+  {
+    "codigo": "5-10-00094",
+    "descricao": "CABEÇA DE SOPRO CERV. BUD CADILLAC 330ML 190GR ART. 21M005 FOFO",
+    "tipoProduto": "cabeca_sopro"
+  },
+  {
+    "codigo": "5-10-00095",
+    "descricao": "CABEÇA DE SOPRO 030-3110-LA24 CI-800",
+    "tipoProduto": "cabeca_sopro"
+  },
+  {
+    "codigo": "5-10-00096",
+    "descricao": "CABEÇA DE SOPRO CERV. CORONA NRB 330ML 215GR ART. 24M012 - FOFO",
+    "tipoProduto": "cabeca_sopro"
+  },
+  {
+    "codigo": "5-10-00097",
+    "descricao": "CABEÇA DE SOPRO 067-1703-LA05 CI-800",
+    "tipoProduto": "cabeca_sopro"
+  },
+  {
+    "codigo": "5-10-00098",
+    "descricao": "CABEÇA DE SOPRO 030-1683-LA08 FOFO CI-800",
+    "tipoProduto": "cabeca_sopro"
+  },
+  {
+    "codigo": "5-10-00099",
+    "descricao": "CABEÇA DE SOPRO 031-1651-LA21 FOFO CI-800",
+    "tipoProduto": "cabeca_sopro"
+  },
+  {
+    "codigo": "5-10-00100",
+    "descricao": "CABEÇA DE SOPRO 030-GUALA-LA23 CI-800",
+    "tipoProduto": "cabeca_sopro"
+  },
+  {
+    "codigo": "5-10-00101",
+    "descricao": "CABEÇA DE SOPRO CERV. CADILLAC 330ML ART.39501 FOFO 96A",
+    "tipoProduto": "cabeca_sopro"
+  },
+  {
+    "codigo": "5-10-00102",
+    "descricao": "CABEÇA DE SOPRO 026-0600-R017 CI-800",
+    "tipoProduto": "cabeca_sopro"
+  },
+  {
+    "codigo": "5-10-00103",
+    "descricao": "MOLDES PARA VIDRO - BLOW HEAD 030-1651-LA13 ST-807",
+    "tipoProduto": "cabeca_sopro"
+  },
+  {
+    "codigo": "5-10-00104",
+    "descricao": "CABEÇA DE SOPRO 028-1651-LA03 CI-882",
+    "tipoProduto": "cabeca_sopro"
+  },
+  {
+    "codigo": "5-10-00105",
+    "descricao": "CABEÇA DE SOPRO 030-GUALA-LA58 CI-882",
+    "tipoProduto": "cabeca_sopro"
+  },
+  {
+    "codigo": "5-10-00106",
+    "descricao": "CABEÇA DE SOPRO 030-2080-LA04 CI-800",
+    "tipoProduto": "cabeca_sopro"
+  },
+  {
+    "codigo": "5-10-00107",
+    "descricao": "CABEÇA DE SOPRO 028-MCA1-LA01 FOFO SS-808",
+    "tipoProduto": "cabeca_sopro"
+  },
+  {
+    "codigo": "5-10-00108",
+    "descricao": "CABEÇA DE SOPRO 028-1683-LA01 CI-882",
+    "tipoProduto": "cabeca_sopro"
+  },
+  {
+    "codigo": "5-10-00109",
+    "descricao": "CABEÇA DE SOPRO 028-1683-LA01 SS-808",
+    "tipoProduto": "cabeca_sopro"
+  },
+  {
+    "codigo": "5-10-00110",
+    "descricao": "MOLDES PARA VIDRO - BLOW HEAD 030-3110-LA13 ST-807",
+    "tipoProduto": "cabeca_sopro"
+  },
+  {
+    "codigo": "5-10-00111",
+    "descricao": "CABEÇA DE SOPRO CERV. SPATEN OW 330ML 195G NNPB ART. 0467 01 NODULAR",
+    "tipoProduto": "cabeca_sopro"
+  },
+  {
+    "codigo": "5-10-00112",
+    "descricao": "CABEÇA DE SOPRO CERV. STELLA GOLD 330ML 205G NNPB ART. 0442 01 FOFO NODULAR",
+    "tipoProduto": "cabeca_sopro"
+  },
+  {
+    "codigo": "5-10-00114",
+    "descricao": "CABEÇA DE SOPRO 030-3110-LA25 SS-808",
+    "tipoProduto": "cabeca_sopro"
+  },
+  {
+    "codigo": "5-10-00115",
+    "descricao": "CABEÇA DE SOPRO 030-3110-LA02 SS-808",
+    "tipoProduto": "cabeca_sopro"
+  },
+  {
+    "codigo": "5-10-00117",
+    "descricao": "CABEÇA DE SOPRO 058-2038-LA02 CI-882",
+    "tipoProduto": "cabeca_sopro"
+  },
+  {
+    "codigo": "5-10-00118",
+    "descricao": "CABEÇA DE SOPRO 028-1683-LA02 FOFO CI-882",
+    "tipoProduto": "cabeca_sopro"
+  },
+  {
+    "codigo": "5-10-00113",
+    "descricao": "CABEÇA DE SOPRO 048-2033-LA01 SS-812",
+    "tipoProduto": "cabeca_sopro"
+  },
+  {
+    "codigo": "5-10-00045-B",
+    "descricao": "CABEÇA DE SOPRO CERV. MATRIOSKA 330ML 195G ART. 26M001 FOFO NODULAR",
+    "tipoProduto": "cabeca_sopro"
+  },
+  {
+    "codigo": "5-10-00119",
+    "descricao": "CABEÇA DE SOPRO GFA. CERVEJA 600ML 420GR ART. 25TT009 CAST IRON",
+    "tipoProduto": "cabeca_sopro"
+  },
+  {
+    "codigo": "5-10-00116",
+    "descricao": "MOLDES PARA VIDRO - BLOW HEAD 030-1683-LA09 ST-807",
+    "tipoProduto": "cabeca_sopro"
+  },
+  {
+    "codigo": "5-10-00120",
+    "descricao": "CABEÇA DE SOPRO GPI 038-2000-R030 NNPB SS-808",
+    "tipoProduto": "cabeca_sopro"
+  }
+]

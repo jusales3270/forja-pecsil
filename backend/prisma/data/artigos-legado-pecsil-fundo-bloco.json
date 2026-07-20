@@ -1,0 +1,3317 @@
+[
+  {
+    "codigo": "5-04-00028",
+    "descricao": "FUNDO DE BLOCO FRASCO MALBEC 100 ML ART. 387 FOFO Q3",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00038",
+    "descricao": "FUNDO DE BLOCO VAS. CERV. MARADONA 1000 ML ART. 369A FOFO CI-882",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00041",
+    "descricao": "FUNDO DE BLOCO GFA. VODKA ORLOFF 1000 ML ART. 267 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00209",
+    "descricao": "FUNDO DE BLOCO GFA. GIN GUALA 1005 ML DC ART. 2265 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00001",
+    "descricao": "FUNDO DE BLOCO GFA. ESPUMANTE 750 ML ART. 4563 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00004",
+    "descricao": "FUNDO DE BLOCO GFA. CERV. SCHIN 1000 ML ART. 1065 FOFO MOVTI",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00002",
+    "descricao": "FUNDO DE BLOCO POTE MAD MAX 290 ML ART. 407 FOFO Q3",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00003",
+    "descricao": "FUNDO DE BLOCO VAS. CONHAQUE DREHER 900 ML DG ART. 280B NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00014",
+    "descricao": "FUNDO DE BLOCO CERV. BUDWEISER KING 343 ML ART. G28 FOFO NODULAR",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00005",
+    "descricao": "FUNDO DE BLOCO GFA. GUARANÁ 1000 ML ONE WAY ART. 4532 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00006",
+    "descricao": "FUNDO DE BLOCO BEBETO ART. 1121 FOFO",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00007",
+    "descricao": "FUNDO DE BLOCO BUDWEISER HEYE ART. 1122 FOFO",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00008",
+    "descricao": "FUNDO DE BLOCO GFA. HEINEKEN K2 330 ART. 4538 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00009",
+    "descricao": "FUNDO DE BLOCO NOVA BUDWEISER ART.813 FOFO",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00010",
+    "descricao": "FUNDO DE BLOCO CERV. STELLA ARTOIS 275 ML ART. 4557 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00011",
+    "descricao": "FUNDO DE BLOCO CERV. SKOL BEATS SAFE 313 ML ART. 4519 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00012",
+    "descricao": "FUNDO DE BLOCO POTE SONETO 100 ML ART. 396 FOFO Q3",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00013",
+    "descricao": "FUNDO DE BLOCO GFA. BACARDI TEACHERS 1500 ML 6.1/4\" BB ART. 390A FOFO CI-882",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00015",
+    "descricao": "FUNDO DE BLOCO FRASCO SHINE 50 ML ART. 346 FOFO Q3",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00016",
+    "descricao": "FUNDO DE BLOCO FRASCO PLUMA 60 ML ART. 152 FOFO Q3",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00017",
+    "descricao": "FUNDO DE BLOCO FRASCO LINDA RADIANCE 100 ML ART. 404 FOFO Q3",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00018",
+    "descricao": "FUNDO DE BLOCO FRASCO NARRATIVA HOMME 100 ML ART. 338 FOFO Q3",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00019",
+    "descricao": "FUNDO DE BLOCO CERV. SOL SHOT 250 ML ART. 4025 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00020",
+    "descricao": "FUNDO DE BLOCO FRASCO NARRATIVA FEMME 100 ML ART. 343 FOFO Q3",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00021",
+    "descricao": "FUNDO DE BLOCO GFA. COCA-COLA 1000 ML ART. 021A FOFO CI-882",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00022",
+    "descricao": "FUNDO DE BLOCO GFA. SUCO PREMIUM 300 ML ART. 626 FOFO Q3 / DELORO 40G",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00023",
+    "descricao": "FUNDO DE BLOCO GFA. BORDALESA PP30 750 ML ART. 4299 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00024",
+    "descricao": "FUNDO DE BLOCO GFA. SUCO FAMÍLIA 2000 ML ART. 4562 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00025",
+    "descricao": "FUNDO DE BLOCO FRASCO FLORATA 75 ML ART. 409 FOFO Q3",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00026",
+    "descricao": "FUNDO DE BLOCO FRASCO FLORATA 75 ML ART. 410 FOFO Q3",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00027",
+    "descricao": "FUNDO DE BLOCO BIG POTE 3 KG ART. 3959 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00029",
+    "descricao": "FUNDO DE BLOCO GFA. AZEITE CILÍNDRICO 500 ML ART. 745 FOFO MOVTI",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00030",
+    "descricao": "FUNDO DE BLOCO CERV. MONET 550 ML ART. 4624 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00031",
+    "descricao": "FUNDO DE BLOCO GFA. SALTON 750 ML ART. 621 FOFO MOVTI",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00033",
+    "descricao": "FUNDO DE BLOCO VAS. COCA-COLA MULTIPRODUTO 200 ML DG BB ART. 8207A FOFO CI-882",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00032",
+    "descricao": "FUNDO DE BLOCO GFA. VELHO BARREIRO - PSBE ART. 619 FOFO Q3 / DELORO 40G",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00035",
+    "descricao": "FUNDO DE BLOCO FRASCO GUINESS 95 ML ART. 380 FOFO Q3",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00034",
+    "descricao": "FUNDO DE BLOCO VAS. GIN GUALA 970 ML ART. 331 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00036",
+    "descricao": "FUNDO DE BLOCO FRASCO AMPHORA 110 ML ART. 603 FOFO Q3",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00037",
+    "descricao": "FUNDO DE BLOCO FRASCO RIO DE JANEIRO FEMME 75 ML ART. 684 FOFO Q3",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00039",
+    "descricao": "FUNDO DE BLOCO FRASCO MA SOPHIE 75 ML ART. 640 FOFO Q3",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00040",
+    "descricao": "FUNDO DE BLOCO GFA. CONHAQUE SJB 900 ML ART. 352 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00042",
+    "descricao": "FUNDO DE BLOCO GFA. CHAMPAGNE AURORA 660 ML BBDG ART. 3347 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00043",
+    "descricao": "FUNDO DE BLOCO CERV. STELLA ARTOIS 275 ML ART. 4557 NI-806 - SP",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00044",
+    "descricao": "FUNDO DE BLOCO CERV. RETORNÁVEL 635 ML ART. 1219 SAE 4140",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00695",
+    "descricao": "MOLDES PARA VIDRO - BAFFLE GFA. HORCON QUEMADO 750ML BB ART. 0010 FOFO Q3",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00045",
+    "descricao": "FUNDO DE BLOCO GROWLER 2000 ML ART. 4583 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00046",
+    "descricao": "FUNDO DE BLOCO FRASCO ARBO 100 ML ART. 691 FOFO Q3",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00047",
+    "descricao": "FUNDO DE BLOCO FRASCO RIO DE JANEIRO HOMME 75 ML ART. 680 FOFO Q3",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00048",
+    "descricao": "FUNDO DE BLOCO FRASCO AGAVE 50 ML ART. 399 FOFO VERMICULAR",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00049",
+    "descricao": "FUNDO DE BLOCO FRASCO CONTA GOTAS 20 ML ART. 100 FOFO Q3",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00050",
+    "descricao": "FUNDO DE BLOCO FRASCO CONTA GOTAS 20 ML ART. 111 FOFO Q3",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00051",
+    "descricao": "FUNDO DE BLOCO FRASCO THIAGUINHO FEM. 100 ML ART. 416 FOFO VERMICULAR",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00052",
+    "descricao": "FUNDO DE BLOCO GFA. VERMOUTH LEVE 900 ML ART. 799 FOFO MOVTI",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00053",
+    "descricao": "FUNDO DE BLOCO CERV. SKOL BEATS SAFE 313 ML BBDG DC ART. 4365 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00054",
+    "descricao": "FUNDO DE BLOCO CERV. BUD 600 ML ART. 4641 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00055",
+    "descricao": "FUNDO DE BLOCO CERV. PRESIDENTE 12 OZ ART. 4550 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00101",
+    "descricao": "FUNDO DE BLOCO CERV. HEINEKEN K2 330 ML ART. 4669 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00056",
+    "descricao": "FUNDO DE BLOCO FRASCO POP 70 ML ART. 376 SAE 1045",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00057",
+    "descricao": "FUNDO DE BLOCO FRASCO BIOGRAFIA 50 ML ART. 424 FOFO VERMICULAR",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00058",
+    "descricao": "FUNDO DE BLOCO FRASCO PEDRA SOBRE PEDRA 100 ML ART. 311 FOFO Q3",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00059",
+    "descricao": "FUNDO DE BLOCO FRASCO UNA II 50 ML ART. 423 FOFO VERMICULAR",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00060",
+    "descricao": "FUNDO DE BLOCO FRASCO PENELOPE 30 ML ART. 418 FOFO VERMICULAR",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00061",
+    "descricao": "FUNDO DE BLOCO GFA. MARTINI 750 ML ART. 4627 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00062",
+    "descricao": "FUNDO DE BLOCO FRASCO PASTIS MASCULINO 90 ML ART. 422 FOFO VERMICULAR",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00063",
+    "descricao": "FUNDO DE BLOCO FRASCO LUNA 25 ML (MINIATURA) ART. 412 FOFO VERMICULAR",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00064",
+    "descricao": "FUNDO DE BLOCO CERV. ECO 600 ML ART. 4631 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00065",
+    "descricao": "FUNDO DE BLOCO GFA. VINHO LUMIÈRE PP30 753 ML DC ART. 4643 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00066",
+    "descricao": "FUNDO DE BLOCO CERV. HEINEKEN K2 330 ML ART. 4538 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00067",
+    "descricao": "FUNDO DE BLOCO POTE DAWN JAR 100 G 408 ML ART. 944 FOFO Q3 / DELORO 40G",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00068",
+    "descricao": "FUNDO DE BLOCO FRASCO PLUMA 120 ML ART. 155 FOFO Q3",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00069",
+    "descricao": "FUNDO DE BLOCO CERV. SANKT GALLEN 600 ML ART. 4632 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00070",
+    "descricao": "FUNDO DE BLOCO CERV. BLACK PRINCESS 600 ML DC ART. 4566 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00071",
+    "descricao": "FUNDO DE BLOCO GFA. SMIRNOFF ICE 275 ML DC ART. 4141 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00073",
+    "descricao": "FUNDO DE BLOCO FRASCO CONTA GOTAS 10 ML BR ART. 235 FOFO Q3",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00074",
+    "descricao": "FUNDO DE BLOCO POTE HERO 179 ML DC ART. 4651 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00075",
+    "descricao": "FUNDO DE BLOCO GFA. SUCO AURORA 500 ML DC ART. 4344 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00084",
+    "descricao": "FUNDO DE BLOCO GFA. COCA COLA 200 ML ART. 1193 FOFO Q3 / DELORO 40G",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00195",
+    "descricao": "FUNDO DE BLOCO CERV. JEEP 1000ML DC ART.4721 NI-806 - RJ",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00076",
+    "descricao": "FUNDO DE BLOCO POTE WELLNESS 245 ML DC ART. 4652 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00077",
+    "descricao": "FUNDO DE BLOCO FRASCO A INDOMADA IV 30 ML ART. 427 FOFO VERMICULAR",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00078",
+    "descricao": "FUNDO DE BLOCO FRASCO AURIEN 100 ML ART. 426 FOFO VERMICULAR",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00079",
+    "descricao": "FUNDO DE BLOCO CERV. BUD 600 ML DC ART. 4548 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00080",
+    "descricao": "FUNDO DE BLOCO GFA. VINHO LUMIÈRE PP30 753 ML ART. 4654 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00081",
+    "descricao": "FUNDO DE BLOCO GFA. CANINHA 275 ML 51 ICE V2 DC ART. 4494 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00082",
+    "descricao": "FUNDO DE BLOCO CERV. LONG NECK STD ART. 3654 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00083",
+    "descricao": "FUNDO DE BLOCO FRASCO HOMEM DE FERRO 100 ML ART. 390 FOFO VERMICULAR",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00085",
+    "descricao": "FUNDO DE BLOCO CERV. MILLER 600 ML ART. 4518 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00086",
+    "descricao": "FUNDO DE BLOCO FRASCO ESSENCIAL HOMME 50 ML ART. 324 FOFO VERMICULAR",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00087",
+    "descricao": "FUNDO DE BLOCO CERV. ECO 330 ML DC ART. 4387 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00088",
+    "descricao": "FUNDO DE BLOCO FRASCO EKOS POTI II 100 ML ART. 401 FOFO VERMICULAR",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00089",
+    "descricao": "FUNDO DE BLOCO CERV. HEINEKEN 600 ML EHBB DC ART. 4636 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00090",
+    "descricao": "FUNDO DE BLOCO POTE CONSERVA 550 ML ART. 357 FOFO Q3 / DELORO 40G",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00091",
+    "descricao": "FUNDO DE BLOCO CERV. HEINEKEN K2 250 ML ART. 4238 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00092",
+    "descricao": "FUNDO DE BLOCO GFA. NEW CERESER Z2 663 ML DC ART. 4661 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00093",
+    "descricao": "FUNDO DE BLOCO FRASCO U2 100 ML ART. 429 FOFO VERMICULAR",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00094",
+    "descricao": "FUNDO DE BLOCO FRASCO BIOGRAFIA MASC. 50 ML ART. 428 FOFO VERMICULAR / AISI 431",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00095",
+    "descricao": "FUNDO DE BLOCO CERV. LUANDINA 250 ML ART. 4671 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00096",
+    "descricao": "FUNDO DE BLOCO FRASCO TAFF MAN-E 125 ML ART. 250-58 FOFO MOVTI",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00097",
+    "descricao": "FUNDO DE BLOCO FRASCO PLUMA 30 ML ART. 150 FOFO GGG 50",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00098",
+    "descricao": "FUNDO DE BLOCO FRASCO JACK DANIEL'S 100 ML ART. 371 FOFO Q3",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00099",
+    "descricao": "FUNDO DE BLOCO CERV. LUANDINA OW 330 ML ART. 4672 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00100",
+    "descricao": "FUNDO DE BLOCO GFA. GIN GUALA 1005 ML DC ART. 4156 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00102",
+    "descricao": "FUNDO DE BLOCO GFA. ROKKY 1000 ML DC ART. 4678 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00103",
+    "descricao": "FUNDO DE BLOCO FRASCO FLORATTA 75 ML ART. 430 FOFO VERMICULAR",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00104",
+    "descricao": "FUNDO DE BLOCO CERV. LUANDINA RET. 330 ML ART. 4673 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00105",
+    "descricao": "FUNDO DE BLOCO GFA. SIDRA LISA STD 910 ML DC ART. 4676 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00106",
+    "descricao": "FUNDO DE BLOCO GFA. SIDRA LA FARRUCA 710 ML DC ART. 4677 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00107",
+    "descricao": "FUNDO DE BLOCO FRASCO DROPPERS 20 ML ART. 113 FOFO Q3",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00108",
+    "descricao": "FUNDO DE BLOCO GFA. JANEIRO 700ML ART. 3819 NI-806 SP",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00109",
+    "descricao": "FUNDO DE BLOCO POTE DAWN JAR 170 DC ART. 3997 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00110",
+    "descricao": "FUNDO DE BLOCO FRASCO WOLVERINE 100 ML ART. 431 FOFO VERMICULAR",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00111",
+    "descricao": "FUNDO DE BLOCO CERV. BRAHMA LN LEVE 355 ML ART. 4626 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00112",
+    "descricao": "FUNDO DE BLOCO CERV. HOEGAARDEN 330 ML ART. 4668 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00113",
+    "descricao": "FUNDO DE BLOCO FRASCO PLUMA 100 ML ART. 154 FOFO Q3",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00114",
+    "descricao": "FUNDO DE BLOCO FRASCO BERLIM 70 ML ART. 334 FOFO VERMICULAR",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00115",
+    "descricao": "FUNDO DE BLOCO FRASCO BERLIM 30 ML ART. 335 FOFO VERMICULAR",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00116",
+    "descricao": "FUNDO DE BLOCO GFA. SIDRA DEL VALLE 720 ML DC ART. 4675 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00117",
+    "descricao": "FUNDO DE BLOCO FRASCO CONTA GOTAS 30 ML BR ART. 131 FOFO Q3",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00118",
+    "descricao": "FUNDO DE BLOCO GFA. SUCO AURORA 1500 ML ART. 4530 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00119",
+    "descricao": "FUNDO DE BLOCO GFA. CACHAÇA PREMIUM BR 703 ML DC ART. 4694 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00120",
+    "descricao": "FUNDO DE BLOCO GFA. ÁGUA ABINAM V2 303 ML DC ART. 4607 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00121",
+    "descricao": "FUNDO DE BLOCO FRASCO CONTA GOTAS 30 ML ART. 108 FOFO GGG 50",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00122",
+    "descricao": "FUNDO DE BLOCO POTE 2 KG 2370 ML ART. 4660 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00123",
+    "descricao": "FUNDO DE BLOCO GFA. NEW CERESER Z2 663 ML DC ART. 4691 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00124",
+    "descricao": "FUNDO DE BLOCO POTE ARANHA 265 ML DC ART. 4696 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00125",
+    "descricao": "FUNDO DE BLOCO POTE ARANHA 265 ML DC ART. 4696 NI-806 OP01",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00126",
+    "descricao": "FUNDO DE BLOCO GFA. CHÁ 1000 ML DC ART. 4653 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00127",
+    "descricao": "FUNDO DE BLOCO GFA. MINALBA 300 ML DC ART. 4655 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00128",
+    "descricao": "FUNDO DE BLOCO CERV. 635 ML ART. 4292 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00129",
+    "descricao": "FUNDO DE BLOCO GFA. VELHO BARREIRO 900 ML DC ART. 3968 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00130",
+    "descricao": "FUNDO DE BLOCO CERV. BOHEMIA LN 355 ML LEVE ART. 4286 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00131",
+    "descricao": "FUNDO DE BLOCO GFA. BORDALESA EURO 750 ML ART. 4337 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00132",
+    "descricao": "FUNDO DE BLOCO GFA. ÁGUA TÔNICA PRATA 203 ML DC ART. 4703 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00133",
+    "descricao": "FUNDO DE BLOCO FRASCO UNA 75 ML ART. 437 FOFO VERMICULAR",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00134",
+    "descricao": "FUNDO DE BLOCO GFA. SMIRNOFF ICE 275 ML ART. 4117 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00135",
+    "descricao": "FUNDO DE BLOCO FRASCO MIRANDA PRIESTLY 75 ML ART. 432 FOFO VERMICULAR / AISI 431",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00136",
+    "descricao": "FUNDO DE BLOCO GFA. WYBOROWA 753 ML DC ART. 4709 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00137",
+    "descricao": "FUNDO DE BLOCO GFA. JUMEX 450 ML ART. 4689 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00138",
+    "descricao": "FUNDO DE BLOCO CERV. JEEP 1000 ML DC ART. 4287 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00139",
+    "descricao": "FUNDO DE BLOCO FRASCO ESSENCIAL FEMME 100 ML ART. 327 FOFO VERMICULAR",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00140",
+    "descricao": "FUNDO DE BLOCO GFA. LEITE DE COCO 200 ML ART. 3765 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00141",
+    "descricao": "FUNDO DE BLOCO CERV. PUB V3 500 ML DC ART. 4714 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00142",
+    "descricao": "FUNDO DE BLOCO FRASCO EGEOS FEMININO 90 ML ART. 440 FOFO VERMICULAR",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00143",
+    "descricao": "FUNDO DE BLOCO FRASCO BUTTERFLY 100 ML ART. 436 FOFO VERMICULAR",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00144",
+    "descricao": "FUNDO DE BLOCO CERV. HEINEKEN 600 ML DC ART. 4463 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00145",
+    "descricao": "FUNDO DE BLOCO POTE DAWN JAR 200 G 800 ML DC ART. 4233 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00146",
+    "descricao": "FUNDO DE BLOCO GFA. ORLOFF X2 1000 ML DC ART. 4664 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00147",
+    "descricao": "FUNDO DE BLOCO POTE MIRANDA PRIESTLY ART. 445 FOFO VERMICULAR",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00148",
+    "descricao": "FUNDO DE BLOCO GFA. WEWI 250 ML DC ART. 4692 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00149",
+    "descricao": "FUNDO DE BLOCO GFA. SMIRNOFF V2 600 ML DC ART. 4647 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00150",
+    "descricao": "FUNDO DE BLOCO FRASCO BILL 50 ML ART. 448 FOFO VERMICULAR",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00151",
+    "descricao": "FUNDO DE BLOCO GFA. ORLOFF 603 ML DC ART. 4720 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00152",
+    "descricao": "FUNDO DE BLOCO GFA. CERVEJA 635 ML DC ART. 3779 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00153",
+    "descricao": "FUNDO DE BLOCO TAFF MAN-E 112 ML DC ART. 3187 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00154",
+    "descricao": "FUNDO DE BLOCO CERV. HEINEKEN K2 OW 330 ML ART. 4725 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00155",
+    "descricao": "FUNDO DE BLOCO CERV. SKOL BEATS SAFE 313 ML ART. 4535 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00163",
+    "descricao": "FUNDO DE BLOCO GFA. SUCO OQ 1000 ML ART. 9468 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00156",
+    "descricao": "FUNDO DE BLOCO FRASCO SR. N 100 ML ART. 301 FOFO VERMICULAR",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00157",
+    "descricao": "FUNDO DE BLOCO CERV. PETRÓPOLIS 300 ML RET. ART. 4399 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00158",
+    "descricao": "FUNDO DE BLOCO FRASCO LUNA CLÁSSICO 75 ML ART. 442 FOFO VERMICULAR",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00159",
+    "descricao": "FUNDO DE BLOCO FRASCO LUNA INTENSO 50 ML ART. 443 FOFO VERMICULAR",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00160",
+    "descricao": "FUNDO DE BLOCO CERV. BUD SQUARE 330 ML ART. 4729 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00161",
+    "descricao": "FUNDO DE BLOCO CERV. SOL 330 ML ART. 4410 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00162",
+    "descricao": "FUNDO DE BLOCO GFA. ÁGUA ABINAM REGIONAL 753 ML DC ART. 4549 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00164",
+    "descricao": "FUNDO DE BLOCO GFA. SUCO OQ 1500 ML ART. 9469 FOFO CI-882",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00165",
+    "descricao": "FUNDO DE BLOCO CERV. BUD SQUARE 550 ML ART. 4730 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00166",
+    "descricao": "FUNDO DE BLOCO POTE CONSERVA 600 ML ART. 339 FOFO Q3 / DELORO 40G",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00167",
+    "descricao": "FUNDO DE BLOCO CERV. LONG NECK ITAIPAVA 355 ML ART. 4127 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00168",
+    "descricao": "FUNDO DE BLOCO GFA. COROA 300 ML ART. 4727 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00169",
+    "descricao": "FUNDO DE BLOCO GFA. BORDALESA AURORA V2 750 ML DC ART. 4719 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00170",
+    "descricao": "FUNDO DE BLOCO GFA. LICOR PRESIDENTE 900 ML ART. 1234 FOFO MOVTI",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00171",
+    "descricao": "FUNDO DE BLOCO FRASCO TULIPA RUIZ 30 ML ART. SB-1677 FOFO K250",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00172",
+    "descricao": "FUNDO DE BLOCO FRASCO TULIPA RUIZ 100 ML ART. MB-1368 FOFO K250",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00173",
+    "descricao": "FUNDO DE BLOCO GFA. PASSPORT V2 1000 ML ART. 4723 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00174",
+    "descricao": "FUNDO DE BLOCO GFA. SUCO AURORA 1500 ML ART. 4345 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00175",
+    "descricao": "FUNDO DE BLOCO CERV. PETRÓPOLIS 1000 ML DC ART. 4473 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00176",
+    "descricao": "FUNDO DE BLOCO CERV. HEINEKEN 300 ML ART. 4716 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00177",
+    "descricao": "FUNDO DE BLOCO GFA. COCA COLA 10 OZ EHB DC ART. 4140 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00178",
+    "descricao": "FUNDO DE BLOCO GFA. COCA-COLA 250 ML CONTOUR ULTRA DC ART. 4682 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00179",
+    "descricao": "FUNDO DE BLOCO GFA. VASO SUCO PRONTO 1000 ML DC ART. 4460 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00180",
+    "descricao": "FUNDO DE BLOCO JARRA DECANTER 1200 ML ART. 1005 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00181",
+    "descricao": "FUNDO DE BLOCO FRASCO FREVO II 150 ML ART. 263 FOFO Q3",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00182",
+    "descricao": "FUNDO DE BLOCO GFA. VINHO STD PP30 V2 750 ML DC ART. 4173 BRONZE BZ-889",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00183",
+    "descricao": "FUNDO DE BLOCO GFA. COCA COLA RET. 290 ML ART. 4070 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00184",
+    "descricao": "FUNDO DE BLOCO CERV. COLORADO 530 ML ART. 4736 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00185",
+    "descricao": "FUNDO DE BLOCO GFA. SMIRNOFF ICE V2 275 ML ART. 4740 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00186",
+    "descricao": "FUNDO DE BLOCO CERV. BUD SQUARE 550 ML DC ART. 4733 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00187",
+    "descricao": "FUNDO DE BLOCO POTE CONSERVA 600 ML ART. 3624 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00188",
+    "descricao": "FUNDO DE BLOCO GFA. GIN GUALA 753 ML DC ART. 4742 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00206",
+    "descricao": "FUNDO DE BLOCO GFA. VINHO STD PP30 1000 ML ART. 4380 BRONZE BZ-804",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00189",
+    "descricao": "FUNDO DE BLOCO CERV. JEEP 1000ML DC ART.4721 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00192",
+    "descricao": "FUNDO DE BLOCO GFA. COCA COLA UNIVERSAL 1000 ML DC ART. 4745 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00190",
+    "descricao": "FUNDO DE BLOCO CERV. KAILUA V2 275 ML ART. 4544 NI-806 - SP",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00191",
+    "descricao": "FUNDO DE BLOCO GFA. SUCO PREMIUM 1500 ML ART. 1013 FOFO Q3 / DELORO 40G",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00193",
+    "descricao": "FUNDO DE BLOCO GFA. COCA COLA 200 ML DC ART. 4483 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00194",
+    "descricao": "FUNDO DE BLOCO CERV. MARIACHI 330 ML ART. 4748 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00196",
+    "descricao": "FUNDO DE BLOCO POTE 3 LITROS ART.328 FOFO / DELORO 40G",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00197",
+    "descricao": "FUNDO DE BLOCO GFA. PASSPORT 1000 ML ART. 4533 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00198",
+    "descricao": "FUNDO DE BLOCO GFA. MALIBU V2 750 ML DC ART. 560078 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00199",
+    "descricao": "FUNDO DE BLOCO GFA. BORDALESA 750 ML DC ART. 3665 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00200",
+    "descricao": "FUNDO DE BLOCO CERV. STELLA ARTOIS V3 275 ML ART. 4640 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00201",
+    "descricao": "FUNDO DE BLOCO CERV. BUD CADILLAC 550 ML ART. 18022 FOFO Q3",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00202",
+    "descricao": "FUNDO DE BLOCO CERV. COROA 300 ML ART. 18030 FOFO Q3",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00203",
+    "descricao": "FUNDO DE BLOCO GFA. BLACK & WHITE 1003 ML DC ART. 4481 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00204",
+    "descricao": "FUNDO DE BLOCO CERV. HEINEKEN K2 330 ML ART. 4669 NI-806 - RJ",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00205",
+    "descricao": "FUNDO DE BLOCO CERV. SKOL BEATS SAFE 313 ML DC ART. 4717 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00207",
+    "descricao": "FUNDO DE BLOCO CERV. KAILUA V2 275 ML DC ART. 4544 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00208",
+    "descricao": "FUNDO DE BLOCO CERV. BUD SQUARE 550 ML ART. 4730 NI-806 - ARG",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00235",
+    "descricao": "MOLDES FUNDO DE BLOCO EQ. CERV. SKOL 275ML",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00228",
+    "descricao": "FUNDO DE BLOCO GFA. SUCO PRONTO 1500 ML ART. 4551 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00234",
+    "descricao": "FUNDO DE BLOCO GFA. NATASHA 1000ML ART. 4279 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00233",
+    "descricao": "FUNDO DE BLOCO GFA. CANINHA 275ML 51 ICE V2 ART. 4542 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00231",
+    "descricao": "FUNDO DE BLOCO GFA. COCA-COLA 350ML ART. 562742 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00229",
+    "descricao": "FUNDO DE BLOCO GFA. COCA-COLA 500 ML ART. 562743 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00222",
+    "descricao": "FUNDO DE BLOCO CERV. RETORNAVEL 635ML ART. 1219",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00221",
+    "descricao": "FUNDO DE BLOCO CERV. NEW BEBETO ART. 999",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00214",
+    "descricao": "FUNDO DE BLOCO CERV. MONET 550ML ART. 4602 DC NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00252",
+    "descricao": "FUNDO DE BLOCO CERV. HEINEKEN 600ML BB DG 4 1/4\" ART. 3408 OI-SP",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00253",
+    "descricao": "FUNDO DE BLOCO CERV. MONET 500 B&B ART. 562763 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00219",
+    "descricao": "FUNDO DE BLOCO GFA. GIN SEAGRAM'S 753ML ART. 562699 OI-SP",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00254",
+    "descricao": "FUNDO DE BLOCO GFA. GIN GUALA 1005 ML ART. 4126 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00256",
+    "descricao": "PLATÔ CERV. BUD CADILLAC 330 ML ART. 18026 FOFO",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00257",
+    "descricao": "PLATÔ CERV. BUD CADILLAC 330 ML ART. A19036 FOFO / INOX",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00258",
+    "descricao": "FUNDO DE BLOCO CERV. BRAHMA BELL 355ML ART. 19046 FOFO NODULAR / AISI 304",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00259",
+    "descricao": "FUNDO DE BLOCO CERV. STELLA ARTOIS 600ML ART. 563329 TYPE 1 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00260",
+    "descricao": "FUNDO DE BLOCO CERV. STELLA ARTOIS 600ML ART. 563329 TYPE 2 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00261",
+    "descricao": "PLATÔ CERV. RETORNAVEL 635ML ART. 19022 FOFO 96A",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00262",
+    "descricao": "FUNDO DE BLOCO CERV. HEINEKEN 600 ML ART. 4534 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00263",
+    "descricao": "FUNDO DE BLOCO GFA. COCA-COLA 250 ML DC ART. 563289 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00264",
+    "descricao": "FUNDO DE BLOCO CERV. BECK'S 600ML ART. 563322 NI-806 OI-SP",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00265",
+    "descricao": "FUNDO DE BLOCO CERV. BECK'S 600ML ART. 563322 TYPE 2 NI-806 OI-SP",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00266",
+    "descricao": "FUNDO DE BLOCO CERV. STELLA ARTOIS 330ML ART. 562688 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00267",
+    "descricao": "MOLDES FUNDO DE BLOCO GFA. WHISKY VAT 69 703ML ART. 563327 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00268",
+    "descricao": "MOLDES PARA VIDRO - MOLDES FUNDO DE BLOCO GFA CAMPARI CINZANO NI-806 1000ML ART563232",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00220",
+    "descricao": "PLATÔ CERV. BUD CADILLAC 330 ML ART. A17066 FOFO",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00269",
+    "descricao": "FUNDO DE BLOCO CERV. BECK'S 600 ML ART. 563322 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00270",
+    "descricao": "FUNDO DE BLOCO GFA. AZEITE CILINDRICO 500ML DC ART. 4656 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00271",
+    "descricao": "FUNDO DE BLOCO CERV. STELLA ARTOIS 600ML ART. 563329 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00272",
+    "descricao": "FUNDO DE BLOCO POTE ACINTURADO DEEP 245ML ART. 562650 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00273",
+    "descricao": "PLATÔ CERV. BOHEMIA 355ML NNPB ART. 19048 FOFO NODULAR",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00274",
+    "descricao": "FUNDO DE BLOCO CERV. STELLA ARTOIS 330ML ART. 562688 NI-806 OI-SP",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00275",
+    "descricao": "FUNDO DE BLOCO CERV. BOHEMIA 355ML B&B ART. A20011 FOFO NODULAR",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00276",
+    "descricao": "MOLDES PARA VIDRO - MOLDES FUNDO DE BLOCO GFA SMIRNOFF NI-806 700ML ART563358",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00277",
+    "descricao": "FUNDO DE BLOCO CERV. HEINEKEN 600ML B&B ART. 563364 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00278",
+    "descricao": "FUNDO DE BLOCO CERV. HEINEKEN 600ML ART. G04 101 FOFO Q3",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00279",
+    "descricao": "FUNDO DE BLOCO COCA COLA ULTRA 1000ML ART. 4184 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00280",
+    "descricao": "FUNDO DE BLOCO CHOCOMILK 200ML ART.4688 N-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00282",
+    "descricao": "FUNDO DE BLOCO CERV. 635ML ART. 399 FOFO Q3",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00283",
+    "descricao": "PLATÔ CERV. FLOPPY 340ML ART. 20018 FOFO 96A",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00284",
+    "descricao": "FUNDO DE BLOCO CERV. HEINEKEN 600ML B&B ART. 563364 NI-806 OI-SP",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00285",
+    "descricao": "FUNDO DE BLOCO CERV. HEINEKEN 600ML NNPB ART. 563365 NI-806 OI-SP",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00286",
+    "descricao": "PLATÔ CERV. BRAHMA DUPLO MALTE 330ML ART. 21021 FOFO/INOX",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00287",
+    "descricao": "FUNDO DE BLOCO GFA. VINHO LUMIÉRE 753ML ART. 563370 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00288",
+    "descricao": "FUNDO DE BLOCO GFA. CACHAÇA MATUTA 1000ML ART. 563249 FOFO CI-882",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00289",
+    "descricao": "FUNDO DE BLOCO GFA. SKARLOFF SEVEN 1000ML ART. G07 102 FOFO Q3",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00290",
+    "descricao": "FUNDO DE BLOCO GFA. SKOL BEATS 269ML DC ART. 563422 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00291",
+    "descricao": "PLATÔ CERV. BUD CADILLAC 550ML TG ART. A20022 FOFO / INOX 304",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00292",
+    "descricao": "FUNDO DE BLOCO GFA LICOR ASTECA 910ML ART. G31 111 FOFO NODULAR",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00293",
+    "descricao": "FUNDO DE BLOCO GFA. VELHO BARREIRO 700ML ART. G52 112 FOFO NODULAR",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00294",
+    "descricao": "FUNDO DE BLOCO CERV. MODELO 600ML B&B ART. 563425 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00295",
+    "descricao": "PLATÔ CERV. LN CRAFT STD 355ML ART. A20027 FOFO NODULAR",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00296",
+    "descricao": "FUNDO DE BLOCO GFA. PARAIBA 700ML ART.797 FOFO Q3",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00297",
+    "descricao": "FUNDO DE BLOCO CERV. 600ML ART. A20023 FOFO NODULAR/ INOX 304",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00298",
+    "descricao": "FUNDO DE BLOCO POTE NESTLE DAWN JAR 220ML 480GR DC ART. 4421 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00299",
+    "descricao": "FUNDO DE BLOCO GFA AGUA MINALBA 303ML ART.563453 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00300",
+    "descricao": "FUNDO DE BLOCO POTE CONSERVA OLÉ 280ML ART.563408 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00301",
+    "descricao": "FUNDO DE BLOCO CERV. HEINEKEN DG 1000ML ART.9526 FOFO CI-882",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00302",
+    "descricao": "FUNDO DE BLOCO CERV. BECK'S 330ML ART. 4702 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00303",
+    "descricao": "FUNDO DE BLOCO GFA. BACARDI MARTINI 983ML ART.4482 BRONZE BZ-804",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00304",
+    "descricao": "PLATÔ CERV. NEW BEBETO 300ML NNPB ART. A20030 FOFO NODULAR",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00305",
+    "descricao": "PLATÔ CERV. NEW BEBETO 300ML B&B ART. A18021 FOFO NODULAR",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00306",
+    "descricao": "FUNDO DE BLOCO CERV. MARIACHI 210ML ART. 4749 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00307",
+    "descricao": "FUNDO DE BLOCO GFA. BORDEUAX 1000ML ART. 053 FOFO CINZENTO",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00308",
+    "descricao": "MOLDES PARA VIDRO - MOLDES FUNDO DE BLOCO FRASCO CAFÉ GOLD 170 ART174Q NÍQUEL",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00310",
+    "descricao": "MOLDES PARA VIDRO - MOLDES FUNDO DE BLOCO MISTRAL ICE 275 ART133M FOFO 96A",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00311",
+    "descricao": "MOLDES PARA VIDRO - MOLDES FUNDO DE BLOCO JUGO VITAL 300ML ART. 1529 NIQUEL",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00312",
+    "descricao": "PLATÔ CERV. BRAHMA BELL 355ML B&B DG ART. A20032 FOFO 96A",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00313",
+    "descricao": "PLATÔ CERV. CRAFT 600ML B&B DG ART. A20034 FOFO 96A",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00314",
+    "descricao": "FUNDO DE BLOCO GFA. VINHO LUMIÈRE PP30 753 ML ART. 4654 NI-806 - OI-RJ",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00315",
+    "descricao": "FUNDO DE BLOCO CERV. BECK'S 330 ML ART. 4702 FOFO NI-806 OI-SP",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00316",
+    "descricao": "FUNDO DE BLOCO GFA. VINHO STD PP30 V2 750ML DC ART. 4173 BRONZE BZ-889",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00317",
+    "descricao": "FUNDO DE BLOCO GFA. MARTINI 970 ML ART. 4627 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00321",
+    "descricao": "MOLDES PARA VIDRO - BL-FB01 - FUNDO DE BLOCO GFA. CERVEZA KUNSTMANN ART. 1977 - NIQUEL GS-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00318",
+    "descricao": "FUNDO DE BLOCO GFA. VINHO STD PP30 1000 ML ART. 4380 NI-806 - O-RJ",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00322",
+    "descricao": "MOLDES PARA VIDRO - BL-FB01 - FUNDO DE BLOCO GFA. CERV. SOL 330 ML ART. 1984 - NIQUEL GS-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00319",
+    "descricao": "FUNDO DE BLOCO GFA. DREHER 900 ML V2 ART. 4576 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00320",
+    "descricao": "PLATÔ GFA. CERV. JEEP 1000 ML ART. A20031 - FOFO 96-A",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00323",
+    "descricao": "MOLDES PARA VIDRO - FUNDO DE BLOCO GFA. CERV. HEINEKEN 330 ML K2 OW ART. 1986 - NIQUEL GS-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00324",
+    "descricao": "FUNDO DE BLOCO GFA. SUCO FOR ME 117ML ART. 563504 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00325",
+    "descricao": "FUNDO DE BLOCO GFA. MONTILLA 1000ML NNPB 6. 1/4\" ART. 4358 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00326",
+    "descricao": "FUNDO DE BLOCO GFA. NATU NOBILIS 1000ML ART. 4261 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00327",
+    "descricao": "FUNDO DE BLOCO POTE AZEITONA 350G ART. 3239 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00328",
+    "descricao": "FUNDO DE BLOCO GFA. CHANCELLER 1000ML NNPB 6. 1/4\" ART. 4644 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00329",
+    "descricao": "FUNDO DE BLOCO GFA. SMIRNOFF 1000ML LISA ART. 1352 FOFO Q3",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00330",
+    "descricao": "FUNDO DE BLOCO POTE HERO QUEENSBERRY 290ML ART. 563507 - NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00331",
+    "descricao": "FUNDO DE BLOCO CERV. MARIACHI 330ML ART.4748 NI-806 - OI-RJ",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00333",
+    "descricao": "FUNDO DE BLOCO GFA. VINHO STD PP30 V2 750 ML DC ART. 4173 BRONZE BZ-889 -02",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00334",
+    "descricao": "FUNDO DE BLOCO POTE CAFÉ RETANGULAR 100G ART. 1324 - FOFO Q3 / DELORO 40G",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00335",
+    "descricao": "FUNDO DE BLOCO GFA. CANINHA 51 V2 970ML - ART. 563513 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00336",
+    "descricao": "FUNDO DE BLOCO CERV. HEINEKEN 600ML NNPB ART. 563365 NI-806 - OI-RJ",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00337",
+    "descricao": "FUNDO DE BLOCO GFA. MICHELOB ULTRA 330ML ART. 563523 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00338",
+    "descricao": "FUNDO DE BLOCO POTE NESTLE DAWN JAR 585ML 140 ART. 563510 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00339",
+    "descricao": "FUNDO DE BLOCO GFA. CERV. MONET 550ML NNPB ART. 4602 NI-806 - OI-RJ",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00340",
+    "descricao": "MOLDES PARA VIDRO - FUNDO DE BLOCO GFA. VINO BURDEOS 375ML LATE HARVEST ART. 122T - BRONZE",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00341",
+    "descricao": "FUNDO DE BLOCO GFA. VODKA BALALAIKA 1000ML ART. 658 FOFO MOVIT",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00342",
+    "descricao": "MOLDES PARA VIDRO - FUNDO DE BLOCO GFA. CERVEZA CCU 355ML OW ART. 1976 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00343",
+    "descricao": "MOLDES PARA VIDRO - FUNDO DE BLOCO GFA. ACEITE OLIVA MARASCA 500ML ART. 1798 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00344",
+    "descricao": "FUNDO DE BLOCO GFA. SMIRNOFF ICE 275ML ART. 563531 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00345",
+    "descricao": "FUNDO DE BLOCO CERV. HEINEKEN K2 250 ML ART. 4238 NI-806 OI-SP",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00346",
+    "descricao": "MOLDES PARA VIDRO - FUNDO DE BLOCO FRASCO COLADO 142ML ART. 173L NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00347",
+    "descricao": "FUNDO DE BLOCO GFA. MICHELOB ULTRA 330ML DC ART. 563523 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00348",
+    "descricao": "FUNDO DE BLOCO POTE CONSERVA 600ML ART. 2453 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00349",
+    "descricao": "FUNDO DE BLOCO POTE CONSERVA 600ML DG ART.2453 NI-806 OI-RJ",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00350",
+    "descricao": "PLATÔ CERV. CADILLAC 550ML 400GR ART. 20010 - FOFO NODULAR",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00351",
+    "descricao": "PLATÔ CERV. BRAHMA DUPLO MALTE 330ML ART. 21M003 FOFO NODULAR",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00352",
+    "descricao": "FUNDO DE BLOCO CERV. HEINEKEN 330ML BB ART. 4757 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00696",
+    "descricao": "FUNDO DE BLOCO GFA. HEINEKEN 330 K2 O.W. 190G TG ART. 1146 FOFO Q3 / DELORO 40G",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00353",
+    "descricao": "FUNDO DE BLOCO GFA. COCA UNIVERSAL LT 1000ML ART. 563558 CI-882",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00354",
+    "descricao": "FUNDO DE BLOCO CERV. STELLA ARTOIS 600ML VN ART. 563617 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00355",
+    "descricao": "FUNDO DE BLOCO GFA. VASO SUCO PRONTO 1000ML ART. 3114 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00356",
+    "descricao": "FUNDO DE BLOCO CERV. STELLA ARTOIS 600ML ART. 563364 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00357",
+    "descricao": "FUNDO DE BLOCO GFA. VODKA ARANHA 900ML ART. 4569 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-11-00115",
+    "descricao": "MOLDES PARA VIDRO - TAPA CERV. MARIACHI 330ML NR ART. 191M GS-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00358",
+    "descricao": "FUNDO DE BLOCO GFA. COCA COLA 1000ML ULTRA ART. 4220 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00359",
+    "descricao": "FUNDO DE BLOCO GFA. VODKA MISSIATO 900ML ART. 4588 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00360",
+    "descricao": "FUNDO DE BLOCO GFA. CHIAMULERA NINOFF 903ML ART.4406 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00361",
+    "descricao": "FUNDO DE BLOCO CERV. MODELO 330ML ART. 563629 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00362",
+    "descricao": "FUNDO DE BLOCO CERV. ICE STD 275ML ART. 4542 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00363",
+    "descricao": "FUNDO DE BLOCO GFA. MULLER 51 ICE 275ML ART. 4542 NI-806 - RJ",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00364",
+    "descricao": "FUNDO DE BLOCO CERV. BEBETO 300ML 215GR NNPB TG ART. 21M001 - NODULAR",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00365",
+    "descricao": "FUNDO DE BLOCO POTE AZEITONA F200 350ML ART. 3238 NI-806 - SP",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00366",
+    "descricao": "MOLDES PARA VIDRO - FUNDO DE BLOCO GFA. CHAMPAÑA VALDIVIESO 375ML ART. 12G1 BRONZE",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00367",
+    "descricao": "MOLDES PARA VIDRO - FUNDO DE BLOCO GFA. CHAMPAÑA MAIPO 750ML ART. 129U BRONZE",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00368",
+    "descricao": "MOLDES PARA VIDRO - FUNDO DE BLOCO GFA. PISCO COCHIGUAS 700ML ART. 131S - 96A",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00369",
+    "descricao": "MOLDES PARA VIDRO - FUNDO DE BLOCO GFA. JUGO ESTANDAR 1000ML ART. 1570 - GS-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00370",
+    "descricao": "MOLDES PARA VIDRO - FUNDO DE BLOCO GFA. SCREW BURDEOS 375ML ART. 126Q - GS-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00371",
+    "descricao": "MOLDES PARA VIDRO - FUNDO DE BLOCO GFA. BAJA ECOGLASS BURDEOS 750ML ART. 12H4 BRONZE",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00372",
+    "descricao": "FUNDO DE BLOCO GFA. BITTER CAMPARI 753ML ART. 563634 - CI-882 PE",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00373",
+    "descricao": "FUNDO DE BLOCO GFA. BITTER CAMPARI 1004ML ART. 563633 - CI-882 PE",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00374",
+    "descricao": "MOLDES PARA VIDRO TAPAS DB CERV. MARIACHI 330ML NR ART. 191M GS-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00375",
+    "descricao": "MOLDES PARA VIDRO TAPAS DB CERVEZA ROYAL 335 ML NR ART. 191U GS-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00376",
+    "descricao": "MOLDES PARA VIDRO TAPAS DB GFA. KUNSTMANN ART. 1977 - NIQUEL GS-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00377",
+    "descricao": "MOLDES PARA VIDRO TAPAS DB GFA. CERV. SOL 330 ML ART. 1984 - NIQUEL GS-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00378",
+    "descricao": "MOLDES PARA VIDRO TAPAS DB GFA. CERV. HEINEKEN 330 ML K2 OW ART. 1986 - NIQUEL GS-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00379",
+    "descricao": "MOLDES PARA VIDRO TAPAS DB GFA. CERVEZA CCU 355ML OW ART. 1976 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00380",
+    "descricao": "PLATÔ CERV. RET. ESMERALDA 600ML 420GR BB ART. 21M023 - FOFO 96A",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00697",
+    "descricao": "FUNDO DE BLOCO GFA. HEINEKEN 330 K2 O.W. 190G DG ART. 1146 FOFO Q3 / DELORO 40G",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00381",
+    "descricao": "PLATÔ CERV. STELLA ARTOIS 330ML NNPB TG ART. 21M021 - NODULAR / AISI 304",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00382",
+    "descricao": "FUNDO DE BLOCO GFA.BORDEAUX 750ML ECO ROLHA ART. 610 - FOFO Q3",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00383",
+    "descricao": "MOLDES PARA VIDRO - TAPA GFA. BURDEOS 750ML ECOGLASS 2 ART. 12V2 - BRONZE",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00384",
+    "descricao": "FUNDO DE BLOCO GFA. MOLHEIRA SAKURA 200ML ART. 4136 - NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00385",
+    "descricao": "FUNDO DE BLOCO GFA. SUCO LISO 38 1000ML BB DG ART. 796 - CI-882 PE",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00386",
+    "descricao": "PLATÔ CERV. SPATEN RETORNÁVEL 355ML BB TG ART. 21M022 FOFO 96A",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00387",
+    "descricao": "FUNDO DE BLOCO COPO POLO 225 ML DC ART. 4738 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00388",
+    "descricao": "FUNDO DE BLOCO POTE NESTLE BABY FOOD 128ML ART. 4469 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00389",
+    "descricao": "FUNDO DE BLOCO GFA. DOMECQ V2 1000ML DC ART. 4650 - NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00390",
+    "descricao": "FUNDO DE BLOCO GFA. FRISANTE 750ML DG BB ART. 4302 - CI-882 PE",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00391",
+    "descricao": "FUNDO DE BLOCO GFA. SUCO NATURAL 500ML ART. 1028 - FOFO Q3",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00392",
+    "descricao": "FUNDO DE BLOCO GFA. VINHO STD PP30 1000 ML ART. 4380 NI-806 - OI-SP",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00393",
+    "descricao": "MOLDES PARA VIDRO - FUNDO DE BLOCO GFA. BRANDY DOMECQ 375ML D19 FDG ART. 138J NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00394",
+    "descricao": "FUNDO DE BLOCO GFA. BORDEAUX 750ML ECO ROSCA ART. 607 - FOFO Q3",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00395",
+    "descricao": "FUNDO DE BLOCO CERV. CORONA 330ML DC VR ART. 563672 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00396",
+    "descricao": "FUNDO DE BLOCO GFA. CHAMPANHE 750ML DC BB ART. 3396 BRONZE BZ-889 OI-SP",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00397",
+    "descricao": "FUNDO DE BLOCO CERV. STELLA ARTOIS 600ML VN ART. 563673 NI-806 - OI-RJ",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00398",
+    "descricao": "FUNDO DE BLOCO CERV. STELLA ARTOIS 600ML DC ART. 563329 NI-806 - OI-SP",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00399",
+    "descricao": "FUNDO DE BLOCO CERV. LUNA 275ML NNPB ART. 562687 NI-806 - SP",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00400",
+    "descricao": "FUNDO DE BLOCO GFA. BLACK STONE 1004ML NNPB ART. 4681 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00401",
+    "descricao": "FUNDO DE BLOCO COPO CÔNICO 296 P.62 ART. 4341 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00402",
+    "descricao": "PLATÔ CERV. STELLA ARTOIS 330ML 190GR ART. 22M001 - NODULAR",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00403",
+    "descricao": "PLATÔ GFA. YAKULT TAFF MAN-E 112ML ART. 5685 FOFO CI-882 PE",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00404",
+    "descricao": "FUNDO DE BLOCO GFA. MICHELOB ULTRA 330ML ART. 563523 NI-806 OI-RJ",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00405",
+    "descricao": "PLATÔ CERV. RET. ESMERALDA 600ML 400GR BB ART. 22M002 - FOFO 96A",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00406",
+    "descricao": "FUNDO DE BLOCO POTE NESTLE BABY FOOD 175ML ART. 4416 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00407",
+    "descricao": "FUNDO DE BLOCO GFA. AZEITE BUONO 500ML BB ART. 750 BM-900",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00410",
+    "descricao": "FUNDO DE BLOCO GFA. ITAIPAVA 500ML ART. 720 - FOFO Q3",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00408",
+    "descricao": "FUNDO DE BLOCO CERV. HEINEKEN K2 330ML DC ART. 563686 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00409",
+    "descricao": "FUNDO DE BLOCO GFA. VINHO LUMIÉRE 753ML PP30 V2 ART. 563370 NI-806 - OI-RJ",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00411",
+    "descricao": "FUNDO DE BLOCO GFA. CHAMPANHA RESERVA 750ML ART. 711 - FOFO Q3",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00412",
+    "descricao": "FUNDO DE BLOCO CERV. LONG NECK STD 355ML ART. 562777 NI-806 - RJ",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00413",
+    "descricao": "FUNDO DE BLOCO CERV. BECK'S 330 ML ART. 563385 FOFO NI-806 OI-SP",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00414",
+    "descricao": "FUNDO DE BLOCO GFA. BODEBROWN IRON MAIDEN 600ML ART. 563689 NI-806 PE",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00415",
+    "descricao": "FUNDO DE BLOCO GFA. VINHO STD PP30 1000ML ART. 4380 - CI-882 PE",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00416",
+    "descricao": "FUNDO DE BLOCO GFA. PASSPORT V2 1000 ML ART. 4723 NI-806 PE",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00417",
+    "descricao": "MOLDES PARA VIDRO - BL-FB01 FUNDO DE BLOCO GFA. ÁGUA MINERAL PORVENIR 330ML ART. 1566 - NIQUEL GS-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00418",
+    "descricao": "MOLDES PARA VIDRO - BL-FB01 FUNDO DE BLOCO GFA. ÁGUA MINERAL VITAL 330ML ART. 1567 - NIQUEL GS-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00419",
+    "descricao": "FUNDO DE BLOCO VASO REDONDO 700ML ART. 013 FOFO Q3",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00420",
+    "descricao": "FUNDO DE BLOCO VASO FACETADO 550ML ART. 014 FOFO Q3",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00421",
+    "descricao": "FUNDO DE BLOCO GFA. ESPUMANTE 750ML ART. 041 - BRONZE",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00422",
+    "descricao": "FUNDO DE BLOCO CERV. HEINEKEN SOL 330ML PRY OFF ART. 563712 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00423",
+    "descricao": "FUNDO DE BLOCO GFA. DREHER 900ML ART. 1141 FOFO Q3 FJA",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00424",
+    "descricao": "FUNDO DE BLOCO GFA. NATU NOBILIS V2 1000ML NNPB ART. 563694 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00425",
+    "descricao": "FUNDO DE BLOCO VAS. ESPUMANTE 750ML DG ART. 330 FOFO SS-824",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00426",
+    "descricao": "FUNDO DE BLOCO GFA. SMIRNOFF ICE 275ML ART. 563531 NI-806 - RJ",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00427",
+    "descricao": "FUNDO DE BLOCO POTE AZEITONA 500G DC ART. 562673 NI-806 - OI-SP",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00428",
+    "descricao": "FUNDO DE BLOCO GFA. VODKA SKYY 753ML DC ART. 4639 NI-806 - OI-SP",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00429",
+    "descricao": "MOLDES PARA VIDRO - BL-FB01 FUNDO DE BLOCO CERV. KROSS 330ML O/W ART. 1990 - NIQUEL GS-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00430",
+    "descricao": "MOLDES PARA VIDRO - BL-FB01 FUNDO DE BLOCO CERV. BECKER 300ML NR ART. 191G - NIQUEL GS-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00431",
+    "descricao": "MOLDES PARA VIDRO - BL-FB01 FUNDO DE BLOCO CERV. BECKER 355ML LONG NECK ART. 1989 - NIQUEL GS-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00432",
+    "descricao": "MOLDES PARA VIDRO - BL-FB01 - FUNDO DE BLOCO GFA. COCTELERA CAPEL 700ML ART. 133K - NIQUEL GS-806 CH",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00433",
+    "descricao": "PLATÔ CERV. BECK´S 600ML 420GR BB ART. 22M012 - FOFO 96A",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00434",
+    "descricao": "FUNDO DE BLOCO GFA. CAMPARI CYNAR 900ML V2 ART. 4554 NI-806 - OI-SP",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00435",
+    "descricao": "MOLDES PARA VIDRO - BL-FB-01 - FUNDO DE BLOCO CERV. HEINEKEN 330ML DC K2 O.W. ART. 9972 NI-806 - ARG",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00436",
+    "descricao": "FUNDO DE BLOCO GFA. PASSPORT 670ML BB ART. 4350 - CI-882 PE",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00437",
+    "descricao": "MOLDES PARA VIDRO - BL-FB01 - TAPA CERV. STELLA ARTOIS 600ML DG NNPB ART. 191R NI-806 CH",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00438",
+    "descricao": "FUNDO DE BLOCO POTE QUADRADO PEQUENO LISO 1200ML ART. 021 FOFO Q3",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00439",
+    "descricao": "FUNDO DE BLOCO GFA. HEINEKEN K2 330ML DG ART. 1128 FOFO Q3 / DELORO 40G VR",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00440",
+    "descricao": "FUNDO DE BLOCO GFA. CIDADE IMPERIAL 275ML DG ART. 1167 FOFO Q3 VR / DELORO 40G VR",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00441",
+    "descricao": "FUNDO DE BLOCO GFA. SUCO PREMIUM 1000ML ECOVA ART. 5454 FOFO Q3 VR",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00442",
+    "descricao": "FUNDO DE BLOCO GFA. BUDWEISER O.W. 330ML ART. 1386 FOFO / DELORO 40G VR",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00443",
+    "descricao": "FUNDO DE BLOCO GFA. GFA. BORDEAUX SENSAÇÃO ECOVA 750ML ART. 1198 FOFO Q3 VR CB",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00444",
+    "descricao": "FUNDO DE BLOCO GFA. BORDEAUX 1000ML ROLHA 520G ART. 5451 FOFO Q3 VR CB",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00445",
+    "descricao": "FUNDO DE BLOCO GFA. BORDEAUX 1000ML PILFER ART. 5457 FOFO Q3 VR CB",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00446",
+    "descricao": "FUNDO DE BLOCO CERV. HEINEKEN ULTRA 275ML AMSTEL ART. 563735 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00447",
+    "descricao": "FUNDO DE BLOCO GFA. WHISKY OLD RED 1000ML ART. 1037 FOFO Q3 VR PF",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00448",
+    "descricao": "FUNDO DE BLOCO GFA. GIN STOCK 1000ML ART. 590 FOFO Q3 VR PF",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00449",
+    "descricao": "FUNDO DE BLOCO GFA. BACARDI CARTA BLANCA 700ML ART. 563726 BZ-889 SP",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00450",
+    "descricao": "FUNDO DE BLOCO GFA. CYNAR 900ML ART. 1014 FOFO Q3 VR JA",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00451",
+    "descricao": "FUNDO DE BLOCO GFA. CAMPARI BVI 1000ML BB ART. 563740 - CI-882 PE",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00452",
+    "descricao": "FUNDO DE BLOCO GFA. CAMPARI BVI 750ML BB ART. 563739 - CI-882 PE",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00453",
+    "descricao": "FUNDO DE BLOCO GFA. COCA COLA 10OZ RET. DC ART. 3354 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00454",
+    "descricao": "PLATÔ CERV. SPATEN RET. 330ML NNPB TG ART. 23M001 FOFO 96A",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00455",
+    "descricao": "PLATÔ CERV. STELLA ARTOIS 330ML NNPB 197GR ART. 22M017 - NODULAR / AISI 304",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00456",
+    "descricao": "FUNDO DE BLOCO GFA. NATASHA 900ML NNPB ART. 562608 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00457",
+    "descricao": "FUNDO DE BLOCO GFA. WHISKY FANTE GOLD 1000ML NNPB ART. 563728 NI-806 OI-PE",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00458",
+    "descricao": "FUNDO DE BLOCO GFA. LICOR PRESIDENTE 900 ML ART. 1234 FOFO Q3 VR JA",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00459",
+    "descricao": "MOLDES PARA VIDRO - BL-FB01 TAPA GFA. BURDEOS 187ML NNPB ART. 12B2 NÍQUEL NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00460",
+    "descricao": "MOLDES PARA VIDRO - BL-FB01 - TAPA GFA. JUGO STD 250ML NNPB ART. 1513 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00461",
+    "descricao": "FUNDO DE BLOCO GFA. CHANCELER 1000ML ART. 1393 FOFO Q3 VE JA",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00462",
+    "descricao": "FUNDO DE BLOCO CERV. CORONA V2 330ML ART. 563755 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00463",
+    "descricao": "MOLDES PARA VIDRO - BL-FB01 FUNDO DE BLOCO GFA. CERVEZA KUNSTMANN ART. 1977 NIQUEL GS-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00464",
+    "descricao": "FUNDO DE BLOCO GFA. SUCO PRONTO 1500ML ART. 4551 CI-882",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00465",
+    "descricao": "FUNDO DE BLOCO GFA. BORDEUAX 750ML ECOVA ART. 5462 FOFO Q3 VR CB",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00466",
+    "descricao": "MOLDES PARA VIDRO - BL-FB01 - FUNDO DE BLOCO GFA. CERVEZA KUNSTMANN 330ML FTG NNPB ART. 1977 - GS-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00467",
+    "descricao": "MOLDES PARA VIDRO - BL-FB01 FUNDO DE BLOCO GFA. JUGO STD 250ML FTG NNPB ART. 1513 NÍQUEL NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00468",
+    "descricao": "MOLDES PARA VIDRO - BL-FB01 - FUNDO DE BLOCO GFA. AGUA MIN. PUYEHUE 330ML FTG NNPB ART. 1581 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00469",
+    "descricao": "MOLDES PARA VIDRO - BL-FB01 FUNDO DE BLOCO GFA. JUGO AMA TIME 300ML FTG NNPB ART. 1562 NÍQUEL NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00470",
+    "descricao": "BASE PLATÔ CERV. CORONA NRB 330ML NNPB TG ART. 23M013 FOFO 96A",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00471",
+    "descricao": "FUNDO DE BLOCO POTE CAFÉ STD 100G ECOVA ART. 5447 - FOFO / DELORO 40G VR",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00472",
+    "descricao": "FUNDO DE BLOCO POTE MULTIUSO 350ML ART. 020 FOFO Q3",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00473",
+    "descricao": "MOLDES PARA VIDRO - BL-FB01 - TAPA CERV. HEINEKEN 660ML FDG NNPB ART. 191T NIQUEL GS-806 CH",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00474",
+    "descricao": "MOLDES PARA VIDRO - BL-FB01 - FUNDO DE BLOCO CERV. STELLA ARTOIS 330ML FTG NNPB ART. 1998 - GS-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00475",
+    "descricao": "MOLDES PARA VIDRO - FUNDO DE BLOCO CERV. BUDWEISER 600ML ART. 1394 BRONZE VR",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00476",
+    "descricao": "MOLDES PARA VIDRO - FUNDO DE BLOCO CERV. BUDWEISER 600ML ART. 1394 FOFO Q3 VR",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00477",
+    "descricao": "FUNDO DE BLOCO GFA. BORDEAUX SENSAÇÃO ECOVA 750ML ART. 1198 - BRONZE VR CB",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00478",
+    "descricao": "FUNDO DE BLOCO GFA. KHLOE 750ML ART. 1406 - FOFO Q3",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00479",
+    "descricao": "FUNDO DE BLOCO GFA. CIDADE IMPERIAL 275ML TG ART. 1167 FOFO Q3 / DELORO 40G VR FJA",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00480",
+    "descricao": "FUNDO DE BLOCO GFA. CIDADE IMPERIAL 330ML TG ART. 1409 FOFO Q3 / DELORO 40G VR FJA",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00481",
+    "descricao": "FUNDO DE BLOCO GFA. CIDADE IMPERIAL 210ML TG ART. 1170 FOFO Q3 / DELORO 40G VR FJA",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00482",
+    "descricao": "MOLDES PARA VIDRO - FUNDO DE BLOCO GFA. BURDEOS 750ML SUYAI ECO ROSCA ART. 279B BRONZE VR AR",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00483",
+    "descricao": "FUNDO DE BLOCO GFA. CIDADE IMPERIAL 210ML TG ART. 5469 FOFO Q3 / DELORO 40G VR FJA",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00484",
+    "descricao": "FUNDO DE BLOCO GFA. L.N. IMPERIAL 330ML TG ART. 1414 FOFO Q3 / DELORO 40G VR FJA",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00485",
+    "descricao": "BASE PLATÔ CERV. BUD CADILLAC 330ML 197GR NNPB VR1 ART. 23M016 FOFO 96A",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00486",
+    "descricao": "BASE PLATÔ CERV. BUD CADILLAC 330ML 190GR NNPB VR1 ART. 23M017 FOFO 96A",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00487",
+    "descricao": "FUNDO DE BLOCO GFA. COCA COLA 1000ML RET. ART. 563558 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00488",
+    "descricao": "FUNDO DE BLOCO CERV. HEINEKEN 250ML TG ART. 1392 FOFO Q3 / DELORO 40G VR FJA",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00489",
+    "descricao": "FUNDO DE BLOCO GFA. RH10L 900ML ART. 1382 FOFO Q3 VR FPF",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00490",
+    "descricao": "FUNDO DE BLOCO GFA. VODKA LEONOFF 920ML ART. 1247 FOFO Q3 FPF",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00491",
+    "descricao": "FUNDO DE BLOCO GFA. CACHAÇA 51 700ML ART. 1411 FOFO Q3 FPF",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00492",
+    "descricao": "FUNDO DE BLOCO GFA. CACHAÇA 51 1000ML ART. 1412 FOFO Q3 FPF",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00493",
+    "descricao": "FUNDO DE BLOCO GFA. CIDADE IMPERIAL 600ML ART. 1261 FOFO Q3 / DELORO 40G VR FJA",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00494",
+    "descricao": "FUNDO DE BLOCO CERV. CIDADE IMPERIAL 275ML ART. 563780 NI-806 SP",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00495",
+    "descricao": "FUNDO DE BLOCO CERV. MARIACH 330ML NNPB ART. 4748 NI 806 - OI-PE",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00496",
+    "descricao": "BASE FUNDO DE BLOCO CERV. HEINEKEN 330ML K2-02 ART. G49 095 FOFO Q3 VP",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00497",
+    "descricao": "FUNDO DE BLOCO CERV. LN. MILLER 355ML OW DC ART. 563786 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00498",
+    "descricao": "FUNDO DE BLOCO CERV. MILLER V2 600ML DC ART. 563789 NI-806 SP",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00499",
+    "descricao": "FUNDO DE BLOCO GFA. BORDEUAX ACINTURADA 750ML ART. 1418 FOFO Q3 FCB",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00500",
+    "descricao": "FUNDO DE BLOCO GFA. AGUA IBGA 300ML DG ART. 100 - CI-882 PE",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00501",
+    "descricao": "FUNDO DE BLOCO GFA. SOL 330ML O.W TG ART. 1121 FOFO Q3 / DELORO 40G VR FJA",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00502",
+    "descricao": "FUNDO DE BLOCO GFA. CABERNET CILINDRICA 750ML PILFER ECOVA 2 ART. 1118 FOFO Q3 FCB",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00503",
+    "descricao": "FUNDO DE BLOCO POTE 3 LITROS ART. 328 FOFO Q3 / DELORO 40G FPF",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00504",
+    "descricao": "FUNDO DE BLOCO GFA. COCA COLA 1000ML ART. 3832 NI-806 SP",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00505",
+    "descricao": "FUNDO DE BLOCO POTE DAWN JAR 100 DC ART. 3999 NI-806 SP",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00506",
+    "descricao": "FUNDO DE BLOCO VAS. SUCO OQ 1500ML DG ART. 9469 CI-882 PE",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00507",
+    "descricao": "FUNDO DE BLOCO GFA. BOURGONE CILINDRICA 750ML RC ART. 563799 NI-806 SP",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00509",
+    "descricao": "FUNDO DE BLOCO GFA. BOURGONE CILINDRICA 750ML RL ART. 563805 BZ-889 SP",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00510",
+    "descricao": "MOLDES PARA VIDRO - FUNDO DE BLOCO GFA. BURDEOS PREMIER 750ML ART. 302A BRONZE VR CH",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00511",
+    "descricao": "FUNDO DE BLOCO GFA. LICOR STD 500ML ART. 563804 NI-806 SP",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00512",
+    "descricao": "FUNDO DE BLOCO GFA. ESPUMANTE CONICA 750ML ART. 1422 - BRONZE FCB",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00513",
+    "descricao": "FUNDO DE BLOCO GFA. FRISANTE 750ML STD PP30 V3 DC ART. 563798 NI-806 SP",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00514",
+    "descricao": "FUNDO DE BLOCO GFA. LUMIERE ULTRA RL 750ML DC ART. 563794 NI-806 SP",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00515",
+    "descricao": "FUNDO DE BLOCO GFA. LUMIERE ULTRA 750ML PP30 DC ART. 563795 NI-806 SP",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00516",
+    "descricao": "FUNDO DE BLOCO GFA. BOURDEAUX CONICA 750ML ART. 563797 BZ-889 SP",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00517",
+    "descricao": "FUNDO DE BLOCO GFA. RH9T TG ART. 1379 FOFO Q3 / DELORO 40G FJA",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00518",
+    "descricao": "FUNDO DE BLOCO GFA. APEROL 750ML ART. 1231 FOFO Q3 FPF",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00519",
+    "descricao": "FUNDO DE BLOCO GFA. SUCO PREMIUM 1000ML ART. 778 FOFO Q3 / DELORO 40G FCB",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00520",
+    "descricao": "FUNDO DE BLOCO GFA. KEEP COOLER 275ML ART. 1432 FOFO Q3 / DELORO 40G FPF",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00521",
+    "descricao": "FUNDO DE BLOCO GFA. ESPUMANTE 750ML ECOVA ART. 5473 BRONZE FCB",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00522",
+    "descricao": "FUNDO DE BLOCO CERV. CIDADE IMPERIAL 210ML ART. 563779 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00523",
+    "descricao": "FUNDO DE BLOCO CERV. CERV. CIDADE IMPERIAL 330ML ART. 563810 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00524",
+    "descricao": "FUNDO DE BLOCO CERV. CIDADE IMPERIAL 330ML GOLD ART. 563809 NI-806 - RJ",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00525",
+    "descricao": "FUNDO DE BLOCO CERV. CIDADE IMPERIAL 300ML TG ART. 563812 NI-806 - RJ",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00526",
+    "descricao": "FUNDO DE BLOCO BARRAFA TIPO C ART. 006 FOFO Q3 VR FPF",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00527",
+    "descricao": "FUNDO DE BLOCO GFA. SCHWEPPES 250ML ART. 1426 FOFO Q3 / DELORO 40G FPF",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00528",
+    "descricao": "FUNDO DE BLOCO GFA. SUCO AURORA 1000ML ART. 1423 FOFO Q3 / DELORO 40G FCB",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00529",
+    "descricao": "FUNDO DE BLOCO GFA. MONTILLA 1000ML ART. 1057 FOFO Q3 FPF",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00530",
+    "descricao": "FUNDO DE BLOCO GFA. CERVEJA 635ML ART. 702 FOFO Q3",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00531",
+    "descricao": "FUNDO DE BLOCO POTE CAFÉ L OR 100G ART. 1442 FOFO / DELORO 40G VR",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00532",
+    "descricao": "FUNDO DE BLOCO GFA. ASTECA 900ML ART. G01 126 FOFO NODULAR VP",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00533",
+    "descricao": "FUNDO DE BLOCO GFA. GIN 970ML ART. G02 122 FOFO NODULAR VP",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00534",
+    "descricao": "FUNDO DE BLOCO GFA. APOLO 900ML ART. G01 459 FOFO NODULAR VP",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00535",
+    "descricao": "FUNDO DE BLOCO GFA. CIDADE IMPERIAL 210ML PSBE ART. 1170 FOFO Q3 / DELORO 40G VR FPF",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00536",
+    "descricao": "FUNDO DE BLOCO GFA. SUCO HUGO PIETRO 1350ML ART. 1435 FOFO Q3 / DELORO 40G FCB",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00537",
+    "descricao": "MOLDES PARA VIDRO - FUNDO DE BLOCO GFA. CHAMP ECOVA USA 750ML ART. 297A BRONZE VR CH",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00538",
+    "descricao": "MOLDES PARA VIDRO - FUNDO DE BLOCO GFA. CHAMP USA 750ML ART. 296A BRONZE VR CH",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00539",
+    "descricao": "FUNDO DE BLOCO POTE AZEITONA 500G ART. 5477 FOFO / DELORO 40G FPF",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00540",
+    "descricao": "FUNDO DE BLOCO GFA. AMBEV STD 600ML ART. 1447 FOFO Q3",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00541",
+    "descricao": "FUNDO DE BLOCO POTE CONSERVA 550G ART. 5480 FOFO Q3 / DELORO 40G",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00542",
+    "descricao": "FUNDO DE BLOCO GFA. CAMPARI BVI 1000ML ART. 1446 FOFO Q3",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00543",
+    "descricao": "FUNDO DE BLOCO GFA. WEWI 255ML ART. 1444 FOFO Q3 / DELORO 40G VR",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00544",
+    "descricao": "FUNDO DE BLOCO CERV. CIDADE IMPERIAL 600ML SS ART. 1261 FOFO Q3 FJA",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00545",
+    "descricao": "FUNDO DE BLOCO CERV. CIDADE IMPERIAL 600ML DC ART. 563829 NI-806 SP",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00546",
+    "descricao": "FUNDO DE BLOCO GFA. CAMPARI BVI 750ML ART. 1445 FOFO Q3",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00547",
+    "descricao": "FUNDO DE BLOCO GFA. COCA COLA 1000ML ART. G13 173 6.1/4\" FOFO NODULAR",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00548",
+    "descricao": "FUNDO DE BLOCO CERV. CIDADE IMPERIAL 210ML ART. 563779 NI-806 SP",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00549",
+    "descricao": "FUNDO DE BLOCO GFA. ICE STD 275ML ART. 1377 FOFO Q3 / DELORO 40G VR",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00550",
+    "descricao": "FUNDO DE BLOCO GFA. WHISKY 101 DO BRASIL 900ML ART.1063 FOFO Q3",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00551",
+    "descricao": "FUNDO DE BLOCO GFA. COCA COLA NORDIC 290ML DC ART.4746",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00552",
+    "descricao": "FUNDO DE BLOCO GFA. LN STD 355ML ART. 5479 FOFO Q3 / DELOR 40",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00553",
+    "descricao": "FUNDO DE BLOCO GFA. NEW ORLOFF 1000ML ART. 5484 FOFO Q3 FPF",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00554",
+    "descricao": "BASE PLATÔ CERV. CORONA NRB 330ML 215GR ART. 24M012 - NODULAR",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00555",
+    "descricao": "FUNDO DE BLOCO GFA. ICE STD 275ML ULTRA ART. 563827 NI-806 SP",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00556",
+    "descricao": "FUNDO DE BLOCO GFA. PASSPORT 1000ML ART. G15 191 NODULAR VP",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00557",
+    "descricao": "FUNDO DE BLOCO GFA. STELLA ARTOIS 330ML ART. 1380 FOFO Q3 / DELORO 40G VR",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00558",
+    "descricao": "FUNDO DE BLOCO GFA. BORDEAUX CAMPOS 750ML ART. 1344 BRONZE VR",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00559",
+    "descricao": "FUNDO DE BLOCO GFA. BORDEAUX 750ML ECO ROLHA ART. 607 FOFO Q3 VR",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00560",
+    "descricao": "FUNDO DE BLOCO POTE AZEITONA 200G 350ML ART. 3286 FOFO CI-800",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00561",
+    "descricao": "FUNDO DE BLOCO GFA. DOCTOR GIN 1000ML DC ART. 563848 NI-806 SP",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00562",
+    "descricao": "FUNDO DE BLOCO GFA. HEINEKEN 330ML K2 O.W 195G ART. 1455 FOFO Q3 / DELORO 40",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00563",
+    "descricao": "FUNDO DE BLOCO POTE MULT 244ML ART. 563846 NI 806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00564",
+    "descricao": "FUNDO DE BLOCO POTE CAFÉ SOLÚVEL 200G ART. 5488 FOFO / DELORO 40G",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00565",
+    "descricao": "FUNDO DE BLOCO GFA. GFA. VODKA INTENCION 900ML ART. 1459 FOFO Q3",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00566",
+    "descricao": "MOLDES PARA VIDRO - FUNDO DE BLOCO GFA. SPARKLING 750ML BARON ECO ART. 310A BRONZE",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00567",
+    "descricao": "MOLDES PARA VIDRO - TAPA GFA. BURDEOS 750CC GIULIANA ECO 2 ART. 306A BRONZE",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00568",
+    "descricao": "FUNDO DE BLOCO GFA. BORDALEZA ROLHA 750ML ART. G60 189 FOFO NODULAR VP",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00569",
+    "descricao": "FUNDO DE BLOCO GFA. BORDALEZA MALBEC ROSCA 750ML ART. G14 172 FOFO NODULAR VP",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00570",
+    "descricao": "FUNDO DE BLOCO GFA. MONIN 700ML ART. 563863 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00571",
+    "descricao": "FUNDO DE BLOCO GFA. NATU NOBILIS V2 1000ML ART. 563856 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00572",
+    "descricao": "FUNDO DE BLOCO GFA. SUCO AURORA 500ML ART. 1425 FOFO Q3 / DELORO 40",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00573",
+    "descricao": "FUNDO DE BLOCO GFA. BORDEAUX 500ML ROSCA ART. 1431 FOFO Q3 VR",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00574",
+    "descricao": "FUNDO DE BLOCO GFA. LN STD 330ML ART.1303 FOFO Q3 / DELORO 40G VR",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00575",
+    "descricao": "FUNDO DE BLOCO GFA. SUCO AURORA 300ML ART.1163 FOFO Q3 / DELORO 40G",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00576",
+    "descricao": "PLATÔ CERV. CADILLAC 330ML ART.39501 FOFO",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00577",
+    "descricao": "FUNDO DE BLOCO POTE INCA 362ML ART. 563872 NI 806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00578",
+    "descricao": "FUNDO DE BLOCO POTE BELEM STD 240ML ART. 563882 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00579",
+    "descricao": "FUNDO DE BLOCO CERV. LN SPATEN 330ML ART. 1465 FOFO Q3 / DELORO 40G",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00580",
+    "descricao": "FUNDO DE BLOCO GFA. SMIRNOFF ICE STD 275ML ART.1463 FOFO Q3 / DELORO 40G",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00581",
+    "descricao": "FUNDO DE BLOCO GFA. SOL 330ML O.W TG ART. 1121 FOFO Q3 / DELORO 40G VR",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00582",
+    "descricao": "FUNDO DE BLOCO GFA. LONG NECK 335ML 200G ART. 1457 FOFO Q3 / DELORO 40G",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00583",
+    "descricao": "FUNDO DE BLOCO GFA. VODKA KOVAC 1000ML V2 DC ART. 563896 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00584",
+    "descricao": "FUNDO DE BLOCO GFA. GIN GUALA VB ULTRA 980ML ART. 563915 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00585",
+    "descricao": "FUNDO DE BLOCO GFA. CERV. SCHIN 300ML RET. TG ART. 1064 FOFO Q3 / DELORO 40G VR",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00586",
+    "descricao": "FUNDO DE BLOCO GFA. VODKA VORUS 900ML ART. 1441 FOFO Q3",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00587",
+    "descricao": "FUNDO DE BLOCO GFA. SUCO PRONTO 1356ML ART. 563914 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00588",
+    "descricao": "FUNDO DE BLOCO POTE PASSATA STD 446ML DC ART. 563916 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00589",
+    "descricao": "FUNDO DE BLOCO CERV. CIDADE IMPERIAL 275ML DC ART. 563919 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00590",
+    "descricao": "FUNDO DE BLOCO CERV. CIDADE IMPERIAL 330ML DC ART. 563918 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00591",
+    "descricao": "MOLDES PARA VIDRO - TAPA 1 GFA. BURDEOS 750ML TOP ART. 2024001 GS-808",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00592",
+    "descricao": "MOLDES PARA VIDRO - TAPA 2 GFA. BURDEOS 750ML TOP ART. 2024001 BRONZE",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00593",
+    "descricao": "MOLDES PARA VIDRO - TAPA 3 GFA. BURDEOS 750ML TOP ART. 2024001 GS-808",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00594",
+    "descricao": "FUNDO DE BLOCO POTE RESERVA DE MINAS 200G ART. 1466 FOFO Q3 / DELORO 40G",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00595",
+    "descricao": "FUNDO DE BLOCO CERV. HEINEKEN SOL 330ML PRY OFF V2 ART. 563828 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00596",
+    "descricao": "FUNDO DE BLOCO GFA. CONTINI 900ML ART. 742 FOFO Q3",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00597",
+    "descricao": "MOLDES PARA VIDRO - BL-FB01 - BAFFLE CERV. EXPORTACION 355ML ART. 8494 NIQUEL GS-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00598",
+    "descricao": "FUNDO DE BLOCO GFA. BORDEAUX 1500ML ECO ROSCA ART. 608 - BRONZE",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00599",
+    "descricao": "FUNDO DE BLOCO GFA. CABERNET CILINDRICA 750ML ECOVA 2 ART. 5503 FOFO Q3 FPF",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00600",
+    "descricao": "FUNDO DE BLOCO GFA. ESPUMANTE RESERVA 750ML ECOVA ART. 5483 - BRONZE",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00601",
+    "descricao": "FUNDO DE BLOCO GFA. ESPUMANTE CONICA 750ML ECOVA ART. 5504 - BRONZE",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00602",
+    "descricao": "BASE PLATÔ CERV. STELLA ARTOIS 330ML NNPB TG ART. 21M021 - NODULAR",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00603",
+    "descricao": "FUNDO DE BLOCO GFA. CERVEJA OW 600ML ART. 736 FOFO Q3",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00604",
+    "descricao": "MOLDES PARA VIDRO - TAPA GFA. COCTELERA CAPEL 1000ML ART. 136J NIQUEL GS-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00605",
+    "descricao": "MOLDES PARA VIDRO - TAPA GFA. LICOR GENÉRICO STD 1000ML ART. 1663 FOFO 96A",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00606",
+    "descricao": "MOLDES PARA VIDRO - BAFFLE GFA. CYNAR CAMPARY 750ML ART. 8711 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00607",
+    "descricao": "FUNDO DE BLOCO GFA. MONIN 330ML DC ART. 563933 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00608",
+    "descricao": "FUNDO DE BLOCO GFA. 51 ICE 275ML ART. 1443 FOFO Q3 / DELORO 40G",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00609",
+    "descricao": "FUNDO DE BLOCO GFA. SMIRNOFF ICE STD 275ML ART. 1463 FOFO Q3 / DELORO 40G",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00610",
+    "descricao": "MOLDES PARA VIDRO - TAPA GFA. CINZANO 1000ML ART. 100 FOFO Q3",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00611",
+    "descricao": "MOLDES PARA VIDRO - TAPA CERV. PREMIUM 500ML ART. 101 FOFO Q3",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00612",
+    "descricao": "MOLDES PARA VIDRO - TAPA CERV. HEINEKEN 330ML DC K2 O.W. ART. 102 FOFO Q3",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00613",
+    "descricao": "FUNDO DE BLOCO POTE NEW ASTECA 160 ART. 1336 - FOFO Q3 / DELORO 40G",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00614",
+    "descricao": "FUNDO DE BLOCO COPO OLÉ 225ML ART. 563928 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00615",
+    "descricao": "MOLDES PARA VIDRO - TAPA GFA. GIN BURNETTS 750ML ART. 1920 FOFO 96A",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00616",
+    "descricao": "MOLDES PARA VIDRO - TAPA GFA. BURDEOS STD 1500ML ART. 357 FOFO 96A",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00617",
+    "descricao": "FUNDO DE BLOCO GFA. ÁGUA ATTIVA 750ML ART. G40 204 FOFO NODULAR",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00618",
+    "descricao": "FUNDO DE BLOCO CERV. HEINEKEN 250ML K2 V2 ART. 563854 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00619",
+    "descricao": "FUNDO DE BLOCO GFA. AZEITE 250ML ART. 1483 FOFO Q3",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00620",
+    "descricao": "FUNDO DE BLOCO GFA. SIDRA CERESER 660ML ART. 1339 FOFO Q3",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00621",
+    "descricao": "FUNDO DE BLOCO GFA. WHISKY 1000ML LW ART. G07 206 FOFO Q3",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00622",
+    "descricao": "FUNDO DE BLOCO GFA. CHAMPANHA 187ML ART. 070 FOFO Q3",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00623",
+    "descricao": "FUNDO DE BLOCO CERV. HEINEKEN 250ML DC K2 V2 ART. 563854 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00624",
+    "descricao": "FUNDO DE BLOCO GFA. ÁGUA ALVA 500ML ART. 563944 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00625",
+    "descricao": "FUNDO DE BLOCO GFA. ESPUMANTE ECOVA 750ML ART. 1030 FOFO Q3",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00626",
+    "descricao": "MOLDES PARA VIDRO - TAPA GFA. VERMOUTH STD 950ML ART. 966 FOFO 96A",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00627",
+    "descricao": "MOLDES PARA VIDRO - TAPA GFA. CHAMPAGNE CÔNICA STD 750ML ART. 1634 MINOX",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00628",
+    "descricao": "FUNDO DE BLOCO GFA. ÁGUA ALVA 1000ML ART. 563945 FOFO CI-882",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00629",
+    "descricao": "FUNDO DE BLOCO GFA. PERNOD RICARD PASSAPORT 700ML DC ART. 563955 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00630",
+    "descricao": "FUNDO DE BLOCO GFA. CANINHA 51 970ML ART. 563921 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00631",
+    "descricao": "FUNDO DE BLOCO GFA. PERNOUD RICARD PASSPORT 700ML NNPB ART. 563955 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00632",
+    "descricao": "MOLDES PARA VIDRO - TAPA GFA. BURDEOS BALBO 1125ML ART. 8993 MINOX",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00633",
+    "descricao": "FUNDO DE BLOCO GFA. PERNOUD RICARD PASSPORT 200ML BB DG ART. 563958 FOFO CI-882",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00634",
+    "descricao": "FUNDO DE BLOCO CERV. CORONA 600ML DC RET. NNPB ART. 563961 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00635",
+    "descricao": "MOLDES PARA VIDRO - BAFFLE GFA. CÔNICA BAJA ECO 750ML ART. 8715 BZ-889",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00636",
+    "descricao": "MOLDES PARA VIDRO - BAFFLE GFA. BURDEOS LUCAS 750ML ART. 8738 BZ-889",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00637",
+    "descricao": "MOLDES PARA VIDRO - TAPA GFA. DR. LEMON 1000ML ART. 1712 FOFO 96A",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00638",
+    "descricao": "FUNDO DE BLOCO GFA. RAMAZZOTTI 700ML ART. 1489 FOFO Q3",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00639",
+    "descricao": "FUNDO DE BLOCO GFA. LICOR GENERICO STOCK 750ML ART. 441 FOFO Q3",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00640",
+    "descricao": "FUNDO DE BLOCO GFA. RH3L 900ML ART. 1120 FOFO MOVTI",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00641",
+    "descricao": "FUNDO DE BLOCO GFA. PERNOD RICARD PASSAPORT 500ML DC ART. 563959 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00643",
+    "descricao": "BASE PLATÔ CERV. SPATEN OW 330ML 195G NNPB ART. 0467 01 NODULAR",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00644",
+    "descricao": "BASE PLATÔ CERV. STELLA GOLD 330ML 205G NNPB ART. 0442 01 FOFO NODULAR",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00645",
+    "descricao": "FUNDO DE BLOCO CERV. CORONA 210ML LW ART. 563967 NI-806 BF.563967.12J500.NI806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00646",
+    "descricao": "FUNDO DE BLOCO GFA. ROCKS 1000ML ART. 1273 FOFO Q3",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00647",
+    "descricao": "MOLDES PARA VIDRO - TAPA GFA. WHISKY BLENDERS PRIDE 1000ML ART. 1677 FOFO 96A",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00648",
+    "descricao": "MOLDES PARA VIDRO - TAPA GFA. SIDRA DEL VALLE 750ML ART. 1767 FOFO 96A",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00649",
+    "descricao": "FUNDO DE BLOCO GFA. VERMOUTH 990ML ART. 799 FOFO Q3",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00650",
+    "descricao": "FUNDO DE BLOCO GFA. AZEITONA 500ML ART. 907 FOFO Q3 / DELOGO 40",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00651",
+    "descricao": "FUNDO DE BLOCO GFA. SMIRNOFF 700ML ART. 1472 FOFO Q3",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00652",
+    "descricao": "FUNDO DE BLOCO CERV. HEINEKEN 250ML DG ART. 1392 FOFO Q3 / DELORO 40G",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00653",
+    "descricao": "FUNDO DE BLOCO GFA. CERV. LN STD 330ML DG ART. 1303 FOFO Q3 / DELORO 40G",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00654",
+    "descricao": "FUNDO DE BLOCO CERV. CIDADE IMPERIAL 300ML RET. LW ART. 563987 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00655",
+    "descricao": "FUNDO DE BLOCO GFA. GIN GUALA 1005ML ART. 563948 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00656",
+    "descricao": "FUNDO DE BLOCO CERV. CIDADE IMPERIAL 300ML ART. 563987 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00657",
+    "descricao": "FUNDO DE BLOCO GFA. KISLLA ICE 275ML DG ART. 1453 FOFO Q3 / DELORO 40G",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00658",
+    "descricao": "FUNDO DE BLOCO GFA. LUMIERE ULTRA RL 750ML ART. 563794 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00659",
+    "descricao": "MOLDES PARA VIDRO - TAPA GFA. APEROL 750ML ART. 8701 BM-900",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00660",
+    "descricao": "FUNDO DE BLOCO GFA. SOL PRAYA 330ML OW ART. 1486 FOFO Q3 / DELORO 40G",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00661",
+    "descricao": "FUNDO DE BLOCO POTE NESTLE SIGNATURE 100GR DC ART. 563998 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00662",
+    "descricao": "FUNDO DE BLOCO GFA. GORDON´S ALEXANDER 700ML ART. 563993 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00663",
+    "descricao": "MOLDES PARA VIDRO - TAPA GFA. CÔNICA BAJA PESADA 750ML ART. 8950 BZ-889",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00664",
+    "descricao": "BASE PLATÔ CERV. MATRIOSKA 330ML 195G ART. 26M001 FOFO 96A",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00665",
+    "descricao": "FUNDO DE BLOCO GFA. VODKA LEONOFF 900ML ART. 563995 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00666",
+    "descricao": "MOLDES PARA VIDRO - TAPA GFA. COCKTELERA DELLEPIANE 750ML ART. 1938 FOFO 96A",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00667",
+    "descricao": "MOLDES PARA VIDRO - TAPA GFA. BURDEOS NEVADA 750ML ART. 1687 FOFO 96A",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00668",
+    "descricao": "FUNDO DE BLOCO GFA. WHISKY 101 RH2L 900ML ART. 5520 FOFO Q3",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00669",
+    "descricao": "FUNDO DE BLOCO CERV. STELLA ARTOIS 330ML DG ART. 564016 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00670",
+    "descricao": "FUNDO DE BLOCO GFA. NEW CONTINI 900ML ART. 1462 FOFO CINZENTO",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00671",
+    "descricao": "FUNDO DE BLOCO GFA. SOL PRAYA 330ML DG ART. 1486 FOFO Q3 / DELORO 40G",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00672",
+    "descricao": "FUNDO DE BLOCO CERV. CERPA 350ML NNPB TG ART. 564012 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00673",
+    "descricao": "FUNDO DE BLOCO POTE LINEA 240ML DC ART. 4318 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00674",
+    "descricao": "FUNDO DE BLOCO GFA. APEROL SPRITZ 275ML DC ART. 564018 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00675",
+    "descricao": "FUNDO DE BLOCO GFA. LN. CONTINI 330ML DG ART. 1290 FOFO Q3 / DELORO 40G",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00676",
+    "descricao": "FUNDO DE BLOCO GFA. COCA-COLA ULTRA 250ML DG ART. 563289 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00677",
+    "descricao": "FUNDO DE BLOCO GFA. NEW APEROL 750ML ART. 1498 FOFO Q3",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00678",
+    "descricao": "FUNDO DE BLOCO CERV. NEW SOL 330ML LW ART. 563969 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00642",
+    "descricao": "FUNDO DE BLOCO GFA. MONIN 700ML ART. 1491 FOFO Q3",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00679",
+    "descricao": "PLATÔ GFA. CERVEJA 600ML 420GR ART. 25M006 FOFO 96A",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00680",
+    "descricao": "FUNDO DE BLOCO GFA. BACARDI MARTINI VITTORIA 750ML ART. 564023 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00072",
+    "descricao": "FUNDO DE BLOCO POTE DAWN JAR 200 G 808 ML ART. 943 FOFO Q3 / DELORO 40G",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00681",
+    "descricao": "FUNDO DE BLOCO POTE DAWN JAR 170 ML ART. 1249 FOFO Q3 / DELORO 40G",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00682",
+    "descricao": "FUNDO DE BLOCO GFA. CANINHA 275ML 51 ICE V2 ART. 4542 NI-806 PE",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00686",
+    "descricao": "FUNDO DE BLOCO GFA. CERPA 300ML RETORNÁVEL ART. 1460 FOFO Q3 / DELORO 40G",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00683",
+    "descricao": "BAFFLE GFA. LICOR BARRICA 750ML ART. 0004 FOFO Q3",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00684",
+    "descricao": "FUNDO DE BLOCO GFA. RH2L ROSCA 900ML ART. 1484 FOFO Q3",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00508",
+    "descricao": "FUNDO DE BLOCO GFA. BOURDEAUX CONICA 1000ML ART. 563796 NI-806 SP",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00685",
+    "descricao": "MOLDES PARA VIDRO - BAFFLE GFA. PISCO EDLA 750ML ART. 0005 FOFO Q3",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00687",
+    "descricao": "FUNDO DE BLOCO GFA. SMIRNOFF ICE 275ML ART. 563531 NI-806 PE",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00688",
+    "descricao": "FUNDO DE BLOCO GFA. ESPUMANTE 750ML V2 ART. 564027 BZ-889",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00691",
+    "descricao": "FUNDO DE BLOCO VAS. SUCO OQ 900ML NNPB ART. 563996 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00689",
+    "descricao": "FUNDO DE BLOCO CERV. AMBEV JEEP V2 1000ML NNPB DG ART. 4721 FOFO CI-882",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00690",
+    "descricao": "MOLDES PARA VIDRO - BAFFLE GFA. CUADRADA AZENDE 700ML ART. 0007 FOFO Q3",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00692",
+    "descricao": "MOLDES PARA VIDRO - BAFFLE GFA. PISCO CORTEZ 750ML BB ART. 0006 FOFO Q3",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00693",
+    "descricao": "FUNDO DE BLOCO VAS. SUCO OQ 1356ML DG ART. 563997 NI-806",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-04-00694",
+    "descricao": "FUNDO DE BLOCO CERV. ICE STD 275ML ART. 4493 DC NI-806",
+    "tipoProduto": "fundo_bloco"
+  }
+]

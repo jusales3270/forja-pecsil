@@ -1,0 +1,652 @@
+[
+  {
+    "codigo": "5-07-00009",
+    "descricao": "PUNÇÃO GFA. TEACHERS 1000 ML ART. 345A BM-901",
+    "tipoProduto": "puncao"
+  },
+  {
+    "codigo": "5-07-00001",
+    "descricao": "PUNÇÃO POTE MAD MAX 290 ML ART. 407 SAE 1045",
+    "tipoProduto": "puncao"
+  },
+  {
+    "codigo": "5-07-00002",
+    "descricao": "PUNÇÃO CERV. HEINEKEN TECATE 355 ML ART. 391 BM-901",
+    "tipoProduto": "puncao"
+  },
+  {
+    "codigo": "5-07-00003",
+    "descricao": "PUNÇÃO GFA. BACARDI TEACHERS 500 ML NNPB ART. 389A BM-901",
+    "tipoProduto": "puncao"
+  },
+  {
+    "codigo": "5-07-00004",
+    "descricao": "PUNÇÃO 038-2000-R030 NI-806",
+    "tipoProduto": "puncao"
+  },
+  {
+    "codigo": "5-07-00005",
+    "descricao": "PUNÇÃO VAS. GIN GUALA 970 ML ART. 331 BM-901",
+    "tipoProduto": "puncao"
+  },
+  {
+    "codigo": "5-07-00006",
+    "descricao": "PUNÇÃO VAS. CERVEJA STD 600 ML ART. 243 BM-901",
+    "tipoProduto": "puncao"
+  },
+  {
+    "codigo": "5-07-00007",
+    "descricao": "PUNÇÃO GFA. CONHAQUE SJB 900 ML ART. 352 BM-901",
+    "tipoProduto": "puncao"
+  },
+  {
+    "codigo": "5-07-00008",
+    "descricao": "PUNÇÃO GFA. VODKA ORLOFF 1000 ML ART. 267 BM-901",
+    "tipoProduto": "puncao"
+  },
+  {
+    "codigo": "5-07-00010",
+    "descricao": "PUNÇÃO CERV. RETORNÁVEL 635 ML ART. 1219 FOFO GG-25",
+    "tipoProduto": "puncao"
+  },
+  {
+    "codigo": "5-07-00011",
+    "descricao": "PUNÇÃO GROWLER 2000 ML ART. 4583 NI-806 042-3122-LA01",
+    "tipoProduto": "puncao"
+  },
+  {
+    "codigo": "5-07-00012",
+    "descricao": "PUNÇÃO PP 31,5 DEEP DG NNPB ART. 012 NI-806",
+    "tipoProduto": "puncao"
+  },
+  {
+    "codigo": "5-07-00013",
+    "descricao": "PUNÇÃO POTE SONETO 100 ML ART. 396 SAE 1045",
+    "tipoProduto": "puncao"
+  },
+  {
+    "codigo": "5-07-00014",
+    "descricao": "PUNÇÃO 026-0540-LA01 NI-806",
+    "tipoProduto": "puncao"
+  },
+  {
+    "codigo": "5-07-00015",
+    "descricao": "PUNÇÃO MÉXICO JUMEX 450 ML ART. 1015 BM-901",
+    "tipoProduto": "puncao"
+  },
+  {
+    "codigo": "5-07-00058",
+    "descricao": "PUNÇÃO 026-0640-LA01 NI-806",
+    "tipoProduto": "puncao"
+  },
+  {
+    "codigo": "5-07-00016",
+    "descricao": "PUNÇÃO POTE HERO 179 ML DC ART. 4651 BM-901",
+    "tipoProduto": "puncao"
+  },
+  {
+    "codigo": "5-07-00017",
+    "descricao": "PUNÇÃO POTE WELLNESS 245 ML DC ART. 4652 BM-901",
+    "tipoProduto": "puncao"
+  },
+  {
+    "codigo": "5-07-00018",
+    "descricao": "PUNÇÃO CERV. STELLA ARTOIS 275 ML ART. 9385 BM-901",
+    "tipoProduto": "puncao"
+  },
+  {
+    "codigo": "5-07-00019",
+    "descricao": "PUNÇÃO CERV. HEINEKEN K2 330 ML ART. 4669 BM-901",
+    "tipoProduto": "puncao"
+  },
+  {
+    "codigo": "5-07-00020",
+    "descricao": "PUNÇÃO 032-3153-LA02 NI-806",
+    "tipoProduto": "puncao"
+  },
+  {
+    "codigo": "5-07-00021",
+    "descricao": "PUNÇÃO 033-3141-LA01 B&B NI-806",
+    "tipoProduto": "puncao"
+  },
+  {
+    "codigo": "5-07-00022",
+    "descricao": "PUNÇÃO GFA. CACHAÇA PREMIUM BR 703 ML DC ART. 4694 BM-901",
+    "tipoProduto": "puncao"
+  },
+  {
+    "codigo": "5-07-00023",
+    "descricao": "PUNÇÃO GFA. ÁGUA ABINAM V2 303 ML DC ART. 4607 BM-901",
+    "tipoProduto": "puncao"
+  },
+  {
+    "codigo": "5-07-00024",
+    "descricao": "PUNÇÃO POTE 2 KG 2370 ML ART. 4660 BM-901",
+    "tipoProduto": "puncao"
+  },
+  {
+    "codigo": "5-07-00025",
+    "descricao": "PUNÇÃO POTE ARANHA 265 ML DC ART. 4696 BM-901",
+    "tipoProduto": "puncao"
+  },
+  {
+    "codigo": "5-07-00026",
+    "descricao": "PUNÇÃO POTE ARANHA 265 ML DC ART. 4696 BM-901 OP01",
+    "tipoProduto": "puncao"
+  },
+  {
+    "codigo": "5-07-00027",
+    "descricao": "PUNÇÃO GFA. MINALBA 300 ML DC ART. 4655 BM-901",
+    "tipoProduto": "puncao"
+  },
+  {
+    "codigo": "5-07-00028",
+    "descricao": "PUNÇÃO POTE MIRANDA PRIESTLY ART. 445 SAE 1045",
+    "tipoProduto": "puncao"
+  },
+  {
+    "codigo": "5-07-00029",
+    "descricao": "PUNÇÃO GFA. WEWI 250 ML DC ART. 4692 BM-901",
+    "tipoProduto": "puncao"
+  },
+  {
+    "codigo": "5-07-00030",
+    "descricao": "PUNÇÃO GFA. SMIRNOFF V2 600 ML DC ART. 4647 BM-901",
+    "tipoProduto": "puncao"
+  },
+  {
+    "codigo": "5-07-00031",
+    "descricao": "PUNÇÃO GFA. ORLOFF 603 ML DC ART. 4720 BM-901",
+    "tipoProduto": "puncao"
+  },
+  {
+    "codigo": "5-07-00032",
+    "descricao": "PUNÇÃO CERV. BUD SQUARE 330 ML ART. 4729 BM-901",
+    "tipoProduto": "puncao"
+  },
+  {
+    "codigo": "5-07-00033",
+    "descricao": "PUNÇÃO GFA. ÁGUA ABINAM REGIONAL 753 ML DC ART. 4549 BM-901",
+    "tipoProduto": "puncao"
+  },
+  {
+    "codigo": "5-07-00034",
+    "descricao": "PUNÇÃO CERV. BUD SQUARE 550 ML ART. 4730 BM-901",
+    "tipoProduto": "puncao"
+  },
+  {
+    "codigo": "5-07-00035",
+    "descricao": "PUNÇÃO GFA. COROA 300 ML ART. 4727 BM-901",
+    "tipoProduto": "puncao"
+  },
+  {
+    "codigo": "5-07-00036",
+    "descricao": "PUNÇÃO FRASCO TULIPA RUIZ 100 ML ART. MB-1368 FOFO",
+    "tipoProduto": "puncao"
+  },
+  {
+    "codigo": "5-07-00037",
+    "descricao": "PUNÇÃO GFA. ÁGUA TERRAL 275 ML DC ART. 4728 BM-901",
+    "tipoProduto": "puncao"
+  },
+  {
+    "codigo": "5-07-00038",
+    "descricao": "PUNÇÃO FRASCO FREVO II 150 ML ART. 263 FOFO G3000",
+    "tipoProduto": "puncao"
+  },
+  {
+    "codigo": "5-07-00057",
+    "descricao": "PUNÇÃO 030-1680-LA40 NI-806",
+    "tipoProduto": "puncao"
+  },
+  {
+    "codigo": "5-07-00039",
+    "descricao": "PUNÇÃO CERV. COLORADO 530 ML ART. 4736 BM-901",
+    "tipoProduto": "puncao"
+  },
+  {
+    "codigo": "5-07-00040",
+    "descricao": "PUNÇÃO GFA. SMIRNOFF ICE V2 275 ML ART. 4740 BM-901",
+    "tipoProduto": "puncao"
+  },
+  {
+    "codigo": "5-07-00041",
+    "descricao": "PUNÇÃO BIG POTE 3 KG ART. 3959 BM-901",
+    "tipoProduto": "puncao"
+  },
+  {
+    "codigo": "5-07-00042",
+    "descricao": "PUNÇÃO 026-0600-LA11 NI-806",
+    "tipoProduto": "puncao"
+  },
+  {
+    "codigo": "5-07-00043",
+    "descricao": "PUNÇÃO 038-2000-LA14 NI-806",
+    "tipoProduto": "puncao"
+  },
+  {
+    "codigo": "5-07-00044",
+    "descricao": "PUNÇÃO POTE DAWN JAR 200 G 808 ML ART. 943 FOFO G4000",
+    "tipoProduto": "puncao"
+  },
+  {
+    "codigo": "5-07-00045",
+    "descricao": "PUNÇÃO GFA. GIN GUALA 753 ML DC ART. 4742 BM-901",
+    "tipoProduto": "puncao"
+  },
+  {
+    "codigo": "5-07-00046",
+    "descricao": "PUNÇÃO 026-0600-LA02 NI-806",
+    "tipoProduto": "puncao"
+  },
+  {
+    "codigo": "5-07-00047",
+    "descricao": "PUNÇÃO 058-ARJEK-LA02 BM-901",
+    "tipoProduto": "puncao"
+  },
+  {
+    "codigo": "5-07-00048",
+    "descricao": "PUNÇÃO CERV. KAILUA V2 275 ML ART. 4544 BM-901",
+    "tipoProduto": "puncao"
+  },
+  {
+    "codigo": "5-07-00049",
+    "descricao": "PUNÇÃO 029-3153-LA01 NI-806",
+    "tipoProduto": "puncao"
+  },
+  {
+    "codigo": "5-07-00050",
+    "descricao": "PUNÇÃO CERV. MARIACHI 330 ML ART. 4748 BM-901",
+    "tipoProduto": "puncao"
+  },
+  {
+    "codigo": "5-07-00051",
+    "descricao": "PUNÇÃO 029-CI-129 NI-806",
+    "tipoProduto": "puncao"
+  },
+  {
+    "codigo": "5-07-00052",
+    "descricao": "PUNÇÃO 028-1628-R002 NI-806",
+    "tipoProduto": "puncao"
+  },
+  {
+    "codigo": "5-07-00053",
+    "descricao": "PUNÇÃO 030-1683-LA05 NI-806",
+    "tipoProduto": "puncao"
+  },
+  {
+    "codigo": "5-07-00054",
+    "descricao": "PUNÇÃO CERV. BUD CADILLAC 550 ML 026-600 ART. 18022 FOFO",
+    "tipoProduto": "puncao"
+  },
+  {
+    "codigo": "5-07-00055",
+    "descricao": "PUNÇÃO CERV. COROA 300 ML 26-600 ART. 18030 FOFO",
+    "tipoProduto": "puncao"
+  },
+  {
+    "codigo": "5-07-00056",
+    "descricao": "PUNÇÃO CERV. SKOL BEATS SAFE 313 ML DC ART. 4717 BM-901",
+    "tipoProduto": "puncao"
+  },
+  {
+    "codigo": "5-07-00059",
+    "descricao": "PUNÇÃO 026-0600-LA11 NI-806 - ARG",
+    "tipoProduto": "puncao"
+  },
+  {
+    "codigo": "5-07-00060",
+    "descricao": "PUNÇÃO 028-GUALA-LA01 NI-806",
+    "tipoProduto": "puncao"
+  },
+  {
+    "codigo": "5-07-00061",
+    "descricao": "PUNÇÃO CERV. RETORNAVEL 635ML ART. 19022 FOFO 96A",
+    "tipoProduto": "puncao"
+  },
+  {
+    "codigo": "5-07-00076",
+    "descricao": "PUNÇÃO GFA. NATASHA 1000ML ART. 4279 AISI 8620",
+    "tipoProduto": "puncao"
+  },
+  {
+    "codigo": "5-07-00069",
+    "descricao": "PUNÇÃO CERV. RETORNAVEL 635ML ART.1219 FOFO",
+    "tipoProduto": "puncao"
+  },
+  {
+    "codigo": "5-07-00074",
+    "descricao": "PUNÇÃO GFA. COCA-COLA 350ML ART. 562742 BM-901",
+    "tipoProduto": "puncao"
+  },
+  {
+    "codigo": "5-07-00073",
+    "descricao": "PUNÇÃO GFA. COCA-COLA 500 ML ART. 562743 BM-901",
+    "tipoProduto": "puncao"
+  },
+  {
+    "codigo": "5-07-00068",
+    "descricao": "PUNÇÃO CERV. NEW BEBETO ART. 999",
+    "tipoProduto": "puncao"
+  },
+  {
+    "codigo": "5-07-00063",
+    "descricao": "PUNÇÃO CERV. MONET 550ML DC ART.4602 BM-901",
+    "tipoProduto": "puncao"
+  },
+  {
+    "codigo": "5-07-00064",
+    "descricao": "PUNÇÃO GFA. GIN SEAGRAM'S 753ML ART. 562699 OI-SP",
+    "tipoProduto": "puncao"
+  },
+  {
+    "codigo": "5-07-00065",
+    "descricao": "PUNÇÃO CERV. BRAHMA BELL 355ML ART. 19046 SAE 8620",
+    "tipoProduto": "puncao"
+  },
+  {
+    "codigo": "5-07-00066",
+    "descricao": "PUNÇÃO CERV. STELLA ARTOIS 600ML ART. 563329 TYPE 1 BM-901",
+    "tipoProduto": "puncao"
+  },
+  {
+    "codigo": "5-07-00067",
+    "descricao": "PUNÇÃO CERV. STELLA ARTOIS 600ML ART. 563329 TYPE 2 BM-901",
+    "tipoProduto": "puncao"
+  },
+  {
+    "codigo": "5-07-00070",
+    "descricao": "PUNÇÃO CERV. BECK'S 600ML ART. 563322 TYPE 1 BM-901 OI-SP",
+    "tipoProduto": "puncao"
+  },
+  {
+    "codigo": "5-07-00071",
+    "descricao": "PUNÇÃO CERV. BECK'S 600ML ART. 563322 TYPE 2 BM-901 OI-SP",
+    "tipoProduto": "puncao"
+  },
+  {
+    "codigo": "5-07-00075",
+    "descricao": "MOLDES PUNÇÃO 026-0600-LA02 NI-806 OI-ARG",
+    "tipoProduto": "puncao"
+  },
+  {
+    "codigo": "5-07-00072",
+    "descricao": "PUNÇÃO GFA. COCA COLA 200 ML DC ART. 4483 BM-901",
+    "tipoProduto": "puncao"
+  },
+  {
+    "codigo": "5-07-00077",
+    "descricao": "PUNÇÃO POTE EXTRATO 190G ART. 4123 BM-901",
+    "tipoProduto": "puncao"
+  },
+  {
+    "codigo": "5-07-00078",
+    "descricao": "PUNÇÃO 030-1680-LA69 NI-806",
+    "tipoProduto": "puncao"
+  },
+  {
+    "codigo": "5-07-00079",
+    "descricao": "PUNÇÃO COPO CONICO 296 ML ART. 4341 BM-901",
+    "tipoProduto": "puncao"
+  },
+  {
+    "codigo": "5-07-00080",
+    "descricao": "PUNÇÃO CERV. CERV. BOHEMIA 355ML B&B ART. A20011 FOFO NODULAR",
+    "tipoProduto": "puncao"
+  },
+  {
+    "codigo": "5-07-00081",
+    "descricao": "PUNÇÃO CERV. FLOPPY 340ML ART. 20018 FOFO NODULAR",
+    "tipoProduto": "puncao"
+  },
+  {
+    "codigo": "5-07-00083",
+    "descricao": "PUNÇÃO GFA. AZEITE STD 250ML ART. 9737 AISI 8620",
+    "tipoProduto": "puncao"
+  },
+  {
+    "codigo": "5-07-00084",
+    "descricao": "PUNÇÃO CERV. BRAHMA DUPLO MALTE 330ML ART. 21021 SAE 8620",
+    "tipoProduto": "puncao"
+  },
+  {
+    "codigo": "5-07-00085",
+    "descricao": "PUNÇÃO CERV. LN CRAFT STD 355ML ART. A20027 FOFO NODULAR",
+    "tipoProduto": "puncao"
+  },
+  {
+    "codigo": "5-07-00086",
+    "descricao": "PUNÇÃO POTE CONSERVA OLÉ 280ML ART.563408 BM-901",
+    "tipoProduto": "puncao"
+  },
+  {
+    "codigo": "5-07-00087",
+    "descricao": "PUNÇÃO CERV. STELLA ARTOIS 330ML ART. 562688 BM-901",
+    "tipoProduto": "puncao"
+  },
+  {
+    "codigo": "5-07-00088",
+    "descricao": "PUNÇÃO CERV. NEW BEBETO 300ML B&B ART. A18021 FOFO NODULAR",
+    "tipoProduto": "puncao"
+  },
+  {
+    "codigo": "5-07-00089",
+    "descricao": "PUNÇÃO 026-0600-LA01 NI-806",
+    "tipoProduto": "puncao"
+  },
+  {
+    "codigo": "5-07-00090",
+    "descricao": "PUNÇÃO POTE AZEITONA 350G ART. 3239 BM-901",
+    "tipoProduto": "puncao"
+  },
+  {
+    "codigo": "5-07-00091",
+    "descricao": "PUNÇÃO CERV. CRAFT 600ML B&B DG ART. A20034 FOFO NODULAR",
+    "tipoProduto": "puncao"
+  },
+  {
+    "codigo": "5-07-00098",
+    "descricao": "PUNÇÃO GFA. CERV. JEEP 1000 ML ART. A20031 - FOFO NODULAR",
+    "tipoProduto": "puncao"
+  },
+  {
+    "codigo": "5-07-00092",
+    "descricao": "PUNÇÃO POTE HERO QUEENSBERRY 290ML ART. 563507 - BM-901",
+    "tipoProduto": "puncao"
+  },
+  {
+    "codigo": "5-07-00093",
+    "descricao": "PUNÇÃO 028-GUALA-LA01 NI-806 - OI-RJ",
+    "tipoProduto": "puncao"
+  },
+  {
+    "codigo": "5-07-00094",
+    "descricao": "PUNÇÃO POTE NESTLE DAWN JAR 585ML 140 ART. 563510 BM-901",
+    "tipoProduto": "puncao"
+  },
+  {
+    "codigo": "5-07-00095",
+    "descricao": "PUNÇÃO 030-GUALA-LA06 NI-806",
+    "tipoProduto": "puncao"
+  },
+  {
+    "codigo": "5-07-00096",
+    "descricao": "PUNÇÃO CERV. CADILLAC 550ML 400GR ART. 20010 FOFO NODULAR",
+    "tipoProduto": "puncao"
+  },
+  {
+    "codigo": "5-07-00097",
+    "descricao": "PUNÇÃO CERV. BRAHMA DUPLO MALTE 330ML ART. 21M003 FOFO NODULAR",
+    "tipoProduto": "puncao"
+  },
+  {
+    "codigo": "5-07-00099",
+    "descricao": "PUNÇÃO 038-2000-R030 NI-806 PE",
+    "tipoProduto": "puncao"
+  },
+  {
+    "codigo": "5-07-00100",
+    "descricao": "PUNÇÃO CERV. BOHEMIA / LN CRAFT STD B&B ART. TT1099 NODULAR",
+    "tipoProduto": "puncao"
+  },
+  {
+    "codigo": "5-07-00101",
+    "descricao": "PUNÇÃO POTE CAFÉ DAWN JAR 220 ART. 4421 BM-901",
+    "tipoProduto": "puncao"
+  },
+  {
+    "codigo": "5-07-00102",
+    "descricao": "PUNÇÃO CERV. MODELO 330ML ART. 563629 BM-901",
+    "tipoProduto": "puncao"
+  },
+  {
+    "codigo": "5-07-00103",
+    "descricao": "PUNÇÃO GFA. SUCO FOR ME 117ML ART. 563504 - BM-901 - OI-SP",
+    "tipoProduto": "puncao"
+  },
+  {
+    "codigo": "5-07-00104",
+    "descricao": "PUNÇÃO POTE AZEITONA F200 350ML ART. 3238 - BM-901 - OI-SP",
+    "tipoProduto": "puncao"
+  },
+  {
+    "codigo": "5-07-00105",
+    "descricao": "PUNÇÃO CERV. RET. ESMERALDA 600ML 420GR BB ART. 21M023 - NODULAR",
+    "tipoProduto": "puncao"
+  },
+  {
+    "codigo": "5-07-00106",
+    "descricao": "PUNÇÃO 030-1680-LA40 NI-806 PE",
+    "tipoProduto": "puncao"
+  },
+  {
+    "codigo": "5-07-00108",
+    "descricao": "PUNÇÃO CERV. BECK´S 600ML 420GR BB ART. 22M012 - NODULAR",
+    "tipoProduto": "puncao"
+  },
+  {
+    "codigo": "5-07-00109",
+    "descricao": "MOLDES PARA VIDRO - PUNÇÃO 026-0650-LA06 NI-806",
+    "tipoProduto": "puncao"
+  },
+  {
+    "codigo": "5-07-00110",
+    "descricao": "PUNÇÃO 030-1680-LA78 NI-806 SP",
+    "tipoProduto": "puncao"
+  },
+  {
+    "codigo": "5-07-00111",
+    "descricao": "PUNÇÃO 031-1621-LA02 NI-806 PE",
+    "tipoProduto": "puncao"
+  },
+  {
+    "codigo": "5-07-00112",
+    "descricao": "PUNÇÃO 030-1680-LA62 NI-806 SP",
+    "tipoProduto": "puncao"
+  },
+  {
+    "codigo": "5-07-00113",
+    "descricao": "PUNÇÃO 030-3113-LA09 NI-806 SP",
+    "tipoProduto": "puncao"
+  },
+  {
+    "codigo": "5-07-00114",
+    "descricao": "PUNÇÃO 030-3110-LA02 NI-806",
+    "tipoProduto": "puncao"
+  },
+  {
+    "codigo": "5-07-00115",
+    "descricao": "PUNÇÃO 026-0650-LA01 NI-806",
+    "tipoProduto": "puncao"
+  },
+  {
+    "codigo": "5-07-00116",
+    "descricao": "PUNÇÃO 030-1683-LA08 NI-806",
+    "tipoProduto": "puncao"
+  },
+  {
+    "codigo": "5-07-00117",
+    "descricao": "PUNÇÃO 031-1651-LA21 NI-806",
+    "tipoProduto": "puncao"
+  },
+  {
+    "codigo": "5-07-00118",
+    "descricao": "PUNÇÃO POTE INCA 362ML ART. 563872 BM-901",
+    "tipoProduto": "puncao"
+  },
+  {
+    "codigo": "5-07-00119",
+    "descricao": "PUNÇÃO POTE BELEM STD 240ML ART. 563882 BM-901",
+    "tipoProduto": "puncao"
+  },
+  {
+    "codigo": "5-07-00120",
+    "descricao": "PUNÇÃO POTE PASSATA STD 446ML DC ART. 563916 BM-901",
+    "tipoProduto": "puncao"
+  },
+  {
+    "codigo": "5-07-00121",
+    "descricao": "PUNÇÃO 026-0600-R017 NI-806",
+    "tipoProduto": "puncao"
+  },
+  {
+    "codigo": "5-07-00122",
+    "descricao": "MOLDES PARA VIDRO - PUNÇÃO 030-1651-LA13 NI-806",
+    "tipoProduto": "puncao"
+  },
+  {
+    "codigo": "5-07-00123",
+    "descricao": "PUNÇÃO 028-1651-LA03 NI-806",
+    "tipoProduto": "puncao"
+  },
+  {
+    "codigo": "5-07-00124",
+    "descricao": "PUNÇÃO COPO OLÉ 225ML ART. 563928 BM-901",
+    "tipoProduto": "puncao"
+  },
+  {
+    "codigo": "5-07-00125",
+    "descricao": "PUNÇÃO COPO OLÉ 292ML V2 ART. 563929 BM-901",
+    "tipoProduto": "puncao"
+  },
+  {
+    "codigo": "5-07-00126",
+    "descricao": "PUNÇÃO 028-MCA1-LA01 NI-806",
+    "tipoProduto": "puncao"
+  },
+  {
+    "codigo": "5-07-00127",
+    "descricao": "PUNÇÃO 030-GUALA-LA58 NI-806",
+    "tipoProduto": "puncao"
+  },
+  {
+    "codigo": "5-07-00128",
+    "descricao": "MOLDES PARA VIDRO - PUNÇÃO 030-3110-LA13 NI-806",
+    "tipoProduto": "puncao"
+  },
+  {
+    "codigo": "5-07-00129",
+    "descricao": "PUNÇÃO 028-1683-LA01 NI-806",
+    "tipoProduto": "puncao"
+  },
+  {
+    "codigo": "5-07-00130",
+    "descricao": "MOLDES PARA VIDRO - PUNÇÃO 030-1683-LA09 NI-806",
+    "tipoProduto": "puncao"
+  },
+  {
+    "codigo": "5-07-00131",
+    "descricao": "PUNÇÃO GFA. CERVEJA 600ML 420GR ART. 25TT009 FOFO 96A",
+    "tipoProduto": "puncao"
+  },
+  {
+    "codigo": "5-07-00082",
+    "descricao": "PUNÇÃO 030-1683-LA05 NI-806 OI-PE",
+    "tipoProduto": "puncao"
+  },
+  {
+    "codigo": "5-07-00107",
+    "descricao": "PUNÇÃO 035-3113-LA01 NI-806",
+    "tipoProduto": "puncao"
+  }
+]

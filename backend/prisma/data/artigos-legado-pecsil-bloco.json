@@ -1,0 +1,3707 @@
+[
+  {
+    "codigo": "5-03-00027",
+    "descricao": "BLOCO CERV. AMBEV KAILUA V2 275 ML NNPB TG ART. 9134 FOFO CI-882",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00045",
+    "descricao": "BLOCO FRASCO AMPHORA 110 ML ART. 603 FOFO Q3",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00048",
+    "descricao": "BLOCO VAS. CERV. MARADONA 1000 ML ART. 369 FOFO CI-882",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00052",
+    "descricao": "BLOCO GFA. TEACHERS 1000 ML ART. 345A FOFO CI-882",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00053",
+    "descricao": "BLOCO VAS. CERV. LONG NECK STD 355 ML ART. 318 FOFO CI-882",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00002",
+    "descricao": "BLOCO CERV. BUD KING 343 ML ART. 8531 FOFO CI-882",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00003",
+    "descricao": "BLOCO GFA. ESPUMANTE 750 ML ART. 4563 FOFO CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00007",
+    "descricao": "BLOCO GFA. CERV. SCHIN 1000 ML ART. 1065 FOFO Q3",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00004",
+    "descricao": "BLOCO POTE MAD MAX 290 ML ART. 407 FOFO Q3",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00005",
+    "descricao": "BLOCO VAS. CONHAQUE DREHER 900 ML DG ART. 280B FOFO CI-882",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00010",
+    "descricao": "BLOCO FRASCO MADRID 100 ML ART. 272 FOFO Q3",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00006",
+    "descricao": "BLOCO GFA. CERV. PETRÓPOLIS 300 ML ART. 1071 FOFO Q3",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00008",
+    "descricao": "BLOCO GFA. GUARANÁ 1000 ML ONE WAY ART. 4532 FOFO CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00009",
+    "descricao": "BLOCO FRASCO MADRID 100 ML ART. 272 FOFO VERMICULAR",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00011",
+    "descricao": "BLOCO GFA. HEINEKEN K2 330 ART. 4538 FOFO CI-882",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00012",
+    "descricao": "BLOCO CERV. STELLA ARTOIS 275 ML ART. 4557 FOFO CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00013",
+    "descricao": "BLOCO CERV. SKOL BEATS SAFE 313 ML ART. 4519 FOFO CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00014",
+    "descricao": "BLOCO FRASCO CONTA GOTAS 20 ML ART. 100 FOFO Q3",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00019",
+    "descricao": "BLOCO CERV. BUD KING 343 ML ART. G28 FOFO Q3",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00015",
+    "descricao": "BLOCO POTE SONETO 100 ML ART. 396 FOFO Q3",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00016",
+    "descricao": "BLOCO FRASCO CONTA GOTAS 20 ML ART. 111 FOFO Q3",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00017",
+    "descricao": "BLOCO GFA. BACARDI TEACHERS 1500 ML 6.1/4\" BB ART. 390A FOFO CI-882",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00018",
+    "descricao": "BLOCO GFA. BACARDI TEACHERS 500 ML NNPB ART. 389A FOFO CI-882",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00020",
+    "descricao": "BLOCO FRASCO SHINE 50 ML ART. 346 FOFO Q3",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00021",
+    "descricao": "BLOCO FRASCO PLUMA 60 ML ART. 152 FOFO Q3",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00022",
+    "descricao": "BLOCO FRASCO LINDA RADIANCE 100 ML ART. 404 FOFO Q3",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00023",
+    "descricao": "BLOCO FRASCO NARRATIVA HOMME 100 ML ART. 338 FOFO Q3",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00024",
+    "descricao": "BLOCO CERV. SOL SHOT 250 ML ART. 4025 FOFO CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00758",
+    "descricao": "MOLDES PARA VIDRO - BLANK MOULD GFA. HORCON QUEMADO 750ML BB ART. 0010 FOFO Q3",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00025",
+    "descricao": "BLOCO FRASCO NARRATIVA FEMME 100 ML ART. 343 FOFO Q3",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00026",
+    "descricao": "BLOCO GFA. COCA-COLA 1000 ML ART. 021A FOFO CI-882",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00029",
+    "descricao": "BLOCO GFA. SUCO PREMIUM 300 ML ART. 626 FOFO Q3",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00030",
+    "descricao": "BLOCO GFA. BORDALESA PP30 750 ML ART. 4299 FOFO CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00031",
+    "descricao": "BLOCO GFA. SUCO FAMÍLIA 2000 ML ART. 4562 FOFO CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00032",
+    "descricao": "BLOCO FRASCO IMPRESSIONISTAS 100 ML ART. 405 FOFO Q3",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00033",
+    "descricao": "BLOCO FRASCO ESSENCIAL MASC. 100 ML ART. 325 FOFO VERMICULAR",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00034",
+    "descricao": "BLOCO FRASCO FLORATA 75 ML ART. 409 FOFO Q3",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00035",
+    "descricao": "BLOCO FRASCO FLORATA 75 ML ART. 410 FOFO Q3",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00036",
+    "descricao": "BLOCO BIG POTE 3 KG ART. 3959 FOFO CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00037",
+    "descricao": "BLOCO FRASCO MALBEC 100 ML ART. 387 FOFO Q3",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00038",
+    "descricao": "BLOCO GFA. AZEITE CILÍNDRICO 500 ML ART. 745 FOFO Q3",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00042",
+    "descricao": "BLOCO VAS. COCA-COLA MULTIPRODUTO 200 ML DG BB ART. 8207A FOFO CI-882",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00039",
+    "descricao": "BLOCO GFA. SALTON 750 ML ART. 621 FOFO Q3",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00040",
+    "descricao": "BLOCO CERV. MONET 550 ML ART. 4624 FOFO CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00041",
+    "descricao": "BLOCO GFA. VELHO BARREIRO - PSBE ART. 619 FOFO Q3",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00051",
+    "descricao": "BLOCO GFA. VODKA ORLOFF 1000 ML ART. 267 FOFO CI-882",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00043",
+    "descricao": "BLOCO VAS. GIN GUALA 970 ML ART. 331 FOFO CI-882",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00044",
+    "descricao": "BLOCO FRASCO GUINESS 95 ML ART. 380 FOFO Q3",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00046",
+    "descricao": "BLOCO VAS. MONTILLA 1000 ML ART. 372A FOFO CI-882",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00047",
+    "descricao": "BLOCO FRASCO RIO DE JANEIRO FEMME 75 ML ART. 684 FOFO Q3",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00049",
+    "descricao": "BLOCO FRASCO MA SOPHIE 75 ML ART. 640 FOFO Q3",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00050",
+    "descricao": "BLOCO GFA. THOQUINO CONHAQUE SJB 900ML ART. 352 FOFO CI-882",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00054",
+    "descricao": "BLOCO GFA. CHAMPAGNE AURORA 660 ML BBDG ART. 3347 FOFO CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00055",
+    "descricao": "BLOCO CERV. STELLA ARTOIS 275 ML ART. 4557 FOFO CI-800 - SP",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00056",
+    "descricao": "BLOCO CERV. RETORNÁVEL 635 ML ART. 1219 FOFO",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00057",
+    "descricao": "BLOCO GROWLER 2000 ML ART. 4583 FOFO CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00058",
+    "descricao": "BLOCO FRASCO ARBO 100 ML ART. 691 FOFO Q3",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00059",
+    "descricao": "BLOCO FRASCO RIO DE JANEIRO HOMME 75 ML ART. 680 FOFO Q3",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00060",
+    "descricao": "BLOCO CERV. BUDWEISER 343 ML ART. 813 FOFO",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00061",
+    "descricao": "BLOCO CERV. HEINEKEN 600 ML EHBB ART. 4636 FOFO CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00062",
+    "descricao": "BLOCO FRASCO AGAVE 50 ML ART. 399 FOFO VERMICULAR",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00063",
+    "descricao": "BLOCO FRASCO THIAGUINHO FEM. 100 ML ART. 416 FOFO VERMICULAR",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00064",
+    "descricao": "BLOCO CERV. SKOL BEATS SAFE 313 ML BBDG DC ART. 4365 FOFO CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00065",
+    "descricao": "BLOCO CERV. BUD 600 ML ART. 4641 FOFO CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00066",
+    "descricao": "BLOCO CERV. PRESIDENTE 12 OZ ART. 4550 FOFO CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00067",
+    "descricao": "BLOCO FRASCO POP 70 ML ART. 376 FOFO Q3",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00068",
+    "descricao": "BLOCO FRASCO BIOGRAFIA 50 ML ART. 424 FOFO VERMICULAR",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00069",
+    "descricao": "BLOCO FRASCO PEDRA SOBRE PEDRA 100 ML ART. 311 FOFO Q3",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00221",
+    "descricao": "BLOCO CERV. JEEP 1000ML DC ART.4721 FOFO CI-882 - RJ",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00070",
+    "descricao": "BLOCO FRASCO UNA II 50 ML ART. 423 FOFO VERMICULAR",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00071",
+    "descricao": "BLOCO FRASCO PENELOPE 30 ML ART. 418 FOFO VERMICULAR",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00072",
+    "descricao": "BLOCO GFA. MARTINI 750 ML ART. 4627 FOFO CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00073",
+    "descricao": "BLOCO FRASCO PASTIS MASCULINO 90 ML ART. 422 FOFO VERMICULAR",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00074",
+    "descricao": "BLOCO GFA. LEITE DE COCO 200 ML ART. 1130 FOFO Q3",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00075",
+    "descricao": "BLOCO FRASCO LUNA 25 ML (MINIATURA) ART. 412 FOFO VERMICULAR",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00076",
+    "descricao": "BLOCO CERV. ECO 600 ML ART. 4631 FOFO CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00077",
+    "descricao": "BLOCO CERV. HEINEKEN K2 330 ML ART. 4538 FOFO CI-882",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00078",
+    "descricao": "BLOCO POTE DAWN JAR 100 G 408 ML ART. 944 FOFO Q3",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00079",
+    "descricao": "BLOCO FRASCO PLUMA 120 ML ART. 155 FOFO Q3",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00080",
+    "descricao": "BLOCO CERV. SANKT GALLEN 600 ML ART. 4632 FOFO CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00081",
+    "descricao": "BLOCO CERV. BLACK PRINCESS 600 ML DC ART. 4566 FOFO CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00082",
+    "descricao": "BLOCO GFA. SMIRNOFF ICE 275 ML DC ART. 4141 FOFO CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00083",
+    "descricao": "BLOCO POTE DAWN JAR 200 G 808 ML ART. 943 FOFO Q3",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00084",
+    "descricao": "BLOCO FRASCO CONTA GOTAS 10 ML BR ART. 235 FOFO Q3",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00085",
+    "descricao": "BLOCO POTE HERO 179 ML DC ART. 4651 FOFO CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00086",
+    "descricao": "BLOCO GFA. SUCO AURORA 500 ML DC ART. 4344 FOFO CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00087",
+    "descricao": "BLOCO POTE GELÉIA QUEENSBERRY ART. 8706A FOFO CI-882",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00088",
+    "descricao": "BLOCO POTE WELLNESS 245 ML DC ART. 4652 FOFO CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00089",
+    "descricao": "BLOCO FRASCO A INDOMADA IV 30 ML ART. 427 FOFO VERMICULAR",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00090",
+    "descricao": "BLOCO FRASCO AURIEN 100 ML ART. 426 FOFO VERMICULAR",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00091",
+    "descricao": "BLOCO CERV. BUD 600 ML DC ART. 4548 FOFO CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00092",
+    "descricao": "BLOCO GFA. CANINHA 275 ML 51 ICE V2 DC ART. 4494 FOFO CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00093",
+    "descricao": "BLOCO CERV. LONG NECK STD ART. 3654 FOFO CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00094",
+    "descricao": "BLOCO FRASCO HOMEM DE FERRO 100 ML ART. 390 FOFO VERMICULAR",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00095",
+    "descricao": "BLOCO GFA. COCA COLA 200 ML ART. 1193 FOFO Q3",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00096",
+    "descricao": "BLOCO CERV. MILLER 600 ML ART. 4518 FOFO CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00097",
+    "descricao": "BLOCO CERV. BUD KING 343 ML DG ART. 8531 FOFO CI-882",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00098",
+    "descricao": "BLOCO FRASCO ESSENCIAL HOMME 50 ML ART. 324 FOFO VERMICULAR",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00099",
+    "descricao": "BLOCO CERV. ECO 330 ML DC ART. 4387 FOFO CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00100",
+    "descricao": "BLOCO FRASCO EKOS POTI II 100 ML ART. 401 FOFO VERMICULAR",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00101",
+    "descricao": "BLOCO POTE CONSERVA 550 ML ART. 357 FOFO Q3",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00102",
+    "descricao": "BLOCO CERV. HEINEKEN K2 250 ML ART. 4238 FOFO CI-882",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00103",
+    "descricao": "BLOCO GFA. NEW CERESER Z2 663 ML DC ART. 4661 FOFO CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00104",
+    "descricao": "BLOCO FRASCO U2 100 ML ART. 429 FOFO VERMICULAR",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00105",
+    "descricao": "BLOCO FRASCO BIOGRAFIA MASC. 50 ML ART. 428 FOFO VERMICULAR",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00106",
+    "descricao": "BLOCO CERV. STELLA ARTOIS 275 ML ART. 9385 FOFO CI-882",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00107",
+    "descricao": "BLOCO CERV. LUANDINA 250 ML ART. 4671 FOFO CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00108",
+    "descricao": "BLOCO FRASCO TAFF MAN-E 125 ML ART. 250-58 FOFO Q3",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00109",
+    "descricao": "BLOCO FRASCO PLUMA 30 ML ART. 150 FOFO GGG 50",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00110",
+    "descricao": "BLOCO FRASCO JACK DANIEL'S 100 ML ART. 371 FOFO Q3",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00111",
+    "descricao": "BLOCO CERV. LUANDINA OW 330 ML ART. 4672 FOFO CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00112",
+    "descricao": "BLOCO GFA. GIN GUALA 1005 ML DC ART. 4156 FOFO CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00113",
+    "descricao": "BLOCO GFA. VINHO LUMIÈRE PP30 753 ML DC ART. 4643 FOFO CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00114",
+    "descricao": "BLOCO CERV. HEINEKEN K2 330 ML ART. 4669 FOFO CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00115",
+    "descricao": "BLOCO GFA. ROKKY 1000 ML DC ART. 4678 FOFO CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00116",
+    "descricao": "BLOCO FRASCO FLORATTA 75 ML ART. 430 FOFO VERMICULAR",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00117",
+    "descricao": "BLOCO CERV. LUANDINA RET. 330 ML ART. 4673 FOFO CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00118",
+    "descricao": "BLOCO GFA. SIDRA LISA STD 910 ML DC ART. 4676 FOFO CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00119",
+    "descricao": "BLOCO GFA. SIDRA LA FARRUCA 710 ML DC ART. 4677 FOFO CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00120",
+    "descricao": "BLOCO FRASCO DROPPERS 20 ML ART. 113 FOFO Q3",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00121",
+    "descricao": "BLOCO GFA. JANEIRO 700ML ART. 3819 FOFO CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00122",
+    "descricao": "BLOCO POTE DAWN JAR 170 DC ART. 3997 FOFO CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00123",
+    "descricao": "BLOCO FRASCO WOLVERINE 100 ML ART. 431 FOFO VERMICULAR",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00124",
+    "descricao": "BLOCO CERV. BRAHMA LN LEVE 355 ML ART. 4626 FOFO CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00125",
+    "descricao": "BLOCO CERV. HOEGAARDEN 330 ML ART. 4668 FOFO CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00126",
+    "descricao": "BLOCO FRASCO PLUMA 100 ML ART. 154 FOFO Q3",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00127",
+    "descricao": "BLOCO FRASCO BERLIM 70 ML ART. 334 FOFO VERMICULAR",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00128",
+    "descricao": "BLOCO FRASCO BERLIM 30 ML ART. 335 FOFO VERMICULAR",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00129",
+    "descricao": "BLOCO GFA. GUARANÁ 1000 ML ONE WAY ART. 4523 FOFO CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00130",
+    "descricao": "BLOCO GFA. VINHO LUMIÈRE PP30 753 ML ART. 4654 FOFO CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00131",
+    "descricao": "BLOCO GFA. SIDRA DEL VALLE 720 ML DC ART. 4675 FOFO CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00132",
+    "descricao": "BLOCO FRASCO CONTA GOTAS 30 ML BR ART. 131 FOFO Q3",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00133",
+    "descricao": "BLOCO GFA. SUCO AURORA 1500 ML ART. 4530 FOFO CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00134",
+    "descricao": "BLOCO E FUNDO EXPERIÊNCIA",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00135",
+    "descricao": "BLOCO GFA. CACHAÇA PREMIUM BR 703 ML DC ART. 4694 FOFO CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00136",
+    "descricao": "BLOCO GFA. ÁGUA ABINAM V2 303 ML DC ART. 4607 FOFO CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00137",
+    "descricao": "BLOCO FRASCO CONTA GOTAS 30 ML ART. 108 FOFO GGG 50",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00138",
+    "descricao": "BLOCO POTE 2 KG 2370 ML ART. 4660 FOFO CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00139",
+    "descricao": "BLOCO GFA. NEW CERESER Z2 663 ML DC ART. 4691 FOFO CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00140",
+    "descricao": "BLOCO POTE ARANHA 265 ML DC ART. 4696 FOFO CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00141",
+    "descricao": "BLOCO POTE ARANHA 265 ML DC ART. 4696 FOFO CI-800 OP01",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00142",
+    "descricao": "BLOCO GFA. CHÁ 1000 ML DC ART. 4653 FOFO CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00143",
+    "descricao": "BLOCO GFA. MINALBA 300 ML DC ART. 4655 FOFO CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00144",
+    "descricao": "BLOCO CERV. 635 ML ART. 4292 FOFO CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00145",
+    "descricao": "BLOCO GFA. VELHO BARREIRO 900 ML DC ART. 3968 FOFO CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00146",
+    "descricao": "BLOCO CERV. BOHEMIA LN 355 ML LEVE ART. 4286 FOFO CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00147",
+    "descricao": "BLOCO GFA. BORDALESA EURO 750 ML ART. 4337 FOFO CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00148",
+    "descricao": "BLOCO GFA. ÁGUA TÔNICA PRATA 203 ML DC ART. 4703 FOFO CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00149",
+    "descricao": "BLOCO FRASCO UNA 75 ML ART. 437 FOFO VERMICULAR",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00150",
+    "descricao": "BLOCO GFA. SMIRNOFF ICE 275 ML ART. 4117 FOFO CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00151",
+    "descricao": "BLOCO FRASCO MIRANDA PRIESTLY 75 ML ART. 432 FOFO VERMICULAR",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00161",
+    "descricao": "BLOCO POTE DAWN JAR 200 G 800 ML DC ART. 4233 FOFO CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00152",
+    "descricao": "BLOCO GFA. WYBOROWA 753 ML DC ART. 4709 FOFO CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00153",
+    "descricao": "BLOCO GFA. JUMEX 450 ML ART. 4689 FOFO CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00154",
+    "descricao": "BLOCO CERV. JEEP 1000 ML DC ART. 4287 FOFO CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00155",
+    "descricao": "BLOCO FRASCO ESSENCIAL FEMME 100 ML ART. 327 FOFO VERMICULAR",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00156",
+    "descricao": "BLOCO GFA. LEITE DE COCO 200 ML ART. 3765 FOFO CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00157",
+    "descricao": "BLOCO CERV. PUB V3 500 ML DC ART. 4714 FOFO CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00158",
+    "descricao": "BLOCO FRASCO EGEOS FEMININO 90 ML ART. 440 FOFO VERMICULAR",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00159",
+    "descricao": "BLOCO FRASCO BUTTERFLY 100 ML ART. 436 FOFO VERMICULAR",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00160",
+    "descricao": "BLOCO CERV. HEINEKEN 600 ML DC ART. 4463 FOFO CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00162",
+    "descricao": "BLOCO GFA. VODKA ORLOFF 1000 ML ART. 267A FOFO CI-882",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00163",
+    "descricao": "BLOCO GFA. ORLOFF X2 1000 ML DC ART. 4664 FOFO CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00164",
+    "descricao": "BLOCO POTE MIRANDA PRIESTLY ART. 445 FOFO VERMICULAR",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00165",
+    "descricao": "BLOCO GFA. WEWI 250 ML DC ART. 4692 FOFO CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00166",
+    "descricao": "BLOCO GFA. SMIRNOFF V2 600 ML DC ART. 4647 FOFO CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00167",
+    "descricao": "BLOCO FRASCO BILL 50 ML ART. 448 FOFO VERMICULAR",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00243",
+    "descricao": "BLOCO CERV. 635 ML ART. 19007 FOFO Q3",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00168",
+    "descricao": "BLOCO GFA. ORLOFF 603 ML DC ART. 4720 FOFO CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00169",
+    "descricao": "BLOCO GFA. CERVEJA 635 ML DC ART. 3779 FOFO CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00170",
+    "descricao": "BLOCO TAFF MAN-E 112 ML DC ART. 3187 FOFO CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00171",
+    "descricao": "BLOCO CERV. HEINEKEN K2 OW 330 ML ART. 4725 FOFO CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00172",
+    "descricao": "BLOCO CERV. SKOL BEATS SAFE 313 ML ART. 4535 FOFO CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00173",
+    "descricao": "BLOCO CERV. PETRO 250 ML ART. G15 032 FOFO Q3",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00174",
+    "descricao": "BLOCO FRASCO SR. N 100 ML ART. 301 FOFO VERMICULAR",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00175",
+    "descricao": "BLOCO CERV. PETRÓPOLIS 300 ML RET. ART. 4399 FOFO CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00176",
+    "descricao": "BLOCO FRASCO LUNA CLÁSSICO 75 ML ART. 442 FOFO VERMICULAR",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00177",
+    "descricao": "BLOCO FRASCO LUNA INTENSO 50 ML ART. 443 FOFO VERMICULAR",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00178",
+    "descricao": "BLOCO CERV. BUD SQUARE 330 ML ART. 4729 FOFO CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00179",
+    "descricao": "BLOCO CERV. SOL 330 ML ART. 4410 FOFO CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00180",
+    "descricao": "BLOCO GFA. ÁGUA ABINAM REGIONAL 753 ML DC ART. 4549 FOFO CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00181",
+    "descricao": "BLOCO GFA. SUCO OQ 303 ML ART. 9466 FOFO CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00182",
+    "descricao": "BLOCO GFA. SUCO OQ 500 ML ART. 9467 FOFO CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00183",
+    "descricao": "BLOCO GFA. SUCO OQ 1000 ML ART. 9468 FOFO CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00184",
+    "descricao": "BLOCO GFA. SUCO OQ 1500 ML ART. 9469 FOFO CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00185",
+    "descricao": "BLOCO CERV. BUD SQUARE 550 ML ART. 4730 FOFO CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00186",
+    "descricao": "BLOCO POTE CONSERVA 600 ML ART. 339 FOFO Q3",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00187",
+    "descricao": "BLOCO CERV. LONG NECK ITAIPAVA 355 ML ART. 4127 FOFO CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00188",
+    "descricao": "BLOCO GFA. COROA 300 ML ART. 4727 FOFO CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00189",
+    "descricao": "BLOCO GFA. BORDALESA AURORA V2 750 ML DC ART. 4719 FOFO CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00190",
+    "descricao": "BLOCO GFA. LICOR PRESIDENTE 900 ML ART. 1234 FOFO Q3",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00191",
+    "descricao": "BLOCO FRASCO TULIPA RUIZ 30 ML ART. SB-1677 AISI 431",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00192",
+    "descricao": "BLOCO FRASCO TULIPA RUIZ 100 ML ART. MB-1368 FOFO K250",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00193",
+    "descricao": "BLOCO GFA. PASSPORT V2 1000 ML ART. 4723 FOFO CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00194",
+    "descricao": "BLOCO GFA. SUCO AURORA 1500 ML ART. 4345 FOFO CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00195",
+    "descricao": "BLOCO CERV. PETRÓPOLIS 1000 ML DC ART. 4473 FOFO CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00196",
+    "descricao": "BLOCO CERV. HEINEKEN 300 ML ART. 4716 FOFO CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00197",
+    "descricao": "BLOCO GFA. COCA COLA 10 OZ EHB DC ART. 4140 FOFO CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00198",
+    "descricao": "BLOCO GFA. COCA-COLA 250 ML CONTOUR ULTRA DC ART. 4682 FOFO CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00199",
+    "descricao": "BLOCO GFA. VASO SUCO PRONTO 1000 ML DC ART. 4460 FOFO CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00200",
+    "descricao": "BLOCO CERV. HEINEKEN 600 ML DG ART. 7478 FOFO CI-882",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00201",
+    "descricao": "BLOCO CERV. HEINEKEN K2 OW 330 ML TG ART. 9163A FOFO CI-882",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00202",
+    "descricao": "BLOCO CERV. HEINEKEN K2 O2 330 ML DG ART. 9163A FOFO CI-882",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00203",
+    "descricao": "BLOCO FRASCO FREVO II 150 ML ART. 263 FOFO Q3",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00204",
+    "descricao": "BLOCO GFA. VINHO STD PP30 V2 750 ML DC ART. 4173 FOFO CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00205",
+    "descricao": "BLOCO GFA. COCA COLA RET. 290 ML ART. 4070 FOFO CI-800 SP",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00206",
+    "descricao": "BLOCO CERV. COLORADO 530 ML ART. 4736 FOFO CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00207",
+    "descricao": "BLOCO CERV. BUD CADILLAC 330 ML ART. A17066 FOFO 96A",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00208",
+    "descricao": "BLOCO GFA. SMIRNOFF ICE V2 275 ML ART. 4740 FOFO CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00209",
+    "descricao": "BLOCO CERV. BUD SQUARE 550 ML DC ART. 4733 FOFO CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00234",
+    "descricao": "BLOCO GFA. VINHO STD PP30 1000 ML ART. 4380 FOFO CI-882",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00210",
+    "descricao": "BLOCO POTE CONSERVA 600 ML ART. 3624 FOFO CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00212",
+    "descricao": "BLOCO GFA. VELHO BARREIRO V2 910 ML ART. 4685 FOFO CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00211",
+    "descricao": "BLOCO GFA. GIN GUALA 753 ML DC ART. 4742 FOFO CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00213",
+    "descricao": "BLOCO CERV. NEW BEBETO 300 ML ART. 999 FOFO CI_GP9",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00214",
+    "descricao": "BLOCO CERV. JEEP 1000ML DC ART.4721 FOFO CI-882",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00215",
+    "descricao": "BLOCO CERV. KAILUA V2 275 ML ART. 4544 FOFO CI-882",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00216",
+    "descricao": "BLOCO CERV. KAILUA V2 275 ML ART. 4544 FOFO CI-800 - SP",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00217",
+    "descricao": "BLOCO GFA. SUCO PREMIUM 1500 ML ART. 1013 FOFO Q3",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00218",
+    "descricao": "BLOCO GFA. COCA COLA UNIVERSAL 1000 ML DC ART. 4745 FOFO CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00219",
+    "descricao": "BLOCO GFA. COCA COLA 200 ML DC ART. 4483 FOFO CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00220",
+    "descricao": "BLOCO CERV. MARIACHI 330ML ART.4748 FOFO CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00222",
+    "descricao": "BLOCO CERV. SANKT GALLEN 355 ML ART. 4351 FOFO CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00223",
+    "descricao": "BLOCO POTE 3 LITROS ART.328 FOFO Q3",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00224",
+    "descricao": "BLOCO GFA. PASSPORT 1000 ML ART. 4533 FOFO CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00225",
+    "descricao": "BLOCO GFA. MALIBU V2 750 ML DC ART. 560078 FOFO CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00226",
+    "descricao": "BLOCO GFA. BORDALESA 750 ML DC ART. 3665 FOFO CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00227",
+    "descricao": "BLOCO CERV. STELLA ARTOIS V3 275 ML ART. 4640 FOFO CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00228",
+    "descricao": "BLOCO CERV. BUD CADILLAC 550 ML ART. 18022 FOFO Q3",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00229",
+    "descricao": "BLOCO CERV. COROA 300 ML ART. 18030 FOFO Q3",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00230",
+    "descricao": "BLOCO GFA. BLACK & WHITE 1003 ML DC ART. 4481 FOFO CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00231",
+    "descricao": "BLOCO CERV. HEINEKEN K2 330 ML ART. 4669 FOFO CI-800 - RJ",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00232",
+    "descricao": "BLOCO CERV. SKOL BEATS SAFE 313 ML DC ART. 4717 FOFO CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00233",
+    "descricao": "BLOCO CERV. BUD CADILLAC 330 ML ART. 18026 FOFO 96A- INATIVO",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00235",
+    "descricao": "BLOCO CERV. KAILUA V2 275 ML DC ART. 4544 FOFO CI-882",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00236",
+    "descricao": "BLOCO CERV. BUD SQUARE 550 ML ART. 4730 FOFO CI-800 - ARG",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00237",
+    "descricao": "BLOCO GFA. GIN GUALA 1005 ML DC ART. 2265 FOFO CI-882",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00254",
+    "descricao": "BLOCO GFA. GIN GUALA 1005ML ART. 4053 FOFO CI-882",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00270",
+    "descricao": "MOLDES BLOCO EQ. CERV. SKOL 275ML",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00263",
+    "descricao": "BLOCO CERV. BUD SQUARE 330ML DG ART. 4729 FOFO CI-882",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00268",
+    "descricao": "BLOCO GFA. NATASHA 904 ML ART. 562608 FOFO CI-800 OI-PE",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00259",
+    "descricao": "BLOCO GFA. SUCO PRONTO 1500 ML ART. 4551 FOFO CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00260",
+    "descricao": "BLOCO CERV. HEINEKEN 300 ML ART. 9527 FOFO CI-882",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00267",
+    "descricao": "BLOCO GFA. NATASHA 1000ML ART. 4279 FOFO CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00264",
+    "descricao": "BLOCO GFA. COCA-COLA 350ML ART. 562742 FOFO CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00261",
+    "descricao": "BLOCO GFA. COCA-COLA 500 ML ART. 562743 FOFO CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00242",
+    "descricao": "BLOCO GFA. PASSPORT V2 1000 ML ART. 4723 FOFO CI-882 PE",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-07-00062",
+    "descricao": "PUNCAO GFA. PASSPORT V2 1000 ML ART. 4723 AISI 8620",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00239",
+    "descricao": "BLOCO CERV. PETROPOLIS AMBAR 250 ML ART. 562596 FOFO CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00247",
+    "descricao": "BLOCO CERV. MONET 550ML ART. 4602 DC FOFO CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00272",
+    "descricao": "BLOCO CERV. HEINEKEN 600ML BB DG 4 1/4\" ART. 3408 OI-SP",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00273",
+    "descricao": "BLOCO CERV. MONET 500 B&B ART. 562763 CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00252",
+    "descricao": "BLOCO GFA. GIN SEAGRAM'S 753ML ART. 562699 OI-SP",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00274",
+    "descricao": "BLOCO GFA. GIN GUALA 1005 ML ART. 4126 FOFO CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00276",
+    "descricao": "PRÉ-MOLDE CERV. BUD CADILLAC 330ML 197G ART. 18026 FOFO 96A",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00277",
+    "descricao": "PRÉ-MOLDE CERV. BUD CADILLAC 330 ML ART. A19036 FOFO 96A",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00278",
+    "descricao": "BLOCO CERV. BRAHMA BELL 355ML ART. 19046 FOFO 96A",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00279",
+    "descricao": "BLOCO CERV. STELLA ARTOIS 600ML ART. 563329 TYPE 1 FOFO CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00280",
+    "descricao": "BLOCO CERV. STELLA ARTOIS 600ML ART. 563329 TYPE 2 FOFO CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00281",
+    "descricao": "BLOCO CERV. HEINEKEN 600 ML ART. 4534 FOFO CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00282",
+    "descricao": "BLOCO GFA. COCA-COLA 250 ML DC ART. 563289 FOFO CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00283",
+    "descricao": "BLOCO CERV. BECK'S 600ML ART. 563322 FOFO CI-800 OI-SP",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00284",
+    "descricao": "BLOCO CERV. BECK'S 600ML ART. 563322 TYPE 2 FOFO CI-800 OI-SP",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00285",
+    "descricao": "BLOCO CERV. STELLA ARTOIS 330ML ART. 562688 FOFO CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00286",
+    "descricao": "MOLDES BLOCO GFA. WHISKY VAT 69 703ML ART. 563327 FOFO CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00287",
+    "descricao": "MOLDES PARA VIDRO - MOLDES BLOCO GFA CAMPARI CINZANO FOFO CI-882 1000ML ART563232",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00288",
+    "descricao": "BLOCO CERV. BECK'S 600 ML ART. 563322 FOFO CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00289",
+    "descricao": "BLOCO GFA. AZEITE CILINDRICO 500ML DC ART. 4656 FOFO CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00290",
+    "descricao": "BLOCO POTE CONSERVA 600ML ART. 738 FOFO CI-882",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00291",
+    "descricao": "BLOCO CERV. STELLA ARTOIS 600ML ART. 563329 FOFO CI-800 OI-RJ",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00292",
+    "descricao": "BLOCO CERV. PUB V5 500ML ART. 563359 TIPO 1 FOFO CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00293",
+    "descricao": "BLOCO CERV. PUB V5 500ML ART. 563359 TIPO 2 FOFO CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00294",
+    "descricao": "BLOCO POTE ACINTURADO DEEP 245ML ART. 562650 FOFO CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00295",
+    "descricao": "BLOCO GFA. CORTEZANO V2 903ML ART. 4468 FOFO CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00296",
+    "descricao": "PRÉ-MOLDE CERV. BOHEMIA 355ML NNPB ART. 19048 FOFO 96A",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00297",
+    "descricao": "BLOCO CERV. STELLA ARTOIS 330ML ART. 562688 FOFO CI-800 OI-SP",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00298",
+    "descricao": "BLOCO CERV. BOHEMIA 355ML B&B ART. A20011 FOFO 96A",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00299",
+    "descricao": "MOLDES PARA VIDRO - MOLDES BLOCO GFA SMIRNOFF CI-800 700ML ART563358",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00300",
+    "descricao": "BLOCO CERV. HEINEKEN 600ML B&B ART. 563364 FOFO CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00301",
+    "descricao": "BLOCO CERV. HEINEKEN 600ML ART. G04 101 FOFO Q3",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00302",
+    "descricao": "BLOCO COCA COLA ULTRA 1000ML ART. 4184 FOFO CI-882",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00303",
+    "descricao": "BLOCO CHOCOMILK 200ML ART.4688 FOFO CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00304",
+    "descricao": "BLOCO ART. SB-1721 FOFO. GS1000",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00305",
+    "descricao": "BLOCO GFA. VINHO TOURIGA 750ML ART. 335 FOFO CI-882 OI-PE",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00306",
+    "descricao": "BLOCO CERV. 635ML ART. 399 FOFO Q3",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00307",
+    "descricao": "PRÉ MOLDE (BLOCO) CERV. BUD CADILLAC 190GR ART.18026 FOFO FUN. 96A",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00308",
+    "descricao": "PRÉ-MOLDE CERV. FLOPPY 340ML ART. 20018 FOFO 96A",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00309",
+    "descricao": "BLOCO CERV. HEINEKEN 600ML B&B ART. 563364 FOFO CI-800 OI-SP",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00310",
+    "descricao": "BLOCO CERV. HEINEKEN 600ML NNPB ART. 563365 FOFO CI-800 OI-SP",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00311",
+    "descricao": "BLOCO GFA. CACHAÇA MATUTA 303ML ART. 563248 FOFO CI-882",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00312",
+    "descricao": "PRÉ-MOLDE CERV. BRAHMA DUPLO MALTE 330ML ART. 20021 FOFO 96A",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00313",
+    "descricao": "BLOCO GFA. VINHO LUMIÉRE 753ML ART. 563370 FOFO CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00314",
+    "descricao": "BLOCO GFA. CACHAÇA MATUTA 1000ML ART. 563249 FOFO CI-882",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00315",
+    "descricao": "BLOCO GFA. AZEITE STD 250ML ART. 9737 FOFO CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00316",
+    "descricao": "BLOCO CERV. HEINEKEN 600ML NNPB ART. 563365 FOFO CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00317",
+    "descricao": "BLOCO GFA. SKARLOFF SEVEN 1000ML ART. G07 102 FOFO Q3",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00318",
+    "descricao": "BLOCO CERV. LUNA 275ML ART. 562687 FOFO CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00319",
+    "descricao": "BLOCO GFA. SKOL BEATS 269ML DC ART. 563422 FOFO CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00320",
+    "descricao": "BLOCO CERV. ECO 600ML ART. 4631 FOFO CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00321",
+    "descricao": "BLOCO CERV. BUD CADILLAC 550ML TG ART. A20022 FOFO 96A",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00322",
+    "descricao": "BLOCO GFA LICOR ASTECA 910ML ART. G31 111 FOFO Q3",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00323",
+    "descricao": "BLOCO GFA. VELHO BARREIRO 700ML ART. G52 112 FOFO Q3",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00324",
+    "descricao": "BLOCO CERV. MODELO 600ML B&B ART. 563425 FOFO CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00325",
+    "descricao": "BLOCO CERV. LN CRAFT STD 355ML ART. A20027 FOFO 96A",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00326",
+    "descricao": "BLOCO GFA. PARAIBA 700ML ART.797 FOFO Q3",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00327",
+    "descricao": "BLOCO CERV. 600ML ART. A20023 FOFO 96A",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00328",
+    "descricao": "BLOCO CERV. PETROPOLIS AMBAR TG 250 ML ART. 562596 FOFO CI-882",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00329",
+    "descricao": "BLOCO POTE NESTLE DAWN JAR 220ML 480GR DC ART. 4421 FOFO CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00330",
+    "descricao": "BLOCO GFA. LEITE DE COCO 200ML ART.1013A FOFO CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00331",
+    "descricao": "BLOCO CERV. MONET 550ML DG ART. 4624 FOFO CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00332",
+    "descricao": "BLOCO GFA AGUA MINALBA 303ML ART.563453 FOFO CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00333",
+    "descricao": "BLOCO POTE CONSERVA OLÉ 280ML ART.563408 NI-806",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00334",
+    "descricao": "BLOCO CERV. HEINEKEN DG 1000ML ART.9526 FOFO CI-882",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00335",
+    "descricao": "BLOCO CERV. BECK'S 330 ML ART. 4702 FOFO CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00336",
+    "descricao": "BLOCO GFA. BACARDI MARTINI 983ML ART.4482 FOFO CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00337",
+    "descricao": "BLOCO CERV. BUD CADILLAC 330ML ART. A18026 FOFO 96A",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00338",
+    "descricao": "BLOCO POTE CONSERVA 600ML DG ART.2453 FOFO CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00339",
+    "descricao": "PRÉ-MOLDE CERV. NEW BEBETO 300ML NNPB ART. A20030 FOFO 96A",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00340",
+    "descricao": "PRÉ-MOLDE CERV. NEW BEBETO 300ML B&B ART. A18021 FOFO 96A",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00341",
+    "descricao": "BLOCO CERV. MARIACHI 210ML ART. 4749 FOFO CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00342",
+    "descricao": "BLOCO GFA. BORDEUAX 1000ML ART. 053 FOFO Q3",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00343",
+    "descricao": "BLOCO POTE DAWN JAR 200G ART. 5414 FOFO Q3",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00344",
+    "descricao": "MOLDES PARA VIDRO - MOLDES BLOCO FRASCO CAFÉ GOLD 170 ART174Q FOFO 96A",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00345",
+    "descricao": "MOLDES PARA VIDRO - MOLDES BLOCO BURDEOS 750 ART12G2 FOFO 96A",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00346",
+    "descricao": "MOLDES PARA VIDRO - MOLDES BLOCO MISTRAL ICE 275 ART133M FOFO 96A",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00347",
+    "descricao": "MOLDES PARA VIDRO - MOLDES BLOCO JUGO VITAL 300ML ART. 1529 FOFO 96A",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00348",
+    "descricao": "PRÉ-MOLDE CERV. BRAHMA BELL 355ML B&B DG ART. A20032 FOFO 96A",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00349",
+    "descricao": "PRÉ-MOLDE CERV. CRAFT 600ML B&B DG ART. A20034 FOFO 96A",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00350",
+    "descricao": "BLOCO GFA. VINHO LUMIÈRE PP30 753 ML ART. 4654 FOFO CI-800 - OI-RJ",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00351",
+    "descricao": "BLOCO CERV. BECK'S 330 ML ART. 4702 FOFO CI-800 OI-SP",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00352",
+    "descricao": "BLOCO GFA. VINHO STD PP30 V2 750 ML DC ART. 4173 FOFO CI-800 OI-RJ",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00353",
+    "descricao": "BLOCO GFA. MARTINI 970 ML ART. 4627 CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00354",
+    "descricao": "BLOCO GFA. VINHO STD PP30 1000 ML ART. 4380 FOFO CI-800 - O-RJ",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00355",
+    "descricao": "BLOCO GFA. DREHER 900 ML V2 ART. 4576 CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00356",
+    "descricao": "MOLDES PARA VIDRO - BLOCO GFA. CERV. KUNSTMANN 330ML ART. 1977 FOFO 96A",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00357",
+    "descricao": "MOLDES PARA VIDRO - BLOCO GFA. CERV. SOL 330 ML ART. 1984 FOFO 96A",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00358",
+    "descricao": "MOLDES PARA VIDRO - BLOCO GFA. CERV. HEINEKEN 330 ML K2 OW ART. 1986 FOFO 96A",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00359",
+    "descricao": "BLOCO CERV. HEINEKEN 600ML NNPB ART. 563365 FOFO CI-800 OI-RJ",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00360",
+    "descricao": "BLOCO GFA. SUCO FOR ME 117ML ART. 563504 FOFO CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00361",
+    "descricao": "BLOCO GFA. MONTILLA 1000ML NNPB 6. 1/4\" ART. 4358 FOFO CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00362",
+    "descricao": "BLOCO GFA. NATU NOBILIS 1000ML ART. 4261 FOFO CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00363",
+    "descricao": "BLOCO POTE AZEITONA 350G ART. 3239 FOFO CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00364",
+    "descricao": "BLOCO GFA. CHANCELLER 1000ML NNPB 6. 1/4\" ART. 4644 CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00365",
+    "descricao": "BLOCO GFA. SMIRNOFF 1000ML LISA ART. 1352 FOFO Q3",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00366",
+    "descricao": "BLOCO POTE HERO QUEENSBERRY 290ML ART. 563507 - FOFO CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00367",
+    "descricao": "BLOCO CERV. MARIACHI 330ML ART.4748 CI-800 - OI-RJ",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00368",
+    "descricao": "BLOCO POTE CAFÉ RETANGULAR 100G ART. 1324 - FOFO Q3",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00369",
+    "descricao": "BLOCO GFA. CANINHA 51 V2 970ML - ART. 563513 - FOFO CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00370",
+    "descricao": "BLOCO CERV. HEINEKEN 600ML NNPB ART. 563365 FOFO CI-800 - OI-RJ",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00371",
+    "descricao": "BLOCO GFA. MICHELOB ULTRA 330ML ART. 563523 FOFO CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00372",
+    "descricao": "BLOCO POTE NESTLE DAWN JAR 585ML 140 ART. 563510 FOFO CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00373",
+    "descricao": "BLOCO GFA. CERV. MONET 550ML NNPB ART. 4602 CI-800 - OI-RJ",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00374",
+    "descricao": "MOLDES PARA VIDRO - BLOCO GFA. VINO BURDEOS 375ML LATE HARVEST ART. 122T - FOFO 96-A",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00375",
+    "descricao": "MOLDES PARA VIDRO - BLOCO GFA. CERVEZA CCU 355ML OW ART. 1976 FOFO 96-A",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00376",
+    "descricao": "BLOCO GFA. SMIRNOFF ICE 275ML ART. 563531 FOFO CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00377",
+    "descricao": "MOLDES PARA VIDRO - BLOCO GFA. ACEITE OLIVA MARASCA 500ML ART. 1798 FOFO 96-A",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00378",
+    "descricao": "BLOCO CERV. HEINEKEN K2 250 ML ART. 4238 FOFO CI-800 OI-SP",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00379",
+    "descricao": "MOLDES PARA VIDRO - BLOCO FRASCO COLADO 142ML ART. 173L - FOFO 96-A",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00380",
+    "descricao": "PRÉ-MOLDE CERV. BRAHMA DUPLO MALTE 330ML ART. 21M003 FOFO 96A",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00381",
+    "descricao": "BLOCO GFA. MICHELOB ULTRA 330ML DC ART. 563523 FOFO CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00759",
+    "descricao": "BLOCO GFA. HEINEKEN 330 K2 O.W. 190G TG ART. 1146 FOFO Q3",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00382",
+    "descricao": "BLOCO POTE CONSERVA 600ML DG ART.2453 FOFO CI-800 OI-RJ",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00383",
+    "descricao": "PRÉ-MOLDE CERV. CADILLAC 550ML 400GR ART. 20010 - FOFO 96A",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00384",
+    "descricao": "BLOCO CERV. HEINEKEN 330ML BB ART. 4757 CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00385",
+    "descricao": "BLOCO GFA. COCA UNIVERSAL LT 1000ML ART. 563558 CI-882",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00387",
+    "descricao": "BLOCO CERV. STELLA ARTOIS 600ML VN ART. 563617 CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00388",
+    "descricao": "BLOCO GFA. VASO SUCO PRONTO 1000ML ART. 3114 CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00389",
+    "descricao": "BLOCO CERV. STELLA ARTOIS 600ML ART. 563364 CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00390",
+    "descricao": "BLOCO VAS. GIN GUALA PITU 1000ML ART. 333 BM-900",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00391",
+    "descricao": "BLOCO GFA. VODKA ARANHA 900ML ART. 4569 CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-11-00114",
+    "descricao": "MOLDES PARA VIDRO - PARISON CERV. MARIACHI 330ML NR ART. 191M 96A",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00392",
+    "descricao": "BLOCO MB-780 ART. 780 FOFO GS-1000",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00760",
+    "descricao": "BLOCO GFA. HEINEKEN 330 K2 O.W. 190G DG ART. 1146 FOFO Q3",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00393",
+    "descricao": "BLOCO GFA. COCA COLA 1000ML ULTRA ART. 4220 CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00394",
+    "descricao": "BLOCO GFA. VODKA MISSIATO 900ML ART. 4588 CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00395",
+    "descricao": "BLOCO GFA. CHIAMULERA NINOFF 903ML ART.4406 CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00396",
+    "descricao": "BLOCO CERV. MODELO 330ML ART. 563629 CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00397",
+    "descricao": "BLOCO CERV. ICE STD 275ML ART. 4542 CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00398",
+    "descricao": "BLOCO GFA. MULLER 51 ICE 275ML ART. 4542 CI-800 - RJ",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00399",
+    "descricao": "BLOCO POTE AZEITONA F200 350ML ART. 3238 FOFO CI-800 - SP",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00400",
+    "descricao": "PRÉ-MOLDE CERV. BEBETO 300ML 215GR NNPB TG ART. 21M001 - 96A",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00401",
+    "descricao": "MOLDES PARA VIDRO - BLOCO GFA. CHAMPAÑA VALDIVIESO 375ML ART. 12G1 - 96A",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00402",
+    "descricao": "MOLDES PARA VIDRO - BLOCO GFA. CHAMPAÑA MAIPO 750ML ART. 129U - 96A",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00403",
+    "descricao": "MOLDES PARA VIDRO - BLOCO GFA. PISCO COCHIGUAS 700ML ART. 131S - 96A",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00404",
+    "descricao": "MOLDES PARA VIDRO - BLOCO GFA. JUGO ESTANDAR 1000ML ART. 1570 - 96A",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00405",
+    "descricao": "MOLDES PARA VIDRO - BLOCO GFA. SCREW BURDEOS 375ML ART. 126Q - 96-A",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00406",
+    "descricao": "MOLDES PARA VIDRO - BLOCO GFA. BAJA ECOGLASS BURDEOS 750ML ART. 12H4 - 96A",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00407",
+    "descricao": "BLOCO GFA. BITTER CAMPARI 753ML ART. 563634 - CI-882 PE",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00408",
+    "descricao": "BLOCO GFA. BITTER CAMPARI 1004ML ART. 563633 - CI-882 PE",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00409",
+    "descricao": "PRÉ-MOLDE CERV. RET. ESMERALDA 600ML 420GR BB ART. 21M023 - FOFO 96A",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00410",
+    "descricao": "PRÉ-MOLDE CERV. STELLA ARTOIS 330ML NNPB TG ART. 21M021 - FOFO 96A",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00411",
+    "descricao": "BLOCO GFA.BORDEAUX 750ML ECO ROLHA ART. 610 - FOFO Q3",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00412",
+    "descricao": "BLOCO ART. SB-1738 FOFO GS1000",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00413",
+    "descricao": "MOLDES PARA VIDRO - PARISON GFA. BURDEOS 750 ECOGLASS 2 ART. 12V2 FOFO 96A",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00414",
+    "descricao": "BLOCO CERV. RETORNÁVEL 635ML TG NNPB ART. 243 FOFO CI-882",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00415",
+    "descricao": "BLOCO GFA. MOLHEIRA SAKURA 200ML ART. 4136 - CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00416",
+    "descricao": "BLOCO GFA. SUCO LISO 38 1000ML BB DG ART. 796 - CI-882 PE",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00417",
+    "descricao": "BLOCO VAS. ALIMENTÍCIO LC 540ML NNPB ART. 759 FOFO CI-882",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00418",
+    "descricao": "BLOCO GFA. VINHO LUMIERE 753ML DG NNPB ART. 9155 FOFO CI-882",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00419",
+    "descricao": "PRÉ-MOLDE CERV. SPATEN RETORNÁVEL 355ML BB TG ART. 21M022 FOFO 96A",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00420",
+    "descricao": "BLANK ART. SB-1728 FOFO GS1000",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00421",
+    "descricao": "MOLDS FOR GLASS – BLOCO COPO POLO 225ML DC ART.4738 NI-806",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00422",
+    "descricao": "BLOCO POTE NESTLE BABY FOOD 128ML ART. 4469 NI-806",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00423",
+    "descricao": "BLOCO GFA. DOMECQ V2 1000ML DC ART. 4650 - CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00424",
+    "descricao": "BLOCO GFA. FRISANTE 750ML DG BB ART. 4302 - CI-882 PE",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00425",
+    "descricao": "BLOCO GFA. SUCO NATURAL 500ML ART. 1028 - FOFO Q3",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00426",
+    "descricao": "BLOCO GFA. VINHO STD PP30 1000 ML ART. 4380 FOFO CI-800 - OI-SP",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00427",
+    "descricao": "MOLDES PARA VIDRO - PRÉ-MOLDE GFA. BRANDY DOMECQ 375ML D19 FDG ART. 138J - FOFO 96A",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00428",
+    "descricao": "BLOCO GFA. BORDEAUX 750ML ECO ROSCA ART. 607 - FOFO Q3",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00429",
+    "descricao": "BLOCO GFA. VASO SUCO LISO 300ML DG NNPB ART. 785 - BM-900 PE",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00430",
+    "descricao": "BLOCO CERV. CORONA 330ML DC VR ART. 563672 FOFO CI-800 SP",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00431",
+    "descricao": "BLOCO GFA. CHAMPANHE 750ML DC BB ART. 3396 - CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00432",
+    "descricao": "BLOCO CERV. STELLA ARTOIS 600ML VN ART. 563673 FOFO CI-800 - OI-RJ",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00433",
+    "descricao": "BLOCO CERV. STELLA ARTOIS 600ML DC ART. 563329 FOFO CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00434",
+    "descricao": "BLOCO VASO ALIMENTICIO 220ML ART. 748 FOFO CI-882",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00435",
+    "descricao": "BLOCO CERV. LUNA 275ML NNPB ART. 562687 FOFO CI-800 - SP",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00436",
+    "descricao": "BLOCO GFA. BLACK STONE 1004ML NNPB ART. 4681 FOFO CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00437",
+    "descricao": "BLOCO COPO CÔNICO 296 P.62 ART. 4341 FOFO CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00438",
+    "descricao": "PRÉ-MOLDE CERV. STELLA ARTOIS 330ML 190GR ART. 22M001 - FOFO 96A",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00439",
+    "descricao": "BLOCO GFA. YAKULT TAFF MAN-E 112ML ART. 5685 FOFO CI-882 PE",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00440",
+    "descricao": "BLANK ART. SB-1036 FOFO GS-1000",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00441",
+    "descricao": "BLOCO GFA. MICHELOB ULTRA 330ML ART. 563523 FOFO CI-800 OI-RJ",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00442",
+    "descricao": "PRÉ-MOLDE CERV. RET. ESMERALDA 600ML 400GR BB ART. 22M002 - FOFO 96A",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00443",
+    "descricao": "BLOCO POTE NESTLE BABY FOOD 175ML ART. 4416 NI-806",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00444",
+    "descricao": "BLOCO GFA. AZEITE BUONO 500ML BB ART. 750 FOFO CI-882",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00445",
+    "descricao": "BLOCO CERV. HEINEKEN K2 330ML DC ART. 563686 FOFO CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00446",
+    "descricao": "BLOCO GFA. VINHO LUMIÉRE 753ML PP30 V2 ART. 563370 FOFO CI-800 - OI-RJ",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00447",
+    "descricao": "BLOCO GFA. ITAIPAVA 500ML ART. 720 - FOFO Q3",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00448",
+    "descricao": "BLOCO GFA. CHAMPANHA RESERVA 750ML ART. 711 - FOFO Q3",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00449",
+    "descricao": "BLOCO GFA. SUCO SALTON 1500ML ART. 5450 - FOFO Q3",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00450",
+    "descricao": "BLOCO CERV. LONG NECK STD 355ML ART. 562777 FOFO CI-800 - RJ",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00451",
+    "descricao": "BLOCO CERV. BECK'S 330 ML ART. 563385 FOFO CI-800 OI-SP",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00452",
+    "descricao": "BLOCO GFA. BODEBROWN IRON MAIDEN 600ML ART. 563689 BRONZE CI 800 - PE",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00453",
+    "descricao": "BLOCO GFA. VINHO STD PP30 1000ML ART. 4380 - CI-882 PE",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00454",
+    "descricao": "MOLDES PARA VIDRO - BLOCO GFA. ÁGUA MINERAL PORVENIR 330ML ART. 1566 FOFO 96A",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00455",
+    "descricao": "MOLDES PARA VIDRO - BLOCO GFA. ÁGUA MINERAL VITAL 330ML ART. 1567 FOFO 96A",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00456",
+    "descricao": "BLOCO VASO REDONDO 700ML ART. 013 FOFO Q3",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00457",
+    "descricao": "BLOCO VASO FACETADO 550ML ART. 014 FOFO Q3",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00458",
+    "descricao": "BLOCO GFA. ESPUMANTE 750ML ART. 041 - FOFO Q3",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00459",
+    "descricao": "BLOCO GFA. ICE STD 275ML TG ART. 4144 FOFO CI-882 OI-PE",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00460",
+    "descricao": "BLOCO CERV. HEINEKEN SOL 330ML PRY OFF ART. 563712 FOFO CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00461",
+    "descricao": "BLOCO GFA. DREHER 900ML ART. 1141 FOFO Q3 FJA",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00462",
+    "descricao": "BLOCO GFA. NATU NOBILIS V2 1000ML NNPB ART. 563694 FOFO CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00463",
+    "descricao": "BLOCO VAS. ESPUMANTE 750ML DG ART. 330 FOFO BM-900",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00464",
+    "descricao": "BLOCO CERV. MARIACH 330ML NNPB ART. 4748 FOFO CI-800 - OI-PE",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00465",
+    "descricao": "BLOCO POTE CAFÉ STD 200G ART. 313 - FOFO Q3",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00466",
+    "descricao": "BLOCO GFA. SMIRNOFF ICE 275ML ART. 563531 FOFO CI-800 - RJ",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00467",
+    "descricao": "BLOCO POTE AZEITONA 500G DC ART. 562673 FOFO CI-800 - OI-SP",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00468",
+    "descricao": "BLOCO GFA. VODKA SKYY 753ML DC ART. 4639 CI-800 - OI-SP",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00469",
+    "descricao": "BLANK ART. SB-1670 FOFO GS-1000",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00470",
+    "descricao": "BLANK ART. SB-1755 FOFO GS-1000",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00471",
+    "descricao": "MOLDES PARA VIDRO - BLOCO CERV. KROSS 330ML O/W ART. 1990 FOFO 96A",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00472",
+    "descricao": "MOLDES PARA VIDRO - BLOCO CERV. BECKER 300ML NR ART. 191G FOFO 96A",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00473",
+    "descricao": "MOLDES PARA VIDRO - BLOCO CERV. BECKER 355ML LONG NECK ART. 1989 FOFO 96A",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00474",
+    "descricao": "MOLDES PARA VIDRO - BLOCO GFA. COCTELERA CAPEL 700ML ART. 133K FOFO 96A CH",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00481",
+    "descricao": "MOLDES PARA VIDRO - BLOCO CERV. HEINEKEN 330ML DC K2 O.W. ART. 9972 FOFO CI-800 - ARG",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00475",
+    "descricao": "PRÉ-MOLDE CERV. BECK´S 600ML 420GR BB ART. 22M012 - FOFO 96A",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00476",
+    "descricao": "BLOCO GFA. CAMPARI CYNAR 900ML V2 ART. 4554 FOFO CI-800 OI-SP",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00477",
+    "descricao": "MOLDES PARA VIDRO - PARISON SEMIELABORADO STD 3.25-170 NNPB ART. 3.25-170 FOFO 96A",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00478",
+    "descricao": "MOLDES PARA VIDRO - PARISON SEMIELABORADO STD 3.25-200 NNPB ART. 3.25-200 FOFO 96A",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00479",
+    "descricao": "MOLDES PARA VIDRO - PARISON SEMI STD SHELL GTG NIS Ø24,5-280 FDG ART. 200-A FOFO 96A",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00480",
+    "descricao": "BLOCO GFA. BUDWEISER O.W. 330ML ART. 1386 FOFO Q3",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00482",
+    "descricao": "BLOCO GFA. PASSPORT 670ML BB ART. 4350 - CI-882 PE",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00483",
+    "descricao": "MOLDES PARA VIDRO - PARISON CERV. STELLA ARTOIS 600ML DG NNPB ART. 191R 96A CH",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00484",
+    "descricao": "BLOCO POTE QUADRADO PEQUENO LISO 1200ML ART. 021 FOFO Q3",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00485",
+    "descricao": "BLOCO GFA. HEINEKEN K2 330ML DG ART. 1128 FOFO Q3 VR",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00487",
+    "descricao": "BLOCO GFA. SUCO PREMIUM 1000ML ECOVA ART. 5454 FOFO Q3 VR",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00492",
+    "descricao": "BLOCO GFA. PASSPORT 1000 ML ART. 4530 FOFO CI-800 OI-PE",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00488",
+    "descricao": "BLOCO GFA. BORDEAUX SENSAÇÃO ECOVA 750ML ART. 1198 FOFO Q3 VR CB",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00489",
+    "descricao": "BLOCO GFA. BORDEAUX 1000ML ROLHA 520G ART. 5451 FOFO Q3 VR CB",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00490",
+    "descricao": "BLOCO GFA. BORDEAUX 1000ML PILFER ART. 5457 FOFO Q3 VR CB",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00491",
+    "descricao": "BLOCO GFA. WHISKY FANTE GOLD 1000ML NNPB ART. 563728 FOFO CI-882 OI-PE",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00493",
+    "descricao": "BLOCO GFA. VODKA SLOVA V2 983ML ART. 563699 FOFO CI-882 OI-PE",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00494",
+    "descricao": "BLOCO CERV. HEINEKEN ULTRA 275ML AMSTEL ART. 563735 FOFO CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00495",
+    "descricao": "BLOCO GFA. BORDEAUX 2L ART. 5452 FOFO Q3 VR CB",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00496",
+    "descricao": "BLOCO GFA. GFA. WHISKY OLD RED 1000ML ART. 1037 FOFO Q3 VR PF",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00497",
+    "descricao": "BLOCO GFA. GIN STOCK 1000ML ART. 590 FOFO Q3 VR PF",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00498",
+    "descricao": "BLOCO GFA. BACARDI CARTA BLANCA 700ML ART. 563726 FOFO CI-800 SP",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00499",
+    "descricao": "BLOCO CERV. LONG NECK STD 355ML ART. 562777 FOFO CI-882 PE",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-01-00484",
+    "descricao": "BLOCO GFA. CYNAR 900ML ART. 1014 FOFO Q3 VR JA",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00500",
+    "descricao": "BLOCO GFA. COCA COLA RET. 290ML BB ART. 102 FOFO CI-800 PE",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00501",
+    "descricao": "BLOCO GFA. CAMPARI BVI 1000ML BB ART. 563740 - CI-882 PE",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00502",
+    "descricao": "BLOCO GFA. CAMPARI BVI 7500ML BB ART. 563739 - CI-882 PE",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00503",
+    "descricao": "BLOCO CERV. ROMÁRIO 300ML MMPB ART. 373 FOFO CI-882 PE",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00504",
+    "descricao": "BLOCO GFA. BORDEAUX 2000ML ECOVA PILFER ART. 5460 FOFO Q3 VR CB",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00505",
+    "descricao": "BLOCO GFA. COCA COLA 10OZ RET. DC ART. 3354 FOFO CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00506",
+    "descricao": "PRÉ-MOLDE CERV. SPATEN RET. 330ML NNPB TG ART. 23M001 FOFO 96A",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00507",
+    "descricao": "PRÉ-MOLDE CERV. STELLA ARTOIS 330ML NNPB 197GR ART. 22M017 - FOFO 96A",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00508",
+    "descricao": "BLOCO GFA. NATASHA 900ML NNPB ART. 562608 FOFO CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00509",
+    "descricao": "BLOCO CERV. AMBEV JEEP V2 1000ML NNPB DG ART. 4721 FOFO CI-882",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00510",
+    "descricao": "BLOCO GFA. LICOR PRESIDENTE 900 ML ART. 1234 FOFO Q3 VR JA",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00511",
+    "descricao": "MOLDES PARA VIDRO - BLOCO GFA. BURDEOS 187ML NNPB ART. 12B2 FOFO 96A",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00512",
+    "descricao": "MOLDES PARA VIDRO - BLOCO GFA. JUGO STD 250ML NNPB ART. 1513 FOFO 96A",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00513",
+    "descricao": "BLOCO GFA. CHANCELER 1000ML ART. 1393 FOFO Q3 VE JA",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00514",
+    "descricao": "BLOCO GFA. CYNAR 900ML ART. 1014 FOFO Q3 VR JA",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00515",
+    "descricao": "BLOCO CERV. CORONA V2 330ML ART. 563755 FOFO CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00516",
+    "descricao": "MOLDES PARA VIDRO - BLOCO CERV. CORONA 330ML ART. 191M FOFO 96A CH",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00517",
+    "descricao": "BLOCO GFA. SUCO PRONTO 1500ML ART. 4551 FOFO CI-882 PE",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00518",
+    "descricao": "BLOCO GFA. BORDEUAX 750ML ECOVA ART. 5462 FOFO Q3 VR CB",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00519",
+    "descricao": "BLOCO GFA. SUCO LISO 38 1000ML ART. 562671 FOFO CI-882 OI-PE",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00520",
+    "descricao": "MOLDES PARA VIDRO - BLOCO GFA. CERV. KUNSTMANN 330ML FTG NNPB ART. 1977 FOFO 96A",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00521",
+    "descricao": "MOLDES PARA VIDRO - BLOCO GFA. JUGO STD 250ML FTG NNPB ART. 1513 FOFO 96A",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00522",
+    "descricao": "MOLDES PARA VIDRO - BLOCO GFA. AGUA MIN. PUYEHUE 330ML FTG NNPB ART. 1581 FOFO 96A",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00523",
+    "descricao": "MOLDES PARA VIDRO - BLOCO GFA. JUGO AMA TIME 300ML FTG NNPB ART. 1562 FOFO 96A",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00524",
+    "descricao": "PRÉ-MOLDE CERV. CORONA NRB 330ML NNPB TG ART. 23M013 FOFO 96A",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00525",
+    "descricao": "BLOCO POTE CAFÉ STD 100G ECOVA ART. 5447 - FOFO Q3 VR",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00526",
+    "descricao": "BLOCO POTE MULTIUSO 350ML ART. 020 FOFO Q3",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00527",
+    "descricao": "MOLDES PARA VIDRO - PRÉ-MOLDE CERV. HEINEKEN 660ML FDG NNPB ART. 191T 96A CH",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00528",
+    "descricao": "MOLDES PARA VIDRO - BLOCO CERV. STELLA ARTOIS 330ML FTG NNPB ART. 1998 FOFO 96A",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00529",
+    "descricao": "MOLDES PARA VIDRO - BLOCO CERV. BUDWEISER 600ML ART. 1394 FOFO Q3 VR",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00530",
+    "descricao": "BLOCO GFA. KHLOE 750ML ART. 1406 - FOFO Q3",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00532",
+    "descricao": "BLOCO GFA. CIDADE IMPERIAL 330ML TG ART. 1409 FOFO Q3 VR FJA",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00533",
+    "descricao": "BLOCO GFA. CIDADE IMPERIAL 210ML TG ART. 1170 FOFO Q3 VR FJA",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00534",
+    "descricao": "MOLDES PARA VIDRO - BLOCO GFA. BURDEOS 750ML SUYAI ECO ROSCA ART. 279B FOFO Q3 VR AR",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00535",
+    "descricao": "BLOCO GFA. CIDADE IMPERIAL 275ML TG ART. 5468 FOFO Q3 VR FJA",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00536",
+    "descricao": "BLOCO GFA. CIDADE IMPERIAL 210ML TG ART. 5469 FOFO Q3 VR FJA",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00537",
+    "descricao": "BLOCO GFA. L.N. IMPERIAL 330ML TG ART. 1414 FOFO Q3 VR FJA",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00538",
+    "descricao": "PRÉ-MOLDE CERV. BUD CADILLAC 330ML 197GR NNPB VR1 ART. 23M016 FOFO 96A",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00539",
+    "descricao": "PRÉ-MOLDE CERV. BUD CADILLAC 330ML 190GR NNPB VR1 ART. 23M017 FOFO 96A",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00541",
+    "descricao": "BLOCO CERV. HEINEKEN 250ML TG ART. 1392 FOFO Q3 VR FJA",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00542",
+    "descricao": "BLOCO GFA. ESPUMANTE 750ML ART. G27 137 FOFO Q3 VP",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00543",
+    "descricao": "BLOCO GFA. RH10L 900ML ART. 1382 FOFO Q3 VR FPF",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00544",
+    "descricao": "BLOCO GFA. VODKA LEONOFF 920ML ART. 1247 FOFO Q3 FPF",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00545",
+    "descricao": "BLOCO GFA. CACHAÇA 51 700ML ART. 1411 FOFO Q3 FPF",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00546",
+    "descricao": "BLOCO GFA. CACHAÇA 51 1000ML ART. 1412 FOFO Q3 FPF",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00547",
+    "descricao": "BLOCO GFA. CIDADE IMPERIAL 600ML ART. 1261 FOFO Q3 VR FJA",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00548",
+    "descricao": "BLOCO CERV. CIDADE IMPERIAL 275ML ART. 563780 CI-800 SP",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00549",
+    "descricao": "BLOCO GFA. CIDADE IMPERIAL 210ML DG ART. 5472 FOFO Q3 VR",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00550",
+    "descricao": "BLOCO CERV. HEINEKEN 330ML K2-02 ART. G49 095 FOFO Q3 VP",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00551",
+    "descricao": "BLOCO CERV. LN. MILLER 355ML OW DC ART. 563786 FOFO CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00552",
+    "descricao": "BLOCO CERV. MILLER V2 600ML DC ART. 563789 CI-800 SP",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00553",
+    "descricao": "BLOCO GFA. BORDEUAX ACINTURADA 750ML ART. 1418 FOFO Q3 FCB",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00554",
+    "descricao": "BLOCO GFA. AGUA IBGA 300ML DG ART. 100 FOFO CI-800 PE",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00555",
+    "descricao": "BLOCO GFA. SOL 330ML O.W TG ART. 1121 FOFO Q3 VR FJA",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00556",
+    "descricao": "BLOCO GFA. CABERNET CILINDRICA 750ML PILFER ECOVA 2 ART. 1118 FOFO Q3 FCB",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00557",
+    "descricao": "BLOCO GFA. CERV. CIDADE IMPERIAL 300ML TG ART. 5474 FOFO Q3 VR FJA",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00558",
+    "descricao": "BLOCO GFA. COCA COLA 1000ML ART. 3832 FOFO CI-800 SP",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00559",
+    "descricao": "BLOCO POTE DAWN JAR 100 DC ART. 3999 FOFO CI-800 SP",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00560",
+    "descricao": "BLOCO VAS. SUCO OQ 1500ML DG ART. 9469 CI-882 PE",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00561",
+    "descricao": "BLOCO GFA. BOURGONE CILINDRICA 750ML RC ART. 563799 FOFO CI-800 SP",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00563",
+    "descricao": "BLOCO GFA. BOURGONE CILINDRICA 750ML RL ART. 563805 FOFO CI-800 SP",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00564",
+    "descricao": "MOLDES PARA VIDRO - BLOCO GFA. BURDEOS PREMIER 750ML ART. 302A FOFO Q3 VR CH",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00565",
+    "descricao": "BLOCO GFA. LICOR STD 500ML ART. 563804 FOFO CI-800 SP",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00566",
+    "descricao": "BLOCO GFA. ESPUMANTE CONICA 750ML ART. 1422 FOFO Q3 FCB",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00567",
+    "descricao": "BLOCO GFA. FRISANTE 750ML STD PP30 V3 DC ART. 563798 CI-800 SP",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00568",
+    "descricao": "BLOCO GFA. LUMIERE ULTRA RL 750ML DC ART. 563794 CI-800 SP",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00569",
+    "descricao": "BLOCO GFA. LUMIERE ULTRA 750ML PP30 DC ART. 563795 CI-800 SP",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00570",
+    "descricao": "BLOCO GFA. BOURDEAUX CONICA 750ML ART. 563797 FOFO CI-800 SP",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00571",
+    "descricao": "BLOCO GFA. RH9T TG ART. 1379 FOFO Q3 FJA",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00572",
+    "descricao": "BLOCO GFA. APEROL 750ML ART. 1231 FOFO Q3 FPF",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00573",
+    "descricao": "BLOCO GFA. SUCO PREMIUM 1000ML ART. 778 FOFO Q3 FCB",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00574",
+    "descricao": "BLOCO VAS. CERVEJA STD 600ML DG ART. 243 FOFO CI-882",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00575",
+    "descricao": "BLOCO GFA. KEEP COOLER 275ML ART. 1432 FOFO Q3 VR FPF",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00576",
+    "descricao": "BLANK ART. MB-1579 FOFO GS-1000",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00579",
+    "descricao": "BLOCO CERV. CIDADE IMPERIAL 330ML GOLD ART. 563809 FOFO CI-800 - RJ",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00580",
+    "descricao": "BLOCO CERV. CIDADE IMPERIAL 300ML TG ART. 563812 FOFO CI-800 - RJ",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00581",
+    "descricao": "BLOCO BARRAFA TIPO C ART. 006 FOFO Q3 VR FPF",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00582",
+    "descricao": "BLOCO GFA. SCHWEPPES 250ML ART. 1426 FOFO Q3 VR FPF",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00583",
+    "descricao": "BLOCO GFA. SUCO AURORA 1000ML ART. 1423 FOFO Q3 FCB",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00584",
+    "descricao": "BLOCO GFA. MONTILLA 1000ML ART. 1057 FOFO Q3 FPF",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00585",
+    "descricao": "BLOCO GFA. CERVEJA 635ML ART. 702 FOFO Q3",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00586",
+    "descricao": "BLOCO GFA. CIDADE IMPERIAL 275ML ALIVIADA ART. 5475 FOFO Q3 FJA",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00587",
+    "descricao": "BLOCO POTE CAFÉ L OR 100G ART. 1442 - FOFO Q3 VR",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00588",
+    "descricao": "BLOCO GFA. ASTECA 900ML ART. G01 126 FOFO Q3 VP",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00589",
+    "descricao": "BLOCO GFA. GIN 970ML ART. G02 122 FOFO Q3 VP",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00590",
+    "descricao": "BLOCO GFA. APOLO 900ML ART. G01 459 FOFO Q3 VP",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00591",
+    "descricao": "BLOCO GFA. LONG NECK 355ML TG ART. 842 FOFO Q3 VR FJA",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00592",
+    "descricao": "BLOCO GFA. CIDADE IMPERIAL 210ML PSBE ART. 1170 FOFO Q3 VR FPF",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00593",
+    "descricao": "BLOCO GFA. SUCO HUGO PIETRO 1350ML ART. 1435 FOFO Q3 FCB",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00594",
+    "descricao": "MOLDES PARA VIDRO - BLOCO GFA. CHAMP ECOVA USA 750ML ART. 297A FOFO Q3 VR CH",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00595",
+    "descricao": "MOLDES PARA VIDRO - BLOCO GFA. CHAMP USA 750ML ART. 296A FOFO Q3 VR CH",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00596",
+    "descricao": "BLOCO POTE AZEITONA 500G ART. 5477 FOFO Q3 FPF",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00597",
+    "descricao": "BLOCO GFA. AMBEV STD 600ML ART. 1447 FOFO Q3",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00598",
+    "descricao": "BLOCO POTE CONSERVA 550G ART. 5480 FOFO Q3",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00599",
+    "descricao": "BLOCO GFA. CAMPARI BVI 1000ML ART. 1446 FOFO Q3",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00600",
+    "descricao": "BLOCO GFA. WEWI 255ML ART. 1444 FOFO Q3 VR",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00601",
+    "descricao": "BLOCO CERV. CIDADE IMPERIAL 600ML DC ART. 563829 FOFO CI-800 SP",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00602",
+    "descricao": "BLOCO GFA. CAMPARI BVI 750ML ART. 1445 FOFO Q3",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00603",
+    "descricao": "BLOCO GFA. COCA COLA 1000ML ART. G13 173 FOFO Q3",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00604",
+    "descricao": "PRÉ-MOLDE CERV. BUD CADILLAC 330 ML ART. 21M005 FOFO 96A",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00605",
+    "descricao": "BLOCO GFA. ICE STD 275ML ART. 1377 FOFO Q3 VR",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00606",
+    "descricao": "BLOCO GFA. WHISKY 101 DO BRASIL 900ML ART. 1063 FOFO Q3",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00607",
+    "descricao": "BLOCO GFA. COCA COLA NORDIC 290ML DC ART.4746",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00608",
+    "descricao": "BLOCO GFA. NEW ORLOFF 1000ML ART. 5484 FOFO Q3 FPF",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00609",
+    "descricao": "PRÉ-MOLDE CERV. CORONA NRB 330ML 215GR ART. 24M012 FOFO 96A",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00610",
+    "descricao": "BLOCO GFA. ICE STD 275ML ULTRA ART. 563827 CI-800 SP",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00611",
+    "descricao": "BLOCO GFA. PASSPORT 1000ML ART. G15 191 FOFO Q3 VP",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00612",
+    "descricao": "BLOCO GFA. ICE 275ML ART. G15 146 FOFO Q3 VP",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00613",
+    "descricao": "BLOCO GFA. STELLA ARTOIS 330ML ART. 1380 FOFO Q3 VR",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00614",
+    "descricao": "BLOCO GFA. BORDEAUX CAMPOS 750ML ART. 1344 FOFO Q3 VR",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00615",
+    "descricao": "PRÉ-MOLDE CERV. CADILLAC 330ML ART. 39501 FOFO 96A",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00616",
+    "descricao": "BLOCO GFA. BORDEAUX 750ML ECO ROLHA ART.607 FOFO Q3 VR",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00617",
+    "descricao": "BLOCO POTE AZEITONA 200G 350ML ART. 3286 FOFO CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00618",
+    "descricao": "BLOCO GFA. DOCTOR GIN 1000ML ART. 563848 FOFO CI-800 SP",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00619",
+    "descricao": "BLOCO GFA. HEINEKEN 330ML K2 O.W 195G ART. 1455 FOFO Q3",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00620",
+    "descricao": "BLOCO POTE MULT 244ML ART. 563846 FOFO CI 800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00621",
+    "descricao": "BLOCO POTE CAFÉ SOLÚVEL 200G ART. 5488 FOFO Q3",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00622",
+    "descricao": "BLOCO GFA. GFA. VODKA INTENCION 900ML ART. 1459 FOFO Q3",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00623",
+    "descricao": "MOLDES PARA VIDRO - BLOCO GFA. SPARKLING 750ML BARON ECO ART. 310A FOFO Q3",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00624",
+    "descricao": "MOLDES PARA VIDRO - PARIZON GFA. BURDEOS 750CC GIULIANA ECO 2 ART. 306A FOFO Q3",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00625",
+    "descricao": "BLOCO GFA. BORDALEZA ROLHA 750ML ART. G60 189 FOFO Q3 VP",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00626",
+    "descricao": "BLOCO GFA. BORDALEZA MALBEC ROSCA 750ML ART. G14 172 FOFO Q3 VP",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00627",
+    "descricao": "BLOCO GFA. MONIN 700ML ART. 563863 FOFO CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00628",
+    "descricao": "BLOCO GFA. NATU NOBILIS V2 1000ML ART. 563856 CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00629",
+    "descricao": "BLOCO GFA. BUDWEISER 330ML ART. G50 091 FOFO Q3 VP",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00630",
+    "descricao": "BLOCO GFA. SUCO AURORA 500ML ART. 1425 FOFO Q3",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00631",
+    "descricao": "BLOCO GFA. STELLA ARTOIS 330ML LW ART. G06 131 FOFO Q3",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00632",
+    "descricao": "BLOCO GFA. BORDEAUX 500ML ROSCA ART. 1431 FOFO Q3 VR",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00633",
+    "descricao": "BLOCO GFA LN STD 330ML ART.1303 FOFO Q3 VR",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00634",
+    "descricao": "BLOCO GFA. SUCO AURORA 300ML ART.1163 FOFO Q3 VR",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00635",
+    "descricao": "BLOCO POTE INCA 362ML ART. 563872 FOFO CI 800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00636",
+    "descricao": "BLOCO POTE BELEM STD 240ML ART. 563882 FOFO CI-882",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00637",
+    "descricao": "BLOCO GFA. LONG NECK 355ML 5.1/2\" ART. G28 038 FOFO Q3",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00638",
+    "descricao": "BLOCO CERV. LN SPATEN 330ML ART. 1465 FOFO Q3",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00639",
+    "descricao": "BLOCO GFA. SMIRNOFF ICE STD 275ML ART.1463 FOFO Q3 VR",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00640",
+    "descricao": "BLOCO GFA. SOL 330ML O.W TG ART. 1121 FOFO Q3 VR",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00641",
+    "descricao": "BLOCO GFA. LONG NECK 335ML 200G ART. 1457 FOFO Q3",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00642",
+    "descricao": "BLOCO GFA. VODKA KOVAC 1000ML V2 DC ART. 563896 CI-800 SP",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00643",
+    "descricao": "BLOCO GFA. GIN GUALA VB ULTRA 980ML ART. 563915 FOFO CI-882",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00644",
+    "descricao": "BLOCO GFA. CERV. SCHIN 300ML RET. TG ART. 1064 FOFO Q3 VR",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00645",
+    "descricao": "BLOCO GFA. VODKA VORUS 900ML ART. 1441 FOFO Q3",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00646",
+    "descricao": "BLOCO GFA. MATRIOSKA 330ML ART. G06 177 FOFO Q3 VP",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00647",
+    "descricao": "BLOCO GAF. SUCO OQ 1000ML DG ART. 4700 FOFO CI-882",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00648",
+    "descricao": "BLOCO GFA. SUCO PRONTO 1356ML ART. 563914 FOFO CI-882",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00649",
+    "descricao": "BLOCO POTE PASSATA STD 446ML DC ART. 563916 CI-882",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00650",
+    "descricao": "BLOCO CERV. CIDADE IMPERIAL 275ML DC ART. 563919 FOFO CI-882",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00651",
+    "descricao": "BLOCO CERV. CIDADE IMPERIAL 330ML DC ART. 563918 FOFO CI-882",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00652",
+    "descricao": "MOLDES PARA VIDRO - PARISON GFA. BURDEOS 750ML TOP ART. 2024001 FOFO 96A",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00653",
+    "descricao": "BLOCO POTE RESERVA DE MINAS 200G ART. 1466 - FOFO Q3",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00654",
+    "descricao": "BLOCO CERV. HEINEKEN SOL 330ML PRY OFF V2 ART. 563828 FOFO CI-882",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00655",
+    "descricao": "BLOCO GFA. CONTINI 900ML ART. 742 FOFO Q3",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00656",
+    "descricao": "MOLDES PARA VIDRO - PARISON CERV. EXPORTACION 355ML ART. 8494 CI-882",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00657",
+    "descricao": "BLOCO GFA. BORDEAUX 1500ML ECO ROSCA ART. 608 FOFO Q3 FPF",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00658",
+    "descricao": "BLOCO GFA. CABERNET CILINDRICA 750ML ECOVA 2 ART. 5503 FOFO Q3 FPF",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00659",
+    "descricao": "BLOCO GFA. CERVVEJA OW 600ML ART. 736 FOFO Q3",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00660",
+    "descricao": "MOLDES PARA VIDRO - PRÉ-MOLDE GFA. COCTELERA CAPEL 1000ML ART. 136J FOFO 96A",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00661",
+    "descricao": "MOLDES PARA VIDRO - PARISON GFA. LICOR GENÉRICO STD 1000ML ART. 1663 FOFO 96A",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00662",
+    "descricao": "MOLDES PARA VIDRO - PRÉ-MOLDE GFA. CYNAR CAMPARY 750ML ART. 8711 FOFO CI-882",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00663",
+    "descricao": "MOLDES PARA VIDRO - BLANK GFA. POTE BORTOLLI 15OZ ART. 502540 CI-882",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00664",
+    "descricao": "BLOCO GFA. MONIN 330ML DC ART. 563933 FOFO CI-882",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00665",
+    "descricao": "BLOCO GFA. 51 ICE 275ML ART.1443 FOFO Q3",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00666",
+    "descricao": "BLOCO GFA. SMIRNOFF ICE STD 275ML ART. 1463 FOFO Q3",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00667",
+    "descricao": "MOLDES PARA VIDRO - PRÉ-MOLDE GFA. CINZANO 1000ML ART. 100 FOFO Q3",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00668",
+    "descricao": "MOLDES PARA VIDRO - PRÉ-MOLDE CERV. PREMIUM 500ML ART. 101 FOFO Q3",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00669",
+    "descricao": "MOLDES PARA VIDRO - PRÉ-MOLDE CERV. HEINEKEN 330ML DC K2 O.W. ART. 102 FOFO Q3",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00670",
+    "descricao": "BLOCO POTE NEW ASTECA 160 ART. 1336 - FOFO Q3",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00671",
+    "descricao": "MOLDES PARA VIDRO - PARISON GFA. GIN BURNETTS 750ML ART. 1920 FOFO 96A",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00672",
+    "descricao": "MOLDES PARA VIDRO - PARISON GFA. BURDEOS STD 1500ML ART. 357 FOFO 96A",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00673",
+    "descricao": "BLOCO GFA. ÁGUA ATTIVA 750ML ART. G40 204 FOFO VP Q3",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00674",
+    "descricao": "BLOCO COPO OLÉ 225ML ART. 563928 NI-806",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00675",
+    "descricao": "BLOCO CERV. HEINEKEN 250ML K2 V2 ART. 563854 FOFO CI-882",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00676",
+    "descricao": "BLOCO GFA. AZEITE 250ML ART. 1483 FOFO Q3",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00678",
+    "descricao": "BLOCO GFA. WHISKY 1000ML LW ART. G07 206 FOFO VP Q3",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00677",
+    "descricao": "BLOCO GFA. SIDRA CERESER 660ML ART. 1339 FOFO Q3",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00679",
+    "descricao": "BLOCO GFA. CORONA 330ML ART. G05 209 FOFO VP Q3",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00680",
+    "descricao": "BLOCO GFA. CHAMPANHA 187ML ART. 070 FOFO Q3",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00681",
+    "descricao": "BLOCO CERV. HEINEKEN 250ML DC K2 V2 ART. 563854 FOFO CI-882",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00684",
+    "descricao": "MOLDES PARA VIDRO - PARISON GFA. VERMOUTH STD 950ML ART. 966 FOFO 96A",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00682",
+    "descricao": "BLOCO GFA. ÁGUA ALVA 500ML ART. 563944 FOFO CI-882",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00683",
+    "descricao": "BLOCO GFA. ESPUMANTE ECOVA 750ML ART. 1030 FOFO Q3",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00685",
+    "descricao": "MOLDES PARA VIDRO - PARISON GFA. CHAMPAGNE CÔNICA STD 750ML ART. 1634 FOFO 96A",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00686",
+    "descricao": "BLOCO GFA. ÁGUA ALVA 1000ML ART. 563945 FOFO CI-882",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00687",
+    "descricao": "BLOCO GFA. CORONA 330ML ART. G05 158 FOFO VP Q3",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00688",
+    "descricao": "BLOCO GFA. PERNOD RICARD PASSAPORT 700ML DC ART. 563955 CI-882",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00689",
+    "descricao": "BLOCO GFA. CANINHA 51 970ML ART. 563921 FOFO CI-882",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00690",
+    "descricao": "BLOCO GFA. PERNOUD RICARD PASSPORT 700ML NNPB ART. 563955 FOFO CI-882",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00691",
+    "descricao": "MOLDES PARA VIDRO - PRÉ-MOLDE GFA. BURDEOS BALDO 1125ML FOFO CI-882",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00693",
+    "descricao": "PRÉ-MOLDE CERV. SPATEN OW 330ML 195G NNPB ART. 0467 01 FOFO 96A",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00694",
+    "descricao": "BLOCO GFA. PERNOUD RICARD PASSPORT 200ML BB DG ART. 563958 FOFO CI-882",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00695",
+    "descricao": "BLOCO CERV. CORONA 600ML DC RET. NNPB ART. 563961 CI-882",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00696",
+    "descricao": "MOLDES PARA VIDRO - PRÉ-MOLDE GFA. CÔNICA BAJA ECO 750ML ART. 8715 FOFO CI-882",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00697",
+    "descricao": "MOLDES PARA VIDRO - PARISON GFA. DR. LEMON 1000ML ART. 1712 FOFO 96A",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00698",
+    "descricao": "BLOCO GFA. RAMAZZOTTI 700ML ART. 1489 FOFO Q3",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00699",
+    "descricao": "BLOCO GFA. LICOR GENERICO STOCK 750ML ART. 441 FOFO Q3",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00700",
+    "descricao": "BLOCO GFA. RH3L 900ML ART. 1120 FOFO Q3",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00701",
+    "descricao": "BLOCO GFA. PERNOD RICARD PASSAPORT 500ML DC ART. 563959 CI-882",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00702",
+    "descricao": "BLOCO GFA. MONIN 700ML ART. 1491 FOFO Q3",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00703",
+    "descricao": "MOLDES PARA VIDRO - BLANK MOULD CERV. MARIACHI 210ML ART. 7659 FOFO CI-882",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00704",
+    "descricao": "BLOCO CERV. CORONA 210ML LW ART. 563967 FOFO CI-882 BL.563967.12J5T0.CI882",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00705",
+    "descricao": "MOLDES PARA VIDRO - PARISON GFA. WHISKY BLENDERS PRIDE 1000ML ART. 1677 FOFO 96A",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00706",
+    "descricao": "MOLDES PARA VIDRO - PARISON GFA. SIDRA DEL VALLE 750ML ART. 1767 FOFO 96A",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00707",
+    "descricao": "BLOCO GFA. LN. CONTINI 330ML ART. 1290 FOFO Q3",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00708",
+    "descricao": "BLOCO GFA. VERMOUTH 990ML ART. 799 FOFO Q3",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00709",
+    "descricao": "BLOCO GFA. AZEITONA 500ML ART. 907 FOFO Q3",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00710",
+    "descricao": "BLOCO GFA. SMIRNOFF 700ML ART. 1472 FOFO Q3",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00711",
+    "descricao": "BLOCO GFA. SUCO ZANLORENZI 1356ML ART. 563985 FOFO CI-882",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00712",
+    "descricao": "BLOCO GFA. SUCO ZANLORENZI 900ML ART. 563986 FOFO CI-882",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00713",
+    "descricao": "BLOCO CERV. HEINEKEN 250ML DG ART. 1392 FOFO Q3",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00714",
+    "descricao": "BLOCO GFA. CERV. LN STD 330ML DG ART. 1303 FOFO Q3",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00715",
+    "descricao": "BLOCOCERV. CIDADE IMPERIAL 300ML RET. LW ART. 563987 FOFO CI-882",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00716",
+    "descricao": "BLOCO GFA. GIN GUALA 1005 ML ART. 563948 FOFO CI-882",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00717",
+    "descricao": "BLOCO CERV. CIDADE IMPERIAL 300ML ART. 563987 FOFO CI-882",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00718",
+    "descricao": "BLOCO POTE CAFÉ CEREBOS 215ML ART. 9524 FOFO CI-882",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00719",
+    "descricao": "BLOCO GFA. KISLLA ICE 275ML DG ART. 1453 FOFO Q3",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00720",
+    "descricao": "BLOCO GFA. LUMIERE ULTRA RL 750ML ART. 563794 FOFO CI-882",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00721",
+    "descricao": "BLOCO GFA. BOURDEAUX CONICA 1000ML BB ART. 563796 FOFO CI-882",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00722",
+    "descricao": "BLOCO GFA. ICE STD 275ML DG ART. 4144 FOFO CI-882",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00723",
+    "descricao": "MOLDES PARA VIDRO - PRÉ-MOLDE GFA. APEROL 750ML ART. 8701 FOFO CI-882",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00724",
+    "descricao": "BLOCO GFA. SOL PRAYA 330ML OW ART. 1486 FOFO Q3",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00725",
+    "descricao": "BLOCO POTE NESTLE SIGNATURE 100GR DC ART. 563998 CI-882",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00726",
+    "descricao": "BLOCO GFA. GORDON´S ALEXANDER 700ML ART. 563993 CI-882",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00728",
+    "descricao": "PRÉ-MOLDE CERV. MATRIOSKA 330ML 195G ART. 26M001 FOFO 96A",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00727",
+    "descricao": "MOLDES PARA VIDRO - PRÉ-MOLDE GFA. CÔNICA BAJA PESADA 750ML ART. 8950 FOFO CI-882",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00729",
+    "descricao": "BLOCO GFA. MATRIOSKA 330ML ART. G06 177 5.1/2\" FOFO VP Q3",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00730",
+    "descricao": "BLOCO CERV. BUD SQUARE 330ML TG NNPB ART. 4729 FOFO CI-882",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00731",
+    "descricao": "BLOCO GFA. VODKA LEONOFF 900ML ART. 563995 FOFO CI-882",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00266",
+    "descricao": "BLOCO GFA. CANINHA 275ML 51 ICE V2 ART. 4542 FOFO CI-882",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00531",
+    "descricao": "BLOCO GFA. CIDADE IMPERIAL 275ML TG ART. 1167 FOFO Q3 VR FJA",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00732",
+    "descricao": "MOLDES PARA VIDRO - PARISON GFA. COCKTELERA DELLEPIANE 750ML ART. 1938 FOFO 96A",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00733",
+    "descricao": "BLOCO GFA. LEITE DE COCO 200ML ART. G70 176 4 FOFO VPQ3",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00540",
+    "descricao": "BLOCO GFA. COCA COLA 1000ML RET. ART. 563558 FOFO CI-800",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00734",
+    "descricao": "MOLDES PARA VIDRO - PARISON GFA. BURDEOS NEVADA 750ML ART. 1687 FOFO 96A",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00692",
+    "descricao": "MOLDES PARA VIDRO - PRÉ-MOLDE GFA. BURDEOS BALBO 1125ML ART. 8993 FOFO CI-882",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00735",
+    "descricao": "BLOCO GFA. WHISKY 101 RH2L 900ML ART. 5520 FOFO Q3",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00736",
+    "descricao": "BLOCO CERV. STELLA ARTOIS 330ML DG ART. 564016 FOFO CI-882",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00737",
+    "descricao": "BLOCO GFA. NEW CONTINI 900ML ART. 1462 FOFO Q3",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00738",
+    "descricao": "BLOCO GFA. SOL PRAYA 330ML DG ART. 1486 FOFO Q3",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00739",
+    "descricao": "BLOCO POTE LINEA 240ML DC ART. 4318 CI-882",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00740",
+    "descricao": "BLOCO GFA. APEROL SPRITZ 275ML DC ART. 564018 FOFO CI-882",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00741",
+    "descricao": "BLOCO GFA. LN. CONTINI 330ML DG ART. 1290 FOFO Q3",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00742",
+    "descricao": "BLOCO GFA. COCA-COLA ULTRA 250ML DG ART. 563289 FOFO CI-882",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00577",
+    "descricao": "BLOCO CERV. CIDADE IMPERIAL 210ML ART. 563779 FOFO CI-882",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00386",
+    "descricao": "BLOCO CERV. CERPA 350ML NNPB TG ART. 564012 CI-882",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00743",
+    "descricao": "BLOCO GFA. NEW APEROL 750ML ART. 1498 FOFO Q3",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00744",
+    "descricao": "BLOCO CERV. NEW SOL 330ML LW ART. 563969 FOFO CI-882",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00745",
+    "descricao": "BLOCO GFA. BACARDI MARTINI VITTORIA 750ML ART. 564023 FOFO CI-882",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00746",
+    "descricao": "BLOCO POTE DAWN JAR 170 ML ART. 1249 FOFO Q3",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00486",
+    "descricao": "BLOCO GFA. CIDADE IMPERIAL 275ML DG ART. 1167 FOFO Q3 VR",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00748",
+    "descricao": "BLANK MOULD GFA. LICOR BARRICA 750ML ART. 0004 FOFO Q3",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00747",
+    "descricao": "BLOCO GFA. CANINHA 275ML 51 ICE V2 ART. 4542 CI-882",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00749",
+    "descricao": "BLOCO GFA. RH2L ROSCA 900ML ART. 1484 FOFO Q3",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00562",
+    "descricao": "BLOCO GFA. BOURDEAUX CONICA 1000ML ART. 563796 FOFO CI-882",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00578",
+    "descricao": "BLOCO CERV. CERV. CIDADE IMPERIAL 330ML ART. 563810 FOFO CI-882",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00750",
+    "descricao": "MOLDES PARA VIDRO - BLANK MOULD GFA. PISCO EDLA 750ML ART. 0005 FOFO Q3",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00751",
+    "descricao": "BLOCO GFA. SMIRNOFF ICE 275ML ART. 563531 CI-882",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00752",
+    "descricao": "BLOCO GFA. ESPUMANTE 750ML V2 ART. 564027 FOFO CI-882",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00753",
+    "descricao": "MOLDES PARA VIDRO - BLANK MOULD GFA. CUADRADA AZENDE 700ML ART. 0007 FOFO Q3",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00754",
+    "descricao": "BLOCO VAS. SUCO OQ 900ML NNPB ART. 563996 FOFO CI-882",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00755",
+    "descricao": "MOLDES PARA VIDRO - BLANK MOULD GFA. PISCO CORTEZ 750ML BB ART. 0006 FOFO Q3",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00756",
+    "descricao": "BLOCO VAS. SUCO OQ 1356ML DG ART. 563997 FOFO CI-882",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-03-00757",
+    "descricao": "BLOCO CERV. ICE STD 275ML ART. 4493 DC FOFO CI-882",
+    "tipoProduto": "bloco"
+  }
+]

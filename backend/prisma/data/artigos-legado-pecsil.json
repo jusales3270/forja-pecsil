@@ -1,0 +1,3722 @@
+[
+  {
+    "codigo": "5-01-00001",
+    "descricao": "FORMA CERV. BUD KING 343 ML ART. 8531 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00002",
+    "descricao": "FORMA GFA. ESPUMANTE 750 ML ART. 4563 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00004",
+    "descricao": "FORMA CERV. BUD KING 343 ML DG ART. 8531 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00005",
+    "descricao": "FORMA POTE MAD MAX 290 ML ART. 407 FOFO Q3",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00006",
+    "descricao": "FORMA VAS. CONHAQUE DREHER 900 ML DG ART. 280B FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00007",
+    "descricao": "FORMA GFA. CERV. SCHIN 300 ML ART. 1064 FOFO Q3",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00008",
+    "descricao": "FORMA GFA. CERV. CONTI 300 ML ART. 1122 FOFO Q3",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00009",
+    "descricao": "FORMA GFA. CERV. SCHIN 1000 ML ART. 1065 FOFO Q3",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00010",
+    "descricao": "FORMA GFA. GUARANÁ 1000 ML ONE WAY ART. 4532 FOF CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00011",
+    "descricao": "FORMA FRASCO MADRID 100 ML ART. 272 FOFO VERMICULAR",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00012",
+    "descricao": "FORMA FRASCO MADRID 100 ML ART. 272 FOFO Q3",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00013",
+    "descricao": "FORMA GFA. HEINEKEN K2 330 ART. 4538 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00014",
+    "descricao": "FORMA CERV. STELLA ARTOIS 275 ML ART. 4557 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00015",
+    "descricao": "FORMA FRASCO CONTA GOTAS 20 ML ART. 100 FOFO Q3",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00016",
+    "descricao": "FORMA CERV. SKOL BEATS SAFE 313 ML ART. 4519 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00017",
+    "descricao": "FORMA POTE SONETO 100 ML ART. 396 FOFO Q3",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00018",
+    "descricao": "FORMA FRASCO CONTA GOTAS 20 ML ART. 111 FOFO Q3",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00019",
+    "descricao": "FORMA GFA. BACARDI TEACHERS 1500 ML 6.1/4\" BB ART. 390A FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00020",
+    "descricao": "FORMA GFA. BACARDI TEACHERS 500 ML NNPB ART. 389A FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00021",
+    "descricao": "FORMA CERV. BUD KING 343 ML ART. G28 FOFO Q3",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00022",
+    "descricao": "FORMA FRASCO SHINE 50 ML ART. 346 FOFO Q3",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00023",
+    "descricao": "FORMA FRASCO PLUMA 60 ML ART. 152 FOFO Q3",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00024",
+    "descricao": "FORMA FRASCO LINDA RADIANCE 100 ML ART. 404 FOFO Q3",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00025",
+    "descricao": "FORMA FRASCO NARRATIVA HOMME 100 ML ART. 338 FOFO Q3",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00027",
+    "descricao": "FORMA GFA. COCA-COLA 1000 ML ART. 021A FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00028",
+    "descricao": "FORMA CERV. AMBEV KAILUA V2 275 ML NNPB TG ART. 9134 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00030",
+    "descricao": "FORMA GFA. BORDALESA PP30 750 ML ART. 4299 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00031",
+    "descricao": "FORMA CERV. HEINEKEN AMSTEL 300 ML ART. 4617 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00032",
+    "descricao": "FORMA CERV. LONG NECK STD ART. 3654 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00033",
+    "descricao": "FORMA GFA. SUCO FAMÍLIA 2000 ML ART. 4562 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00034",
+    "descricao": "FORMA FRASCO IMPRESSIONISTAS 100 ML ART. 405 FOFO Q3",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00035",
+    "descricao": "FORMA FRASCO ESSENCIAL MASC. 100 ML ART. 325 FOFO VERMICULAR",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00036",
+    "descricao": "FORMA FRASCO NARRATIVA FEMME 100 ML ART. 343 FOFO Q3",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00037",
+    "descricao": "FORMA GFA. STOCK SUCO FAMÍLIA 1500 ML ART. 4511 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00038",
+    "descricao": "FORMA FRASCO FLORATA 75 ML ART. 409 FOFO Q3",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00039",
+    "descricao": "FORMA FRASCO FLORATA 75 ML ART. 410 FOFO Q3",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00040",
+    "descricao": "FORMA BIG POTE 3 KG ART. 3959 FOFO CI-882 SP",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00041",
+    "descricao": "FORMA LB-423 FFN-ADN-F",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00042",
+    "descricao": "FORMA FRASCO MALBEC 100 ML ART. 387 FOFO Q3",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00043",
+    "descricao": "FORMA GFA. AZEITE CILÍNDRICO 500 ML ART. 745 FOFO Q3",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00044",
+    "descricao": "FORMA GFA. SALTON 750 ML ART. 621 FOFO Q3",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00045",
+    "descricao": "FORMA CERV. MONET 550 ML ART. 4624 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00046",
+    "descricao": "FORMA VAS. COCA-COLA MULTIPRODUTO 200 ML DG BB ART. 8207A FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00047",
+    "descricao": "FORMA FRASCO GUINESS 95 ML ART. 380 FOFO Q3",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00048",
+    "descricao": "FORMA VAS. GIN GUALA 970 ML ART. 331 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00049",
+    "descricao": "FORMA FRASCO AMPHORA 110 ML ART. 603 FOFO Q3",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00050",
+    "descricao": "FORMA VAS. MONTILLA 1000 ML ART. 372A FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00051",
+    "descricao": "FORMA FRASCO RIO DE JANEIRO FEMME 75 ML ART. 684 FOFO Q3",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00052",
+    "descricao": "FORMA VAS. CERV. AMBEV 1000 ML (JEEP) ART. 369A FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00053",
+    "descricao": "FORMA FRASCO MA SOPHIE 75 ML ART. 640 FOFO Q3",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00054",
+    "descricao": "FORMA GFA. THOQUINO CONHAQUE SJB 900ML ART. 352 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00055",
+    "descricao": "FORMA VAS. SMIRNOFF 1006 ML - LISA ART. 326A FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00056",
+    "descricao": "FORMA GFA. TEACHERS 1000 ML ART. 345A FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00057",
+    "descricao": "FORMA VAS. CERV. LONG NECK STD 355 ML ART. 318 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00058",
+    "descricao": "FORMA GFA. CHAMPAGNE AURORA 660 ML BBDG DC ART. 3347 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00059",
+    "descricao": "FORMA CERV. STELLA ARTOIS 275 ML ART. 4557 FOFO CI-882 - SP",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00060",
+    "descricao": "FORMA CERV. RETORNÁVEL 635 ML ART. 1219 FOFO",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00061",
+    "descricao": "FORMA GROWLER 2000 ML ART. 4583 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00062",
+    "descricao": "FORMA FRASCO ARBO 100 ML ART. 691 FOFO Q3",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00063",
+    "descricao": "FORMA FRASCO RIO DE JANEIRO HOMME 75 ML ART. 680 FOFO Q3",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00064",
+    "descricao": "FORMA CERV. BUDWEISER 343 ML ART. 813 FOFO",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00065",
+    "descricao": "FORMA GFA. BORDALESA EURO 750 ML NNPB DC ART. 4595 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00066",
+    "descricao": "FORMA CERV. PUB 500 ML DC ART. 4634 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00067",
+    "descricao": "FORMA CERV. SOL SHOT 250 ML ART. 4025 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00068",
+    "descricao": "FORMA FRASCO AGAVE 50 ML ART. 399 FOFO VERMICULAR",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00069",
+    "descricao": "FORMA FRASCO THIAGUINHO FEM. 100 ML ART. 416 FOFO VERMICULAR",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00070",
+    "descricao": "FORMA CERV. SKOL BEATS SAFE 313 ML BBDG DC ART. 4365 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00071",
+    "descricao": "FORMA CERV. BUD 600 ML ART. 4641 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00072",
+    "descricao": "FORMA CERV. PRESIDENTE 12 OZ ART. 4550 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00073",
+    "descricao": "FORMA FRASCO POP 70 ML ART. 376 FOFO Q3",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00074",
+    "descricao": "FORMA FRASCO BIOGRAFIA 50 ML ART. 424 FOFO VERMICULAR",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00075",
+    "descricao": "FORMA FRASCO PEDRA SOBRE PEDRA 100 ML ART. 311 FOFO Q3",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00076",
+    "descricao": "FORMA FRASCO UNA II 50 ML ART. 423 FOFO VERMICULAR",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00077",
+    "descricao": "FORMA CERV. HEINEKEN 600 ML EHBB DC ART. 4636 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00078",
+    "descricao": "FORMA FRASCO PENELOPE 30 ML ART. 418 FOFO VERMICULAR",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00079",
+    "descricao": "FORMA GFA. DREHER 900 ML V2 ART. 4576 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00080",
+    "descricao": "FORMA GFA. CANINHA 275 ML 51 ICE V2 ART. 4542 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00081",
+    "descricao": "FORMA FRASCO PASTIS MASCULINO 90 ML ART. 422 FOFO VERMICULAR",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00082",
+    "descricao": "FORMA FRASCO LUNA 25 ML (MINIATURA) ART. 412 FOFO VERMICULAR",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00083",
+    "descricao": "FORMA CERV. ECO 600 ML ART. 4631 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00084",
+    "descricao": "FORMA CERV. HEINEKEN K2 330 ML ART. 4538 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00085",
+    "descricao": "FORMA POTE DAWN JAR 100 G 408 ML ART. 944 FOFO Q3",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00086",
+    "descricao": "FORMA FRASCO DROPPERS 20 ML ART. 113 FOFO Q3",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00087",
+    "descricao": "FORMA FRASCO PLUMA 120 ML ART. 155 FOFO Q3",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00088",
+    "descricao": "FORMA CERV. SANKT GALLEN 600 ML ART. 4632 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00089",
+    "descricao": "FORMA CERV. STRONG 355 ML ART. 4357 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00090",
+    "descricao": "FORMA CERV. BLACK PRINCESS 600 ML DC ART. 4566 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00091",
+    "descricao": "FORMA GFA. SMIRNOFF ICE 275 ML DC ART. 4141 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00092",
+    "descricao": "FORMA POTE DAWN JAR 200 G 808 ML ART. 943 FOFO Q3",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00093",
+    "descricao": "FORMA CERV. HEINEKEN K2 600 ML ART. 4649 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00094",
+    "descricao": "FORMA FRASCO CONTA GOTAS 10 ML BR ART. 235 FOFO Q3",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00095",
+    "descricao": "FORMA POTE HERO 179 ML DC ART. 4651 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00096",
+    "descricao": "FORMA GFA. SUCO AURORA 500 ML DC ART. 4344 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00097",
+    "descricao": "FORMA POTE WELLNESS 245 ML DC ART. 4652 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00098",
+    "descricao": "FORMA FRASCO A INDOMADA IV 30 ML ART. 427 FOFO VERMICULAR",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00099",
+    "descricao": "FORMA FRASCO AURIEN 100 ML ART. 426 FOFO VERMICULAR",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00100",
+    "descricao": "FORMA CERV. BUD 600 ML DC ART. 4548 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00101",
+    "descricao": "FORMA GFA. CHÁ 1000 ML DC ART. 4653 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00102",
+    "descricao": "FORMA FRASCO HOMEM DE FERRO 100 ML ART. 390 FOFO VERMICULAR",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00103",
+    "descricao": "FORMA GFA. COCA COLA 200 ML ART. 1193 FOFO Q3",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00104",
+    "descricao": "FORMA FRASCO ESSENCIAL HOMME 50 ML ART. 324 FOFO VERMICULAR",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00105",
+    "descricao": "FORMA CERV. ECO 330 ML DC ART. 4387 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00106",
+    "descricao": "FORMA GFA. YPIOCA GUALA 970 ML DC ART. 4657 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00107",
+    "descricao": "FORMA FRASCO EKOS POTI II 100 ML ART. 401 FOFO VERMICULAR",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00108",
+    "descricao": "FORMA CERV. HEINEKEN K2 250 ML ART. 4238 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00109",
+    "descricao": "FORMA GFA. NEW CERESER Z2 663 ML DC ART. 4661 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00110",
+    "descricao": "FORMA FRASCO U2 100 ML ART. 429 FOFO VERMICULAR",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00111",
+    "descricao": "FORMA FRASCO BIOGRAFIA MASC. 50 ML ART. 428 FOFO VERMICULAR",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00112",
+    "descricao": "FORMA CERV. STELLA ARTOIS 275 ML ART. 9385 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00113",
+    "descricao": "FORMA GFA. ORLOFF X2 1000 ML DC ART. 4664 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00114",
+    "descricao": "FORMA CERV. LUANDINA 250 ML ART. 4671 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00115",
+    "descricao": "FORMA FRASCO TAFF MAN-E 125 ML ART. 250-58 FOFO Q3",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00116",
+    "descricao": "FORMA FRASCO PLUMA 30 ML ART. 150 FOFO GGG 50",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00117",
+    "descricao": "FORMA FRASCO JACK DANIEL'S 100 ML ART. 371 FOFO Q3",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00118",
+    "descricao": "FORMA CERV. LUANDINA OW 330 ML ART. 4672 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00119",
+    "descricao": "FORMA GFA. GIN GUALA 1005 ML DC ART. 4156 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00120",
+    "descricao": "FORMA GFA. VINHO LUMIÈRE PP30 753 ML DC ART. 4643 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00121",
+    "descricao": "FORMA CERV. HEINEKEN K2 330 ML ART. 4669 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00122",
+    "descricao": "FORMA GFA. ROKKY 1000 ML DC ART. 4678 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00123",
+    "descricao": "FORMA FRASCO FLORATTA 75 ML ART. 430 FOFO VERMICULAR",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00124",
+    "descricao": "FORMA CERV. LUANDINA RET. 330 ML ART. 4673 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00125",
+    "descricao": "FORMA GFA. SIDRA LISA STD 910 ML DC ART. 4676 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00126",
+    "descricao": "FORMA GFA. SIDRA LA FARRUCA 710 ML DC ART. 4677 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00127",
+    "descricao": "FORMA GFA. JANEIRO 700 ML ART. 3819 FOFO CI-800",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00128",
+    "descricao": "FORMA POTE DAWN JAR 170 DC ART. 3997 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00129",
+    "descricao": "FORMA FRASCO WOLVERINE 100 ML ART. 431 FOFO VERMICULAR",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00130",
+    "descricao": "FORMA CERV. BRAHMA LN LEVE 355 ML ART. 4626 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00131",
+    "descricao": "FORMA CERV. HOEGAARDEN 330 ML ART. 4668 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00132",
+    "descricao": "FORMA FRASCO PLUMA 100 ML ART. 154 FOFO Q3",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00133",
+    "descricao": "FORMA FRASCO BERLIM 70 ML ART. 334 FOFO VERMICULAR",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00134",
+    "descricao": "FORMA FRASCO BERLIM 30 ML ART. 335 FOFO VERMICULAR",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00135",
+    "descricao": "FORMA FRASCO PLUMA 200 ML PP 28 BR ART. 243 FOFO Q3",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00136",
+    "descricao": "FORMA GFA. ESPUMANTE CRS V2 660 ML DC ART. 4684 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00137",
+    "descricao": "FORMA GFA. VINHO LUMIÈRE PP30 753 ML ART. 4654 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00138",
+    "descricao": "FORMA GFA. SIDRA DEL VALLE 720 ML DC ART. 4675 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00139",
+    "descricao": "FORMA FRASCO CONTA GOTAS 30 ML BR ART. 131 FOFO Q3",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00140",
+    "descricao": "FORMA GFA. SUCO AURORA 1500 ML ART. 4530 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00141",
+    "descricao": "FORMA CERV. SOL 330 ML ART. 4410 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00142",
+    "descricao": "FORMA E FUNDO EXPERIÊNCIA",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00143",
+    "descricao": "FORMA GFA. CACHAÇA PREMIUM BR 703 ML DC ART. 4694 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00144",
+    "descricao": "FORMA GFA. WEWI 250 ML DC ART. 4692 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00145",
+    "descricao": "FORMA GFA. ÁGUA ABINAM V2 303 ML DC ART. 4607 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00146",
+    "descricao": "FORMA POTE 2 KG 2370 ML ART. 4660 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00147",
+    "descricao": "FORMA CERV. NASSAU 290 ML ART. 4690 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00148",
+    "descricao": "FORMA GFA. NEW CERESER Z2 663 ML DC ART. 4691 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00149",
+    "descricao": "FORMA POTE ARANHA 265 ML DC ART. 4696 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00150",
+    "descricao": "FORMA GFA. MINALBA 300 ML DC ART. 4655 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00151",
+    "descricao": "FORMA GFA. VELHO BARREIRO 900 ML DC ART. 3968 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00152",
+    "descricao": "FORMA CERV. BOHEMIA LN 355 ML LEVE ART. 4286 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00153",
+    "descricao": "FORMA CERV. BOCA ANCHA 500 ML ART. 4700 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00154",
+    "descricao": "FORMA GFA. BORDALESA EURO 750 ML ART. 4337 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00155",
+    "descricao": "FORMA GFA. ÁGUA TÔNICA PRATA 203 ML DC ART. 4703 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00156",
+    "descricao": "FORMA CERV. BECK'S 330 ML ART. 4702 FOFO CI-882 - SP",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00157",
+    "descricao": "FORMA FRASCO UNA 75 ML ART. 437 FOFO VERMICULAR",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00158",
+    "descricao": "FORMA GFA. SMIRNOFF ICE 275 ML ART. 4117 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00159",
+    "descricao": "FORMA FRASCO MIRANDA PRIESTLY 75 ML ART. 432 AISI 431",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00160",
+    "descricao": "FORMA GFA. WYBOROWA 753 ML DC ART. 4709 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00161",
+    "descricao": "FORMA COPO ECO 200 DC ART. 4242 FOFO CI-800",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00162",
+    "descricao": "FORMA COPO ECO 290 DC ART. 4243 FOFO CI-800",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00163",
+    "descricao": "FORMA CERV. JEEP 1000 ML DC ART. 4287 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00164",
+    "descricao": "FORMA FRASCO ESSENCIAL FEMME 100 ML ART. 327 FOFO VERMICULAR",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00165",
+    "descricao": "FORMA CERV. ITAIPAVA 355 ML ART. 4712 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00166",
+    "descricao": "FORMA CERV. ITAIPAVA 600 ML ART. 4713 FOFO CI-800",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00167",
+    "descricao": "FORMA GFA. LEITE DE COCO 200 ML ART. 3765 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00168",
+    "descricao": "FORMA GFA. SUCO FAMÍLIA 500 ML DC ART. 4621 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00169",
+    "descricao": "FORMA CERV. PUB V3 500 ML DC ART. 4714 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00170",
+    "descricao": "FORMA FRASCO EGEOS FEMININO 90 ML ART. 440 FOFO VERMICULAR",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00171",
+    "descricao": "FORMA FRASCO BUTTERFLY 100 ML ART. 436 FOFO VERMICULAR",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00172",
+    "descricao": "FORMA CERV. HEINEKEN 1000 ML DC ART. 4715 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00173",
+    "descricao": "FORMA CERV. HEINEKEN 600 ML DC ART. 4463 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00174",
+    "descricao": "FORMA POTE DAWN JAR 200 G 800 ML DC ART. 4233 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00175",
+    "descricao": "FORMA GFA. VODKA ORLOFF 1000 ML ART. 267A FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00176",
+    "descricao": "FORMA GFA. SMIRNOFF V2 600 ML DC ART. 4647 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00177",
+    "descricao": "FORMA CERV. LN STD 355 ML ART. 4710 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00178",
+    "descricao": "FORMA CERV. SKOL BEATS SAFE 313 ML DC ART. 4717 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00179",
+    "descricao": "FORMA GFA. BORDALESA AURORA V2 750 ML DC ART. 4719 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00180",
+    "descricao": "FORMA FRASCO BILL 50 ML ART. 448 FOFO VERMICULAR",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00181",
+    "descricao": "FORMA GFA. ORLOFF 603 ML DC ART. 4720 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00182",
+    "descricao": "FORMA POTE MIRANDA PRIESTLY ART. 445 AISI 431",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00183",
+    "descricao": "FORMA GFA. CERVEJA 635 ML DC ART. 3779 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00184",
+    "descricao": "FORMA TAFF MAN-E 112 ML DC ART. 3187 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00185",
+    "descricao": "FORMA POTE MINI BARRIL 218 ML ART. 364 FOFO Q3",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00186",
+    "descricao": "FORMA CERV. HEINEKEN K2 OW 330 ML ART. 4725 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00187",
+    "descricao": "FORMA CERV. SKOL BEATS SAFE 313 ML ART. 4535 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00188",
+    "descricao": "FORMA CERV. PETRO 250 ML ART. G15 032 FOFO Q3",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00189",
+    "descricao": "FORMA CERV. PETRÓPOLIS 300 ML RET. ART. 4399 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00190",
+    "descricao": "FORMA FRASCO LUNA CLÁSSICO 75 ML ART. 442 FOFO VERMICULAR",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00191",
+    "descricao": "FORMA FRASCO LUNA INTENSO 50 ML ART. 443 FOFO VERMICULAR",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00192",
+    "descricao": "FORMA CERV. BUD SQUARE 330 ML ART. 4729 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00193",
+    "descricao": "FORMA CERV. HEINEKEN 300 ML ART. 4716 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00194",
+    "descricao": "FORMA GFA. ÁGUA ABINAM REGIONAL 753 ML DC ART. 4549 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00195",
+    "descricao": "FORMA GFA. SUCO OQ 303 ML ART. 9466 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00196",
+    "descricao": "FORMA GFA. SUCO OQ 500 ML ART. 9467 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00197",
+    "descricao": "FORMA GFA. SUCO OQ 1000 ML ART. 9468 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00198",
+    "descricao": "FORMA GFA. SUCO OQ 1500 ML ART. 9469 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00199",
+    "descricao": "FORMA CERV. BUD SQUARE 550 ML ART. 4730 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00200",
+    "descricao": "FORMA GFA. COCA COLA RET. 285 ML DC ART. 4598 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00201",
+    "descricao": "FORMA CERV. LONG NECK ITAIPAVA 355 ML ART. 4127 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00202",
+    "descricao": "FORMA GFA. COROA 300 ML ART. 4727 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00203",
+    "descricao": "FORMA GFA. SUCO AURORA 1500 ML ART. 4345 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00204",
+    "descricao": "FORMA GFA. LICOR PRESIDENTE 900 ML ART. 1234 FOFO Q3",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00205",
+    "descricao": "FORMA FRASCO TULIPA RUIZ 30 ML ART. SB-1677 FOFO K250",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00206",
+    "descricao": "FORMA FRASCO TULIPA RUIZ 100 ML ART. MB-1368 FOFO K250",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00207",
+    "descricao": "FORMA GFA. BALALAIKA 1000 ML DC ART. 4444 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00208",
+    "descricao": "FORMA FRASCO PLUMA 250 ML ART. 184 FOFO Q3",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00209",
+    "descricao": "FORMA CERV. PETRÓPOLIS 1000 ML DC ART. 4473 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00210",
+    "descricao": "FORMA GFA. COCA COLA 10 OZ EHB DC ART. 4140 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00211",
+    "descricao": "FORMA GFA. COCA-COLA 250 ML CONTOUR ULTRA DC ART. 4682 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00212",
+    "descricao": "FORMA GFA. VASO SUCO PRONTO 1000 ML DC ART. 4460 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00213",
+    "descricao": "FORMA CERV. 635 ML ART. 4292 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00214",
+    "descricao": "FORMA GFA. ÁGUA TERRAL 275 ML DC ART. 4728 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00215",
+    "descricao": "FORMA CERV. HEINEKEN 600 ML DG ART. 7478 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00216",
+    "descricao": "FORMA CERV. HEINEKEN K2 OW 330 ML TG ART. 9163A FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00217",
+    "descricao": "FORMA CERV. HEINEKEN K2 O2 330 ML DG ART. 9163A FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00218",
+    "descricao": "FORMA FRASCO FREVO II 150 ML ART. 263 FOFO Q3",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00219",
+    "descricao": "FORMA GFA. VINHO STD PP30 V2 750 ML DC ART. 4173 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00220",
+    "descricao": "FORMA GFA. SUCO TOP 906 ML DC ART. 4726 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00221",
+    "descricao": "FORMA GFA. COCA COLA RET. 290 ML ART. 4070 FOFO CI-882 SP",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00222",
+    "descricao": "FORMA TAÇA P/ VINHO LINHA BARROCO CHICK ART. 5870 FOFO 96A",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00223",
+    "descricao": "FORMA CERV. COLORADO 530 ML ART. 4736 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00224",
+    "descricao": "FORMA CERV. BUD CADILLAC 330 ML ART. A17066 FOFO 96A",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00225",
+    "descricao": "FORMA GFA. SMIRNOFF ICE V2 275 ML ART. 4740 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00226",
+    "descricao": "FORMA CERV. BUD SQUARE 550 ML DC ART. 4733 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00227",
+    "descricao": "FORMA COPO POLO 225 ML DC ART. 4738 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00228",
+    "descricao": "FORMA COPO POLO 292 ML DC ART. 4739 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00229",
+    "descricao": "FORMA POTE CONSERVA 600 ML ART. 3624 BRONZE BZ-889",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00230",
+    "descricao": "FORMA GFA. GIN GUALA 753 ML DC ART. 4742 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00231",
+    "descricao": "FORMA GFA. VELHO BARREIRO V2 910 ML ART. 4685 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00232",
+    "descricao": "FORMA CERV. NEW BEBETO 300 ML ART. 999 FOFO CI_GP9",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00233",
+    "descricao": "FORMA CERV. JEEP 1000ML DC ART.4721 FOFO CI-800",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00234",
+    "descricao": "FORMA CERV. KAILUA V2 275 ML ART. 4544 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00235",
+    "descricao": "FORMA CERV. KAILUA V2 275 ML ART. 4544 FOFO CI-882 - SP",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00236",
+    "descricao": "FORMA GFA. COCA COLA UNIVERSAL 1000 ML DC ART. 4745 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00237",
+    "descricao": "FORMA GFA. COCA COLA NORDIC 290 ML DC ART. 4746 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00238",
+    "descricao": "FORMA GFA. COCA COLA 200 ML DC ART. 4483 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00239",
+    "descricao": "FORMA ART. 36-24 FOFO",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00240",
+    "descricao": "FORMA CERV. MARIACHI 330ML ART.4748 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00241",
+    "descricao": "FORMA CERV. JEEP 1000ML DC ART.4721 FOFO CI-800 - RJ",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00242",
+    "descricao": "FORMA POTE 3 LITROS ART.328 FOFO Q3",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00243",
+    "descricao": "FORMA GFA. PASSPORT 1000 ML ART. 4533 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00244",
+    "descricao": "FORMA GFA. MALIBU V2 750 ML DC ART. 560078 FOFO CI-800",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00245",
+    "descricao": "FORMA GFA. BORDALESA 750 ML DC ART. 3665 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00246",
+    "descricao": "FORMA CERV. STELLA ARTOIS V3 275 ML ART. 4640 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00247",
+    "descricao": "FORMA CERV. HEINEKEN K2 330ML ART. 4669 FOFO CI-882 - RJ",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00248",
+    "descricao": "FORMA CERV. BUD CADILLAC 550 ML ART. 18022 FOFO Q3",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00249",
+    "descricao": "FORMA CERV. COROA 300 ML ART. 18030 FOFO Q3",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00250",
+    "descricao": "FORMA GFA. BLACK & WHITE 1003 ML DC ART. 4481 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00252",
+    "descricao": "FORMA GFA. VINHO STD PP30 1000 ML ART. 4380 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00253",
+    "descricao": "FORMA CERV. KAILUA V2 275 ML DC ART. 4544 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00254",
+    "descricao": "MOLDES PARA VIDRO - MOLDES FORMA BUD SQUARE 550ML ART4730 FOFO CI-882",
+    "tipoProduto": "molde"
+  },
+  {
+    "codigo": "5-01-00255",
+    "descricao": "FORMA GFA. GIN GUALA 1005 ML DC ART. 2265 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00256",
+    "descricao": "FORMA GFA. CANINHA 51 V2 970 ML DC ART. 4425 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00258",
+    "descricao": "FORMA TACA P/ VINHO LINHA BARROCO CHICK ART. 5872 FOFO 96A",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00259",
+    "descricao": "FORMA CERV. PETROPOLIS AMBAR 250 ML ART. 562596 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00262",
+    "descricao": "FORMA CERV. PETROPOLIS AMBAR 355 ML TG ART. 4752 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00266",
+    "descricao": "FORMA CERV MONET 550ML ART. 4602 DC FOFO CI-800",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00270",
+    "descricao": "FORMA GFA. GIN SEAGRAM'S 753ML ART. 562699 OI-SP",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00276",
+    "descricao": "FORMA CERV. ICE STD 275ML ART. 4493 DC FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00277",
+    "descricao": "FORMA GFA. SUCO PRONTO 1500 ML ART. 4551 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00278",
+    "descricao": "FORMA CERV. HEINEKEN 300 ML ART. 9527 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00279",
+    "descricao": "FORMA GFA. COCA-COLA 500 ML ART. 562743 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00281",
+    "descricao": "FORMA FORMA CERV. BUD SQUARE 330ML DG ART. 4729 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00282",
+    "descricao": "FORMA GFA. COCA-COLA NORDIC 350 ART. 562594 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00283",
+    "descricao": "FORMA GFA. COCA-COLA NORDIC 500ML ART. 562741 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00284",
+    "descricao": "FORMA GFA. COCA-COLA 350ML ART. 562742 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00286",
+    "descricao": "FORMA GFA. NATASHA 1000ML ART. 4279 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00287",
+    "descricao": "FORMA GFA. NATASHA 904 ML ART. 562608 FOFO CI-882 OI-PE",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00288",
+    "descricao": "FORMA CERV. AMSTEL 275ML ART. 563241 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00289",
+    "descricao": "FORMA GFA. SUCO NATURAL 1000ML ART.1027",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00291",
+    "descricao": "FORMA CERV. HEINEKEN 600ML BB DG 4 1/4\" OI-SP ART. 3408",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00292",
+    "descricao": "FORMA CERV. MONET 500 B&B ART. 562763 CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00294",
+    "descricao": "MOLDE CERV. BUD CADILLAC 330ML 197G ART. 18026 FOFO 96A",
+    "tipoProduto": "molde"
+  },
+  {
+    "codigo": "5-01-00295",
+    "descricao": "FORMA CERV. BUD CADILLAC 330 ML ART. A19036 FOFO 96A",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00296",
+    "descricao": "FORMA VVF 93-02 FOFO NODULAR",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00297",
+    "descricao": "FORMA CERV. BECK'S 600 ML ART. 563322 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00298",
+    "descricao": "FORMA CERV. STELLA ARTOIS 600ML DC ART. 563329 FOFO CI-882 - OI-SP",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00299",
+    "descricao": "FORMA CERV. STELLA ARTOIS 600ML ART. 563329 FOFO CI-882 OI-RJ",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00300",
+    "descricao": "FORMA CERV. HEINEKEN 600 ML ART. 4534 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00301",
+    "descricao": "FORMA GFA. COCA-COLA 250 ML DC ART. 563289 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00302",
+    "descricao": "FORMA CERV. BECK'S 600ML ART. 563322 FOFO CI-882 OI-SP",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00303",
+    "descricao": "FORMA CERV. STELLA ARTOIS 330ML ART. 562688 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00304",
+    "descricao": "MOLDES FORMA GFA. WHISKY VAT 69 703ML ART. 563327 FOFO CI-800",
+    "tipoProduto": "molde"
+  },
+  {
+    "codigo": "5-01-00305",
+    "descricao": "MOLDES PARA VIDRO - MOLDES FORMA GFA CAMPARI CINZANO FOFO CI-882 1000ML ART563232",
+    "tipoProduto": "molde"
+  },
+  {
+    "codigo": "5-01-00306",
+    "descricao": "FORMA GFA. COCA-COLA NORDIC 200 ML ART. 562595 FOFO CI-889",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00307",
+    "descricao": "FORMA VVF 93-02 FOFO NODULAR",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00308",
+    "descricao": "FORMA POTE CONSERVA 600ML ART. 738 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00309",
+    "descricao": "FORMA CERV. PUB V5 500ML ART. 563359 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00310",
+    "descricao": "FORMA CERV. BUD SQUARE 550ML DC ART. 4730 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00311",
+    "descricao": "FORMA CERV. BOHEMIA 355ML B&B ART. A20011 FOFO 96A",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00312",
+    "descricao": "MOLDES PARA VIDRO - MOLDES FORMA GFA SMIRNOFF CI-882 700ML ART563358",
+    "tipoProduto": "molde"
+  },
+  {
+    "codigo": "5-01-00313",
+    "descricao": "FORMA GFA. VINHO ROMANA 753ML ART. 563363 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00314",
+    "descricao": "FORMA CERV. HEINEKEN 600ML B&B ART. 563364 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00315",
+    "descricao": "FORMA CERV. HEINEKEN 600ML ART. G04 101 FOFO Q3",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00316",
+    "descricao": "FORMA COCA COLA ULTRA 1000ML ART. 4184 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00317",
+    "descricao": "FORMA GFA. CHOCOMILK 200ML ART.4688 FOFO CL-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00318",
+    "descricao": "FORMA COPO OLÉ 292ML ART. 563406 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00319",
+    "descricao": "FORMA CERV. 635ML ART. 399 FOFO Q3",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00320",
+    "descricao": "FORMA CERV. BUD CADILLAC 190GR ART.18026 FOFO FUN. 96A",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00321",
+    "descricao": "FORMA CERV. 635ML ART. 399 C/ GRAVAÇÃO FOFO Q3",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00322",
+    "descricao": "FORMA CERV. OPA BIER 600ML ART. 563411 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00323",
+    "descricao": "FORMA CERV. HEINEKEN K2 330 ML DC ART. 4669 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00324",
+    "descricao": "FORMA CERV. HEINEKEN 600ML B&B ART. 563364 FOFO CI-882 OI-SP",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00325",
+    "descricao": "FORMA COPO OLÉ 225ML ART. 563407 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00326",
+    "descricao": "FORMA CERV. FLOPPY 340ML ART. 20018 FOFO 96A",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00327",
+    "descricao": "FORMA CERV. HEINEKEN 600ML NNPB ART. 563365 FOFO CI-882 OI-SP",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00328",
+    "descricao": "FORMA GFA. CACHAÇA MATUTA 303ML ART. 563248 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00329",
+    "descricao": "FORMA GFA. VINHO LUMIÉRE 753ML ART. 563370 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00330",
+    "descricao": "FORMA COPO OLÉ 280ML ART. 563408 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00331",
+    "descricao": "FORMA GFA. CACHAÇA MATUTA 1000ML ART. 563249 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00332",
+    "descricao": "FORMA GFA. AZEITE STD 250ML ART. 9737 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00333",
+    "descricao": "FORMA CERV. HEINEKEN 600ML NNPB ART. 563365 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00334",
+    "descricao": "FORMA CERV. MODELO 600ML B&B ART. 563425 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00335",
+    "descricao": "FORMA GFA. SKARLOFF SEVEN 1000ML ART. G07 102 FOFO Q3",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00336",
+    "descricao": "FORMA CERV. ECOBIER 620ML ART. G04 108 FOFO Q3",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00337",
+    "descricao": "FORMA CERV. LUNA 275ML ART. 562687 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00338",
+    "descricao": "MOLDES PARA VIDRO - MOLDES FORMA CERV. BUD SQUARE FOFO CI-882 550ML ART4733",
+    "tipoProduto": "molde"
+  },
+  {
+    "codigo": "5-01-00339",
+    "descricao": "FORMA GFA. SKOL BEATS 269ML DC ART. 563422 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00340",
+    "descricao": "FORMA CERV. ECO 600ML ART. 4631 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00341",
+    "descricao": "FORMA CERV. BUD CADILLAC 550ML TG ART. A20022 FOFO 96A",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00342",
+    "descricao": "FORMA CERV. MARIACHI 330ML DC ART. 4748 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00343",
+    "descricao": "FORMA GFA LICOR ASTECA 910ML ART. G31 111 FOFO Q3",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00344",
+    "descricao": "FORMA GFA. VELHO BARREIRO 700ML ART. G52 112 FOFO Q3",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00345",
+    "descricao": "FORMA CERV. LN CRAFT STD 355ML ART. A20027 FOFO 96A",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00346",
+    "descricao": "FORMA GFA. PARAIBA 700ML ART. 797 FOFO Q3",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00347",
+    "descricao": "FORMA CERV. 600ML ART. A20023 FOFO 96A",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00348",
+    "descricao": "FORMA CERV. PETROPOLIS AMBAR TG 250 ML ART. 562596 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00349",
+    "descricao": "FORMA GFA. LEITE DE COCO 200ML ART.1013A FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00350",
+    "descricao": "FORMA CERV. MONET 550ML DG ART. 4624 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00351",
+    "descricao": "FORMA GFA AGUA MINALBA 303ML ART.563453 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00352",
+    "descricao": "FORMA CERV. HEINEKEN DG 1000ML ART.9526 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00353",
+    "descricao": "FORMA CERV. BECK'S 330 ML ART. 4702 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00354",
+    "descricao": "FORMA GFA. BACARDI MARTINI 983ML ART.4482 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00356",
+    "descricao": "FORMA GFA. SMIRNOFF 1000ML LISA ART. 1352 FOFO Q3",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00357",
+    "descricao": "FORMA CERV. MARIACHI 210ML ART. 4749 FOFO CI-880",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00358",
+    "descricao": "MOLDES PARA VIDRO - MOLDES FORMA FRASCO CAFÉ GOLD 170 ART174Q FOFO 96A",
+    "tipoProduto": "molde"
+  },
+  {
+    "codigo": "5-01-00359",
+    "descricao": "FORMA GFA. VINHO LUMIÈRE PP30 753 ML ART. 4654 FOFO CI-882 - OI-RJ",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00360",
+    "descricao": "FORMA GFA. VINHO STD PP30 V2 750ML DC ART. 4173 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00361",
+    "descricao": "FORMA GFA. MARTINI 970 ML ART. 4627 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00362",
+    "descricao": "FORMA GFA. VINHO STD PP30 1000 ML ART. 4380 FOFO CI-882 - O-RJ",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00363",
+    "descricao": "FORMA GFA. SUCO FOR ME 117ML ART. 563504 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00364",
+    "descricao": "FORMA GFA. MONTILLA 1000ML NNPB 6. 1/4\" ART. 4358 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00365",
+    "descricao": "FORMA GFA. NATU NOBILIS 1000ML NNPB ART. 4261 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00366",
+    "descricao": "FORMA GFA. CHANCELLER 1000ML NNPB 6. 1/4\" ART. 4644 FOFO CI-800",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00367",
+    "descricao": "FORMA POTE HERO QUEENSBERRY 290ML ART. 563507 - FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00368",
+    "descricao": "FORMA CERV. MARIACHI 330ML ART.4748 FOFO CI-882 - OI-RJ",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00369",
+    "descricao": "FORMA GFA. CANINHA 51 V2 970ML - ART. 563513 - FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00370",
+    "descricao": "FORMA CERV. HEINEKEN 600ML NNPB ART. 563365 FOFO CI-882 - OI-RJ",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00371",
+    "descricao": "FORMA GFA. GIN GUALA 1000 ML DC ART. 2265 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00372",
+    "descricao": "FORMA GFA. MICHELOB ULTRA 330ML ART. 563523 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00373",
+    "descricao": "FORMA POTE NESTLE DAWN JAR 585ML 140 ART. 563510 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00374",
+    "descricao": "FORMA GFA. CERV. MONET 550ML NNPB ART. 4602 FOFO CI-882 - OI-RJ",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00375",
+    "descricao": "FORMA GFA. VODKA BALALAIKA 1000ML ART. 658 FOFO Q3",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00376",
+    "descricao": "MOLDES PARA VIDRO - FORMA FRASCO CUADRADO 1250ML ART. 659 FOFO CI-800",
+    "tipoProduto": "molde"
+  },
+  {
+    "codigo": "5-01-00377",
+    "descricao": "FORMA GFA. SMIRNOFF ICE 275ML DC ART. 563531 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00378",
+    "descricao": "FORMA GFA. SMIRNOFF ICE 275ML ART. 563531 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00379",
+    "descricao": "FORMA CERV. HEINEKEN K2 250 ML ART. 4238 FOFO CI-882 OI-SP",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00380",
+    "descricao": "MOLDE CERV. BRAHMA DUPLO MALTE 330ML ART. 21M002 FOFO 96A",
+    "tipoProduto": "molde"
+  },
+  {
+    "codigo": "5-01-00381",
+    "descricao": "MOLDE CERV. BRAHMA DUPLO MALTE 330ML ART. 21M003 FOFO 96A",
+    "tipoProduto": "molde"
+  },
+  {
+    "codigo": "5-01-00382",
+    "descricao": "FORMA GFA. MICHELOB ULTRA 330ML DC ART. 563523 - FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00383",
+    "descricao": "FORMA POTE CONSERVA 600ML DC ART. 2453 FOFO CI-882 OI-RJ",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00384",
+    "descricao": "FORMA VASO ALIMENTICIO 220ML ART. 748 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00385",
+    "descricao": "FORMA GFA. COCA UNIVERSAL LT ULTRA 1000ML ART. 563559 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00386",
+    "descricao": "FORMA GFA. COCA UNIVERSAL LT 1000ML ART. 563558 CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00387",
+    "descricao": "FORMA CERV. STELLA ARTOIS 600ML NNPB ART. 563329 FOFO CI-882 OI-RJ",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00388",
+    "descricao": "FORMA CERV. CERPA 350ML NNPB TG ART. 564012 CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00389",
+    "descricao": "FORMA CERV. STELLA ARTOIS 330ML ART. 562688 CI-882 OI-SP",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00390",
+    "descricao": "FORMA CERV. STELLA ARTOIS 600ML VN ART. 563617 CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00391",
+    "descricao": "FORMA GFA. VASO SUCO PRONTO 1000ML ART. 3114 CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00392",
+    "descricao": "FORMA VAS. GIN GUALA PITU 1000ML ART. 333 BM-900",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00393",
+    "descricao": "FORMA GFA. VODKA ARANHA 900ML ART. 4569 CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00394",
+    "descricao": "FORMA CERV. BUD SQUARE 330ML TG NNPB ART. 4729 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00395",
+    "descricao": "FORMA GFA. VODKA MISSIATO 900ML ART. 4588 CI-800",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00396",
+    "descricao": "FORMA GFA. CHIAMULERA NINOFF 903ML ART. 4630 CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00397",
+    "descricao": "FORMA CERV. MODELO 330ML ART. 563629 CI-800",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00398",
+    "descricao": "FORMA GFA. MULLER 51 ICE 275ML ART. 4542 CI-800 - RJ",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00399",
+    "descricao": "FORMA GFA. LONDON 1000ML ART. 1251 Q3",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00400",
+    "descricao": "MOLDES PARA VIDRO - FORMA GFA. CHAMPAÑA VALDIVIESO 375ML ART. 12G1 - 96A",
+    "tipoProduto": "molde"
+  },
+  {
+    "codigo": "5-01-00401",
+    "descricao": "FORMA GFA. BITTER CAMPARI 753ML ART. 563634 - CI-882 PE",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00402",
+    "descricao": "FORMA GFA. BITTER CAMPARI 1004ML ART. 563633 - CI-882 PE",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00403",
+    "descricao": "MOLDE CERV. RET. ESMERALDA 600ML 420GR BB ART. 21M023 FOFO 96A",
+    "tipoProduto": "molde"
+  },
+  {
+    "codigo": "5-01-00404",
+    "descricao": "MOLDE CERV. STELLA ARTOIS 330ML NNPB TG ART. 21M021 FOFO 96A",
+    "tipoProduto": "molde"
+  },
+  {
+    "codigo": "5-01-00405",
+    "descricao": "MOLDES PARA VIDRO - MOLDE GFA. BURDEOS 750ML ECOGLASS 2 ART. 12V2 FOFO 96A",
+    "tipoProduto": "molde"
+  },
+  {
+    "codigo": "5-01-00406",
+    "descricao": "FORMA CERV. RETORNÁVEL 635ML TG NNPB ART. 243 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00407",
+    "descricao": "FORMA GFA. MOLHEIRA SAKURA 200ML ART. 4136 - CI-800",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00408",
+    "descricao": "FORMA GFA. SUCO LISO 38 1000ML BB DG ART. 796 - CI-882 PE",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00409",
+    "descricao": "FORMA VAS. ALIMENTÍCIO LC 540ML NNPB ART. 759 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00410",
+    "descricao": "FORMA GFA. VINHO LUMIERE 753ML DG NNPB ART. 9155 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00411",
+    "descricao": "MOLDE CERV. SPATEN RETORNÁVEL 355ML BB TG ART. 21M022 FOFO 96A",
+    "tipoProduto": "molde"
+  },
+  {
+    "codigo": "5-01-00412",
+    "descricao": "FORMA CERV. CORONA 330ML VR ART. 563672 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00413",
+    "descricao": "FORMA POTE NESTLE BABY FOOD 128ML ART. 4718 CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00414",
+    "descricao": "FORMA POTE AZEITONA F200 350ML DC ART. 3238 CI-800 - SP",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00415",
+    "descricao": "MOLDES PARA VIDRO - FORMA GFA. BURDEOS 750ML P16 ECOGLASS 2 CO ART. 12G2 - BRONZE",
+    "tipoProduto": "molde"
+  },
+  {
+    "codigo": "5-01-00416",
+    "descricao": "MOLDES PARA VIDRO - FORMA GFA. BURDEOS 750ML P16 ECOGLASS 2 SC ART. 12G3 - BRONZE",
+    "tipoProduto": "molde"
+  },
+  {
+    "codigo": "5-01-00417",
+    "descricao": "FORMA GFA. DOMECQ V2 1000ML DC ART. 4650 - CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00418",
+    "descricao": "FORMA GFA. FRISANTE 750ML DG BB ART. 4302 - CI-882 PE",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00419",
+    "descricao": "FORMA GFA. BORDEAUX PERGOLA 1000 ML ART. 1225 FOFO Q3",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00420",
+    "descricao": "FORMA GFA. VINHO STD PP30 1000 ML ART. 4380 FOFO CI-882 - O-SP",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00421",
+    "descricao": "MOLDES PARA VIDRO - MOLDE GFA. BRANDY DOMECQ 375ML D19 FDG ART. 138J - 96A",
+    "tipoProduto": "molde"
+  },
+  {
+    "codigo": "5-01-00422",
+    "descricao": "MOLDES PARA VIDRO - MOLDE GFA. BURDEOS 750ML P16 ECOGLASS 2 CO GTG ART. 12G2 - BRONZE",
+    "tipoProduto": "molde"
+  },
+  {
+    "codigo": "5-01-00423",
+    "descricao": "MOLDES PARA VIDRO - MOLDE GFA. BURDEOS 750ML CASILLERO EMBOSSING SC GTG ART. 12P6 - BRONZE",
+    "tipoProduto": "molde"
+  },
+  {
+    "codigo": "5-01-00424",
+    "descricao": "MOLDES PARA VIDRO - MOLDE GFA. BURDEOS 750ML CASILLERO EMBOSSING CO GTG ART. 12P5 - BRONZE",
+    "tipoProduto": "molde"
+  },
+  {
+    "codigo": "5-01-00425",
+    "descricao": "FORMA GFA. VASO SUCO LISO 300ML DG NNPB ART. 785 - CI-882 PE",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00426",
+    "descricao": "FORMA CERV. CORONA 330ML DC VR ART. 563672 FOFO CI-882 SP",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00427",
+    "descricao": "FORMA GFA. CHAMPANHE 750ML DC BB ART. 3396 - CI-800",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00428",
+    "descricao": "FORMA CERV. STELLA ARTOIS 600ML VN ART. 563673 FOFO CI-882 - OI-RJ",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00429",
+    "descricao": "FORMA CERV. LUNA 275ML NNPB ART. 562687 FOFO CI-882 - SP",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00430",
+    "descricao": "FORMA POTE NESTLE DAWN JAR 220ML 480GR DC ART. 4421 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00431",
+    "descricao": "FORMA GFA. BLACK STONE 1004ML NNPB ART. 4681 FOFO CI-800",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00432",
+    "descricao": "MOLDE CERV. STELLA ARTOIS 330ML 190GR ART. 22M001 FOFO 96A",
+    "tipoProduto": "molde"
+  },
+  {
+    "codigo": "5-01-00433",
+    "descricao": "FORMA GFA. YAKULT TAFF MAN-E 112ML ART. 5685 FOFO CI-882 PE",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00434",
+    "descricao": "FORMA GFA. MICHELOB ULTRA 330ML ART. 563523 FOFO CI-882 OI-RJ",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00435",
+    "descricao": "MOLDE CERV. RET. ESMERALDA 600ML 400GR BB ART. 22M002 FOFO 96A",
+    "tipoProduto": "molde"
+  },
+  {
+    "codigo": "5-01-00436",
+    "descricao": "FORMA GFA. BODEBROWN IRON MAIDEN 600ML ART. 563689 FOFO CI-882 - PE",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00437",
+    "descricao": "FORMA GFA. BODEBROWN IRON MAIDEN 600ML ART. 563690 FOFO CI-882 - PE",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00438",
+    "descricao": "FORMA CERV. HEINEKEN K2 330 ML DC ART. 563686 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00439",
+    "descricao": "FORMA GFA. VINHO LUMIÉRE 753ML PP30 V2 ART. 563370 FOFO CI-882 - OI-RJ",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00440",
+    "descricao": "FORMA VAS. GIN GUALA YPIOCA 970ML NNPB ART. 332 FOFO BM-900",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00441",
+    "descricao": "FORMA GFA. CHAMPANHA RESERVA 750ML ART. 711 FOFO Q3",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00442",
+    "descricao": "FORMA CERV. LONG NECK STD 355ML ART. 562777 FOFO CI-882 - RJ",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00443",
+    "descricao": "FORMA CERV. BECK'S 330ML ART. 563385 FOFO CI-882 - SP",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00444",
+    "descricao": "FORMA GFA. VINHO STD PP30 1000ML ART. 4380 - CI 882 PE",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00445",
+    "descricao": "FORMA GFA. PASSPORT V2 1000 ML ART. 4723 - CI-882 PE",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00446",
+    "descricao": "FORMA VASO REDONDO 700ML ART. 013 FOFO Q3",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00447",
+    "descricao": "FORMA VASO FACETADO 550ML ART. 014 FOFO Q3",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00448",
+    "descricao": "FORMA GFA. ICE STD 275ML TG ART. 4144 FOFO CI-882 OI-PE",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00449",
+    "descricao": "FORMA GFA. VODKA SLOVA V2 983ML ART. 563699 FOFO CI-882 OI-PE",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00450",
+    "descricao": "FORMA CERV. HEINEKEN SOL 330ML PRY OFF ART. 563712 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00451",
+    "descricao": "FORMA GFA. NATU NOBILIS V2 1000ML NNPB ART. 563694 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00452",
+    "descricao": "FORMA VAS. ESPUMANTE 750ML DG ART. 330 FOFO BM-900",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00453",
+    "descricao": "FORMA CERV. MARIACH 330ML NNPB ART. 4748 FOFO CI-882 OI-PE",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00454",
+    "descricao": "FORMA GFA. SMIRNOFF ICE 275ML ART. 563531 FOFO CI-882 - RJ",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00455",
+    "descricao": "FORMA POTE AZEITONA 350G DC ART. 3239 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00456",
+    "descricao": "FORMA POTE AZEITONA 500G DC ART. 562673 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00457",
+    "descricao": "FORMA CERV. ARTESANAL 500ML ART. 4435 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00458",
+    "descricao": "FORMA GFA. VODKA SKYY 753ML DC ART. 4639 CI-800 - OI-SP",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00459",
+    "descricao": "MOLDE CERV. BECK´S 600ML 420GR ART. 22M012 FOFO 96A",
+    "tipoProduto": "molde"
+  },
+  {
+    "codigo": "5-01-00460",
+    "descricao": "FORMA GFA. CAMPARI CYNAR 900ML V2 ART. 4554 FOFO CI-882 OI-SP",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00461",
+    "descricao": "MOLDES PARA VIDRO - FORMA CERV. HEINEKEN 330ML DC K2 O.W. ART. 9972 FOFO CI-800",
+    "tipoProduto": "molde"
+  },
+  {
+    "codigo": "5-01-00462",
+    "descricao": "FORMA GFA. PASSPORT 670ML BB ART. 4350 - CI-882 PE",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00463",
+    "descricao": "FORMA POTE CAFÉ DAWN JAR 100 ART. 3999 CI-800 OI-SP",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00464",
+    "descricao": "MOLDES PARA VIDRO - MOLDE CERV. STELLA ARTOIS 600ML DG NNPB ART. 191R 96A CH",
+    "tipoProduto": "molde"
+  },
+  {
+    "codigo": "5-01-00465",
+    "descricao": "FORMA POTE NESTLE DAWN JAR 50 DC ART. 3907 FOFO CI-882 OI-SP",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00466",
+    "descricao": "FORMA POTE QUADRADO PEQUENO LISO 1200ML ART. 021 FOFO Q3",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00467",
+    "descricao": "FORMA POTE QUADRADO PEQUENO DIAMANTE 1200ML ART. 022 FOFO Q3",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00468",
+    "descricao": "FORMA POTE QUADRADO PEQUENO COLMEIA 1200ML ART. 023 FOFO Q3",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00469",
+    "descricao": "FORMA GFA. HEINEKEN K2 330ML DG ART. 1128 FOFO Q3 VR",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00470",
+    "descricao": "FORMA GFA. CIDADE IMPERIAL 275ML DG ART. 1167 FOFO Q3 VR",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00471",
+    "descricao": "FORMA GFA. GFA. SUCO PREMIUM 1000ML ECOVA ART. 5454 FOFO Q3 VR",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00472",
+    "descricao": "FORMA GFA. GFA. BORDEAUX SENSAÇÃO ECOVA 750ML ART. 1198 FOFO Q3 VR CB",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00473",
+    "descricao": "FORMA FORMA GFA. BORDEAUX 1000ML PILFER ART. 5457 FOFO Q3 VR CB",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00474",
+    "descricao": "FORMA GFA. WHISKY FANTE GOLD 1000ML NNPB ART. 563728 FOFO CI-882 OI-PE",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00475",
+    "descricao": "FORMA GFA. PASSPORT 1000 ML ART. 4530 FOFO CI-882 OI-PE",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00476",
+    "descricao": "FORMA CERV. HEINEKEN ULTRA 275ML AMSTEL ART. 563735 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00477",
+    "descricao": "FORMA GFA. WHISKY OLD RED 1000ML ART. 1037 FOFO Q3 VR PF",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00478",
+    "descricao": "FORMA GFA. LICOR GENERICO STOCK 750ML ART. 441 FOFO Q3",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00479",
+    "descricao": "FORMA GFA. GIN STOCK 1000ML ART. 590 FOFO Q3 VR PF",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00480",
+    "descricao": "FORMA CERV. MODELO 355ML ART. M0154 FOFO CI-882 OI-SP",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00481",
+    "descricao": "FORMA GFA. BACARDI CARTA BLANCA 700ML ART. 563726 FOFO CI-882 SP",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00482",
+    "descricao": "FORMA CERV. LONG NECK STD 355ML NNPB ART. 562777 FOFO CI-882 PE",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00483",
+    "descricao": "FORMA GFA. GENÉRICA 600ML NNPB ART. 344 FOFO CI-882 PE",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00485",
+    "descricao": "FORMA GFA. CYNAR 900ML ART. 1014 FOFO Q3 VR JA",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00486",
+    "descricao": "FORMA GFA. COCA COLA RET. 290ML BB ART. 102 FOFO CI-882 PE",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00487",
+    "descricao": "FORMA GFA. CAMPARI BVI 1000ML BB ART. 563740 - CI 882 PE",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00488",
+    "descricao": "FORMA GFA. CAMPARI BVI 750ML BB ART. 563739 - CI 882 PE",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00489",
+    "descricao": "FORMA VAS. CERV. ROMÁRIO 300ML MMPB ART. 373 FOFO CI-882 PE",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00490",
+    "descricao": "FORMA GFA. VINHO PP30 BB ART. 4380 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00491",
+    "descricao": "FORMA GFA. COCA-COLA ULTRA 250ML NNPB ART. 563289 FOFO CI-800 OI-SP",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00492",
+    "descricao": "FORMA GFA. GENÉRICA 600ML NNPB ART. 344 FOFO CI-882 PE",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00493",
+    "descricao": "FORMA GFA. COCA COLA 10OZ RET. DC ART. 3354 FOFO CI-800",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00494",
+    "descricao": "MOLDE CERV. SPATEN RET. 330ML NNPB TG ART. 23M001 FOFO 96A",
+    "tipoProduto": "molde"
+  },
+  {
+    "codigo": "5-01-00495",
+    "descricao": "MOLDE CERV. STELLA ARTOIS 330ML NNPB 197GR ART. 22M017 FOFO 96A",
+    "tipoProduto": "molde"
+  },
+  {
+    "codigo": "5-01-00496",
+    "descricao": "FORMA GFA. CANINHA 51 970ML NNPB DG ART. 334 FOFO CI-882 OI-PE",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00497",
+    "descricao": "FUNDO DE FORMA GFA. CANINHA 51 970ML NNPB DG ART. 334 FOFO CI-882 OI-PE",
+    "tipoProduto": "fundo_forma"
+  },
+  {
+    "codigo": "5-01-00498",
+    "descricao": "FORMA GFA. NATASHA 900ML NNPB ART. 562608 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00499",
+    "descricao": "FORMA CERV. AMBEV JEEP V2 1000ML NNPB DG ART. 4721 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00500",
+    "descricao": "FORMA GFA. LICOR PRESIDENTE 900 ML ART. 1234 FOFO Q3 VR JA",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00501",
+    "descricao": "FORMA GFA. CHANCELER 1000ML ART. 1393 FOFO Q3 VR JA",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00502",
+    "descricao": "FORMA CERV. CORONA V2 330ML ART. 563755 FOFO CI-882 OI-SP",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00503",
+    "descricao": "FORMA CERV. GENÉRICO 600ML TG NNPB ART. 344 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00504",
+    "descricao": "FORMA GFA. GFA. SUCO NATURAL 1500ML ART. 5461 FOFO Q3",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00505",
+    "descricao": "FORMA GFA. SUCO LISO 38 1000ML ART. 562671 FOFO CI-882 OI-PE",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00506",
+    "descricao": "FORMA POTE QUADRADO MÉDIO LISO 1600ML ART. 024 FOFO Q3",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00507",
+    "descricao": "FORMA POTE QUADRADO MÉDIO DIAMANTE 1600ML ART. 025 FOFO Q3",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00508",
+    "descricao": "FORMA POTE QUADRADO MÉDIO COLMEIA 1200ML ART. 026 FOFO Q3",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00509",
+    "descricao": "MOLDE CERV. CORONA NRB 330ML NNPB TG ART. 23M013 FOFO 96A",
+    "tipoProduto": "molde"
+  },
+  {
+    "codigo": "5-01-00510",
+    "descricao": "FORMA POTE CAFÉ STD 100G ECOVA ART. 5447 - FOFO Q3 VR",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00511",
+    "descricao": "FORMA POTE MULTIUSO 350ML ART. 020 FOFO Q3",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00512",
+    "descricao": "FUNDO DE FORMA GFA. BOURGOGNE PREMIUM 750ML ART. 5464 BRONZE VR PF",
+    "tipoProduto": "fundo_forma"
+  },
+  {
+    "codigo": "5-01-00513",
+    "descricao": "FUNDO DE BLOCO GFA. BOURGOGNE PREMIUM 750ML ART. 5464 FOFO Q3 VR PF",
+    "tipoProduto": "fundo_bloco"
+  },
+  {
+    "codigo": "5-01-00514",
+    "descricao": "MOLDES PARA VIDRO - FORMA CERV. BUDWEISER 600ML ART. 1394 FOFO Q3 VR",
+    "tipoProduto": "molde"
+  },
+  {
+    "codigo": "5-01-00515",
+    "descricao": "FORMA GFA. KHLOE 750ML ART. 1406 - FOFO Q3",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00516",
+    "descricao": "FORMA GFA. CIDADE IMPERIAL 275ML TG ART. 1167 BRONZE VR FJA",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00517",
+    "descricao": "FORMA GFA. CIDADE IMPERIAL 330ML TG ART. 1409 BRONZE VR FJA",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00518",
+    "descricao": "FORMA GFA. CIDADE IMPERIAL 210ML TG ART. 1170 BRONZE VR FJA",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00519",
+    "descricao": "MOLDES PARA VIDRO - FORMA GFA. BURDEOS 750ML SUYAI ECO ROSCA ART. 279B FOFO Q3 VR AR",
+    "tipoProduto": "molde"
+  },
+  {
+    "codigo": "5-01-00520",
+    "descricao": "FORMA GFA. CIDADE IMPERIAL 275ML TG ART. 5468 BRONZE VR FJA",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00521",
+    "descricao": "FORMA GFA. CIDADE IMPERIAL 210ML TG ART. 5469 BRONZE VR FJA",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00522",
+    "descricao": "FORMA GFA. L.N. IMPERIAL 330ML TG ART. 1414 BRONZE VR FJA",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00523",
+    "descricao": "MOLDE CERV. BUD CADILLAC 330ML 197GR NNPB VR1 ART. 23M016 FOFO 96A",
+    "tipoProduto": "molde"
+  },
+  {
+    "codigo": "5-01-00524",
+    "descricao": "MOLDE CERV. BUD CADILLAC 330ML 190GR NNPB VR1 ART. 23M017 FOFO 96A",
+    "tipoProduto": "molde"
+  },
+  {
+    "codigo": "5-01-00525",
+    "descricao": "FORMA GFA. COCA COLA 1000ML RET. ART. 563558 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00526",
+    "descricao": "FORMA CERV. HEINEKEN 250ML TG ART. 1392 BRONZE VR FJA",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00527",
+    "descricao": "FORMA GFA. ESPUMANTE 75ML ART. G29 137 FOFO Q3",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00528",
+    "descricao": "FORMA GFA. RH10L 900ML ART. 1382 FOFO Q3 VR FPF",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00529",
+    "descricao": "FORMA GFA. VODKA LEONOFF 920ML ART. 1247 FOFO Q3 FPF",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00530",
+    "descricao": "FORMA GFA. CACHAÇA 51 700ML ART. 1411 FOFO Q3 FPF",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00531",
+    "descricao": "FORMA GFA. CACHAÇA 51 1000ML ART. 1412 FOFO Q3 FPF",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00532",
+    "descricao": "FORMA GFA. RH9L TG ART. 1379 BRONZE VR FJA",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00533",
+    "descricao": "FORMA CERV. CIDADE IMPERIAL 210ML ART. 563779 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00534",
+    "descricao": "FORMA CERV. CIDADE IMPERIAL 275ML ART. 563780 FOFO CI-882 - SP",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00535",
+    "descricao": "FORMA GFA. CIDADE IMPERIAL 210ML DG ART. 5472 FOFO Q3 VR",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00536",
+    "descricao": "FORMA CERV. HEINEKEN 330ML K2-02 ART. G49 095 FOFO Q3 VP",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00537",
+    "descricao": "FORMA CERV. LN. MILLER 355ML OW DC ART. 563786 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00538",
+    "descricao": "FORMA CERV. MILLER V2 600ML DC ART. 563789 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00539",
+    "descricao": "FORMA GFA. BORDEAUX ACINTURADO 750ML ART. 1418 FOFO Q3 FCB",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00540",
+    "descricao": "FORMA GFA. SOL 330ML O.W TG ART. 1121 BRONZE VR FJA",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00541",
+    "descricao": "FORMA GFA. CABERNET CILINDRICA 750ML PILFER ECOVA 2 ART. 1118 FOFO Q3 FCB",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00542",
+    "descricao": "FORMA GFA. REFRIGERANTE 600 STD DC ART. 4165 FOFO CI-882 OI-SP",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00543",
+    "descricao": "FORMA GFA. STOCK WAVE 278ML DC ART. 563791 FOFO CI-882 OI-SP",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00544",
+    "descricao": "FORMA GFA. CERV. CIDADE IMPERIAL 300ML TG ART. 5474 BRONZE VR FJA",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00545",
+    "descricao": "FORMA GFA. SALINAS 700ML ART. G03 174 FOFO Q3",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00546",
+    "descricao": "FORMA VAS. SUCO OQ 1500ML DG ART. 563989 FOFO CI-882 PE",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00547",
+    "descricao": "FORMA GFA. BOURGONE CILINDRICA 750ML RC ART. 563799 FOFO CI-882 SP",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00548",
+    "descricao": "FORMA GFA. BOURDEAUX CONICA 1000ML ART. 563796 FOFO CI-882 SP",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00549",
+    "descricao": "FORMA GFA. BOURGONE CILINDRICA 750ML RL ART. 563805 FOFO CI-882 SP",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00550",
+    "descricao": "MOLDES PARA VIDRO - FORMA GFA. BURDEOS PREMIER 750ML ART. 302A FOFO Q3 VR CH",
+    "tipoProduto": "molde"
+  },
+  {
+    "codigo": "5-01-00551",
+    "descricao": "FORMA GFA. LICOR STD 500ML ART. 563804 FOFO CI-882 SP",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00552",
+    "descricao": "FORMA GFA. BORDEAUX 750ML ECO ROLHA ART. 1430 BRONZE VR FCB",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00553",
+    "descricao": "FORMA GFA. ESPUMANTE CONICA 750ML ART. 1422 FOFO Q3 FCB",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00554",
+    "descricao": "FORMA GFA. KEEP COOLER 275ML ART. 1432 FOFO Q3 VR JA",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00555",
+    "descricao": "FORMA GFA. FRISANTE 750ML STD PP30 V3 DC ART. 563798 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00556",
+    "descricao": "FORMA GFA. LUMIERE ULTRA RL 750ML DC ART. 563794 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00557",
+    "descricao": "FORMA GFA. LUMIERE ULTRA 750ML PP30 DC ART. 563795 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00558",
+    "descricao": "FORMA GFA. BOURDEAUX CONICA 750ML ART. 563797 FOFO CI-882 SP",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00559",
+    "descricao": "FORMA GFA. SUCO PREMIUM 1000ML ART. 778 FOFO Q3 FCB",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00560",
+    "descricao": "FORMA VAS. CERVEJA STD 600ML DG ART. 243 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00561",
+    "descricao": "FORMA CERV. CIDADE IMPERIAL 275ML DC ART. 563780 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00562",
+    "descricao": "FORMA CERV. CIDADE IMPERIAL 330ML TG ART. 563810 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00563",
+    "descricao": "FORMA CERV. CIDADE IMPERIAL 330ML GOLD ART. 563809 FOFO CI-882 - RJ",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00564",
+    "descricao": "FORMA CERV. CIDADE IMPERIAL 300ML TG ART. 563812 FOFO CI-882 - RJ",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00565",
+    "descricao": "FORMA GFA. SCHWEPPES 250ML ART. 1426 FOFO Q3 VR FPF",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00566",
+    "descricao": "MOLDES PARA VIDRO - FORMA GFA. BORGOÑA 750ML TABLAS CREEK ART. 304A FOFO Q3 VR CH",
+    "tipoProduto": "molde"
+  },
+  {
+    "codigo": "5-01-00567",
+    "descricao": "FORMA GFA. SUCO AURORA 1000ML ART. 1423 FOFO Q3 FCB",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00568",
+    "descricao": "FORMA GFA. DREHER 900ML ART. 1141 FOFO Q3 FJA",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00569",
+    "descricao": "FORMA GFA. MONTILLA 1000ML ART. 1057 FOFO Q3 FPF",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00570",
+    "descricao": "FORMA GFA. CIDADE IMPERIAL 275ML ALIVIADA ART. 5475 FOFO Q3 FJA",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00571",
+    "descricao": "FORMA POTE CAFÉ L OR 100G ART. 1442 - FOFO Q3 VR",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00572",
+    "descricao": "FORMA GFA. ASTECA 900ML ART. G01 126 FOFO Q3 VP",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00573",
+    "descricao": "FORMA GFA. GIN 970ML ART. G02 122 FOFO Q3 VP",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00574",
+    "descricao": "FORMA GFA. APOLO 900ML ART. G01 459 FOFO Q3 VP",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00575",
+    "descricao": "FORMA GFA. CIDADE IMPERIAL 210ML PSBE ART. 1170 FOFO Q3 VR FPF",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00576",
+    "descricao": "FORMA CERV. HEINEKEN K2 330ML TG ART. 1128 BRONZE",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00577",
+    "descricao": "FORMA CERV. HEINEKEN SOL 330ML PRY OFF V2 ART. 563828 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00578",
+    "descricao": "FORMA GFA. SUCO HUGO PIETRO 1350ML ART. 1435 FOFO Q3 FCB",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00579",
+    "descricao": "MOLDES PARA VIDRO - FORMA GFA. CHAMP ECOVA USA 750ML ART. 297A FOFO Q3 VR CH",
+    "tipoProduto": "molde"
+  },
+  {
+    "codigo": "5-01-00580",
+    "descricao": "MOLDES PARA VIDRO - FORMA GFA. CHAMP USA 750ML ART. 296A FOFO Q3 VR CH",
+    "tipoProduto": "molde"
+  },
+  {
+    "codigo": "5-01-00581",
+    "descricao": "FORMA GFA. AMBEV STD 600ML ART. 1447 FOFO Q3 FJA",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00582",
+    "descricao": "FORMA GFA. CAMPARI BVI 1000ML ART. 1446 FOFO Q3",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00583",
+    "descricao": "FORMA GFA. WEWI 255ML ART. 1444 FOFO Q3 VR",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00584",
+    "descricao": "FORMA CERV. CIDADE IMPERIAL 600ML SS ART. 1261 FOFO Q3 FJA",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00585",
+    "descricao": "FORMA CERV. CIDADE IMPERIAL 600ML DC ART. 563829 FOFO CI-882 SP",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00586",
+    "descricao": "FORMA GFA. MULT STD 700ML DC ART. 4288 FOFO CI-882 SP",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00587",
+    "descricao": "MOLDES PARA VIDRO - MOLDE GFA. BURDEOS 750ML VSR SC ART. 12Z1 96A CH",
+    "tipoProduto": "molde"
+  },
+  {
+    "codigo": "5-01-00588",
+    "descricao": "FORMA GFA. CAMPARI BVI 750ML ART. 1445 FOFO Q3",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00589",
+    "descricao": "FORMA GFA. COCA COLA 1000ML ART. G13 173 5.1/2\" FOFO Q3",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00590",
+    "descricao": "FORMA CERV. CIDADE IMPERIAL 355ML ART. 563840 FOFO CI-882 SP",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00593",
+    "descricao": "FORMA GFA. ICE STD 275ML ART. 1377 FOFO Q3 VR",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00594",
+    "descricao": "BLOCO GFA. LN STD 355ML ART. 5479 FOFO Q3",
+    "tipoProduto": "bloco"
+  },
+  {
+    "codigo": "5-01-00595",
+    "descricao": "MOLDE CERV. CORONA NRB 330ML 215GR ART. 24M012 FOFO 96A",
+    "tipoProduto": "molde"
+  },
+  {
+    "codigo": "5-01-00596",
+    "descricao": "FORMA GFA. ICE 275ML ART. G15 146 FOFO Q3 VP",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00597",
+    "descricao": "FORMA GFA. ICE STD 275ML ULTRA ART. 563827 CI-882 SP",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00598",
+    "descricao": "FORMA GFA. PASSPORT 1000ML ART. G15 191 FOFO Q3 VP",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00599",
+    "descricao": "FORMA GFA. STELLA ARTOIS 330ML ART. 1380 FOFO Q3 VR",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00600",
+    "descricao": "FORMA GFA. BORDEAUX CAMPOS 750ML ART. 1344 FOFO Q3 VR",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00601",
+    "descricao": "MOLDE CERV. CADILLAC 330ML ART.39501 FOFO 96A",
+    "tipoProduto": "molde"
+  },
+  {
+    "codigo": "5-01-00602",
+    "descricao": "FORMA GFA. 51 ICE 275ML ART.1443 FOFO Q3 VR",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00603",
+    "descricao": "FORMA POTE AZEITONA 200G 350ML ART. 3286 FOFO CI-800",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00604",
+    "descricao": "FORMA GFA. DOCTOR GIN 1000ML ART. 563848 FOFO CI-882 SP",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00605",
+    "descricao": "FORMA GFA. HEINEKEN 330ML K2 O.W 195G ART. 1455 FOFO Q3",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00606",
+    "descricao": "FORMA POTE MULT 244ML ART. 563846 FOFO CI 882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00607",
+    "descricao": "FORMA GFA. GFA. VODKA INTENCION 900ML ART. 1459 FOFO Q3",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00608",
+    "descricao": "MOLDES PARA VIDRO - FORMA GFA. SPARKLING 750ML BARON ECO ART. 310A FOFO Q3",
+    "tipoProduto": "molde"
+  },
+  {
+    "codigo": "5-01-00609",
+    "descricao": "MOLDES PARA VIDRO - MOLDE GFA. BURDEOS 750CC GIULIANA ECO 2 ART. 306A FOFO Q3",
+    "tipoProduto": "molde"
+  },
+  {
+    "codigo": "5-01-00610",
+    "descricao": "FORMA GFA. BORDALEZA ROLHA 750ML ART. G60 189 FOFO Q3 VP",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00611",
+    "descricao": "FORMA GFA. BORDALEZA MALBEC ROSCA 750ML ART. G14 172 FOFO Q3 VP",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00612",
+    "descricao": "FORMA GFA. MONIN 700ML ART. 563863 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00613",
+    "descricao": "FORMA GFA. NATU NOBILIS V2 1000ML ART. 563856 CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00614",
+    "descricao": "FORMA GFA. BUDWEISER 330ML ART. G50 091 FOFO Q3 VP",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00615",
+    "descricao": "FORMA GFA. SUCO AURORA 500ML ART. 1425 FOFO Q3",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00616",
+    "descricao": "FORMA GFA. STELLA ARTOIS 330ML LW ART. G06 131 FOFO Q3",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00617",
+    "descricao": "FORMA GFA. BORDEAUX 500ML ROSCA ART. 1431 FOFO Q3 VR",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00618",
+    "descricao": "FORMA GFA. LN STD 330ML ART.1303 BRONZE VR",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00619",
+    "descricao": "FORMA GFA. SUCO AURORA 300ML ART.1163 FOFO Q3 VR",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00620",
+    "descricao": "FORMA GFA. SMIRNOFF ICE STD 275ML ART.1463 FOFO Q3 VR",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00621",
+    "descricao": "FORMA POTE INCA 362ML ART. 563872 FOFO CI 882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00622",
+    "descricao": "FORMA CERV. HEINEKEN 250ML K2 V2 ART. 563854 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00623",
+    "descricao": "FORMA CERV. HEINEKEN 330ML K2 V2 ART. 563855 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00624",
+    "descricao": "FORMA GFA. POLÔNIA 1000ML DC ART. 563873 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00625",
+    "descricao": "FORMA GFA. SUCO HUGO PIETRO 1350ML ART. 5493 FOFO Q3 FCB",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00626",
+    "descricao": "FORMA POTE BELEM STD 240ML ART. 563882 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00627",
+    "descricao": "FORMA GFA. LONG NECK 355ML 5.1/2\" ART. G28 038 FOFO Q3",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00628",
+    "descricao": "FORMA GFA. LUMIERE ULTRA 750ML PP30 ART. 563795 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00629",
+    "descricao": "FORMA POTE CAFÉ STD 200 ART. 3814 CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00630",
+    "descricao": "FORMA CERV. HEINEKEN K2 330ML TG ART. 1128 FOFO Q3",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00631",
+    "descricao": "FORMA CERV. LN SPATEN 330ML ART. 1465 FOFO Q3",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00632",
+    "descricao": "FORMA CERV. MILLER 355ML HIGH LIFE DC ART. 563891 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00633",
+    "descricao": "FORMA CERV. MILLER 600ML HIGH LIFE DC ART. 563892 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00634",
+    "descricao": "FORMA GFA. AZEITE CILINDRICO 500ML DC ART. 4656 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00635",
+    "descricao": "FORMA GFA. BUDWEISER O.W. 330ML ART. 1386 BRONZE VR",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00636",
+    "descricao": "FORMA GFA. SOL 330ML O.W TG ART. 1121 FOFO Q3 VR",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00637",
+    "descricao": "MOLDES PARA VIDRO - MOLDE GFA. COCA COLA 300ML FTG NNPB ART. 1591 96A CH",
+    "tipoProduto": "molde"
+  },
+  {
+    "codigo": "5-01-00638",
+    "descricao": "FORMA GFA. VODKA KOVAC 1000ML V2 DC ART. 563896 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00639",
+    "descricao": "FORMA GFA. GIN GUALA VB ULTRA 980ML ART. 56915 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00640",
+    "descricao": "FORMA GFA. CERV. SCHIN 300ML RET ART. 1064 - BRONZE",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00641",
+    "descricao": "FORMA GFA. VODKA VORUS 900ML ART. 1441 FOFO Q3",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00642",
+    "descricao": "FORMA GFA. SUCO PRONTO 1356ML ART. 563914 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00643",
+    "descricao": "FORMA POTE PASSATA STD 446ML DC ART. 563916 CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00644",
+    "descricao": "FORMA CERV. CIDADE IMPERIAL 275ML DC ART. 563919 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00645",
+    "descricao": "FORMA CERV. CIDADE IMPERIAL 330ML DC ART. 563918 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00646",
+    "descricao": "MOLDES PARA VIDRO - MOLDE GFA. BURDEOS 750ML TOP ART. 2024001 96A",
+    "tipoProduto": "molde"
+  },
+  {
+    "codigo": "5-01-00647",
+    "descricao": "FORMA POTE RESERVA DE MINAS 200G ART. 1466 - FOFO Q3",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00648",
+    "descricao": "MOLDES PARA VIDRO - MOLDE CERV. EXPORTACION 355ML ART. 8494 CI-882",
+    "tipoProduto": "molde"
+  },
+  {
+    "codigo": "5-01-00649",
+    "descricao": "FORMA GFA. CANINHA 51 970ML ART. 563921 FOFO CI-882 SP",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00650",
+    "descricao": "FORMA GFA. BORDEAUX 1500ML ECO ROSCA ART. 608 FOFO Q3 FPF",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00651",
+    "descricao": "FORMA GFA. VERMOUTH DA RAÇA 900ML ART. 563920 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00652",
+    "descricao": "FORMA GFA. CABERNET CILINDRICA 750ML ECOVA 2 ART. 5503 FOFO Q3 FPF",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00653",
+    "descricao": "MOLDES PARA VIDRO - MOLDE GFA. LICOR GENÉRICO STD 1000ML ART. 1663 FOFO 96A",
+    "tipoProduto": "molde"
+  },
+  {
+    "codigo": "5-01-00654",
+    "descricao": "MOLDES PARA VIDRO - MOLDE GFA. CYNAR CAMPARY 750ML ART. 8711 FOFO CI-882",
+    "tipoProduto": "molde"
+  },
+  {
+    "codigo": "5-01-00655",
+    "descricao": "FORMA GFA. MONIN 330ML DC ART. 563933 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00656",
+    "descricao": "FORMA COPO OLÉ 225ML ART. 563928 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00657",
+    "descricao": "MOLDES PARA VIDRO - MOLDE GFA. CINZANO 1000ML ART. 100 FOFO Q3",
+    "tipoProduto": "molde"
+  },
+  {
+    "codigo": "5-01-00658",
+    "descricao": "FORMA COPO OLÉ 292ML V2 ART. 563929 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00659",
+    "descricao": "MOLDES PARA VIDRO - MOLDE CERV. PREMIUM 500ML ART. 101 FOFO Q3",
+    "tipoProduto": "molde"
+  },
+  {
+    "codigo": "5-01-00660",
+    "descricao": "MOLDES PARA VIDRO - MOLDE CERV. HEINEKEN 330ML DC K2 O.W. ART. 102 FOFO Q3",
+    "tipoProduto": "molde"
+  },
+  {
+    "codigo": "5-01-00661",
+    "descricao": "FORMA POTE NEW ASTECA 160 ART. 1336 - FOFO Q3",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00662",
+    "descricao": "FORMA GFA. SUCO SALTON 1500ML ART. 1262 FOFO Q3",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00663",
+    "descricao": "MOLDES PARA VIDRO - MOLDE GFA. GIN BURNETTS 750ML ART. 1920 FOFO 96A",
+    "tipoProduto": "molde"
+  },
+  {
+    "codigo": "5-01-00664",
+    "descricao": "MOLDES PARA VIDRO - MOLDE GFA. BURDEOS STD 1500ML ART. 357 FOFO 96A",
+    "tipoProduto": "molde"
+  },
+  {
+    "codigo": "5-01-00665",
+    "descricao": "FORMA GFA. CIDADE IMPERIAL 275ML DG ART. 1167 FOFO Q3",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00666",
+    "descricao": "FORMA GFA. ÁGUA ATTIVA 750ML ART. G40 204 FOFO VP Q3",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00667",
+    "descricao": "FORMA GFA. BORDEAUX 750ML ECO ROSCA ART. 5506 FOFO Q3",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00668",
+    "descricao": "FORMA GFA. AZEITE 250ML ART. 1483 FOFO Q3",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00669",
+    "descricao": "FORMA GFA. SUCO AURORA 1500ML ART. 1164 FOFO Q3",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00670",
+    "descricao": "FORMA GFA. SIDRA CERESER 660ML ART. 1339 FOFO Q3",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00671",
+    "descricao": "FORMA GFA. WHISKY 1000ML LW ART. G07 206 FOFO VP Q3",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00672",
+    "descricao": "FORMA GFA. CORONA 330ML ART. G05 209 FOFO VP Q3",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00673",
+    "descricao": "FORMA GFA. CHAMPANHA 187ML ART. 070 FOFO Q3",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00674",
+    "descricao": "FORMA GFA. ÁGUA PLATINA 753ML ART. 563950 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00675",
+    "descricao": "FORMA GFA. SUCO CASA MADEIRA 250ML ART. 1061 FOFO Q3",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00676",
+    "descricao": "FORMA CERV. HEINEKEN 250ML DC K2 V2 ART. 563854 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00677",
+    "descricao": "FORMA GFA. ÁGUA ALVA 500ML ART. 563944 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00678",
+    "descricao": "FORMA GFA. ESPUMANTE ECOVA 750ML ART. 1030 FOFO Q3",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00679",
+    "descricao": "MOLDES PARA VIDRO - MOLDE GFA. VERMOUTH STD 950ML ART. 966 FOFO 96A",
+    "tipoProduto": "molde"
+  },
+  {
+    "codigo": "5-01-00680",
+    "descricao": "MOLDES PARA VIDRO - MOLDE GFA. CHAMPAGNE CÔNICA STD 750ML FOFO 96A",
+    "tipoProduto": "molde"
+  },
+  {
+    "codigo": "5-01-00681",
+    "descricao": "FORMA GFA. ÁGUA ALVA 1000ML ART. 563945 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00682",
+    "descricao": "FORMA GFA. CORONA 330ML ART. G05 158 FOFO VP Q3",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00683",
+    "descricao": "FORMA GFA. GIN GUALA 1005 ML ART. 4126 BRONZE BZ-889",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00684",
+    "descricao": "FORMA GFA. PERNOD RICARD PASSAPORT 700ML DC ART. 563955 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00685",
+    "descricao": "MOLDE CERV. BUD CADILLAC 330 ML ART. 18026 FOFO 96A",
+    "tipoProduto": "molde"
+  },
+  {
+    "codigo": "5-01-00686",
+    "descricao": "FORMA GFA. PERNOUD RICARD PASSPORT 700ML NNPB ART. 563955 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00687",
+    "descricao": "MOLDES PARA VIDRO - MOLDE GFA. BURDEOS BALBO 1125ML ART. 8993 FOFO CI-882",
+    "tipoProduto": "molde"
+  },
+  {
+    "codigo": "5-01-00688",
+    "descricao": "MOLDE CERV. SPATEN OW 330ML 195G NNPB ART. 0467 01 FOFO 96A",
+    "tipoProduto": "molde"
+  },
+  {
+    "codigo": "5-01-00689",
+    "descricao": "FORMA GFA. PERNOUD RICARD PASSPORT 200ML BB DG ART. 563958 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00690",
+    "descricao": "FORMA CERV. CORONA 600ML DC RET. NNPB ART. 563961 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00691",
+    "descricao": "MOLDES PARA VIDRO - MOLDE GFA. CÔNICA BAJA ECO 750ML ART. 8715 FOFO CI-882",
+    "tipoProduto": "molde"
+  },
+  {
+    "codigo": "5-01-00692",
+    "descricao": "MOLDES PARA VIDRO - MOLDE GFA. DR. LEMON 1000ML ART. 1712 FOFO 96A",
+    "tipoProduto": "molde"
+  },
+  {
+    "codigo": "5-01-00693",
+    "descricao": "FORMA GFA. RAMAZZOTTI 700ML ART. 1489 FOFO Q3",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00694",
+    "descricao": "FORMA GFA. WHISKY 101 DO BRASIL 900ML ART. 1063 FOFO Q3",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00695",
+    "descricao": "FORMA GFA. RH3L 900ML ART. 1120 FOFO Q3",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00696",
+    "descricao": "FORMA GFA. PERNOD RICARD PASSAPORT 500ML DC ART. 563959 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00697",
+    "descricao": "FORMA GFA. SMIRNOFF ICE STD 275ML ART. 1463 BRONZE",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00698",
+    "descricao": "FORMA GFA. BORDEUAX 1000ML ART. 053 FOFO Q3",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00699",
+    "descricao": "FORMA GFA. BORDEAUX 750ML ECO ROLHA ART. 607 FOFO Q3",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00700",
+    "descricao": "FORMA GFA. MONIN 700ML ART. 1491 FOFO Q3",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00701",
+    "descricao": "MOLDES PARA VIDRO - BLOW MOULD CERV. MARIACHI 210ML ART. 7659 FOFO CI-882",
+    "tipoProduto": "molde"
+  },
+  {
+    "codigo": "5-01-00702",
+    "descricao": "FORMA CERV. CORONA 210ML LW ART. 563967 FOFO CI-882 BM.563967.12J50T.CI882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00703",
+    "descricao": "FORMA GFA. BORDEAUX PERGOLA 1000ML ART. 1225 FOFO Q3",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00704",
+    "descricao": "MOLDES PARA VIDRO - MOLDE GFA. WHISKY BLENDERS PRIDE 1000ML ART. 1677 FOFO 96A",
+    "tipoProduto": "molde"
+  },
+  {
+    "codigo": "5-01-00705",
+    "descricao": "MOLDES PARA VIDRO - MOLDE GFA. SIDRA DEL VALLE 750ML ART. 1767 FOFO 96A",
+    "tipoProduto": "molde"
+  },
+  {
+    "codigo": "5-01-00706",
+    "descricao": "FORMA GFA. CERVEJA 635ML ART. 702 FOFO Q3",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00707",
+    "descricao": "FORMA GFA. SMIRNOFF ICE STD 275ML ART. 1463 FOFO Q3",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00708",
+    "descricao": "FORMA GFA. HEINEKEN 330ML K2 O.W 195G ART. 1455 BRONZE",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00709",
+    "descricao": "FORMA GFA. AZEITONA 500ML ART. 907 FOFO Q3",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00710",
+    "descricao": "FORMA GFA. SMIRNOFF 700ML ART. 1472 FOFO Q3",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00711",
+    "descricao": "FORMA GFA. SUCO ZANLORENZI 1356ML ART. 563985 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00712",
+    "descricao": "FORMA VAS. SUCO OQ 1000ML DG ART. 563988 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00713",
+    "descricao": "FORMA GFA. SUCO ZANLORENZI 900ML ART. 563986 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00714",
+    "descricao": "FORMA POTE GELEIA KIVIKS 290ML ART. 5529 FOFO Q3",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00715",
+    "descricao": "FORMA CERV. HEINEKEN 250ML DG ART. 1392 FOFO Q3",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00716",
+    "descricao": "FORMA GFA. CERV. LN STD 330ML DG ART. 1303 FOFO Q3",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00717",
+    "descricao": "FORMA CERV. CIDADE IMPERIAL 300ML RET. LW ART. 563987 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00718",
+    "descricao": "FORMA GFA. GIN GUALA 1005 ML ART. 563948 BRONZE BZ-889",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00719",
+    "descricao": "FORMA CERV. CIDADE IMPERIAL 300ML ART. 563987 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00720",
+    "descricao": "FORMA POTE CAFÉ CEREBOS 215ML ART. 9524 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00721",
+    "descricao": "FORMA GFA. KISLLA ICE 275ML DG ART. 1453 FOFO Q3",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00722",
+    "descricao": "FORMA GFA. LUMIERE ULTRA RL 750ML ART. 563794 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00723",
+    "descricao": "FORMA GFA. BOURDEAUX CONICA 1000ML BB ART. 563796 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00724",
+    "descricao": "FORMA GFA. ICE STD 275ML DG ART. 4144 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00725",
+    "descricao": "MOLDES PARA VIDRO - MOLDE GFA. APEROL 750ML ART. 8701 FOFO CI-882",
+    "tipoProduto": "molde"
+  },
+  {
+    "codigo": "5-01-00726",
+    "descricao": "FORMA GFA. VODKA LEONOFF 900ML ART. 563995 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00727",
+    "descricao": "FORMA GFA. SOL PRAYA 330ML OW ART. 1486 BRONZE",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00728",
+    "descricao": "FORMA GFA. SUCO CAMPESTRE 1000ML ART. 1492 FOFO Q3",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00729",
+    "descricao": "FORMA POTE NESTLE SIGNATURE 100GR DC ART. 563998 CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00730",
+    "descricao": "FORMA VAS. SUCO OQ 900ML NNPB ART. 563996 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00731",
+    "descricao": "FORMA GFA. GORDON´S ALEXANDER 700ML ART. 563993 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00732",
+    "descricao": "MOLDES PARA VIDRO - MOLDE GFA. CÔNICA BAJA PESADA 750ML ART. 8950 FOFO CI-882",
+    "tipoProduto": "molde"
+  },
+  {
+    "codigo": "5-01-00733",
+    "descricao": "MOLDE CERV. MATRIOSKA 330ML 195G ART. 26M001 FOFO 96A",
+    "tipoProduto": "molde"
+  },
+  {
+    "codigo": "5-01-00734",
+    "descricao": "FORMA GFA. MATRIOSKA 330ML ART. G06 177 5.1/2\" FOFO VP Q3",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00735",
+    "descricao": "FORMA GFA. VODKA KWAII 900ML ART. 563992 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00736",
+    "descricao": "MOLDES PARA VIDRO - MOLDE GFA. COCKTELERA DELLEPIANE 750ML ART. 1938 FOFO 96A",
+    "tipoProduto": "molde"
+  },
+  {
+    "codigo": "5-01-00737",
+    "descricao": "FORMA GFA. LEITE DE COCO 200ML ART. G70 176 4 FOFO VPQ3",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00738",
+    "descricao": "MOLDES PARA VIDRO - MOLDE GFA. BURDEOS NEVADA 750ML ART. 1687 FOFO 96A",
+    "tipoProduto": "molde"
+  },
+  {
+    "codigo": "5-01-00739",
+    "descricao": "FORMA GFA. WHISKY 101 RH2L 900ML ART. 5520 FOFO Q3",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00740",
+    "descricao": "FORMA CERV. STELLA ARTOIS 330ML DG ART. 564016 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00741",
+    "descricao": "FORMA GFA. NEW CONTINI 900ML ART. 1462 FOFO Q3",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00742",
+    "descricao": "FORMA GFA. SOL PRAYA 330ML DG ART. 1486 FOFO Q3",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00743",
+    "descricao": "FORMA GFA. COCA COLA NORDIC 200ML ART. 564005 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00744",
+    "descricao": "FORMA GFA. COCA COLA NORDIC 290ML DC ART. 564006 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00745",
+    "descricao": "FORMA GARRAFA TIPO C ART. 006 FOFO Q3",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00746",
+    "descricao": "FORMA POTE LINEA 240ML DC ART. 4318 CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00747",
+    "descricao": "FORMA GFA. APEROL SPRITZ 275ML DC ART. 564018 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00748",
+    "descricao": "FORMA GFA. LICOR DON LUIZ 750ML DC ART. 564017 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00749",
+    "descricao": "FORMA GFA. CERV. GENÉRICA 635ML ART. 715 FOFO Q3",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00750",
+    "descricao": "FORMA GFA. LN. CONTINI 330ML DG ART. 1290 FOFO Q3",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00751",
+    "descricao": "FORMA GFA. COCA-COLA ULTRA 250ML DG ART. 563289 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00752",
+    "descricao": "FORMA GFA. NEW APEROL 750ML ART. 1498 FOFO Q3",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00753",
+    "descricao": "FORMA CERV. NEW SOL 330ML LW ART. 563969 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00754",
+    "descricao": "FORMA GFA. BACARDI MARTINI VITTORIA 750ML ART. 564023 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00755",
+    "descricao": "FORMA GFA. ROCKS 1000ML ART. 5541 FOFO Q3",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00756",
+    "descricao": "FORMA POTE DAWN JAR 170 ML ART. 1249 FOFO Q3",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00757",
+    "descricao": "FORMA GFA. CANINHA 275ML 51 ICE V2 ART. 4542 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00758",
+    "descricao": "FORMA GFA. SMIRNOFF ICE 275ML ART. 563531 FO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00759",
+    "descricao": "BLOW MOULD GFA. LICOR BARRICA 750ML ART. 0004 FOFO Q3",
+    "tipoProduto": "molde"
+  },
+  {
+    "codigo": "5-01-00760",
+    "descricao": "FORMA GFA. RH2L ROSCA 900ML ART. 1484 FOFO Q3",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00761",
+    "descricao": "FORMA CERV. CIDADE IMPERIAL 330ML DC ART. 563810 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00762",
+    "descricao": "MOLDES PARA VIDRO - BLOW MOULD GFA. PISCO EDLA 750ML ART. 0005 FOFO Q3",
+    "tipoProduto": "molde"
+  },
+  {
+    "codigo": "5-01-00763",
+    "descricao": "FORMA GFA. ESPUMANTE 750ML V2 ART. 564027 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00764",
+    "descricao": "MOLDES PARA VIDRO - BLOW MOULD GFA. CUADRADA AZENDE 700ML ART. 0007 FOFO Q3",
+    "tipoProduto": "molde"
+  },
+  {
+    "codigo": "5-01-00765",
+    "descricao": "MOLDES PARA VIDRO - BLOW MOULD GFA. PISCO CORTEZ 750ML BB ART. 0006 FOFO Q3",
+    "tipoProduto": "molde"
+  },
+  {
+    "codigo": "5-01-00766",
+    "descricao": "FORMA VAS. SUCO OQ 1356ML DG ART. 563997 FOFO CI-882",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00767",
+    "descricao": "MOLDES PARA VIDRO - BLOW MOULD GFA. HORCON QUEMADO 750ML BB ART. 0010 FOFO Q3",
+    "tipoProduto": "molde"
+  },
+  {
+    "codigo": "5-01-00768",
+    "descricao": "FORMA GFA. HEINEKEN 330 K2 O.W. 190G TG ART. 1146 FOFO Q3",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00769",
+    "descricao": "FORMA GFA. HEINEKEN 330 K2 O.W. 190G DG ART. 1146 FOFO Q3",
+    "tipoProduto": "forma"
+  },
+  {
+    "codigo": "5-01-00770",
+    "descricao": "FORMA GFA. CERV. KAISER 330ML ART. 563551 CI-800",
+    "tipoProduto": "forma"
+  }
+]
