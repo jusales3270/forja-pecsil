@@ -40,6 +40,11 @@ enum TipoProduto {
   fundo_forma
   fundo_bloco
   molde
+  arruela
+  cabeca_sopro
+  forminha
+  puncao
+  funil
 }
 
 enum TipoMaquina {

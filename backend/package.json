@@ -11,6 +11,7 @@
     "db:generate": "prisma generate",
     "db:migrate": "prisma migrate dev",
     "db:seed": "tsx prisma/seed.ts",
+    "db:import-artigos-legado": "tsx prisma/import-artigos-legado.ts",
     "db:reset": "prisma migrate reset --force",
     "db:studio": "prisma studio"
   },
