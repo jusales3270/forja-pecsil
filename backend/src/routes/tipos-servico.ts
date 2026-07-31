@@ -19,6 +19,7 @@ import { prisma } from '../db/prisma.js';
 // ============================================================
 
 const criarTipoServicoSchema = z.object({
+  codigo: z.number().int().positive('codigo deve ser um inteiro positivo').nullable().optional(),
   nome: z.string().min(2, 'Nome deve ter ao menos 2 caracteres').max(200),
   etapaId: z.string().uuid('etapaId inválido'),
   exigeInspecao: z.boolean().default(false),
@@ -178,6 +179,19 @@ export async function tiposServicoRoutes(app: FastifyInstance) {
         });
       }
 
+      // Verifica unicidade do código, se informado
+      if (parsed.data.codigo != null) {
+        const codigoExistente = await prisma.tipoServico.findUnique({
+          where: { codigo: parsed.data.codigo },
+        });
+        if (codigoExistente) {
+          return reply.code(409).send({
+            error: 'duplicate_codigo',
+            message: `Já existe um Tipo de Serviço com o código ${parsed.data.codigo}`,
+          });
+        }
+      }
+
       const tipo = await prisma.tipoServico.create({
         data: parsed.data,
         include: { etapa: true },
@@ -227,6 +241,22 @@ export async function tiposServicoRoutes(app: FastifyInstance) {
           return reply.code(409).send({
             error: 'duplicate_name',
             message: 'Já existe um Tipo de Serviço com esse nome',
+          });
+        }
+      }
+
+      // Se mudou o código, valida unicidade
+      if (
+        bodyParsed.data.codigo != null &&
+        bodyParsed.data.codigo !== tipo.codigo
+      ) {
+        const codigoExistente = await prisma.tipoServico.findUnique({
+          where: { codigo: bodyParsed.data.codigo },
+        });
+        if (codigoExistente) {
+          return reply.code(409).send({
+            error: 'duplicate_codigo',
+            message: `Já existe um Tipo de Serviço com o código ${bodyParsed.data.codigo}`,
           });
         }
       }

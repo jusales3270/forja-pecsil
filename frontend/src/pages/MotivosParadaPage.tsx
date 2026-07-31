@@ -1,5 +1,5 @@
 // ============================================================
-// Forja - Página de Tipos de Serviço
+// Forja - Página de Motivos de Parada
 // CRUD via modal, usando React Query
 // ============================================================
 
@@ -9,35 +9,30 @@ import { AppLayout } from '../components/AppLayout';
 import { Modal } from '../components/Modal';
 import { ConfirmDialog } from '../components/ConfirmDialog';
 import {
-  useTiposServicoList,
-  useCreateTipoServico,
-  useUpdateTipoServico,
-  useDeleteTipoServico,
-  type TipoServico,
-} from '../hooks/useTiposServico';
-import { useEtapasList } from '../hooks/useEtapas';
+  useMotivosParadaList,
+  useCreateMotivoParada,
+  useUpdateMotivoParada,
+  useDeleteMotivoParada,
+  type MotivoParada,
+} from '../hooks/useMotivosParada';
 
-export function TiposServicoPage() {
+export function MotivosParadaPage() {
   const { claro } = useTheme();
   const [busca, setBusca] = useState('');
-  const [editando, setEditando] = useState<TipoServico | null>(null);
+  const [editando, setEditando] = useState<MotivoParada | null>(null);
   const [criando, setCriando] = useState(false);
-  const [deletando, setDeletando] = useState<TipoServico | null>(null);
+  const [deletando, setDeletando] = useState<MotivoParada | null>(null);
   const [mostrarInativos, setMostrarInativos] = useState(false);
 
-  const { data: tipos, isLoading, isError } = useTiposServicoList(mostrarInativos ? undefined : { ativo: true });
-  const deleteMut = useDeleteTipoServico();
+  const { data: motivos, isLoading, isError } = useMotivosParadaList(mostrarInativos ? undefined : { ativo: true });
+  const deleteMut = useDeleteMotivoParada();
 
-  const tiposFiltrados = useMemo(() => {
-    if (!tipos) return [];
-    if (!busca.trim()) return tipos;
+  const motivosFiltrados = useMemo(() => {
+    if (!motivos) return [];
+    if (!busca.trim()) return motivos;
     const termo = busca.toLowerCase();
-    return tipos.filter(
-      (t) =>
-        t.nome.toLowerCase().includes(termo) ||
-        t.etapa?.nome.toLowerCase().includes(termo)
-    );
-  }, [tipos, busca]);
+    return motivos.filter((m) => m.nome.toLowerCase().includes(termo));
+  }, [motivos, busca]);
 
   const handleConfirmarDelete = async () => {
     if (!deletando) return;
@@ -50,13 +45,13 @@ export function TiposServicoPage() {
   };
 
   return (
-    <AppLayout title="Tipos de Serviço" voltarPara="/">
+    <AppLayout title="Motivos de Parada" voltarPara="/">
       <div className="space-y-6">
         {/* Barra de ações */}
         <div className="flex flex-col sm:flex-row gap-3 items-stretch sm:items-center justify-between">
           <input
             type="text"
-            placeholder="Buscar por nome ou etapa..."
+            placeholder="Buscar por nome..."
             value={busca}
             onChange={(e) => setBusca(e.target.value)}
             className="input max-w-md"
@@ -71,7 +66,7 @@ export function TiposServicoPage() {
             Mostrar inativos
           </label>
           <button onClick={() => setCriando(true)} className="btn-primary px-5 py-3">
-            + Novo Tipo de Serviço
+            + Novo Motivo de Parada
           </button>
         </div>
 
@@ -91,57 +86,53 @@ export function TiposServicoPage() {
 
         {isError && (
           <div className="error-message">
-            Não foi possível carregar os Tipos de Serviço.
+            Não foi possível carregar os Motivos de Parada.
           </div>
         )}
 
-        {!isLoading && !isError && tiposFiltrados.length === 0 && (
+        {!isLoading && !isError && motivosFiltrados.length === 0 && (
           <div className={`card text-center ${claro ? 'text-slate-400' : 'text-neutral-400'}`}>
             {busca ? (
-              <>Nenhum tipo encontrado para "{busca}".</>
+              <>Nenhum motivo encontrado para "{busca}".</>
             ) : (
               <>
-                Nenhum Tipo de Serviço cadastrado ainda. Clique em "Novo" para
+                Nenhum Motivo de Parada cadastrado ainda. Clique em "Novo" para
                 começar.
               </>
             )}
           </div>
         )}
 
-        {!isLoading && tiposFiltrados.length > 0 && (
+        {!isLoading && motivosFiltrados.length > 0 && (
           <div className="card p-0 overflow-hidden">
             <table className="w-full text-sm">
               <thead className={`text-xs uppercase tracking-wide ${claro ? 'bg-slate-50 text-slate-500' : 'bg-neutral-950 text-neutral-400'}`}>
                 <tr>
                   <th className="text-left px-4 py-3 w-20">Código</th>
                   <th className="text-left px-4 py-3">Nome</th>
-                  <th className="text-left px-4 py-3">Etapa</th>
-                  <th className="text-left px-4 py-3">Exige Inspeção</th>
+                  <th className="text-left px-4 py-3">Planejada</th>
                   <th className="text-left px-4 py-3">Status</th>
                   <th className="text-right px-4 py-3">Ações</th>
                 </tr>
               </thead>
               <tbody className={`divide-y ${claro ? 'divide-slate-200' : 'divide-neutral-800'}`}>
-                {tiposFiltrados.map((t) => (
-                  <tr key={t.id} className={claro ? 'hover:bg-slate-50' : 'hover:bg-neutral-800/30'}>
+                {motivosFiltrados.map((m) => (
+                  <tr key={m.id} className={claro ? 'hover:bg-slate-50' : 'hover:bg-neutral-800/30'}>
                     <td className={`px-4 py-3 font-mono ${claro ? 'text-slate-500' : 'text-neutral-400'}`}>
-                      {t.codigo ?? '—'}
+                      {m.codigo ?? '—'}
                     </td>
                     <td className={`px-4 py-3 font-medium ${claro ? 'text-slate-900' : 'text-neutral-100'}`}>
-                      {t.nome}
-                    </td>
-                    <td className={`px-4 py-3 ${claro ? 'text-slate-600' : 'text-neutral-300'}`}>
-                      {t.etapa?.nome ?? '—'}
+                      {m.nome}
                     </td>
                     <td className="px-4 py-3">
-                      {t.exigeInspecao ? (
+                      {m.planejado ? (
                         <span className="badge-forja">Sim</span>
                       ) : (
                         <span className="badge-neutral">Não</span>
                       )}
                     </td>
                     <td className="px-4 py-3">
-                      {t.ativo ? (
+                      {m.ativo ? (
                         <span className="badge-forja">Ativo</span>
                       ) : (
                         <span className="badge-neutral">Inativo</span>
@@ -149,13 +140,13 @@ export function TiposServicoPage() {
                     </td>
                     <td className="px-4 py-3 text-right">
                       <button
-                        onClick={() => setEditando(t)}
+                        onClick={() => setEditando(m)}
                         className="btn-ghost px-3 py-1.5 text-xs mr-1"
                       >
                         Editar
                       </button>
                       <button
-                        onClick={() => setDeletando(t)}
+                        onClick={() => setDeletando(m)}
                         className={`btn px-3 py-1.5 text-xs ${claro ? 'bg-slate-200 hover:bg-slate-300 text-slate-700' : 'bg-neutral-800 hover:bg-neutral-700 text-neutral-200'}`}
                       >
                         Desativar
@@ -170,9 +161,9 @@ export function TiposServicoPage() {
       </div>
 
       {/* Modal criar/editar */}
-      <TipoServicoModal
+      <MotivoParadaModal
         open={criando || editando !== null}
-        tipo={editando}
+        motivo={editando}
         onClose={() => {
           setCriando(false);
           setEditando(null);
@@ -182,7 +173,7 @@ export function TiposServicoPage() {
       {/* Confirmação de delete */}
       <ConfirmDialog
         open={deletando !== null}
-        title="Desativar Tipo de Serviço"
+        title="Desativar Motivo de Parada"
         message={
           deletando
             ? `Tem certeza que deseja desativar "${deletando.nome}"? O item ficará oculto da lista mas pode ser reativado depois marcando "Mostrar inativos".`
@@ -201,40 +192,33 @@ export function TiposServicoPage() {
 // Modal de criar/editar (interno à página)
 // ============================================================
 
-interface TipoServicoModalProps {
+interface MotivoParadaModalProps {
   open: boolean;
-  tipo: TipoServico | null;
+  motivo: MotivoParada | null;
   onClose: () => void;
 }
 
-function TipoServicoModal({ open, tipo, onClose }: TipoServicoModalProps) {
-  const ehEdicao = tipo !== null;
+function MotivoParadaModal({ open, motivo, onClose }: MotivoParadaModalProps) {
+  const ehEdicao = motivo !== null;
 
   const [codigo, setCodigo] = useState('');
   const [nome, setNome] = useState('');
-  const [etapaId, setEtapaId] = useState('');
-  const [exigeInspecao, setExigeInspecao] = useState(false);
+  const [planejado, setPlanejado] = useState(false);
   const [ativo, setAtivo] = useState(true);
-  const [observacoes, setObservacoes] = useState('');
   const [erro, setErro] = useState<string | null>(null);
 
-  const { data: etapas, isLoading: etapasLoading } = useEtapasList();
-  const createMut = useCreateTipoServico();
-  const updateMut = useUpdateTipoServico();
-
-  // Reset quando muda o tipo ou abre/fecha (sincroniza props -> state)
+  const createMut = useCreateMotivoParada();
+  const updateMut = useUpdateMotivoParada();
 
   useEffect(() => {
     if (open) {
-      setCodigo(tipo?.codigo != null ? String(tipo.codigo) : '');
-      setNome(tipo?.nome ?? '');
-      setEtapaId(tipo?.etapaId ?? '');
-      setExigeInspecao(tipo?.exigeInspecao ?? false);
-      setAtivo(tipo?.ativo ?? true);
-      setObservacoes(tipo?.observacoes ?? '');
+      setCodigo(motivo?.codigo != null ? String(motivo.codigo) : '');
+      setNome(motivo?.nome ?? '');
+      setPlanejado(motivo?.planejado ?? false);
+      setAtivo(motivo?.ativo ?? true);
       setErro(null);
     }
-  }, [open, tipo]);
+  }, [open, motivo]);
 
   const loading = createMut.isPending || updateMut.isPending;
 
@@ -244,10 +228,6 @@ function TipoServicoModal({ open, tipo, onClose }: TipoServicoModalProps) {
 
     if (!nome.trim()) {
       setErro('Nome é obrigatório');
-      return;
-    }
-    if (!etapaId) {
-      setErro('Etapa é obrigatória');
       return;
     }
     let codigoNum: number | null = null;
@@ -260,25 +240,21 @@ function TipoServicoModal({ open, tipo, onClose }: TipoServicoModalProps) {
     }
 
     try {
-      if (ehEdicao && tipo) {
+      if (ehEdicao && motivo) {
         await updateMut.mutateAsync({
-          id: tipo.id,
+          id: motivo.id,
           input: {
             codigo: codigoNum,
             nome: nome.trim(),
-            etapaId,
-            exigeInspecao,
+            planejado,
             ativo,
-            observacoes: observacoes.trim() || null,
           },
         });
       } else {
         await createMut.mutateAsync({
           codigo: codigoNum,
           nome: nome.trim(),
-          etapaId,
-          exigeInspecao,
-          observacoes: observacoes.trim() || undefined,
+          planejado,
         });
       }
       onClose();
@@ -295,7 +271,7 @@ function TipoServicoModal({ open, tipo, onClose }: TipoServicoModalProps) {
     <Modal
       open={open}
       onClose={loading ? () => {} : onClose}
-      title={ehEdicao ? 'Editar Tipo de Serviço' : 'Novo Tipo de Serviço'}
+      title={ehEdicao ? 'Editar Motivo de Parada' : 'Novo Motivo de Parada'}
       size="md"
       footer={
         <>
@@ -309,7 +285,7 @@ function TipoServicoModal({ open, tipo, onClose }: TipoServicoModalProps) {
           </button>
           <button
             type="submit"
-            form="tipo-servico-form"
+            form="motivo-parada-form"
             disabled={loading}
             className="btn-primary px-4 py-2 text-sm"
           >
@@ -318,7 +294,7 @@ function TipoServicoModal({ open, tipo, onClose }: TipoServicoModalProps) {
         </>
       }
     >
-      <form id="tipo-servico-form" onSubmit={handleSubmit} className="space-y-4">
+      <form id="motivo-parada-form" onSubmit={handleSubmit} className="space-y-4">
         {erro && <div className="error-message">{erro}</div>}
 
         <div>
@@ -329,7 +305,7 @@ function TipoServicoModal({ open, tipo, onClose }: TipoServicoModalProps) {
             value={codigo}
             onChange={(e) => setCodigo(e.target.value)}
             className="input"
-            placeholder="Ex: 10 (opcional — referência do sistema legado)"
+            placeholder="Ex: 3 (opcional — referência do sistema legado)"
           />
         </div>
 
@@ -340,38 +316,21 @@ function TipoServicoModal({ open, tipo, onClose }: TipoServicoModalProps) {
             value={nome}
             onChange={(e) => setNome(e.target.value)}
             className="input"
-            placeholder="Ex: CÉLULA DE TORNEAMENTO LADO DIANTEIRO"
+            placeholder="Ex: QUEBRA DE MÁQUINA"
             autoFocus
           />
         </div>
 
-        <div>
-          <label className="label">Etapa *</label>
-          <select
-            value={etapaId}
-            onChange={(e) => setEtapaId(e.target.value)}
-            className="input"
-            disabled={etapasLoading}
-          >
-            <option value="">Selecione uma etapa...</option>
-            {etapas?.map((e) => (
-              <option key={e.id} value={e.id}>
-                {e.nome}
-              </option>
-            ))}
-          </select>
-        </div>
-
         <div className="flex items-center gap-3">
           <input
-            id="exige-inspecao"
+            id="planejado"
             type="checkbox"
-            checked={exigeInspecao}
-            onChange={(e) => setExigeInspecao(e.target.checked)}
+            checked={planejado}
+            onChange={(e) => setPlanejado(e.target.checked)}
             className="w-4 h-4 accent-forja-500"
           />
-          <label htmlFor="exige-inspecao" className="text-sm text-neutral-300 dark:text-neutral-300">
-            Exige inspeção dimensional
+          <label htmlFor="planejado" className="text-sm text-neutral-300">
+            Parada planejada (ex: setup, troca de ferramenta — não é um problema)
           </label>
         </div>
 
@@ -389,17 +348,6 @@ function TipoServicoModal({ open, tipo, onClose }: TipoServicoModalProps) {
             </label>
           </div>
         )}
-
-        <div>
-          <label className="label">Observações</label>
-          <textarea
-            value={observacoes}
-            onChange={(e) => setObservacoes(e.target.value)}
-            className="input"
-            rows={3}
-            placeholder="Opcional"
-          />
-        </div>
       </form>
     </Modal>
   );

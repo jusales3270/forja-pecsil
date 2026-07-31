@@ -208,6 +208,7 @@ model Pessoa {
   alertasRecebidos              Alerta[]
   osCriadas                     OS[]                   @relation("OSCriadaPor")
   artigosCriados                Artigo[]               @relation("ArtigoCriadoPor")
+  paradasRegistradas            ParadaMaquina[]
 
   @@map("pessoas")
 }
@@ -283,6 +284,7 @@ model Maquina {
 
 model TipoServico {
   id            String   @id @default(uuid())
+  codigo        Int?     @unique
   nome          String   @unique
   etapaId       String   @map("etapa_id")
   exigeInspecao Boolean  @default(false) @map("exige_inspecao")
@@ -569,8 +571,46 @@ model Carimbo {
   programador         Pessoa?               @relation("ProgramadorCarimbo", fields: [programadorId], references: [id])
   operadorResponsavel Pessoa?               @relation("OperadorCarimbo", fields: [operadorResponsavelId], references: [id])
   processamento       ProcessamentoMaquina?
+  paradas             ParadaMaquina[]
 
   @@map("carimbos")
+}
+
+// ============================================================
+// MOTIVO DE PARADA (catálogo) + PARADA DE MÁQUINA (registro)
+// ============================================================
+
+model MotivoParada {
+  id                   String   @id @default(uuid())
+  codigo               Int?     @unique
+  nome                 String   @unique
+  planejado            Boolean  @default(false)
+  ativo                Boolean  @default(true)
+  capturaAutomaticaIot Boolean  @default(false) @map("captura_automatica_iot")
+  criadoEm             DateTime @default(now()) @map("criado_em")
+  atualizadoEm         DateTime @updatedAt @map("atualizado_em")
+
+  paradas ParadaMaquina[]
+
+  @@map("motivos_parada")
+}
+
+model ParadaMaquina {
+  id              String    @id @default(uuid())
+  carimboId       String    @map("carimbo_id")
+  motivoParadaId  String    @map("motivo_parada_id")
+  inicio          DateTime  @default(now())
+  fim             DateTime?
+  observacoes     String?
+  registradoPorId String    @map("registrado_por_id")
+  criadoEm        DateTime  @default(now()) @map("criado_em")
+  atualizadoEm    DateTime  @updatedAt @map("atualizado_em")
+
+  carimbo       Carimbo      @relation(fields: [carimboId], references: [id])
+  motivoParada  MotivoParada @relation(fields: [motivoParadaId], references: [id])
+  registradoPor Pessoa       @relation(fields: [registradoPorId], references: [id])
+
+  @@map("paradas_maquina")
 }
 
 // ============================================================

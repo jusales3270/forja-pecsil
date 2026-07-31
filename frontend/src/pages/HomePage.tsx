@@ -75,9 +75,11 @@ export function HomePage() {
           </p>
         </div>
 
-        {/* Backoffice — cadastros */}
+        {/* Cadastros — base do roteiro de produção (1. o que existe antes de qualquer OS) */}
+        {(pode('cadastros_tipos_servico') || pode('cadastros_motivos_parada') || pode('cadastros_artigos')) && (
         <div className="card">
-          <h3 className={`text-lg font-semibold mb-4 ${T.cardTexto}`}>Backoffice</h3>
+          <h3 className={`text-lg font-semibold mb-1 ${T.cardTexto}`}>Cadastros</h3>
+          <p className={`text-xs mb-4 ${T.cardSub}`}>Base do roteiro de produção — mantida à parte, não é uma etapa do fluxo</p>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-sm">
             {pode('cadastros_tipos_servico') && (
             <button
@@ -91,16 +93,15 @@ export function HomePage() {
               </p>
             </button>
             )}
-
-            {/* Espaços reservados pras próximas telas */}
-            {pode('cadastros_tolerancias') && (
+            {pode('cadastros_motivos_parada') && (
             <button
-              onClick={() => navigate('/tolerancias')}
+              onClick={() => navigate('/motivos-parada')}
               className={`text-left p-4 rounded-lg border transition-colors ${T.itemBorder}`}
             >
-              <p className={`font-medium ${T.itemTexto}`}>Tolerâncias por Cliente</p>
+              <p className={`font-medium ${T.itemTexto}`}>Motivos de Parada</p>
               <p className={`text-xs mt-1 ${T.itemSub}`}>
-                Faixas de tolerância padrão por cliente (fallback das cotas)
+                Catálogo de paradas de máquina (quebra, setup, falta de
+                material...) usado no Tótem e no Painel
               </p>
             </button>
             )}
@@ -115,24 +116,34 @@ export function HomePage() {
               </p>
             </button>
             )}
-            {pode('totem_acessar') && (
-            <button
-              onClick={() => navigate('/totem')}
-              className={`text-left p-4 rounded-lg border transition-colors ${T.totemBorder}`}
-            >
-              <p className={`font-medium ${T.totemTexto}`}>Tótem (Sprint 3)</p>
-              <p className={`text-xs mt-1 ${T.totemSub}`}>Programador inicia e encerra OPs no chão de fábrica</p>
-            </button>
-            )}
+          </div>
+        </div>
+        )}
+
+        {/* Produção — sequência real do PCP: abrir OS -> executar no tótem -> acompanhar -> tratar exceções */}
+        {(pode('os_listar') || pode('totem_acessar') || pode('dashboard_chefe') || pode('fantasmas_ver')) && (
+        <div className="card">
+          <h3 className={`text-lg font-semibold mb-1 ${T.cardTexto}`}>Fluxo de PCP</h3>
+          <p className={`text-xs mb-4 ${T.cardSub}`}>Sequência real do processo, do pedido até a entrega</p>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-sm">
             {pode('os_listar') && (
             <button
               onClick={() => navigate('/os')}
               className={`text-left p-4 rounded-lg border transition-colors ${T.itemBorder}`}
             >
-              <p className={`font-medium ${T.itemTexto}`}>Ordens de Serviço</p>
+              <p className={`font-medium ${T.itemTexto}`}>1. Ordens de Serviço</p>
               <p className={`text-xs mt-1 ${T.itemSub}`}>
-                Abertura e acompanhamento de OS de produção
+                Abertura da OS: gera os lotes e as OPs de produção
               </p>
+            </button>
+            )}
+            {pode('totem_acessar') && (
+            <button
+              onClick={() => navigate('/totem')}
+              className={`text-left p-4 rounded-lg border transition-colors ${T.totemBorder}`}
+            >
+              <p className={`font-medium ${T.totemTexto}`}>2. Tótem</p>
+              <p className={`text-xs mt-1 ${T.totemSub}`}>Programador inicia e encerra OPs no chão de fábrica</p>
             </button>
             )}
             {pode('dashboard_chefe') && (
@@ -140,7 +151,7 @@ export function HomePage() {
               onClick={() => navigate('/dashboard')}
               className={`text-left p-4 rounded-lg border transition-colors ${T.dashBorder}`}
             >
-              <p className={`font-medium ${T.dashTexto}`}>Painel de Produção</p>
+              <p className={`font-medium ${T.dashTexto}`}>3. Painel de Produção</p>
               <p className={`text-xs mt-1 ${T.dashSub}`}>
                 Visão macro: OS por status, atrasadas, produção por etapa, inspeção
               </p>
@@ -151,7 +162,7 @@ export function HomePage() {
               onClick={() => navigate('/lotes-fantasmas')}
               className={`text-left p-4 rounded-lg border transition-colors ${T.fantasmaBorder}`}
             >
-              <p className={`font-medium ${T.fantasmaTexto}`}>👻 Lotes Fantasmas</p>
+              <p className={`font-medium ${T.fantasmaTexto}`}>👻 4. Lotes Fantasmas</p>
               <p className={`text-xs mt-1 ${T.fantasmaSub}`}>
                 OPs sem movimentação, máquinas sem registro e turnos não fechados
               </p>
@@ -159,6 +170,7 @@ export function HomePage() {
             )}
           </div>
         </div>
+        )}
 
         {/* Status do sistema */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

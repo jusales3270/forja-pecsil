@@ -31,6 +31,11 @@ const encerrarSchema = z.object({
   observacoes: z.string().max(1000).nullable().optional(),
 });
 
+const pausarSchema = z.object({
+  motivoParadaId: z.string().uuid('motivoParadaId inválido'),
+  observacoes: z.string().max(1000).nullable().optional(),
+});
+
 // ============================================================
 // Helpers
 // ============================================================
@@ -216,6 +221,15 @@ export async function opLoteRoutes(app: FastifyInstance) {
               maquina: { select: { id: true, nome: true, codigoInterno: true } },
               programador: { select: { id: true, nome: true } },
               operadorResponsavel: { select: { id: true, nome: true } },
+              // Parada em aberto (se a OP estiver pausada agora)
+              paradas: {
+                where: { fim: null },
+                orderBy: { inicio: 'desc' },
+                take: 1,
+                include: {
+                  motivoParada: { select: { id: true, nome: true, planejado: true } },
+                },
+              },
             },
           },
         },
@@ -568,6 +582,13 @@ export async function opLoteRoutes(app: FastifyInstance) {
             data: { status: 'finalizado', fim: new Date() },
           });
 
+          // Fecha qualquer parada de máquina ainda aberta nesse carimbo —
+          // não deixa parada pendurada quando o operador encerra a OP.
+          await tx.paradaMaquina.updateMany({
+            where: { carimboId: carimboAberto.id, fim: null },
+            data: { fim: new Date() },
+          });
+
           // Atualiza OPLote
           await tx.oPLote.update({
             where: { id: opLote.id },
@@ -735,6 +756,160 @@ export async function opLoteRoutes(app: FastifyInstance) {
           message: 'Erro ao encerrar OP. Tente novamente.',
         });
       }
+    },
+  );
+
+  // ---------------- PAUSAR (registrar parada de máquina) ----------------
+  app.post(
+    '/op-lote/:id/pausar',
+    { onRequest: [app.authenticate] },
+    async (request, reply) => {
+      const paramsSchema = z.object({ id: z.string().uuid() });
+      const paramsParsed = paramsSchema.safeParse(request.params);
+      if (!paramsParsed.success) {
+        return reply
+          .code(400)
+          .send({ error: 'invalid_input', message: 'ID inválido' });
+      }
+
+      const bodyParsed = pausarSchema.safeParse(request.body);
+      if (!bodyParsed.success) {
+        return reply.code(400).send({
+          error: 'invalid_input',
+          message: 'Dados inválidos',
+          details: bodyParsed.error.flatten(),
+        });
+      }
+
+      const user = request.user as any;
+      if (!podeOperarTotem(user.papel)) {
+        return reply.code(403).send({
+          error: 'forbidden',
+          message: 'Apenas programador, PCP ou admin podem pausar OPs',
+        });
+      }
+
+      const { id: opLoteId } = paramsParsed.data;
+      const { motivoParadaId, observacoes } = bodyParsed.data;
+      const registradoPorId = user.pessoaId;
+
+      const opLote = await prisma.oPLote.findUnique({
+        where: { id: opLoteId },
+        select: { id: true, status: true },
+      });
+      if (!opLote) {
+        return reply
+          .code(404)
+          .send({ error: 'not_found', message: 'OP não encontrada' });
+      }
+      if (opLote.status !== 'em_processo') {
+        return reply.code(400).send({
+          error: 'op_nao_em_processo',
+          message: `OP está com status "${opLote.status}" e não pode ser pausada`,
+        });
+      }
+
+      const carimboAberto = await prisma.carimbo.findFirst({
+        where: { opLoteId: opLote.id, timestampSaida: null },
+        orderBy: { timestampEntrada: 'desc' },
+      });
+      if (!carimboAberto) {
+        return reply.code(400).send({
+          error: 'carimbo_aberto_nao_encontrado',
+          message: 'Nenhum carimbo aberto encontrado pra esta OP',
+        });
+      }
+
+      const paradaAberta = await prisma.paradaMaquina.findFirst({
+        where: { carimboId: carimboAberto.id, fim: null },
+      });
+      if (paradaAberta) {
+        return reply.code(409).send({
+          error: 'parada_ja_aberta',
+          message: 'Já existe uma parada em aberto para esta OP. Retome antes de pausar de novo.',
+        });
+      }
+
+      const motivo = await prisma.motivoParada.findUnique({
+        where: { id: motivoParadaId },
+      });
+      if (!motivo || !motivo.ativo) {
+        return reply.code(404).send({
+          error: 'motivo_parada_invalido',
+          message: 'Motivo de parada não encontrado ou inativo',
+        });
+      }
+
+      const parada = await prisma.paradaMaquina.create({
+        data: {
+          carimboId: carimboAberto.id,
+          motivoParadaId,
+          observacoes: observacoes ?? null,
+          registradoPorId,
+        },
+        include: {
+          motivoParada: { select: { id: true, nome: true, planejado: true } },
+        },
+      });
+
+      return reply.code(201).send({ data: parada });
+    },
+  );
+
+  // ---------------- RETOMAR (fechar parada de máquina aberta) ----------------
+  app.post(
+    '/op-lote/:id/retomar',
+    { onRequest: [app.authenticate] },
+    async (request, reply) => {
+      const paramsSchema = z.object({ id: z.string().uuid() });
+      const paramsParsed = paramsSchema.safeParse(request.params);
+      if (!paramsParsed.success) {
+        return reply
+          .code(400)
+          .send({ error: 'invalid_input', message: 'ID inválido' });
+      }
+
+      const user = request.user as any;
+      if (!podeOperarTotem(user.papel)) {
+        return reply.code(403).send({
+          error: 'forbidden',
+          message: 'Apenas programador, PCP ou admin podem retomar OPs',
+        });
+      }
+
+      const { id: opLoteId } = paramsParsed.data;
+
+      const carimboAberto = await prisma.carimbo.findFirst({
+        where: { opLoteId, timestampSaida: null },
+        orderBy: { timestampEntrada: 'desc' },
+      });
+      if (!carimboAberto) {
+        return reply.code(400).send({
+          error: 'carimbo_aberto_nao_encontrado',
+          message: 'Nenhum carimbo aberto encontrado pra esta OP',
+        });
+      }
+
+      const paradaAberta = await prisma.paradaMaquina.findFirst({
+        where: { carimboId: carimboAberto.id, fim: null },
+        orderBy: { inicio: 'desc' },
+      });
+      if (!paradaAberta) {
+        return reply.code(400).send({
+          error: 'parada_nao_encontrada',
+          message: 'Não há parada em aberto para esta OP',
+        });
+      }
+
+      const parada = await prisma.paradaMaquina.update({
+        where: { id: paradaAberta.id },
+        data: { fim: new Date() },
+        include: {
+          motivoParada: { select: { id: true, nome: true, planejado: true } },
+        },
+      });
+
+      return { data: parada };
     },
   );
 }

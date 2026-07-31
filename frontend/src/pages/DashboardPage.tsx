@@ -140,6 +140,55 @@ export default function DashboardPage() {
         ))}
       </div>
 
+      {/* Paradas de máquina */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+        <div className={`${T.card} ${d.paradas.ativas.length > 0 ? 'border-red-500/40' : ''}`}>
+          <div className="flex items-center justify-between mb-2">
+            <h2 className={`text-sm font-semibold ${T.texto}`}>Máquinas paradas agora</h2>
+            <span className="badge bg-red-500/15 text-red-500 border-red-500/30">{d.paradas.ativas.length}</span>
+          </div>
+          {d.paradas.ativas.length === 0 ? (
+            <p className={`text-xs ${T.sub}`}>Nenhuma parada em aberto.</p>
+          ) : (
+            <div className="space-y-1 text-xs">
+              {d.paradas.ativas.map((p) => (
+                <div key={p.id} className={`flex justify-between border-b ${T.divisor} py-1`}>
+                  <span className={T.cardKSub}>
+                    {p.maquina ?? '—'} · {p.codigoGrv} ({p.etapa}) — {p.motivo}
+                    {p.planejado ? ' · planejada' : ''}
+                  </span>
+                  <span className="text-red-500 font-semibold">{p.minutosParado}min</span>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+        <div className={T.card}>
+          <div className="flex items-center justify-between mb-2">
+            <h2 className={`text-sm font-semibold ${T.texto}`}>Tempo parado hoje, por motivo</h2>
+          </div>
+          {Object.keys(d.paradas.porMotivoHoje).length === 0 ? (
+            <p className={`text-xs ${T.sub}`}>Nenhuma parada registrada hoje.</p>
+          ) : (
+            <div className="space-y-1 text-xs">
+              {Object.entries(d.paradas.porMotivoHoje)
+                .sort(([, a], [, b]) => b.minutos - a.minutos)
+                .map(([motivo, info]) => (
+                  <div key={motivo} className={`flex justify-between border-b ${T.divisor} py-1`}>
+                    <span className={T.cardKSub}>
+                      {motivo}
+                      {info.planejado ? ' · planejada' : ''} ({info.ocorrencias}x)
+                    </span>
+                    <span className={`font-semibold ${info.planejado ? 'text-blue-500' : 'text-amber-500'}`}>
+                      {info.minutos}min
+                    </span>
+                  </div>
+                ))}
+            </div>
+          )}
+        </div>
+      </div>
+
       {/* Lotes Fantasmas v2 */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
         <div className={`${T.card} ${d.fantasmas.opsParadas.length > 0 ? 'border-amber-500/40' : ''}`}>

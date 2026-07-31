@@ -138,7 +138,7 @@ forja/
 - ⬜ **Sprint 3** — Tótem do programador (mouse+teclado)
 - ⬜ **Sprint 4** — Apontamento operador + fundição
 - ⬜ **Sprint 5** — Inspeção dimensional + controle volume + log eventos
-- ⬜ **Sprint 6** — Dashboard do chefe + métricas
+- ⬜ **Sprint 6** — Dashboard do chefe + métricas (inclui Motivo de Parada/downtime — ver `DECISOES_SPRINT4.md`)
 - ⬜ **Sprint 7** — Alertas WhatsApp + go-live
 
 ---

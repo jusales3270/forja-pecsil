@@ -1,48 +1,44 @@
 // ============================================================
-// Forja - Hooks de API para Tipos de Serviço
+// Forja - Hooks de API para Motivos de Parada
 // ============================================================
 
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { api } from '../lib/api';
 
-export interface TipoServico {
+export interface MotivoParada {
   id: string;
   codigo: number | null;
   nome: string;
-  etapaId: string;
-  exigeInspecao: boolean;
+  planejado: boolean;
   ativo: boolean;
-  observacoes: string | null;
+  capturaAutomaticaIot: boolean;
   criadoEm: string;
   atualizadoEm: string;
-  etapa?: { id: string; nome: string };
 }
 
-export interface CriarTipoServicoInput {
+export interface CriarMotivoParadaInput {
   codigo?: number | null;
   nome: string;
-  etapaId: string;
-  exigeInspecao?: boolean;
-  observacoes?: string;
+  planejado?: boolean;
+  capturaAutomaticaIot?: boolean;
 }
 
-export interface AtualizarTipoServicoInput {
+export interface AtualizarMotivoParadaInput {
   codigo?: number | null;
   nome?: string;
-  etapaId?: string;
-  exigeInspecao?: boolean;
+  planejado?: boolean;
   ativo?: boolean;
-  observacoes?: string | null;
+  capturaAutomaticaIot?: boolean;
 }
 
-const QUERY_KEY = ['tipos-servico'] as const;
+const QUERY_KEY = ['motivos-parada'] as const;
 
 // ---------------- LISTA ----------------
-export function useTiposServicoList(params?: { ativo?: boolean; q?: string }) {
+export function useMotivosParadaList(params?: { ativo?: boolean }) {
   return useQuery({
     queryKey: [...QUERY_KEY, params],
     queryFn: async () => {
-      const { data } = await api.get<{ data: TipoServico[] }>('/tipos-servico', {
+      const { data } = await api.get<{ data: MotivoParada[] }>('/motivos-parada', {
         params,
       });
       return data.data;
@@ -51,12 +47,12 @@ export function useTiposServicoList(params?: { ativo?: boolean; q?: string }) {
 }
 
 // ---------------- CRIAR ----------------
-export function useCreateTipoServico() {
+export function useCreateMotivoParada() {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: async (input: CriarTipoServicoInput) => {
-      const { data } = await api.post<{ data: TipoServico }>(
-        '/tipos-servico',
+    mutationFn: async (input: CriarMotivoParadaInput) => {
+      const { data } = await api.post<{ data: MotivoParada }>(
+        '/motivos-parada',
         input
       );
       return data.data;
@@ -68,7 +64,7 @@ export function useCreateTipoServico() {
 }
 
 // ---------------- ATUALIZAR ----------------
-export function useUpdateTipoServico() {
+export function useUpdateMotivoParada() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async ({
@@ -76,10 +72,10 @@ export function useUpdateTipoServico() {
       input,
     }: {
       id: string;
-      input: AtualizarTipoServicoInput;
+      input: AtualizarMotivoParadaInput;
     }) => {
-      const { data } = await api.put<{ data: TipoServico }>(
-        `/tipos-servico/${id}`,
+      const { data } = await api.put<{ data: MotivoParada }>(
+        `/motivos-parada/${id}`,
         input
       );
       return data.data;
@@ -91,11 +87,11 @@ export function useUpdateTipoServico() {
 }
 
 // ---------------- DELETAR ----------------
-export function useDeleteTipoServico() {
+export function useDeleteMotivoParada() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (id: string) => {
-      await api.delete(`/tipos-servico/${id}`);
+      await api.delete(`/motivos-parada/${id}`);
     },
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: QUERY_KEY });

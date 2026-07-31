@@ -155,6 +155,74 @@ export async function dashboardRoutes(app: FastifyInstance) {
       horasParado: Math.floor((Date.now() - c.timestampEntrada.getTime()) / 3_600_000),
     }));
 
+    // Paradas ativas agora — o que está parado, desde quando e por quê
+    const paradasAtivasRaw = await prisma.paradaMaquina.findMany({
+      where: { fim: null },
+      include: {
+        motivoParada: { select: { id: true, nome: true, planejado: true } },
+        carimbo: {
+          select: {
+            maquina: { select: { id: true, nome: true, codigoInterno: true } },
+            opLote: {
+              select: {
+                codigoOp: true,
+                etapa: { select: { nome: true } },
+                lote: {
+                  select: {
+                    os: {
+                      select: {
+                        codigoGrv: true,
+                        cliente: { select: { nome: true } },
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+      orderBy: { inicio: 'asc' },
+    });
+    const paradasAtivas = paradasAtivasRaw.map((p) => ({
+      id: p.id,
+      motivo: p.motivoParada.nome,
+      planejado: p.motivoParada.planejado,
+      maquina: p.carimbo.maquina?.nome ?? null,
+      codigoOp: p.carimbo.opLote.codigoOp,
+      etapa: p.carimbo.opLote.etapa.nome,
+      codigoGrv: p.carimbo.opLote.lote.os.codigoGrv,
+      cliente: p.carimbo.opLote.lote.os.cliente.nome,
+      inicio: p.inicio,
+      minutosParado: Math.floor((agora.getTime() - p.inicio.getTime()) / 60_000),
+    }));
+
+    // Paradas de hoje, agregadas por motivo (disponibilidade de máquina)
+    const inicioHoje = new Date(agora);
+    inicioHoje.setHours(0, 0, 0, 0);
+    const paradasHojeRaw = await prisma.paradaMaquina.findMany({
+      where: { inicio: { gte: inicioHoje } },
+      select: {
+        inicio: true,
+        fim: true,
+        motivoParada: { select: { nome: true, planejado: true } },
+      },
+    });
+    const paradasPorMotivoHoje: Record<
+      string,
+      { minutos: number; ocorrencias: number; planejado: boolean }
+    > = {};
+    for (const p of paradasHojeRaw) {
+      const fim = p.fim ?? agora;
+      const minutos = Math.max(0, Math.round((fim.getTime() - p.inicio.getTime()) / 60_000));
+      const key = p.motivoParada.nome;
+      if (!paradasPorMotivoHoje[key]) {
+        paradasPorMotivoHoje[key] = { minutos: 0, ocorrencias: 0, planejado: p.motivoParada.planejado };
+      }
+      paradasPorMotivoHoje[key].minutos += minutos;
+      paradasPorMotivoHoje[key].ocorrencias += 1;
+    }
+
     const ontem = new Date(agora);
     ontem.setDate(agora.getDate() - 1);
     ontem.setHours(0, 0, 0, 0);
@@ -181,6 +249,10 @@ export async function dashboardRoutes(app: FastifyInstance) {
         osAtrasadas,
         kanban,
         inspecao,
+        paradas: {
+          ativas: paradasAtivas,
+          porMotivoHoje: paradasPorMotivoHoje,
+        },
         fantasmas: {
           opsParadas,
           turnosNaoFechados,

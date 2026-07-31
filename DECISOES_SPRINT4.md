@@ -47,3 +47,83 @@ operador que produziu. Decisão de negócio, não bug. Confirmar na fábrica:
 quem deve "assinar" a peça — quem está no tótem ou o operador da máquina?
 Se for o operador, mudar o registro para receber operadorId explícito (vindo
 do carimbo em andamento) em vez do usuário logado.
+
+## Débito de modelagem — Motivo de Parada / Downtime (adicionado 21/07/2026)
+
+**Contexto:** o cadastro legado "Tipos de Serviço" (planilha Pecsil) mistura
+dois domínios num catálogo só: operações reais de roteiro — as que viraram
+`Etapa`/`OperacaoArtigo` no forja (Metalização, Torno, Acabamento...) — e
+motivos de parada de máquina, sinalizados na coluna `Motivo de Parada = Sim`
+(Limpeza, Quebra de Máquina, Falta de Projeto, Falta de Material, Setup,
+Quebra de Ferramenta, Troca de Ferramenta, Ajuste de Máquina, Controle de
+Medição, Falta de Operador, Micro Parada, Serviço de Terceiros). O forja hoje
+só migrou a primeira metade. Não existe model nem tela para motivo de parada;
+`Carimbo` só tem `observacoes` (texto livre, não estruturado).
+
+**Por que importa:** sem isso não dá pra calcular disponibilidade de
+máquina/OEE nem diferenciar, no dashboard e no alerta de lote fantasma, uma
+máquina parada por falta de material de uma parada por quebra — hoje os dois
+casos aparecem como "carimbo aberto há X horas sem encerrar" e mais nada.
+
+**Opções de modelagem avaliadas:**
+
+1. *Reaproveitar o cadastro de Tipos de Serviço, com um campo `categoria`
+   (`operacao` | `parada`).* Migração de dados trivial (importa a planilha
+   direto), mas mistura dois domínios semânticos diferentes na mesma
+   tabela/tela — polui o formulário de roteiro e a tela de OS com opções que
+   não fazem sentido ali.
+2. *Cadastro `MotivoParada` dedicado + model `ParadaMaquina` vinculado a
+   `Carimbo`/`ProcessamentoMaquina`* (`inicio`, `fim`, `motivoId`,
+   `planejada: boolean`). Separação limpa de domínio e suporta múltiplas
+   paradas dentro do mesmo carimbo, mas exige migration e tela novas.
+3. *Campo `motivoParadaId` nullable direto em `Carimbo`.* Mais simples de
+   encaixar no fluxo atual do tótem (um select na hora de pausar), mas não
+   aguenta duas paradas diferentes dentro da mesma OP em andamento — perde
+   granularidade pro cálculo de OEE.
+
+**Recomendação:** opção 2, mas migrando só as ~13 linhas do legado que são de
+fato motivo de parada (não as 49). Manter `planejado: boolean` (mapeando a
+coluna "Motivo de Parada Planejado" do legado — hoje vazia na planilha, mas
+existe pra separar parada programada de não programada). No Tótem, isso vira
+um botão "Pausar" na tela de OP em andamento, ao lado de "Encerrar", que abre
+modal de motivo — sem sair do fluxo atual de iniciar/encerrar.
+
+Não bloqueante agora — só entra em jogo quando o dashboard de OEE/métricas
+(Sprint 6) for escopado. Registrado aqui pra não se perder.
+
+## Decisão do PCP: Travar Máquina descartada, Motivo de Parada é prioridade (21/07/2026)
+
+Conversa com o PCP resolveu as duas pendências em aberto sobre o cadastro
+legado de Tipos de Serviço:
+
+1. **"Travar Máquina" (item 5 do levantamento) — NÃO será usado.** Tinha sido
+   implementado como POC (campo `travaMaquina` em `OperacaoArtigo`/`OPLote`,
+   validação no `POST /op-lote/:id/iniciar`) pra testar a ideia de prender uma
+   operação parcial à mesma máquina entre carimbos. O PCP decidiu que não é
+   necessário — revertido por completo (schema, migration, backend, frontend).
+   Fica registrado que a ideia foi avaliada e descartada, caso surja de novo.
+
+2. **"Motivo de Parada" (item 4 do levantamento, opção 2 acima) — CONFIRMADO
+   como prioridade**, especificamente para alimentar o **Painel de Produção
+   do chefe** (acompanhamento do fluxo de produção em tempo real). Implementado
+   conforme a recomendação já registrada: `MotivoParada` (catálogo, com
+   `codigo`, `nome`, `planejado`, `capturaAutomaticaIot`) + `ParadaMaquina`
+   (N por `Carimbo`, `inicio`/`fim`/`observacoes`/`registradoPor`).
+
+   - Tótem: botão "Pausar" no card de OP em andamento → modal de motivo →
+     `POST /op-lote/:id/pausar`. Card fica vermelho com "⏸ PARADO — <motivo>
+     desde Xmin" e troca pra botão "Retomar" (`POST /op-lote/:id/retomar`).
+     Encerrar a OP fecha automaticamente qualquer parada aberta (não deixa
+     pendurada).
+   - Painel de Produção (`/dashboard`): dois cards novos — "Máquinas paradas
+     agora" (lista ao vivo, com motivo e minutos parado) e "Tempo parado
+     hoje, por motivo" (agregado, ordenado por minutos — a base do indicador
+     de disponibilidade/OEE que faltava).
+   - Cadastro: tela `/motivos-parada` (mesmo padrão de Tipos de Serviço),
+     atalho na Home em "Cadastros".
+
+   Pendente pro PCP popular: os motivos reais migrados do legado (Limpeza,
+   Quebra de Máquina, Falta de Material, Setup, Quebra/Troca de Ferramenta,
+   Ajuste de Máquina, Controle de Medição, Falta de Operador, Micro Parada,
+   Serviço de Terceiros) ainda não foram cadastrados via tela — o catálogo
+   está vazio em produção até alguém inserir.

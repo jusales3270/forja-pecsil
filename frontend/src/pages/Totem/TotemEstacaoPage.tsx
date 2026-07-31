@@ -8,6 +8,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import {
   useOPsPendentes,
   useOPsEmAndamento,
+  useRetomarOP,
   type OPLotePendente,
   type OPLoteEmAndamento,
   tempoDesde,
@@ -22,6 +23,7 @@ import { getSocket, joinEstacao, leaveEstacao } from '../../lib/socket';
 import { useQueryClient } from '@tanstack/react-query';
 import { IniciarOPModal } from './IniciarOPModal';
 import { EncerrarOPModal } from './EncerrarOPModal';
+import { PausarOPModal } from './PausarOPModal';
 
 export function TotemEstacaoPage() {
   const navigate = useNavigate();
@@ -36,7 +38,9 @@ export function TotemEstacaoPage() {
   const [busca, setBusca] = useState('');
   const [opIniciar, setOpIniciar] = useState<OPLotePendente | null>(null);
   const [opEncerrar, setOpEncerrar] = useState<OPLoteEmAndamento | null>(null);
+  const [opPausar, setOpPausar] = useState<OPLoteEmAndamento | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const retomar = useRetomarOP();
 
   const { data: pendentesData, isLoading: loadingPend } = useOPsPendentes(
     etapaId ? { etapaId, busca: busca || undefined } : null,
@@ -165,6 +169,9 @@ export function TotemEstacaoPage() {
                   op={op}
                   podeOperar={podeOperar}
                   onEncerrar={() => setOpEncerrar(op)}
+                  onPausar={() => setOpPausar(op)}
+                  onRetomar={() => retomar.mutate({ opLoteId: op.id })}
+                  retomando={retomar.isPending}
                 />
               ))}
             </div>
@@ -211,6 +218,13 @@ export function TotemEstacaoPage() {
       )}
       {opEncerrar && (
         <EncerrarOPModal op={opEncerrar} onClose={() => setOpEncerrar(null)} />
+      )}
+      {opPausar && (
+        <PausarOPModal
+          opLoteId={opPausar.id}
+          codigoOp={opPausar.codigoOp}
+          onClose={() => setOpPausar(null)}
+        />
       )}
     </div>
   );
@@ -342,14 +356,27 @@ function CardEmAndamento({
   op,
   podeOperar,
   onEncerrar,
+  onPausar,
+  onRetomar,
+  retomando,
 }: {
   op: OPLoteEmAndamento;
   podeOperar: boolean;
   onEncerrar: () => void;
+  onPausar: () => void;
+  onRetomar: () => void;
+  retomando: boolean;
 }) {
   const carimbo = op.carimbos[0];
+  const paradaAtiva = carimbo?.paradas?.[0];
   return (
-    <div className="bg-amber-500/5 border border-amber-500/30 rounded-xl p-4">
+    <div
+      className={`border rounded-xl p-4 ${
+        paradaAtiva
+          ? 'bg-red-500/5 border-red-500/30'
+          : 'bg-amber-500/5 border-amber-500/30'
+      }`}
+    >
       <div className="flex items-start justify-between gap-3 mb-2">
         <div className="flex items-center gap-2">
           <span className="font-mono text-forja-400 font-semibold">
@@ -389,12 +416,41 @@ function CardEmAndamento({
         </div>
       )}
 
-      {carimbo && podeOperar && (
+      {paradaAtiva && (
+        <div className="mb-3 px-3 py-2 bg-red-500/10 border border-red-500/30 rounded-lg">
+          <div className="text-xs font-semibold text-red-400">
+            ⏸ PARADO — {paradaAtiva.motivoParada.nome}
+          </div>
+          <div className="text-[11px] text-red-300/80 mt-0.5">
+            desde {tempoDesde(paradaAtiva.inicio)}
+            {paradaAtiva.motivoParada.planejado ? ' · planejada' : ''}
+          </div>
+        </div>
+      )}
+
+      {carimbo && !paradaAtiva && podeOperar && (
         <BotaoMaisUmaPeca opLoteId={op.id} maquinaId={carimbo.maquina.id} />
       )}
 
       <div className="flex items-center justify-end gap-2 mt-3">
         <BotaoInspecionar opLoteId={op.id} />
+        {podeOperar && paradaAtiva && (
+          <button
+            onClick={onRetomar}
+            disabled={retomando}
+            className="px-4 py-2 bg-red-600 hover:bg-red-700 disabled:opacity-50 text-white text-sm font-medium rounded-lg transition"
+          >
+            {retomando ? 'Retomando...' : 'Retomar'}
+          </button>
+        )}
+        {podeOperar && !paradaAtiva && (
+          <button
+            onClick={onPausar}
+            className="px-4 py-2 bg-neutral-700 hover:bg-neutral-600 text-white text-sm font-medium rounded-lg transition"
+          >
+            Pausar
+          </button>
+        )}
         {podeOperar && (
           <button
             onClick={onEncerrar}

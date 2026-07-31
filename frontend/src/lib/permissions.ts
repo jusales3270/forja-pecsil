@@ -23,6 +23,7 @@ export type Capacidade =
   | 'backoffice_acessar'
   // Cadastros
   | 'cadastros_tipos_servico'
+  | 'cadastros_motivos_parada'
   | 'cadastros_tolerancias'
   | 'cadastros_artigos'
   | 'cadastros_clientes'
@@ -52,6 +53,7 @@ const MAPA: Record<Papel, Capacidade[]> = {
   admin: [
     'backoffice_acessar',
     'cadastros_tipos_servico',
+    'cadastros_motivos_parada',
     'cadastros_tolerancias',
     'cadastros_artigos',
     'cadastros_clientes',
@@ -73,6 +75,7 @@ const MAPA: Record<Papel, Capacidade[]> = {
   chefe: [
     'backoffice_acessar',
     'cadastros_tipos_servico',
+    'cadastros_motivos_parada',
     'cadastros_tolerancias',
     'cadastros_artigos',
     'cadastros_clientes',
@@ -88,6 +91,7 @@ const MAPA: Record<Papel, Capacidade[]> = {
   pcp: [
     'backoffice_acessar',
     'cadastros_tipos_servico',
+    'cadastros_motivos_parada',
     'cadastros_tolerancias',
     'cadastros_artigos',
     'cadastros_clientes',
@@ -104,6 +108,7 @@ const MAPA: Record<Papel, Capacidade[]> = {
   engenharia: [
     'backoffice_acessar',
     'cadastros_tipos_servico',
+    'cadastros_motivos_parada',
     'cadastros_tolerancias',
     'cadastros_artigos',
     'os_listar',

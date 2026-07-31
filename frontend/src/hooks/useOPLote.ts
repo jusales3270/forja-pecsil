@@ -78,6 +78,14 @@ export interface OPLotePendente {
   };
 }
 
+export interface ParadaMaquina {
+  id: string;
+  inicio: string;
+  fim: string | null;
+  observacoes: string | null;
+  motivoParada: { id: string; nome: string; planejado: boolean };
+}
+
 export interface CarimboAberto {
   id: string;
   timestampEntrada: string;
@@ -87,6 +95,7 @@ export interface CarimboAberto {
   maquina: { id: string; nome: string; codigoInterno?: string };
   programador: { id: string; nome: string };
   operadorResponsavel: { id: string; nome: string };
+  paradas?: ParadaMaquina[];
 }
 
 export interface OPLoteEmAndamento extends OPLotePendente {
@@ -122,6 +131,11 @@ export interface EncerrarOPMeta {
   novoStatus: StatusOPLote;
   proximaOpId: string | null;
   loteConcluido: boolean;
+}
+
+export interface PausarOPInput {
+  motivoParadaId: string;
+  observacoes?: string | null;
 }
 
 // ============================================================
@@ -198,6 +212,36 @@ export function useEncerrarOP() {
       qc.invalidateQueries({ queryKey: ['os-list'] });
       qc.invalidateQueries({ queryKey: ['os-detail'] });
       qc.invalidateQueries({ queryKey: ['os-timeline'] });
+    },
+  });
+}
+
+export function usePausarOP() {
+  const qc = useQueryClient();
+  return useMutation<
+    { data: ParadaMaquina },
+    Error,
+    { opLoteId: string; input: PausarOPInput }
+  >({
+    mutationFn: async ({ opLoteId, input }) => {
+      const res = await api.post(`/op-lote/${opLoteId}/pausar`, input);
+      return res.data;
+    },
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ['op-lote-em-andamento'] });
+    },
+  });
+}
+
+export function useRetomarOP() {
+  const qc = useQueryClient();
+  return useMutation<{ data: ParadaMaquina }, Error, { opLoteId: string }>({
+    mutationFn: async ({ opLoteId }) => {
+      const res = await api.post(`/op-lote/${opLoteId}/retomar`, {});
+      return res.data;
+    },
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ['op-lote-em-andamento'] });
     },
   });
 }

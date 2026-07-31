@@ -3,6 +3,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { LoginPage } from './pages/LoginPage';
 import { HomePage } from './pages/HomePage';
 import { TiposServicoPage } from './pages/TiposServicoPage';
+import { MotivosParadaPage } from './pages/MotivosParadaPage';
 import { ToleranciasPage } from './pages/ToleranciasPage';
 import { ArtigosListPage } from './pages/Artigos/ArtigosListPage';
 import { ArtigoEditPage } from './pages/Artigos/ArtigoEditPage';
@@ -75,6 +76,14 @@ export function App() {
             element={
               <RoleRoute requireCapability="cadastros_tipos_servico">
                 <TiposServicoPage />
+              </RoleRoute>
+            }
+          />
+          <Route
+            path="/motivos-parada"
+            element={
+              <RoleRoute requireCapability="cadastros_motivos_parada">
+                <MotivosParadaPage />
               </RoleRoute>
             }
           />

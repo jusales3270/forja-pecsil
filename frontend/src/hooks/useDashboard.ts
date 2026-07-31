@@ -57,6 +57,21 @@ export interface DashboardData {
   osAtrasadas: OSAtrasada[];
   kanban: KanbanEtapa[];
   inspecao: Record<string, number>;
+  paradas: {
+    ativas: {
+      id: string;
+      motivo: string;
+      planejado: boolean;
+      maquina: string | null;
+      codigoOp: string;
+      etapa: string;
+      codigoGrv: string;
+      cliente: string;
+      inicio: string;
+      minutosParado: number;
+    }[];
+    porMotivoHoje: Record<string, { minutos: number; ocorrencias: number; planejado: boolean }>;
+  };
   fantasmas: {
     opsParadas: { codigoOp: string; codigoGrv: string; etapa: string; horasParado: number }[];
     turnosNaoFechados: { operador: string }[];
