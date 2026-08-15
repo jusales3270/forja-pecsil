@@ -8,6 +8,7 @@ import { decorateSocketPlaceholder, attachSocketIO } from './lib/socket.js';
 import { authRoutes } from './routes/auth.js';
 import { tiposServicoRoutes } from './routes/tipos-servico.js';
 import { motivosParadaRoutes } from './routes/motivos-parada.js';
+import { roteirosPadraoRoutes } from './routes/roteiros-padrao.js';
 import { toleranciasGeraisRoutes } from './routes/tolerancias-gerais.js';
 import { artigosRoutes } from './routes/artigos.js';
 import { desenhosRoutes } from './routes/desenhos.js';
@@ -88,6 +89,7 @@ async function bootstrap() {
   await app.register(authRoutes, { prefix: '/api' });
   await app.register(tiposServicoRoutes, { prefix: '/api' });
   await app.register(motivosParadaRoutes, { prefix: '/api' });
+  await app.register(roteirosPadraoRoutes, { prefix: '/api' });
   await app.register(toleranciasGeraisRoutes, { prefix: '/api' });
   await app.register(artigosRoutes, { prefix: '/api' });
   await app.register(desenhosRoutes, { prefix: '/api' });

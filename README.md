@@ -2,7 +2,7 @@
 
 Sistema de rastreamento de produção em tempo real para a fundição/usinagem Pecsil.
 
-**Status atual:** Sprint 1.1 — Parte 1 entregue (refatoração v2 da fundação técnica)
+**Status atual:** Sprints 0 a 6 + trilha de julho entregues (fundação, cadastros, OS, tótem, apontamento peça a peça, inspeção, painel do chefe, import do catálogo legado, Motivo de Parada). Em produção em `forja.somaflow.com.br`. Próximo: Sprint 6c — Paridade com o GRV. Ver `Roadmap_Pecsil_v5.md`.
 
 ---
 
@@ -81,7 +81,7 @@ Para containers mas **mantém os dados** (Postgres + MinIO).
 
 | Papel | Nome | Código |
 |-------|------|--------|
-| Admin | Junior | `0001` |
+| Admin | Administrador | `0001` |
 | Chefe | Ricardo | `0002` |
 | PCP | Rafael | `0003` |
 | Programador | Japonês | `0010` |
@@ -127,19 +127,19 @@ forja/
 
 ## 🗺️ Roadmap
 
-- ✅ **Sprint 0** — Pré-MVP (levantamento + setup)
-- ✅ **Sprint 1** — Fundação técnica (v1.0)
-- 🟡 **Sprint 1.1** — Refatoração v2 (em andamento — Parte 1 entregue)
-  - ✅ Parte 1: Schema v2, tipos, seed, MinIO, scripts, CI
-  - ⬜ Parte 2: Tela de login refeita (mouse+teclado), CSS limpo
-  - ⬜ Parte 3: Testes mínimos + documentação de implantação
-- ⬜ **Sprint 2a** — Backoffice de Artigos
-- ⬜ **Sprint 2b** — Abertura de OS + geração de lotes/OPs
-- ⬜ **Sprint 3** — Tótem do programador (mouse+teclado)
-- ⬜ **Sprint 4** — Apontamento operador + fundição
-- ⬜ **Sprint 5** — Inspeção dimensional + controle volume + log eventos
-- ⬜ **Sprint 6** — Dashboard do chefe + métricas (inclui Motivo de Parada/downtime — ver `DECISOES_SPRINT4.md`)
-- ⬜ **Sprint 7** — Alertas WhatsApp + go-live
+- ✅ **Sprints 0-1.1** — Fundação técnica, schema v2, MinIO, CI
+- ✅ **Sprint 2a/2b** — Backoffice de Artigos + abertura de OS com lotes/OPs herdadas
+- ✅ **Sprint 3** — Tótem do programador (mouse+teclado) + RBAC
+- ✅ **Sprint 4** — Apontamento peça a peça, conferência de turno, Lotes Fantasmas v1
+- ✅ **Sprint 5** — Inspeção dimensional + controle de volume
+- ✅ **Sprint 6** — Painel de produção do chefe + Lotes Fantasmas v2
+- ✅ **Trilha de julho** — Import do catálogo legado (~3.870 artigos), Motivo de Parada / Parada de Máquina, reorganização da Home
+- 🟡 **Fase 0 — Higiene** — limpeza de resíduos de dev (Home ✅, catálogo de paradas ✅; README/CHANGELOG ✅; falta backup versionado)
+- ⬜ **Sprint 6c** — Paridade com o GRV (materiais, terceiros, horas, roteiro em massa)
+- ⬜ **Sprint 6b** — Dashboard financeiro do PCP (bloqueado por respostas do PCP)
+- ⬜ **Sprint 7** — Alertas WhatsApp + hardening + go-live
+
+Detalhe completo, débitos técnicos e decisões registradas: `Roadmap_Pecsil_v5.md` e `DECISOES_SPRINT4.md`.
 
 ---
 
@@ -212,10 +212,10 @@ Rode `docker compose up minio_setup` pra recriar buckets.
 
 ## 📞 Contato
 
-**Antigravity** — Junior
-Boituva, SP
+**SomaVerso AI Systems**
 
-Documentação relacionada (na pasta de outputs):
-- `PRD_Pecsil_v2.md` — especificação completa do produto
-- `Roadmap_Pecsil_v2.md` — plano de entrega por sprint
+Documentação relacionada:
+- `Roadmap_Pecsil_v5.md` — plano de entrega, débitos técnicos e decisões registradas (na raiz do repo)
+- `DECISOES_SPRINT4.md` — decisões pontuais de modelagem (fundição, Motivo de Parada, `travaMaquina`)
 - `CHANGELOG.md` — histórico de mudanças do código
+- `PRD_Pecsil_v2.md` — especificação de produto (na pasta de outputs; v4/v5 pendente de publicação)

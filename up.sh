@@ -4,7 +4,7 @@
 # Uso: ./up.sh
 # ============================================================
 # Sobe: Postgres, Redis, MinIO + setup buckets
-# Aplica migrations e seed
+# Aplica migrations (NUNCA roda seed - db:seed apaga todos os dados)
 # Sobe backend e frontend em modo dev
 # ============================================================
 
@@ -65,16 +65,18 @@ sleep 3
 echo "  ✓ Buckets criados (verifique em http://localhost:9001)"
 echo ""
 
-# 5. Migrations + seed
+# 5. Migrations (sem seed - ver aviso abaixo)
 echo "🗄️  Aplicando migrations do Prisma..."
 cd backend
 pnpm prisma generate
 pnpm prisma migrate deploy 2>/dev/null || pnpm prisma migrate dev --name init
 echo ""
 
-echo "🌱 Rodando seed..."
-pnpm db:seed
 cd ..
+echo ""
+echo "ℹ️  Seed NÃO é executado por este script (db:seed APAGA todos os dados)."
+echo "   Se este for um ambiente novo e vazio, rode manualmente:"
+echo "   pnpm --filter @forja/backend db:seed"
 echo ""
 
 # 6. Resumo

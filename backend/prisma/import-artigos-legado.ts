@@ -26,7 +26,7 @@ const prisma = new PrismaClient();
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
 const NOME_CLIENTE_CATALOGO = 'Pecsil - Catálogo Interno (Moldes)';
-const CODIGO_PESSOA_IMPORTADOR = '0001'; // Admin (Junior) - ver README/seed.ts
+const CODIGO_PESSOA_IMPORTADOR = '0001'; // Admin - ver README/seed.ts
 
 interface ArtigoLegado {
   codigo: string;

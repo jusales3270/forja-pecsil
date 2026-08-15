@@ -175,7 +175,7 @@ export function AppLayout({
       {/* Footer simples */}
       <footer className={`border-t ${T.footerBorder} py-4`}>
         <div className={`max-w-7xl mx-auto px-6 text-center text-xs ${T.footerTexto}`}>
-          Forja · Antigravity · Pecsil
+          Forja · SomaVerso AI Systems · Pecsil
         </div>
       </footer>
     </div>

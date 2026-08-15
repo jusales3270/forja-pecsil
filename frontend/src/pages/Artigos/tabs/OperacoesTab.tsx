@@ -17,12 +17,15 @@ import {
   useReordenarOperacoes,
   type OperacaoArtigo,
 } from '../../../hooks/useOperacoesArtigo';
+import { AplicarRoteiroModal } from './AplicarRoteiroModal';
+import { useTheme } from '../../../lib/theme-store';
 
 interface OperacoesTabProps {
   artigoId: string;
 }
 
 export function OperacoesTab({ artigoId }: OperacoesTabProps) {
+  const { claro } = useTheme();
   const { data: operacoes, isLoading, isError } =
     useOperacoesArtigoList(artigoId);
   const reordenarMut = useReordenarOperacoes(artigoId);
@@ -31,6 +34,7 @@ export function OperacoesTab({ artigoId }: OperacoesTabProps) {
   const [criando, setCriando] = useState(false);
   const [editando, setEditando] = useState<OperacaoArtigo | null>(null);
   const [deletando, setDeletando] = useState<OperacaoArtigo | null>(null);
+  const [aplicandoRoteiro, setAplicandoRoteiro] = useState(false);
 
   const handleConfirmarDelete = async () => {
     if (!deletando) return;
@@ -72,12 +76,20 @@ export function OperacoesTab({ artigoId }: OperacoesTabProps) {
             ? `${operacoes.length} operação(ões) cadastrada(s)`
             : 'Nenhuma operação cadastrada ainda'}
         </div>
-        <button
-          onClick={() => setCriando(true)}
-          className="btn-primary px-4 py-2 text-sm"
-        >
-          + Nova Operação
-        </button>
+        <div className="flex items-center gap-2">
+          <button
+            onClick={() => setAplicandoRoteiro(true)}
+            className="btn-ghost px-4 py-2 text-sm border border-neutral-700 hover:border-forja-500/50"
+          >
+            📋 Usar roteiro padrão
+          </button>
+          <button
+            onClick={() => setCriando(true)}
+            className="btn-primary px-4 py-2 text-sm"
+          >
+            + Nova Operação
+          </button>
+        </div>
       </div>
 
       {/* Erros */}
@@ -106,9 +118,28 @@ export function OperacoesTab({ artigoId }: OperacoesTabProps) {
         </div>
       )}
       {!isLoading && !isError && operacoes && operacoes.length === 0 && (
-        <div className="card text-center text-neutral-400">
-          Adicione a primeira operação. A sequência será montada na ordem de
-          inclusão e pode ser reorganizada depois.
+        <div className="card text-center py-8">
+          <p className={`font-medium ${claro ? 'text-slate-900' : 'text-neutral-300'}`}>
+            Este artigo ainda não tem processo produtivo.
+          </p>
+          <p className={`text-sm mt-1 mb-5 ${claro ? 'text-slate-600' : 'text-neutral-500'}`}>
+            Comece por um roteiro padrão — ele já traz a sequência completa, com
+            tempos e instruções. Depois é só ajustar o que for diferente.
+          </p>
+          <div className="flex items-center justify-center gap-3">
+            <button
+              onClick={() => setAplicandoRoteiro(true)}
+              className="btn-primary px-5 py-2.5 text-sm"
+            >
+              📋 Escolher roteiro padrão
+            </button>
+            <button
+              onClick={() => setCriando(true)}
+              className={`btn-ghost px-5 py-2.5 text-sm border ${claro ? 'border-slate-300' : 'border-neutral-700'}`}
+            >
+              Montar do zero
+            </button>
+          </div>
         </div>
       )}
 
@@ -192,6 +223,15 @@ export function OperacoesTab({ artigoId }: OperacoesTabProps) {
             </tbody>
           </table>
         </div>
+      )}
+
+      {/* Modal de roteiro padrão */}
+      {aplicandoRoteiro && (
+        <AplicarRoteiroModal
+          artigoId={artigoId}
+          totalOperacoesExistentes={operacoes?.length ?? 0}
+          onClose={() => setAplicandoRoteiro(false)}
+        />
       )}
 
       {/* Modal criar/editar */}

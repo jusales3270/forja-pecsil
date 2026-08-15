@@ -156,7 +156,7 @@ export function DadosBasicosTab({ artigo }: DadosBasicosTabProps) {
             value={codigo}
             onChange={(e) => setCodigo(e.target.value)}
             className="input"
-            placeholder="Ex: 070-FOFO-Q3"
+            placeholder="Ex: 5-02-00791"
           />
         </div>
         <div>

@@ -21,7 +21,10 @@ async function main() {
   await prisma.controleVolume.deleteMany();
   await prisma.medicaoInspecao.deleteMany();
   await prisma.inspecaoOP.deleteMany();
+  await prisma.apontamentoPeca.deleteMany();
   await prisma.apontamentoTurno.deleteMany();
+  await prisma.paradaMaquina.deleteMany();
+  await prisma.motivoParada.deleteMany();
   await prisma.processamentoMaquina.deleteMany();
   await prisma.carimbo.deleteMany();
   await prisma.oPLote.deleteMany();
@@ -30,6 +33,8 @@ async function main() {
   await prisma.cotaInspecao.deleteMany();
   await prisma.planoInspecao.deleteMany();
   await prisma.operacaoArtigo.deleteMany();
+  await prisma.tipoServico.deleteMany();
+  await prisma.toleranciaGeralCliente.deleteMany();
   await prisma.desenho.deleteMany();
   await prisma.artigo.deleteMany();
   await prisma.maquina.deleteMany();
@@ -150,16 +155,16 @@ async function main() {
 
   const etapasData = [
     {
-      nome: 'Engenharia / Programação',
+      nome: 'Fundição',
       ordemPadrao: 1,
-      slaHoras: 24,
+      slaHoras: 168, // 7 dias
       aplicaParaTipos: ['forma', 'bloco', 'fundo_forma', 'fundo_bloco', 'molde'],
       exigeCheckpointQualidade: false,
     },
     {
-      nome: 'Fundição',
+      nome: 'Engenharia / Programação',
       ordemPadrao: 2,
-      slaHoras: 168, // 7 dias
+      slaHoras: 24,
       aplicaParaTipos: ['forma', 'bloco', 'fundo_forma', 'fundo_bloco', 'molde'],
       exigeCheckpointQualidade: false,
     },

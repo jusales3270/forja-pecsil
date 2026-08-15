@@ -14,6 +14,7 @@ import { FastifyInstance } from 'fastify';
 import { z } from 'zod';
 import { Prisma } from '@prisma/client';
 import { prisma } from '../db/prisma.js';
+import { buscarRoteiroPadrao, PASSO_SEQUENCIA } from '../data/roteiros-padrao.js';
 
 const criarOperacaoSchema = z.object({
   etapaId: z.string().uuid('etapaId inválido'),
@@ -28,6 +29,12 @@ const criarOperacaoSchema = z.object({
 });
 
 const atualizarOperacaoSchema = criarOperacaoSchema.partial();
+
+const aplicarRoteiroSchema = z.object({
+  roteiroId: z.string().min(1, 'roteiroId é obrigatório'),
+  /** true = apaga as operações existentes antes de aplicar */
+  substituir: z.boolean().default(false),
+});
 
 const reordenarSchema = z.object({
   ordens: z
@@ -319,6 +326,126 @@ export async function operacoesArtigoRoutes(app: FastifyInstance) {
 
       return reply.code(204).send();
     }
+  );
+
+  // ---------------- APLICAR ROTEIRO PADRÃO ----------------
+  app.post(
+    '/artigos/:artigoId/operacoes/aplicar-roteiro',
+    { onRequest: [app.authenticate] },
+    async (request, reply) => {
+      const { artigoId } = request.params as { artigoId: string };
+
+      const artigo = await garantirArtigoExiste(artigoId);
+      if (!artigo) {
+        return reply.code(404).send({
+          error: 'artigo_nao_encontrado',
+          message: 'Artigo não encontrado',
+        });
+      }
+
+      const parsed = aplicarRoteiroSchema.safeParse(request.body);
+      if (!parsed.success) {
+        return reply.code(400).send({
+          error: 'validation_error',
+          message: 'Dados inválidos',
+          issues: parsed.error.issues,
+        });
+      }
+
+      const roteiro = buscarRoteiroPadrao(parsed.data.roteiroId);
+      if (!roteiro) {
+        return reply.code(404).send({
+          error: 'roteiro_nao_encontrado',
+          message: 'Roteiro padrão não encontrado',
+        });
+      }
+
+      // Resolve os códigos do roteiro contra o catálogo de Tipos de Serviço.
+      // Cada tipo carrega a etapa — é dela que a OP herda o destino no tótem.
+      const codigos = [...new Set(roteiro.operacoes.map((o) => o.codigoTipoServico))];
+      const tipos = await prisma.tipoServico.findMany({
+        where: { codigo: { in: codigos }, ativo: true },
+      });
+      const porCodigo = new Map(tipos.map((t) => [t.codigo!, t]));
+
+      const faltando = codigos.filter((c) => !porCodigo.has(c));
+      if (faltando.length > 0) {
+        return reply.code(409).send({
+          error: 'tipos_servico_faltando',
+          message: `Este roteiro usa Tipos de Serviço que não estão no catálogo (códigos: ${faltando.join(', ')}). Cadastre-os antes de aplicar.`,
+          codigosFaltando: faltando,
+        });
+      }
+
+      const existentes = await prisma.operacaoArtigo.findMany({
+        where: { artigoId },
+        include: { _count: { select: { opsLote: true } } },
+      });
+
+      if (existentes.length > 0 && !parsed.data.substituir) {
+        return reply.code(409).send({
+          error: 'artigo_ja_tem_operacoes',
+          message: `Este artigo já tem ${existentes.length} operação(ões). Confirme a substituição para aplicar o roteiro.`,
+          totalExistentes: existentes.length,
+        });
+      }
+
+      // Não dá pra apagar operação que já virou OP de lote numa OS real.
+      const emUso = existentes.filter((o) => o._count.opsLote > 0);
+      if (emUso.length > 0) {
+        return reply.code(409).send({
+          error: 'operacoes_em_uso',
+          message: `${emUso.length} operação(ões) deste artigo já estão em uso em OS abertas e não podem ser substituídas.`,
+        });
+      }
+
+      try {
+        const criadas = await prisma.$transaction(async (tx) => {
+          if (existentes.length > 0) {
+            // Plano de inspeção depende da operação; some junto.
+            await tx.planoInspecao.deleteMany({
+              where: { operacaoArtigoId: { in: existentes.map((o) => o.id) } },
+            });
+            await tx.operacaoArtigo.deleteMany({ where: { artigoId } });
+          }
+
+          return Promise.all(
+            roteiro.operacoes.map((op, idx) => {
+              const tipo = porCodigo.get(op.codigoTipoServico)!;
+              return tx.operacaoArtigo.create({
+                data: {
+                  artigoId,
+                  etapaId: tipo.etapaId,
+                  tipoServicoId: tipo.id,
+                  codigoOp: String((idx + 1) * PASSO_SEQUENCIA),
+                  ordem: idx,
+                  tipoServico: tipo.nome,
+                  tempoUnitMin: op.tempoUnitMin,
+                  tempoSetupMin: op.tempoSetupMin,
+                  exigeInspecao: op.exigeInspecao,
+                  observacoes: op.observacoes,
+                },
+              });
+            }),
+          );
+        });
+
+        return reply.code(201).send({
+          data: criadas,
+          meta: {
+            roteiro: roteiro.nome,
+            criadas: criadas.length,
+            substituidas: existentes.length,
+          },
+        });
+      } catch (err) {
+        app.log.error({ err }, 'Erro ao aplicar roteiro padrão');
+        return reply.code(500).send({
+          error: 'erro_interno',
+          message: 'Erro ao aplicar o roteiro. Tente novamente.',
+        });
+      }
+    },
   );
 
   // ---------------- REORDENAR (bulk) ----------------

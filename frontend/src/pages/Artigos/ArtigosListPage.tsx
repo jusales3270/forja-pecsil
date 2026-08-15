@@ -372,7 +372,7 @@ function NovoArtigoModal({ open, onClose, onCreated }: NovoArtigoModalProps) {
             value={codigo}
             onChange={(e) => setCodigo(e.target.value)}
             className="input"
-            placeholder="Ex: 070-FOFO-Q3"
+            placeholder="Ex: 5-02-00791"
             autoFocus
           />
         </div>

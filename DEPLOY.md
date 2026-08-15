@@ -2,7 +2,7 @@
 
 Guia passo-a-passo pra colocar o sistema Forja em produção no servidor on-premise da Pecsil.
 
-**Quem usa este manual:** Junior (admin do sistema)
+**Quem usa este manual:** administrador do sistema
 **Quando usar:** quando o MVP estiver pronto pra ir pro chão de fábrica
 
 ---
@@ -221,7 +221,7 @@ pnpm db:seed
 cd ..
 ```
 
-Isso cria os usuários básicos (Junior, Ricardo, Rafael, etc).
+Isso cria os usuários básicos (Ricardo, Rafael, etc).
 
 ⚠️ **CRÍTICO:** depois do seed, **muda os PINs de todos os usuários** que vão acessar o sistema. Os PINs padrão (`1234`) são pra dev.
 
@@ -446,7 +446,7 @@ rclone copy ~/forja/backups remote:forja-backups
 ### Checklist pós-implantação
 
 - [ ] `http://<ip-servidor>` abre o login
-- [ ] Login com Junior (0001/PIN) funciona
+- [ ] Login com Administrador (0001/PIN) funciona
 - [ ] Backend health (`/health`) retorna ok
 - [ ] MinIO Console acessível (via VPN/Tunnel, nunca exposto à internet)
 - [ ] Backup automático rodou (verifica em `~/forja/backups/`)
@@ -567,13 +567,13 @@ Ordem de troubleshooting:
 4. **Banco bagunçou** → restaurar backup (CTRL+F "Restaurar de backup")
 5. **Servidor não responde** → reiniciar fisicamente
 
-Se nada disso resolver, fala comigo (Junior) ou com a Antigravity.
+Se nada disso resolver, fala com a SomaVerso AI Systems.
 
 ---
 
 ## Contatos de emergência
 
-- **Junior (Antigravity):** [seu telefone]
+- **SomaVerso AI Systems:** [telefone]
 - **Provedor de hosting de backup:** [se aplicável]
 - **Provedor de domínio:** [se aplicável]
 
