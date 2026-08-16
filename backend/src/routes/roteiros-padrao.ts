@@ -18,7 +18,13 @@ export async function roteirosPadraoRoutes(app: FastifyInstance) {
       // serviço e sinalizar se algum código não está cadastrado.
       const codigos = [
         ...new Set(
-          ROTEIROS_PADRAO.flatMap((r) => r.operacoes.map((o) => o.codigoTipoServico)),
+          ROTEIROS_PADRAO.flatMap((r) =>
+            r.operacoes.flatMap((o) =>
+              [o.codigoTipoServico, o.avisaEtapaDoCodigoTipoServico].filter(
+                (c): c is number => c != null,
+              ),
+            ),
+          ),
         ),
       ];
 
@@ -41,6 +47,11 @@ export async function roteirosPadraoRoutes(app: FastifyInstance) {
             tempoUnitMin: op.tempoUnitMin,
             tempoSetupMin: op.tempoSetupMin,
             exigeInspecao: op.exigeInspecao,
+            gatilhoAlertaPecas: op.gatilhoAlertaPecas ?? null,
+            avisaEtapa:
+              op.avisaEtapaDoCodigoTipoServico != null
+                ? (porCodigo.get(op.avisaEtapaDoCodigoTipoServico)?.etapa.nome ?? null)
+                : null,
             /** true = o código não existe no catálogo de Tipos de Serviço */
             naoEncontrado: !tipo,
           };

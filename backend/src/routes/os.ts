@@ -377,6 +377,8 @@ export async function osRoutes(app: FastifyInstance) {
                 codigoOp: op.codigoOp,
                 tipoServico: op.tipoServico,
                 exigeInspecao: op.exigeInspecao,
+                gatilhoAlertaPecas: op.gatilhoAlertaPecas,
+                etapaAvisadaId: op.etapaAvisadaId,
                 observacoes: op.observacoes ?? null,
               },
             });

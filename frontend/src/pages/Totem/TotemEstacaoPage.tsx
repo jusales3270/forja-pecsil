@@ -24,6 +24,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { IniciarOPModal } from './IniciarOPModal';
 import { EncerrarOPModal } from './EncerrarOPModal';
 import { PausarOPModal } from './PausarOPModal';
+import { PainelAvisos } from '../../components/PainelAvisos';
 
 export function TotemEstacaoPage() {
   const navigate = useNavigate();
@@ -111,6 +112,7 @@ export function TotemEstacaoPage() {
             </p>
           </div>
           <div className="flex items-center gap-2">
+            <PainelAvisos />
             <button
               onClick={() => navigate('/fim-de-turno')}
               className="px-4 py-2 text-sm text-forja-400 hover:text-forja-300 border border-forja-500/30 hover:border-forja-500 rounded-lg"

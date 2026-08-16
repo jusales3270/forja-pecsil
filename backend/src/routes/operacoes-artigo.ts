@@ -25,6 +25,8 @@ const criarOperacaoSchema = z.object({
   tempoUnitMin: z.number().int().nonnegative('tempoUnitMin deve ser >= 0'),
   tempoSetupMin: z.number().int().nonnegative().default(0),
   exigeInspecao: z.boolean().default(false),
+  gatilhoAlertaPecas: z.number().int().positive().nullable().optional(),
+  etapaAvisadaId: z.string().uuid().nullable().optional(),
   observacoes: z.string().max(2000).nullable().optional(),
 });
 
@@ -182,6 +184,8 @@ export async function operacoesArtigoRoutes(app: FastifyInstance) {
             tempoUnitMin: parsed.data.tempoUnitMin,
             tempoSetupMin: parsed.data.tempoSetupMin,
             exigeInspecao: parsed.data.exigeInspecao,
+            gatilhoAlertaPecas: parsed.data.gatilhoAlertaPecas ?? null,
+            etapaAvisadaId: parsed.data.etapaAvisadaId ?? null,
             observacoes: parsed.data.observacoes,
           },
           include: {
@@ -362,7 +366,15 @@ export async function operacoesArtigoRoutes(app: FastifyInstance) {
 
       // Resolve os códigos do roteiro contra o catálogo de Tipos de Serviço.
       // Cada tipo carrega a etapa — é dela que a OP herda o destino no tótem.
-      const codigos = [...new Set(roteiro.operacoes.map((o) => o.codigoTipoServico))];
+      const codigos = [
+        ...new Set(
+          roteiro.operacoes.flatMap((o) =>
+            [o.codigoTipoServico, o.avisaEtapaDoCodigoTipoServico].filter(
+              (c): c is number => c != null,
+            ),
+          ),
+        ),
+      ];
       const tipos = await prisma.tipoServico.findMany({
         where: { codigo: { in: codigos }, ativo: true },
       });
@@ -423,6 +435,11 @@ export async function operacoesArtigoRoutes(app: FastifyInstance) {
                   tempoUnitMin: op.tempoUnitMin,
                   tempoSetupMin: op.tempoSetupMin,
                   exigeInspecao: op.exigeInspecao,
+                  gatilhoAlertaPecas: op.gatilhoAlertaPecas ?? null,
+                  etapaAvisadaId:
+                    op.avisaEtapaDoCodigoTipoServico != null
+                      ? (porCodigo.get(op.avisaEtapaDoCodigoTipoServico)?.etapaId ?? null)
+                      : null,
                   observacoes: op.observacoes,
                 },
               });

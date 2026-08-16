@@ -252,6 +252,9 @@ model Etapa {
   opsArtigo     OperacaoArtigo[]
   opsLote       OPLote[]
   tiposServico  TipoServico[]
+  /// Operações que avisam esta estação ao atingir o gatilho parcial
+  avisosOperacao OperacaoArtigo[] @relation("EtapaAvisadaOperacao")
+  avisosOPLote   OPLote[]         @relation("EtapaAvisadaOPLote")
 
   @@map("etapas")
 }
@@ -388,6 +391,12 @@ model OperacaoArtigo {
   tempoUnitMin    Int     @map("tempo_unit_min")
   tempoSetupMin   Int     @default(0) @map("tempo_setup_min")
   exigeInspecao   Boolean @default(false) @map("exige_inspecao")
+  /// Avisa quando esta operação atingir N peças, sem esperar o lote fechar.
+  /// Padrão do roteiro; ajustável por lote em OPLote.gatilhoAlertaPecas.
+  gatilhoAlertaPecas Int? @map("gatilho_alerta_pecas")
+  /// Estação que recebe o aviso (ex: metalização avisa a Engenharia para
+  /// começar o próximo programa). Sem isso, o gatilho não avisa ninguém.
+  etapaAvisadaId  String? @map("etapa_avisada_id")
   observacoes     String?
   precoUnitario   Decimal?  @map("preco_unitario")     @db.Decimal(12, 2)
   valorTotal      Decimal?  @map("valor_total")        @db.Decimal(14, 2)
@@ -402,6 +411,7 @@ model OperacaoArtigo {
 
   artigo         Artigo          @relation(fields: [artigoId], references: [id], onDelete: Cascade)
   etapa          Etapa           @relation(fields: [etapaId], references: [id])
+  etapaAvisada   Etapa?          @relation("EtapaAvisadaOperacao", fields: [etapaAvisadaId], references: [id])
   tipoServicoRel TipoServico?    @relation(fields: [tipoServicoId], references: [id])
   planoInspecao  PlanoInspecao?
   opsLote        OPLote[]
@@ -530,6 +540,13 @@ model OPLote {
   codigoOp            String       @map("codigo_op")
   tipoServico         String       @map("tipo_servico")
   exigeInspecao       Boolean      @default(false) @map("exige_inspecao")
+  /// Avisa a próxima etapa ao atingir N peças, sem esperar o lote fechar.
+  /// Herdado do roteiro na criação da OS; o PCP edita por lote.
+  gatilhoAlertaPecas  Int?         @map("gatilho_alerta_pecas")
+  /// Estação que recebe o aviso quando o gatilho dispara.
+  etapaAvisadaId      String?      @map("etapa_avisada_id")
+  /// Momento em que o gatilho disparou (evita alertar de novo a cada peça).
+  alertaParcialEm     DateTime?    @map("alerta_parcial_em")
   observacoes         String?
   criadoEm            DateTime     @default(now()) @map("criado_em")
   atualizadoEm        DateTime     @updatedAt @map("atualizado_em")
@@ -537,6 +554,7 @@ model OPLote {
   lote           Lote                   @relation(fields: [loteId], references: [id])
   operacaoArtigo OperacaoArtigo         @relation(fields: [operacaoArtigoId], references: [id])
   etapa          Etapa                  @relation(fields: [etapaId], references: [id])
+  etapaAvisada   Etapa?                 @relation("EtapaAvisadaOPLote", fields: [etapaAvisadaId], references: [id])
   carimbos       Carimbo[]
   processamentos ProcessamentoMaquina[]
   apontamentosPeca ApontamentoPeca[]

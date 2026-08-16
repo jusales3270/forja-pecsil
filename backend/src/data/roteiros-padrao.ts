@@ -22,6 +22,18 @@ export interface OperacaoRoteiroPadrao {
   tempoUnitMin: number;
   tempoSetupMin: number;
   exigeInspecao: boolean;
+  /**
+   * Avisa a etapa seguinte ao atingir N peças, sem esperar o lote fechar.
+   * Regra do PCP: a engenharia não espera o lote inteiro para começar o
+   * próximo programa. O número é sugestão — o PCP ajusta por lote.
+   */
+  gatilhoAlertaPecas?: number;
+  /**
+   * Código do Tipo de Serviço cuja etapa recebe o aviso. Ex: a metalização
+   * avisa a Engenharia, que começa o programa de encaixe+arredondamento sem
+   * esperar o lote fechar.
+   */
+  avisaEtapaDoCodigoTipoServico?: number;
 }
 
 export interface RoteiroPadrao {
@@ -38,6 +50,31 @@ export interface RoteiroPadrao {
 export const ROTEIROS_PADRAO: RoteiroPadrao[] = [
   // ----------------------------------------------------------
   {
+    id: 'fundicao',
+    nome: 'Fundição',
+    descricao:
+      'Etapas internas da fundição, da modelação ao tratamento térmico. O tratamento térmico fecha o ciclo — só libera para o desbaste quando todas as peças estiverem tratadas.',
+    origem:
+      'Reunião com o PCP (Rafael). Sequência definida por ele; o OK de cada operação é do Guilherme. Tempos a levantar com a fundição.',
+    revisaoPendente: true,
+    operacoes: [
+      { codigoTipoServico: 20, observacoes: 'MODELAÇÃO', tempoUnitMin: 0, tempoSetupMin: 0, exigeInspecao: false },
+      { codigoTipoServico: 15, observacoes: 'MOLDAGEM', tempoUnitMin: 0, tempoSetupMin: 0, exigeInspecao: false },
+      { codigoTipoServico: 17, observacoes: 'VAZAMENTO', tempoUnitMin: 0, tempoSetupMin: 0, exigeInspecao: false },
+      { codigoTipoServico: 7, observacoes: 'REBARBAÇÃO', tempoUnitMin: 0, tempoSetupMin: 0, exigeInspecao: false },
+      {
+        codigoTipoServico: 50,
+        observacoes:
+          'TRATAMENTO TÉRMICO — início e fim.\nCiclo de aprox. 3 dias (tempo de forno, não por peça).\nPode rodar parcial: a engenharia já programa com o parcial, mas só libera para o desbaste com o lote todo tratado.',
+        tempoUnitMin: 0,
+        tempoSetupMin: 0,
+        exigeInspecao: false,
+      },
+    ],
+  },
+
+  // ----------------------------------------------------------
+  {
     id: 'bloco-pre-molde',
     nome: 'Bloco / Pré-molde',
     descricao:
@@ -48,7 +85,7 @@ export const ROTEIROS_PADRAO: RoteiroPadrao[] = [
       { codigoTipoServico: 36, observacoes: 'PROGRAMAR CENTRO', tempoUnitMin: 60, tempoSetupMin: 0, exigeInspecao: false },
       { codigoTipoServico: 37, observacoes: 'PROGRAMAR TORNO', tempoUnitMin: 60, tempoSetupMin: 0, exigeInspecao: false },
       { codigoTipoServico: 25, observacoes: 'DESBASTE PARA METALIZAÇÃO', tempoUnitMin: 10, tempoSetupMin: 0, exigeInspecao: false },
-      { codigoTipoServico: 10, observacoes: 'DESCRIÇÃO DO PÓ: _____________\nQUANTIDADE POR PEÇA (KG): _____________', tempoUnitMin: 6, tempoSetupMin: 0, exigeInspecao: false },
+      { codigoTipoServico: 10, observacoes: 'DESCRIÇÃO DO PÓ: _____________\nQUANTIDADE POR PEÇA (KG): _____________', tempoUnitMin: 6, tempoSetupMin: 0, exigeInspecao: false, gatilhoAlertaPecas: 10, avisaEtapaDoCodigoTipoServico: 36 },
       { codigoTipoServico: 26, observacoes: 'ENCAIXE', tempoUnitMin: 7, tempoSetupMin: 0, exigeInspecao: false },
       { codigoTipoServico: 26, observacoes: 'ARREDONDAMENTO / CORTE LATERAL', tempoUnitMin: 8, tempoSetupMin: 0, exigeInspecao: false },
       { codigoTipoServico: 30, observacoes: 'LADO DIANTEIRO', tempoUnitMin: 10, tempoSetupMin: 0, exigeInspecao: false },
@@ -73,7 +110,7 @@ export const ROTEIROS_PADRAO: RoteiroPadrao[] = [
       { codigoTipoServico: 36, observacoes: 'PROGRAMAR CENTRO', tempoUnitMin: 2, tempoSetupMin: 0, exigeInspecao: false },
       { codigoTipoServico: 37, observacoes: 'PROGRAMAR TORNO', tempoUnitMin: 2, tempoSetupMin: 0, exigeInspecao: false },
       { codigoTipoServico: 25, observacoes: 'DESBASTE PARA METALIZAÇÃO', tempoUnitMin: 55, tempoSetupMin: 0, exigeInspecao: false },
-      { codigoTipoServico: 10, observacoes: 'DESCRIÇÃO DO PÓ: _____________\nQUANTIDADE POR PEÇA (KG): _____________', tempoUnitMin: 60, tempoSetupMin: 0, exigeInspecao: false },
+      { codigoTipoServico: 10, observacoes: 'DESCRIÇÃO DO PÓ: _____________\nQUANTIDADE POR PEÇA (KG): _____________', tempoUnitMin: 60, tempoSetupMin: 0, exigeInspecao: false, gatilhoAlertaPecas: 10, avisaEtapaDoCodigoTipoServico: 36 },
       { codigoTipoServico: 34, observacoes: 'ACABAMENTO CAVIDADE E ENCAIXE', tempoUnitMin: 212, tempoSetupMin: 0, exigeInspecao: false },
       { codigoTipoServico: 22, observacoes: 'FACEAMENTO TOPO E FURAÇÕES', tempoUnitMin: 70, tempoSetupMin: 0, exigeInspecao: false },
       { codigoTipoServico: 29, observacoes: 'TORNEAMENTO EXTERNO', tempoUnitMin: 40, tempoSetupMin: 0, exigeInspecao: false },
@@ -101,7 +138,7 @@ export const ROTEIROS_PADRAO: RoteiroPadrao[] = [
       { codigoTipoServico: 36, observacoes: 'PROGRAMAR CENTRO', tempoUnitMin: 60, tempoSetupMin: 0, exigeInspecao: false },
       { codigoTipoServico: 37, observacoes: 'PROGRAMAR TORNO', tempoUnitMin: 60, tempoSetupMin: 0, exigeInspecao: false },
       { codigoTipoServico: 25, observacoes: 'DESBASTE PARA METALIZAÇÃO', tempoUnitMin: 40, tempoSetupMin: 0, exigeInspecao: false },
-      { codigoTipoServico: 10, observacoes: 'DESCRIÇÃO DO PÓ: _____________\nQUANTIDADE POR PEÇA (KG): _____________', tempoUnitMin: 50, tempoSetupMin: 0, exigeInspecao: false },
+      { codigoTipoServico: 10, observacoes: 'DESCRIÇÃO DO PÓ: _____________\nQUANTIDADE POR PEÇA (KG): _____________', tempoUnitMin: 50, tempoSetupMin: 0, exigeInspecao: false, gatilhoAlertaPecas: 10, avisaEtapaDoCodigoTipoServico: 36 },
       { codigoTipoServico: 26, observacoes: 'ENCAIXE', tempoUnitMin: 24, tempoSetupMin: 0, exigeInspecao: false },
       { codigoTipoServico: 26, observacoes: 'ARREDONDAMENTO', tempoUnitMin: 22, tempoSetupMin: 0, exigeInspecao: false },
       { codigoTipoServico: 29, observacoes: 'LADO DIANTEIRO', tempoUnitMin: 15, tempoSetupMin: 0, exigeInspecao: false },

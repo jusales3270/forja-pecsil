@@ -91,6 +91,66 @@ modal de motivo — sem sair do fluxo atual de iniciar/encerrar.
 Não bloqueante agora — só entra em jogo quando o dashboard de OEE/métricas
 (Sprint 6) for escopado. Registrado aqui pra não se perder.
 
+## REVERTE Bloco C: fundição ganha operações internas (reunião com o PCP, 15/08/2026)
+
+A decisão de 13/06 (fundição como etapa única) **cai**. A pergunta que estava
+na pauta da visita — "a fundição tem subetapas?" — foi respondida pelo Rafael:
+sim, e ele definiu a sequência.
+
+**Operações da fundição**, nesta ordem:
+`Modelação → Moldagem → Vazamento → Rebarbação → Tratamento Térmico`
+
+- O OK de cada operação é do **Guilherme**.
+- **Tratamento térmico entra no lugar do Controle de Qualidade** — na fundição
+  não há CQ: quem confere é o desbaste, ao receber a peça, antes de pôr na
+  máquina.
+- Tratamento térmico registra **início e fim**, ciclo de ~3 dias. Não precisa de
+  "pendente/em andamento" ("o que entra tem que sair"). Pode rodar parcial: a
+  engenharia já programa com o parcial, mas **só libera para o desbaste com o
+  lote todo tratado**.
+
+**Implementado como operações, não como Etapas novas** — é o termo que o próprio
+PCP usou, e o modelo atual já suporta: o roteiro do Artigo tem N operações, cada
+uma apontando para uma Etapa. Todas as cinco apontam para Fundição, então
+aparecem em sequência no tótem daquela estação. Nenhuma estação nova no tótem.
+
+`TRATAMENTO TÉRMICO` **não existia** no catálogo dos 49 códigos do GRV —
+cadastrado como código **50**.
+
+## Alerta parcial: a etapa seguinte não espera o lote fechar (15/08/2026)
+
+Os "loopings" que o PCP pediu. A engenharia é acionada **várias vezes** ao longo
+do processo, por eventos de etapas posteriores a ela:
+
+```
+Fundição (tratamento térmico)
+   └─→ avisa ENGENHARIA → programa de "desbaste + metalização" (os dois de uma vez)
+Metalização (peça a peça)
+   └─→ ao atingir N peças → avisa ENGENHARIA → programa de "encaixe + arredondamento"
+   └─→ segue para Encaixe
+```
+
+**Modelagem:** `gatilhoAlertaPecas` em `OperacaoArtigo` (padrão do roteiro) e em
+`OPLote` (ajustável por lote), mais `OPLote.alertaParcialEm` para o disparo
+acontecer uma única vez. Migration `20260815220332_add_gatilho_alerta_pecas`.
+
+- O disparo acontece no `POST /apontamento-peca`, ao cruzar a quantidade, e
+  emite `op:parcial-pronta` via Socket.IO.
+- **O número não pode ficar engessado.** Quem define na prática é o chão de
+  fábrica (o Domingo), que não usa o sistema — liga para o PCP. Por isso
+  `PATCH /op-lote/:id/gatilho-alerta` permite ao PCP mudar por lote, na hora
+  ("é 10, mas preciso agora os cinco para adiantar"). Validado contra o tamanho
+  do lote; baixar o gatilho rearma o alerta.
+- Valor inicial: **10 peças na metalização**, número que o Rafael estimou. A
+  confirmar com o pessoal da metalização (quantas peças/dia eles fazem).
+
+**Pendências que a própria reunião registrou:**
+- Perguntar à metalização a produção diária, para calibrar o gatilho.
+- Confirmar o fluxo físico: jateamento → metalização → alívio de tensão (forno
+  600°) → estufa. Estimado em 1-2 dias, ninguém tinha certeza.
+- Tempos das operações da fundição — o roteiro está com 0, a levantar.
+- Conversas futuras com engenharia e fundição podem reajustar tudo isso.
+
 ## Decisão do PCP: Travar Máquina descartada, Motivo de Parada é prioridade (21/07/2026)
 
 Conversa com o PCP resolveu as duas pendências em aberto sobre o cadastro

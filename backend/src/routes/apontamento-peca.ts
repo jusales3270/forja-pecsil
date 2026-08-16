@@ -53,7 +53,64 @@ export async function apontamentoPecaRoutes(app: FastifyInstance) {
           });
         }
 
-        return { apontamento, numeroPeca };
+        // Gatilho de alerta parcial: a etapa avisada não espera o lote fechar.
+        // Dispara uma única vez, ao cruzar a quantidade definida pelo PCP.
+        let alertaParcial = false;
+        if (
+          opLote.gatilhoAlertaPecas != null &&
+          !opLote.alertaParcialEm &&
+          numeroPeca >= opLote.gatilhoAlertaPecas
+        ) {
+          await tx.oPLote.update({
+            where: { id: opLoteId },
+            data: { alertaParcialEm: new Date() },
+          });
+          alertaParcial = true;
+
+          // Persiste o aviso no painel (canal dashboard) para quem trabalha na
+          // etapa avisada, mesmo que ninguém esteja com a tela aberta agora.
+          if (opLote.etapaAvisadaId) {
+            const contexto = await tx.oPLote.findUnique({
+              where: { id: opLoteId },
+              select: {
+                codigoOp: true,
+                tipoServico: true,
+                lote: {
+                  select: {
+                    numeroLote: true,
+                    os: { select: { codigoGrv: true, artigo: { select: { codigo: true } } } },
+                  },
+                },
+              },
+            });
+
+            const mensagem = contexto
+              ? `${contexto.lote.os.codigoGrv} (${contexto.lote.os.artigo.codigo}) — lote ${contexto.lote.numeroLote}: ${numeroPeca} peça(s) prontas em ${contexto.tipoServico}. Pode adiantar o próximo programa.`
+              : `${numeroPeca} peça(s) prontas. Pode adiantar o próximo programa.`;
+
+            // Destinatários: quem atua na estação avisada.
+            const destinatarios = await tx.pessoa.findMany({
+              where: { ativo: true, papel: { in: ['engenharia', 'programador', 'pcp'] } },
+              select: { id: true },
+            });
+
+            if (destinatarios.length > 0) {
+              await tx.alerta.createMany({
+                data: destinatarios.map((p) => ({
+                  tipo: 'lote_parado' as const, // TODO: enum ganha `parcial_pronta` quando o Sprint 7 mexer em alertas
+                  severidade: 'info' as const,
+                  entidadeTipo: 'OPLote',
+                  entidadeId: opLoteId,
+                  destinatarioId: p.id,
+                  canal: 'dashboard' as const,
+                  mensagem,
+                })),
+              });
+            }
+          }
+        }
+
+        return { apontamento, numeroPeca, alertaParcial };
       });
 
       app.io
@@ -64,7 +121,24 @@ export async function apontamentoPecaRoutes(app: FastifyInstance) {
           numeroPeca: resultado.numeroPeca,
         });
 
-      return reply.code(201).send({ data: resultado.apontamento });
+      if (resultado.alertaParcial) {
+        // Aviso de "já tem peça pronta" — a próxima etapa pode se preparar
+        // (ex: engenharia começa o programa sem esperar o lote todo).
+        app.io.emit('op:parcial-pronta', {
+          opLoteId,
+          etapaId: opLote.etapaId,
+          etapaAvisadaId: opLote.etapaAvisadaId,
+          codigoOp: opLote.codigoOp,
+          tipoServico: opLote.tipoServico,
+          quantidade: resultado.numeroPeca,
+          gatilho: opLote.gatilhoAlertaPecas,
+        });
+      }
+
+      return reply.code(201).send({
+        data: resultado.apontamento,
+        meta: { alertaParcial: resultado.alertaParcial },
+      });
     },
   );
 

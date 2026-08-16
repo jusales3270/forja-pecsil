@@ -31,6 +31,11 @@ const encerrarSchema = z.object({
   observacoes: z.string().max(1000).nullable().optional(),
 });
 
+const gatilhoAlertaSchema = z.object({
+  /** null = desliga o alerta parcial nesta OP */
+  gatilhoAlertaPecas: z.number().int().positive().nullable(),
+});
+
 const pausarSchema = z.object({
   motivoParadaId: z.string().uuid('motivoParadaId inválido'),
   observacoes: z.string().max(1000).nullable().optional(),
@@ -910,6 +915,77 @@ export async function opLoteRoutes(app: FastifyInstance) {
       });
 
       return { data: parada };
+    },
+  );
+
+  // ---------------- EDITAR GATILHO DE ALERTA PARCIAL ----------------
+  // O PCP ajusta, por lote, a quantidade que avisa a etapa seguinte.
+  // Na prática quem define é o chão de fábrica (liga pro PCP), por isso
+  // o número não pode ficar preso no roteiro.
+  app.patch(
+    '/op-lote/:id/gatilho-alerta',
+    { onRequest: [app.authenticate] },
+    async (request, reply) => {
+      const paramsSchema = z.object({ id: z.string().uuid() });
+      const paramsParsed = paramsSchema.safeParse(request.params);
+      if (!paramsParsed.success) {
+        return reply
+          .code(400)
+          .send({ error: 'invalid_input', message: 'ID inválido' });
+      }
+
+      const bodyParsed = gatilhoAlertaSchema.safeParse(request.body);
+      if (!bodyParsed.success) {
+        return reply.code(400).send({
+          error: 'invalid_input',
+          message: 'Dados inválidos',
+          details: bodyParsed.error.flatten(),
+        });
+      }
+
+      const user = request.user as any;
+      if (!['pcp', 'admin', 'chefe'].includes(user.papel)) {
+        return reply.code(403).send({
+          error: 'forbidden',
+          message: 'Apenas PCP, chefe ou admin podem ajustar o gatilho de alerta',
+        });
+      }
+
+      const opLote = await prisma.oPLote.findUnique({
+        where: { id: paramsParsed.data.id },
+        include: { lote: { select: { quantidadePecas: true } } },
+      });
+      if (!opLote) {
+        return reply
+          .code(404)
+          .send({ error: 'not_found', message: 'OP não encontrada' });
+      }
+
+      const { gatilhoAlertaPecas } = bodyParsed.data;
+      if (
+        gatilhoAlertaPecas != null &&
+        gatilhoAlertaPecas > opLote.lote.quantidadePecas
+      ) {
+        return reply.code(400).send({
+          error: 'gatilho_maior_que_lote',
+          message: `O gatilho (${gatilhoAlertaPecas}) não pode ser maior que o lote (${opLote.lote.quantidadePecas} peças).`,
+        });
+      }
+
+      const atualizado = await prisma.oPLote.update({
+        where: { id: opLote.id },
+        data: {
+          gatilhoAlertaPecas,
+          // Baixar o gatilho reabre a possibilidade de avisar de novo.
+          alertaParcialEm:
+            gatilhoAlertaPecas != null &&
+            opLote.quantidadeConcluida < gatilhoAlertaPecas
+              ? null
+              : opLote.alertaParcialEm,
+        },
+      });
+
+      return { data: atualizado };
     },
   );
 }
