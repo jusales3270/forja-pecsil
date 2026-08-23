@@ -298,9 +298,14 @@ function CardPendente({
       </div>
 
       <div className="flex items-start justify-between gap-2 mb-1">
-        <div>
-          <div className="text-neutral-100 font-medium text-base">
-            {op.lote.os.artigo.codigo}
+        <div
+          onClick={() => onAbrirDesenhos(op.lote.os.artigo, desenhos)}
+          className="cursor-pointer group"
+          title="Clique para ver desenhos técnicos"
+        >
+          <div className="text-neutral-100 group-hover:text-forja-400 font-medium text-base transition flex items-center gap-1.5">
+            <span>{op.lote.os.artigo.codigo}</span>
+            <span className="text-xs text-neutral-500 group-hover:text-forja-400">↗</span>
           </div>
           <div className="text-xs text-neutral-500">
             {op.lote.os.artigo.descricao}
@@ -312,8 +317,8 @@ function CardPendente({
           className={`shrink-0 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold border transition ${
             desenhos.length > 0
               ? temDesenhosComArquivo
-                ? 'bg-blue-500/15 border-blue-500/40 text-blue-300 hover:bg-blue-500/25'
-                : 'bg-amber-500/15 border-amber-500/40 text-amber-300 hover:bg-amber-500/25'
+                ? 'bg-blue-500/20 border-blue-500/50 text-blue-300 hover:bg-blue-500/30 shadow-sm'
+                : 'bg-amber-500/20 border-amber-500/50 text-amber-300 hover:bg-amber-500/30'
               : 'bg-neutral-800/80 border-neutral-700/60 text-neutral-400 hover:bg-neutral-750'
           }`}
           title={
@@ -363,15 +368,26 @@ function CardPendente({
 
       <div className="flex items-center justify-between mt-3 pt-3 border-t border-neutral-800">
         <div className="text-xs text-neutral-500">{op.lote.os.cliente.nome}</div>
-        {podeOperar && (
+        <div className="flex items-center gap-2">
           <button
-            onClick={onIniciar}
-            className="px-5 py-2 bg-forja-500 hover:bg-forja-600 text-white text-sm font-medium rounded-lg transition"
+            type="button"
+            onClick={() => onAbrirDesenhos(op.lote.os.artigo, desenhos)}
+            className="px-3 py-2 bg-neutral-800 hover:bg-neutral-750 text-neutral-200 text-sm font-medium rounded-lg border border-neutral-700 transition flex items-center gap-1.5"
           >
-            Iniciar OP
+            <span>📐</span>
+            <span>Ver Desenho</span>
           </button>
-        )}
+          {podeOperar && (
+            <button
+              onClick={onIniciar}
+              className="px-5 py-2 bg-forja-500 hover:bg-forja-600 text-white text-sm font-medium rounded-lg transition"
+            >
+              Iniciar OP
+            </button>
+          )}
+        </div>
       </div>
+
     </div>
   );
 }
@@ -463,9 +479,14 @@ function CardEmAndamento({
       </div>
 
       <div className="flex items-start justify-between gap-2 mb-2">
-        <div>
-          <div className="text-neutral-100 font-medium text-base">
-            {op.lote.os.artigo.codigo}
+        <div
+          onClick={() => onAbrirDesenhos(op.lote.os.artigo, desenhos)}
+          className="cursor-pointer group"
+          title="Clique para ver desenhos técnicos"
+        >
+          <div className="text-neutral-100 group-hover:text-forja-400 font-medium text-base transition flex items-center gap-1.5">
+            <span>{op.lote.os.artigo.codigo}</span>
+            <span className="text-xs text-neutral-500 group-hover:text-forja-400">↗</span>
           </div>
           <div className="text-xs text-neutral-500">
             {op.lote.os.artigo.descricao}
@@ -477,8 +498,8 @@ function CardEmAndamento({
           className={`shrink-0 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold border transition ${
             desenhos.length > 0
               ? temDesenhosComArquivo
-                ? 'bg-blue-500/15 border-blue-500/40 text-blue-300 hover:bg-blue-500/25'
-                : 'bg-amber-500/15 border-amber-500/40 text-amber-300 hover:bg-amber-500/25'
+                ? 'bg-blue-500/20 border-blue-500/50 text-blue-300 hover:bg-blue-500/30 shadow-sm'
+                : 'bg-amber-500/20 border-amber-500/50 text-amber-300 hover:bg-amber-500/30'
               : 'bg-neutral-800/80 border-neutral-700/60 text-neutral-400 hover:bg-neutral-750'
           }`}
           title={
@@ -533,34 +554,46 @@ function CardEmAndamento({
         <BotaoMaisUmaPeca opLoteId={op.id} maquinaId={carimbo.maquina.id} />
       )}
 
-      <div className="flex items-center justify-end gap-2 mt-3 pt-2 border-t border-neutral-800">
-        <BotaoInspecionar opLoteId={op.id} />
-        {podeOperar && paradaAtiva && (
-          <button
-            onClick={onRetomar}
-            disabled={retomando}
-            className="px-4 py-2 bg-red-600 hover:bg-red-700 disabled:opacity-50 text-white text-sm font-medium rounded-lg transition"
-          >
-            {retomando ? 'Retomando...' : 'Retomar'}
-          </button>
-        )}
-        {podeOperar && !paradaAtiva && (
-          <button
-            onClick={onPausar}
-            className="px-4 py-2 bg-neutral-700 hover:bg-neutral-600 text-white text-sm font-medium rounded-lg transition"
-          >
-            Pausar
-          </button>
-        )}
-        {podeOperar && (
-          <button
-            onClick={onEncerrar}
-            className="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-medium rounded-lg transition"
-          >
-            Encerrar
-          </button>
-        )}
+      <div className="flex items-center justify-between gap-2 mt-3 pt-2 border-t border-neutral-800">
+        <button
+          type="button"
+          onClick={() => onAbrirDesenhos(op.lote.os.artigo, desenhos)}
+          className="px-3 py-2 bg-neutral-800 hover:bg-neutral-750 text-neutral-200 text-sm font-medium rounded-lg border border-neutral-700 transition flex items-center gap-1.5"
+        >
+          <span>📐</span>
+          <span>Ver Desenho</span>
+        </button>
+
+        <div className="flex items-center gap-2">
+          <BotaoInspecionar opLoteId={op.id} />
+          {podeOperar && paradaAtiva && (
+            <button
+              onClick={onRetomar}
+              disabled={retomando}
+              className="px-4 py-2 bg-red-600 hover:bg-red-700 disabled:opacity-50 text-white text-sm font-medium rounded-lg transition"
+            >
+              {retomando ? 'Retomando...' : 'Retomar'}
+            </button>
+          )}
+          {podeOperar && !paradaAtiva && (
+            <button
+              onClick={onPausar}
+              className="px-4 py-2 bg-neutral-700 hover:bg-neutral-600 text-white text-sm font-medium rounded-lg transition"
+            >
+              Pausar
+            </button>
+          )}
+          {podeOperar && (
+            <button
+              onClick={onEncerrar}
+              className="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-medium rounded-lg transition"
+            >
+              Encerrar
+            </button>
+          )}
+        </div>
       </div>
+
     </div>
   );
 }
