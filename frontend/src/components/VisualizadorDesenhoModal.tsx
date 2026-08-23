@@ -1,14 +1,9 @@
-// ============================================================
-// Forja - Modal de Visualização de Desenhos Técnicos
-// Otimizado para desktop e tótem touch da fábrica
-// ============================================================
-
 import { useState, useEffect } from 'react';
 import {
   type Desenho,
   LABELS_TIPO_DESENHO,
-  obterUrlArquivoStream,
 } from '../hooks/useDesenhos';
+import { api } from '../lib/api';
 
 interface VisualizadorDesenhoModalProps {
   open: boolean;
@@ -30,6 +25,9 @@ export function VisualizadorDesenhoModal({
   desenhoInicialId,
 }: VisualizadorDesenhoModalProps) {
   const [desenhoAtivoId, setDesenhoAtivoId] = useState<string | null>(null);
+  const [blobUrl, setBlobUrl] = useState<string | null>(null);
+  const [carregandoArquivo, setCarregandoArquivo] = useState(false);
+  const [erroArquivo, setErroArquivo] = useState<string | null>(null);
   const [zoom, setZoom] = useState(1);
   const [rotacao, setRotacao] = useState(0);
   const [telaCheia, setTelaCheia] = useState(false);
@@ -52,6 +50,68 @@ export function VisualizadorDesenhoModal({
       setRotacao(0);
     }
   }, [open, desenhoInicialId, desenhos]);
+
+  const desenhoAtivo = desenhos.find((d) => d.id === desenhoAtivoId) ?? desenhos[0] ?? null;
+  const temArquivo = Boolean(desenhoAtivo?.arquivoKey);
+  const ehPdf =
+    desenhoAtivo?.arquivoTipo === 'application/pdf' ||
+    (desenhoAtivo?.arquivoNomeOriginal?.toLowerCase().endsWith('.pdf') ?? false);
+
+  // Carrega o arquivo via API como Blob para evitar carregamento indevido do SPA
+  useEffect(() => {
+    let cancelado = false;
+    let urlCriada: string | null = null;
+
+    if (open && desenhoAtivo && desenhoAtivo.arquivoKey) {
+      setCarregandoArquivo(true);
+      setErroArquivo(null);
+      setBlobUrl(null);
+
+      api
+        .get(`/artigos/${artigo.id}/desenhos/${desenhoAtivo.id}/arquivo`, {
+          responseType: 'blob',
+          timeout: 45000,
+        })
+        .then((res) => {
+          if (cancelado) return;
+          const blob = res.data as Blob;
+
+          // Se a resposta for HTML ou JSON (ex: fallback SPA index.html do nginx se o backend antigo estiver rodando)
+          if (blob.type.includes('text/html') || blob.type.includes('application/json')) {
+            setErroArquivo(
+              'O arquivo não foi encontrado no storage ou o servidor backend ainda não foi reiniciado/atualizado com as novas rotas.'
+            );
+            return;
+          }
+
+          const url = URL.createObjectURL(blob);
+          urlCriada = url;
+          setBlobUrl(url);
+        })
+        .catch((err) => {
+          if (cancelado) return;
+          console.error('Erro ao buscar desenho:', err);
+          setErroArquivo(
+            err?.response?.data?.message ??
+              'Não foi possível carregar o arquivo. Certifique-se de que o backend foi atualizado no servidor e que o arquivo existe no MinIO.'
+          );
+        })
+        .finally(() => {
+          if (!cancelado) setCarregandoArquivo(false);
+        });
+    } else {
+      setBlobUrl(null);
+      setCarregandoArquivo(false);
+      setErroArquivo(null);
+    }
+
+    return () => {
+      cancelado = true;
+      if (urlCriada) {
+        URL.revokeObjectURL(urlCriada);
+      }
+    };
+  }, [open, artigo.id, desenhoAtivo?.id, desenhoAtivo?.arquivoKey]);
 
   // ESC fecha
   useEffect(() => {
@@ -81,13 +141,6 @@ export function VisualizadorDesenhoModal({
 
   if (!open) return null;
 
-  const desenhoAtivo = desenhos.find((d) => d.id === desenhoAtivoId) ?? desenhos[0] ?? null;
-  const temArquivo = Boolean(desenhoAtivo?.arquivoKey);
-  const urlArquivo = desenhoAtivo && temArquivo ? obterUrlArquivoStream(artigo.id, desenhoAtivo.id) : null;
-  const ehPdf =
-    desenhoAtivo?.arquivoTipo === 'application/pdf' ||
-    (desenhoAtivo?.arquivoNomeOriginal?.toLowerCase().endsWith('.pdf') ?? false);
-
   const formatBytes = (bytes: number | null | undefined) => {
     if (!bytes) return '';
     if (bytes < 1024) return `${bytes} B`;
@@ -96,21 +149,24 @@ export function VisualizadorDesenhoModal({
   };
 
   const handleAbrirNovaAba = () => {
-    if (urlArquivo) {
-      window.open(urlArquivo, '_blank', 'noopener,noreferrer');
+    if (blobUrl) {
+      window.open(blobUrl, '_blank', 'noopener,noreferrer');
     }
   };
 
   const handleDownload = () => {
-    if (urlArquivo && desenhoAtivo) {
+    if (blobUrl && desenhoAtivo) {
       const a = document.createElement('a');
-      a.href = urlArquivo;
-      a.download = desenhoAtivo.arquivoNomeOriginal ?? `${desenhoAtivo.codigoDesenho}-${desenhoAtivo.revisao}`;
+      a.href = blobUrl;
+      a.download =
+        desenhoAtivo.arquivoNomeOriginal ??
+        `${desenhoAtivo.codigoDesenho}-${desenhoAtivo.revisao}`;
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
     }
   };
+
 
   return (
     <div
@@ -144,7 +200,7 @@ export function VisualizadorDesenhoModal({
           </div>
 
           <div className="flex items-center gap-2">
-            {urlArquivo && (
+            {blobUrl && (
               <>
                 <button
                   type="button"
@@ -181,6 +237,7 @@ export function VisualizadorDesenhoModal({
               ✕
             </button>
           </div>
+
         </header>
 
         {/* Abas dos Desenhos */}
@@ -330,18 +387,32 @@ export function VisualizadorDesenhoModal({
                 O arquivo pode ser anexado na tela de Artigos &gt; Desenhos.
               </p>
             </div>
-          ) : ehPdf && urlArquivo ? (
+          ) : carregandoArquivo ? (
+            <div className="text-center p-8 text-neutral-400 flex flex-col items-center gap-3">
+              <div className="w-10 h-10 border-4 border-forja-500 border-t-transparent rounded-full animate-spin" />
+              <p className="text-sm">Carregando arquivo do desenho...</p>
+            </div>
+          ) : erroArquivo ? (
+            <div className="text-center p-8 max-w-md bg-neutral-900 border border-red-500/30 rounded-2xl shadow-xl">
+              <div className="text-5xl mb-3 text-red-400">⚠</div>
+              <h3 className="text-lg font-bold text-red-200 mb-2">Arquivo não carregado</h3>
+              <p className="text-sm text-neutral-300 mb-4">{erroArquivo}</p>
+              <p className="text-xs text-neutral-500">
+                Se você fez deploy recente, lembre-se de reiniciar o container do backend.
+              </p>
+            </div>
+          ) : ehPdf && blobUrl ? (
             <div className="w-full h-full rounded-xl overflow-hidden bg-neutral-900 border border-neutral-800 shadow-inner flex flex-col">
               <iframe
-                src={`${urlArquivo}#toolbar=1&navpanes=0&scrollbar=1`}
+                src={blobUrl}
                 title={`Desenho ${desenhoAtivo.codigoDesenho}`}
                 className="w-full h-full border-0 rounded-xl bg-neutral-900"
               />
             </div>
-          ) : urlArquivo ? (
+          ) : blobUrl ? (
             <div className="w-full h-full flex items-center justify-center overflow-auto p-4">
               <img
-                src={urlArquivo}
+                src={blobUrl}
                 alt={`Desenho ${desenhoAtivo.codigoDesenho}`}
                 style={{
                   transform: `scale(${zoom}) rotate(${rotacao}deg)`,
@@ -354,6 +425,7 @@ export function VisualizadorDesenhoModal({
             </div>
           ) : null}
         </div>
+
 
         {/* Rodapé */}
         <footer className="flex items-center justify-between px-5 py-3 bg-neutral-950 border-t border-neutral-800 shrink-0">
