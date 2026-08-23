@@ -196,10 +196,11 @@ export function ArtigoEditPage() {
         {/* Conteúdo da aba ativa */}
         <div>
           {aba === 'dados' && <DadosBasicosTab artigo={artigo} />}
-          {aba === 'desenhos' && <DesenhosTab artigoId={artigo.id} />}
+          {aba === 'desenhos' && <DesenhosTab artigoId={artigo.id} artigo={artigo} />}
           {aba === 'operacoes' && <OperacoesTab artigoId={artigo.id} />}
           {aba === 'plano' && <PlanoInspecaoTab artigoId={artigo.id} />}
         </div>
+
       </div>
     </AppLayout>
   );

@@ -124,11 +124,11 @@ export function useUploadDesenhoArquivo(artigoId: string) {
       const formData = new FormData();
       formData.append('arquivo', arquivo);
 
+      // Não defina Content-Type manualmente para que o browser/axios gere o boundary correto
       const { data } = await api.post<{ data: Desenho }>(
         `/artigos/${artigoId}/desenhos/${id}/arquivo`,
         formData,
         {
-          headers: { 'Content-Type': 'multipart/form-data' },
           timeout: 60000, // 1 minuto pra upload
         }
       );
@@ -151,3 +151,16 @@ export async function obterUrlDesenho(
   );
   return data.data.url;
 }
+
+// ---------------- URL DIRETA VIA STREAMING DA API ----------------
+// Usada no preview de iframe e tags de imagem com token em query
+export function obterUrlArquivoStream(
+  artigoId: string,
+  id: string
+): string {
+  const baseURL = import.meta.env.VITE_API_URL ?? (import.meta.env.DEV ? 'http://localhost:3001' : '');
+  const token = localStorage.getItem('forja_token') ?? '';
+  const tokenQuery = token ? `?token=${encodeURIComponent(token)}` : '';
+  return `${baseURL}/api/artigos/${artigoId}/desenhos/${id}/arquivo${tokenQuery}`;
+}
+

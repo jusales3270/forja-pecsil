@@ -96,6 +96,18 @@ export function urlPublica(bucket: string, key: string): string {
 }
 
 /**
+ * Obtém stream de leitura do arquivo no MinIO.
+ */
+export async function obterArquivoStream(bucket: string, key: string) {
+  const command = new GetObjectCommand({
+    Bucket: bucket,
+    Key: key,
+  });
+
+  return s3.send(command);
+}
+
+/**
  * Remove arquivo do MinIO.
  */
 export async function removerArquivo(bucket: string, key: string): Promise<void> {
@@ -106,3 +118,4 @@ export async function removerArquivo(bucket: string, key: string): Promise<void>
     })
   );
 }
+

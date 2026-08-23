@@ -25,6 +25,8 @@ import { IniciarOPModal } from './IniciarOPModal';
 import { EncerrarOPModal } from './EncerrarOPModal';
 import { PausarOPModal } from './PausarOPModal';
 import { PainelAvisos } from '../../components/PainelAvisos';
+import { VisualizadorDesenhoModal } from '../../components/VisualizadorDesenhoModal';
+import type { Desenho } from '../../hooks/useDesenhos';
 
 export function TotemEstacaoPage() {
   const navigate = useNavigate();
@@ -40,6 +42,11 @@ export function TotemEstacaoPage() {
   const [opIniciar, setOpIniciar] = useState<OPLotePendente | null>(null);
   const [opEncerrar, setOpEncerrar] = useState<OPLoteEmAndamento | null>(null);
   const [opPausar, setOpPausar] = useState<OPLoteEmAndamento | null>(null);
+  const [modalDesenhos, setModalDesenhos] = useState<{
+    artigo: { id: string; codigo: string; descricao?: string };
+    desenhos: Desenho[];
+  } | null>(null);
+
   const inputRef = useRef<HTMLInputElement>(null);
   const retomar = useRetomarOP();
 
@@ -174,6 +181,9 @@ export function TotemEstacaoPage() {
                   onPausar={() => setOpPausar(op)}
                   onRetomar={() => retomar.mutate({ opLoteId: op.id })}
                   retomando={retomar.isPending}
+                  onAbrirDesenhos={(artigo, desenhos) =>
+                    setModalDesenhos({ artigo, desenhos })
+                  }
                 />
               ))}
             </div>
@@ -204,6 +214,9 @@ export function TotemEstacaoPage() {
                   op={op}
                   podeOperar={podeOperar}
                   onIniciar={() => setOpIniciar(op)}
+                  onAbrirDesenhos={(artigo, desenhos) =>
+                    setModalDesenhos({ artigo, desenhos })
+                  }
                 />
               ))}
             </div>
@@ -228,6 +241,14 @@ export function TotemEstacaoPage() {
           onClose={() => setOpPausar(null)}
         />
       )}
+      {modalDesenhos && (
+        <VisualizadorDesenhoModal
+          open={true}
+          artigo={modalDesenhos.artigo}
+          desenhos={modalDesenhos.desenhos}
+          onClose={() => setModalDesenhos(null)}
+        />
+      )}
     </div>
   );
 }
@@ -240,12 +261,20 @@ function CardPendente({
   op,
   podeOperar,
   onIniciar,
+  onAbrirDesenhos,
 }: {
   op: OPLotePendente;
   podeOperar: boolean;
   onIniciar: () => void;
+  onAbrirDesenhos: (
+    artigo: { id: string; codigo: string; descricao?: string },
+    desenhos: Desenho[],
+  ) => void;
 }) {
   const urgente = op.lote.os.prioridade === 'urgente';
+  const desenhos = op.lote.os.artigo.desenhos ?? [];
+  const temDesenhosComArquivo = desenhos.some((d) => Boolean(d.arquivoKey));
+
   return (
     <div className="bg-neutral-900 border border-neutral-800 rounded-xl p-4 hover:border-forja-600 transition">
       <div className="flex items-start justify-between gap-3 mb-2">
@@ -268,12 +297,41 @@ function CardPendente({
         </span>
       </div>
 
-      <div className="text-neutral-100 font-medium">{op.lote.os.artigo.codigo}</div>
-      <div className="text-xs text-neutral-500 mb-3">
-        {op.lote.os.artigo.descricao}
+      <div className="flex items-start justify-between gap-2 mb-1">
+        <div>
+          <div className="text-neutral-100 font-medium text-base">
+            {op.lote.os.artigo.codigo}
+          </div>
+          <div className="text-xs text-neutral-500">
+            {op.lote.os.artigo.descricao}
+          </div>
+        </div>
+        <button
+          type="button"
+          onClick={() => onAbrirDesenhos(op.lote.os.artigo, desenhos)}
+          className={`shrink-0 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold border transition ${
+            desenhos.length > 0
+              ? temDesenhosComArquivo
+                ? 'bg-blue-500/15 border-blue-500/40 text-blue-300 hover:bg-blue-500/25'
+                : 'bg-amber-500/15 border-amber-500/40 text-amber-300 hover:bg-amber-500/25'
+              : 'bg-neutral-800/80 border-neutral-700/60 text-neutral-400 hover:bg-neutral-750'
+          }`}
+          title={
+            desenhos.length > 0
+              ? `${desenhos.length} desenho(s) cadastrado(s)`
+              : 'Clique para detalhes dos desenhos'
+          }
+        >
+          <span>📐</span>
+          <span>
+            {desenhos.length > 0
+              ? `Desenho (${desenhos.length})`
+              : 'Sem desenho'}
+          </span>
+        </button>
       </div>
 
-      <div className="text-sm text-neutral-300 mb-3">
+      <div className="text-sm text-neutral-300 my-3">
         <span className="text-neutral-500">OP {op.codigoOp}:</span> {op.tipoServico}
         {op.exigeInspecao && (
           <span className="ml-2 inline-block px-2 py-0.5 text-[10px] uppercase bg-purple-500/15 text-purple-400 border border-purple-500/30 rounded">
@@ -303,14 +361,14 @@ function CardPendente({
         </div>
       )}
 
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between mt-3 pt-3 border-t border-neutral-800">
         <div className="text-xs text-neutral-500">{op.lote.os.cliente.nome}</div>
         {podeOperar && (
           <button
             onClick={onIniciar}
-            className="px-4 py-2 bg-forja-500 hover:bg-forja-600 text-white text-sm font-medium rounded-lg transition"
+            className="px-5 py-2 bg-forja-500 hover:bg-forja-600 text-white text-sm font-medium rounded-lg transition"
           >
-            Iniciar
+            Iniciar OP
           </button>
         )}
       </div>
@@ -361,6 +419,7 @@ function CardEmAndamento({
   onPausar,
   onRetomar,
   retomando,
+  onAbrirDesenhos,
 }: {
   op: OPLoteEmAndamento;
   podeOperar: boolean;
@@ -368,9 +427,16 @@ function CardEmAndamento({
   onPausar: () => void;
   onRetomar: () => void;
   retomando: boolean;
+  onAbrirDesenhos: (
+    artigo: { id: string; codigo: string; descricao?: string },
+    desenhos: Desenho[],
+  ) => void;
 }) {
   const carimbo = op.carimbos[0];
   const paradaAtiva = carimbo?.paradas?.[0];
+  const desenhos = op.lote.os.artigo.desenhos ?? [];
+  const temDesenhosComArquivo = desenhos.some((d) => Boolean(d.arquivoKey));
+
   return (
     <div
       className={`border rounded-xl p-4 ${
@@ -396,7 +462,40 @@ function CardEmAndamento({
         )}
       </div>
 
-      <div className="text-neutral-100 font-medium">{op.lote.os.artigo.codigo}</div>
+      <div className="flex items-start justify-between gap-2 mb-2">
+        <div>
+          <div className="text-neutral-100 font-medium text-base">
+            {op.lote.os.artigo.codigo}
+          </div>
+          <div className="text-xs text-neutral-500">
+            {op.lote.os.artigo.descricao}
+          </div>
+        </div>
+        <button
+          type="button"
+          onClick={() => onAbrirDesenhos(op.lote.os.artigo, desenhos)}
+          className={`shrink-0 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold border transition ${
+            desenhos.length > 0
+              ? temDesenhosComArquivo
+                ? 'bg-blue-500/15 border-blue-500/40 text-blue-300 hover:bg-blue-500/25'
+                : 'bg-amber-500/15 border-amber-500/40 text-amber-300 hover:bg-amber-500/25'
+              : 'bg-neutral-800/80 border-neutral-700/60 text-neutral-400 hover:bg-neutral-750'
+          }`}
+          title={
+            desenhos.length > 0
+              ? `${desenhos.length} desenho(s) cadastrado(s)`
+              : 'Clique para detalhes dos desenhos'
+          }
+        >
+          <span>📐</span>
+          <span>
+            {desenhos.length > 0
+              ? `Desenho (${desenhos.length})`
+              : 'Sem desenho'}
+          </span>
+        </button>
+      </div>
+
       <div className="text-sm text-neutral-300 mb-2">
         <span className="text-neutral-500">OP {op.codigoOp}:</span> {op.tipoServico}
       </div>
@@ -434,7 +533,7 @@ function CardEmAndamento({
         <BotaoMaisUmaPeca opLoteId={op.id} maquinaId={carimbo.maquina.id} />
       )}
 
-      <div className="flex items-center justify-end gap-2 mt-3">
+      <div className="flex items-center justify-end gap-2 mt-3 pt-2 border-t border-neutral-800">
         <BotaoInspecionar opLoteId={op.id} />
         {podeOperar && paradaAtiva && (
           <button
@@ -465,6 +564,7 @@ function CardEmAndamento({
     </div>
   );
 }
+
 
 
 // ============================================================

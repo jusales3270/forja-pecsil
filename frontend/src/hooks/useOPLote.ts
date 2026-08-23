@@ -4,6 +4,7 @@
 
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { api } from '../lib/api';
+import type { Desenho } from './useDesenhos';
 
 // ============================================================
 // Tipos
@@ -73,10 +74,17 @@ export interface OPLotePendente {
       observacoes: string | null;
       cliente: { id: string; nome: string };
       criadoPor?: { id: string; nome: string };
-      artigo: { id: string; codigo: string; descricao: string; observacoes?: string | null };
+      artigo: {
+        id: string;
+        codigo: string;
+        descricao: string;
+        observacoes?: string | null;
+        desenhos?: Desenho[];
+      };
     };
   };
 }
+
 
 export interface ParadaMaquina {
   id: string;

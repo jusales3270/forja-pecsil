@@ -8,6 +8,7 @@
 //   PATCH  /api/artigos/:artigoId/desenhos/:id          — atualiza metadados
 //   DELETE /api/artigos/:artigoId/desenhos/:id          — remove (e apaga arquivo do MinIO)
 //   POST   /api/artigos/:artigoId/desenhos/:id/arquivo  — anexa/substitui arquivo
+//   GET    /api/artigos/:artigoId/desenhos/:id/arquivo  — stream direto do arquivo (preview/download)
 //   GET    /api/artigos/:artigoId/desenhos/:id/url      — URL assinada pra download
 // ============================================================
 
@@ -15,7 +16,8 @@ import { FastifyInstance } from 'fastify';
 import { z } from 'zod';
 import { prisma } from '../db/prisma.js';
 import { TipoDesenho } from '@prisma/client';
-import { uploadArquivo, gerarUrlAssinada, removerArquivo } from '../lib/storage.js';
+import { uploadArquivo, gerarUrlAssinada, removerArquivo, obterArquivoStream } from '../lib/storage.js';
+
 
 const TAMANHO_MAX_BYTES = 50 * 1024 * 1024; // 50 MB
 
@@ -338,6 +340,69 @@ export async function desenhosRoutes(app: FastifyInstance) {
     }
   );
 
+  // ---------------- STREAM DIRETO DO ARQUIVO (DOWNLOAD / PREVIEW) ----------------
+  app.get(
+    '/artigos/:artigoId/desenhos/:id/arquivo',
+    async (request: any, reply: any) => {
+      // Aceita token via header Authorization ou query parameter `?token=...`
+      try {
+        if (!request.headers.authorization && request.query?.token) {
+          request.headers.authorization = `Bearer ${request.query.token}`;
+        }
+        await request.jwtVerify();
+      } catch {
+        return reply.code(401).send({
+          error: 'unauthorized',
+          message: 'Token inválido ou ausente para download do desenho',
+        });
+      }
+
+      const { artigoId, id } = request.params as { artigoId: string; id: string };
+
+      const desenho = await prisma.desenho.findFirst({
+        where: { id, artigoId },
+      });
+
+      if (!desenho) {
+        return reply.code(404).send({
+          error: 'desenho_nao_encontrado',
+          message: 'Desenho não encontrado',
+        });
+      }
+
+      if (!desenho.arquivoBucket || !desenho.arquivoKey) {
+        return reply.code(404).send({
+          error: 'arquivo_nao_anexado',
+          message: 'Este desenho ainda não tem arquivo anexado',
+        });
+      }
+
+      try {
+        const s3Response = await obterArquivoStream(desenho.arquivoBucket, desenho.arquivoKey);
+        if (!s3Response.Body) {
+          return reply.code(404).send({
+            error: 'arquivo_nao_encontrado_storage',
+            message: 'Arquivo não encontrado no servidor de armazenamento',
+          });
+        }
+
+        const nomeArquivo = encodeURIComponent(desenho.arquivoNomeOriginal ?? `${desenho.codigoDesenho}-${desenho.revisao}`);
+        reply
+          .header('Content-Type', desenho.arquivoTipo || 'application/octet-stream')
+          .header('Content-Disposition', `inline; filename="${nomeArquivo}"`)
+          .header('Cache-Control', 'private, max-age=3600');
+
+        return reply.send(s3Response.Body);
+      } catch (err) {
+        app.log.error({ err, bucket: desenho.arquivoBucket, key: desenho.arquivoKey }, 'Erro ao obter arquivo do MinIO');
+        return reply.code(500).send({
+          error: 'storage_error',
+          message: 'Erro ao buscar arquivo no servidor de armazenamento',
+        });
+      }
+    }
+  );
+
   // ---------------- URL ASSINADA PRA DOWNLOAD ----------------
   app.get(
     '/artigos/:artigoId/desenhos/:id/url',
@@ -369,3 +434,4 @@ export async function desenhosRoutes(app: FastifyInstance) {
     }
   );
 }
+

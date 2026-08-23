@@ -1,16 +1,11 @@
-// ============================================================
-// Forja - Aba 2: Desenhos do Artigo
-// Lista compacta + modal de criar/editar com upload integrado
-// ============================================================
-
 import { useState } from 'react';
 import { ConfirmDialog } from '../../../components/ConfirmDialog';
 import { ObservacaoBadge } from '../../../components/ObservacaoBadge';
+import { VisualizadorDesenhoModal } from '../../../components/VisualizadorDesenhoModal';
 import {
   useDesenhosList,
   useDeleteDesenho,
   useUploadDesenhoArquivo,
-  obterUrlDesenho,
   LABELS_TIPO_DESENHO,
   type Desenho,
 } from '../../../hooks/useDesenhos';
@@ -18,9 +13,14 @@ import { DesenhoModal } from './DesenhoModal';
 
 interface DesenhosTabProps {
   artigoId: string;
+  artigo?: {
+    id: string;
+    codigo: string;
+    descricao?: string;
+  };
 }
 
-export function DesenhosTab({ artigoId }: DesenhosTabProps) {
+export function DesenhosTab({ artigoId, artigo }: DesenhosTabProps) {
   const { data: desenhos, isLoading, isError } = useDesenhosList(artigoId);
   const deleteMut = useDeleteDesenho(artigoId);
   const uploadMut = useUploadDesenhoArquivo(artigoId);
@@ -28,8 +28,9 @@ export function DesenhosTab({ artigoId }: DesenhosTabProps) {
   const [criando, setCriando] = useState(false);
   const [editando, setEditando] = useState<Desenho | null>(null);
   const [deletando, setDeletando] = useState<Desenho | null>(null);
+  const [visualizando, setVisualizando] = useState<Desenho | null>(null);
+  const [uploadandoId, setUploadandoId] = useState<string | null>(null);
   const [erro, setErro] = useState<string | null>(null);
-  const [abrindoUrl, setAbrindoUrl] = useState<string | null>(null);
 
   const handleConfirmarDelete = async () => {
     if (!deletando) return;
@@ -45,26 +46,21 @@ export function DesenhosTab({ artigoId }: DesenhosTabProps) {
   // Upload direto da tabela (input file escondido)
   const handleUploadInline = async (desenho: Desenho, file: File) => {
     setErro(null);
+    setUploadandoId(desenho.id);
     try {
       await uploadMut.mutateAsync({ id: desenho.id, arquivo: file });
     } catch (err: any) {
       setErro(err?.response?.data?.message ?? 'Erro ao subir arquivo');
+    } finally {
+      setUploadandoId(null);
     }
   };
 
-  // Visualizar arquivo via URL assinada
-  const handleVisualizar = async (desenho: Desenho) => {
-    setErro(null);
-    setAbrindoUrl(desenho.id);
-    try {
-      const url = await obterUrlDesenho(artigoId, desenho.id);
-      window.open(url, '_blank', 'noopener,noreferrer');
-    } catch (err: any) {
-      setErro(err?.response?.data?.message ?? 'Erro ao gerar URL');
-    } finally {
-      setAbrindoUrl(null);
-    }
+  // Visualizar arquivo via modal integrado
+  const handleVisualizar = (desenho: Desenho) => {
+    setVisualizando(desenho);
   };
+
 
   const formatBytes = (bytes: number | null) => {
     if (bytes == null) return '—';
@@ -171,16 +167,20 @@ export function DesenhosTab({ artigoId }: DesenhosTabProps) {
                     {d.arquivoKey && (
                       <button
                         onClick={() => handleVisualizar(d)}
-                        disabled={abrindoUrl === d.id}
-                        className="btn-ghost px-3 py-1.5 text-xs mr-1"
+                        className="btn-ghost px-3 py-1.5 text-xs mr-1 text-forja-400 hover:text-forja-300 font-semibold"
                       >
-                        {abrindoUrl === d.id ? 'Abrindo...' : 'Visualizar'}
+                        Visualizar
                       </button>
                     )}
                     <label className="btn-ghost px-3 py-1.5 text-xs mr-1 cursor-pointer inline-block">
-                      {d.arquivoKey ? 'Substituir' : 'Subir arquivo'}
+                      {uploadandoId === d.id
+                        ? 'Enviando...'
+                        : d.arquivoKey
+                        ? 'Substituir'
+                        : 'Subir arquivo'}
                       <input
                         type="file"
+                        disabled={uploadandoId === d.id}
                         className="hidden"
                         accept="application/pdf,image/png,image/jpeg"
                         onChange={(e) => {
@@ -223,6 +223,17 @@ export function DesenhosTab({ artigoId }: DesenhosTabProps) {
         }}
       />
 
+      {/* Visualizador de Desenhos */}
+      {visualizando && (
+        <VisualizadorDesenhoModal
+          open={true}
+          artigo={artigo ?? { id: artigoId, codigo: visualizando.codigoDesenho }}
+          desenhos={desenhos ?? []}
+          desenhoInicialId={visualizando.id}
+          onClose={() => setVisualizando(null)}
+        />
+      )}
+
       {/* Confirmação de delete */}
       <ConfirmDialog
         open={deletando !== null}
@@ -244,3 +255,4 @@ export function DesenhosTab({ artigoId }: DesenhosTabProps) {
     </div>
   );
 }
+

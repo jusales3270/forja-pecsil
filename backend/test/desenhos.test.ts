@@ -172,4 +172,42 @@ describe('Desenhos — CRUD de metadados', () => {
     assert.equal(res.statusCode, 404);
     assert.equal(res.json().error, 'desenho_nao_encontrado');
   });
+
+  test('GET /arquivo retorna 404 quando desenho não tem arquivo anexado', async () => {
+    const create = await app.inject({
+      method: 'POST',
+      url: `/api/artigos/${artigoId}/desenhos`,
+      headers: { authorization: `Bearer ${token}` },
+      payload: { tipo: 'cliente', codigoDesenho: 'DES-STREAM-TEST', revisao: '01' },
+    });
+    const id = create.json().data.id;
+
+    const res = await app.inject({
+      method: 'GET',
+      url: `/api/artigos/${artigoId}/desenhos/${id}/arquivo`,
+      headers: { authorization: `Bearer ${token}` },
+    });
+
+    assert.equal(res.statusCode, 404);
+    assert.equal(res.json().error, 'arquivo_nao_anexado');
+
+    // Testa também com token via query parameter
+    const resQuery = await app.inject({
+      method: 'GET',
+      url: `/api/artigos/${artigoId}/desenhos/${id}/arquivo?token=${token}`,
+    });
+
+    assert.equal(resQuery.statusCode, 404);
+    assert.equal(resQuery.json().error, 'arquivo_nao_anexado');
+  });
+
+  test('GET /arquivo retorna 401 quando sem token', async () => {
+    const res = await app.inject({
+      method: 'GET',
+      url: `/api/artigos/${artigoId}/desenhos/00000000-0000-0000-0000-000000000000/arquivo`,
+    });
+
+    assert.equal(res.statusCode, 401);
+  });
 });
+

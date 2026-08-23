@@ -109,7 +109,16 @@ export function DesenhoModal({
 
       // Se tem arquivo selecionado, sobe agora
       if (arquivo) {
-        await uploadMut.mutateAsync({ id: desenhoSalvo.id, arquivo });
+        try {
+          await uploadMut.mutateAsync({ id: desenhoSalvo.id, arquivo });
+        } catch (uploadErr: any) {
+          setErro(
+            `Desenho salvo, mas falhou ao enviar o arquivo: ${
+              uploadErr?.response?.data?.message ?? uploadErr?.message ?? 'Erro no upload'
+            }. Você pode tentar subir o arquivo novamente pela tabela.`
+          );
+          return;
+        }
       }
 
       onClose();
@@ -150,11 +159,18 @@ export function DesenhoModal({
             disabled={loading}
             className="btn-primary px-4 py-2 text-sm"
           >
-            {loading ? 'Salvando...' : ehEdicao ? 'Salvar' : 'Criar'}
+            {uploadMut.isPending
+              ? 'Enviando arquivo...'
+              : loading
+              ? 'Salvando...'
+              : ehEdicao
+              ? 'Salvar'
+              : 'Criar'}
           </button>
         </>
       }
     >
+
       <form id="desenho-form" onSubmit={handleSubmit} className="space-y-4">
         {erro && <div className="error-message">{erro}</div>}
 
