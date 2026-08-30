@@ -383,6 +383,7 @@ function CardPendente({
             inspeção
           </span>
         )}
+        <SeloTipoOP op={op} />
       </div>
 
       {/* Observações herdadas (OS, OP, Artigo) */}
@@ -422,7 +423,11 @@ function CardPendente({
               onClick={onIniciar}
               className="px-5 py-2 bg-forja-500 hover:bg-forja-600 text-white text-sm font-medium rounded-lg transition"
             >
-              Iniciar OP
+              {op.terceirizada
+                ? '🚚 Enviar'
+                : op.esperaHoras != null
+                  ? `⏳ Iniciar espera (${op.esperaHoras}h)`
+                  : 'Iniciar OP'}
             </button>
           )}
         </div>
@@ -430,6 +435,29 @@ function CardPendente({
 
     </div>
   );
+}
+
+/**
+ * Diz de cara que tipo de OP é aquela: feita fora da fábrica (rebarbação) ou
+ * só tempo de espera (cura, resfriamento). Nenhuma das duas ocupa máquina, e
+ * o operador precisa saber disso antes de clicar.
+ */
+function SeloTipoOP({ op }: { op: OPLotePendente }) {
+  if (op.terceirizada) {
+    return (
+      <span className="ml-2 inline-block px-2 py-0.5 text-[10px] uppercase bg-sky-500/15 text-sky-400 border border-sky-500/30 rounded">
+        🚚 fora da fábrica{op.fornecedor ? ` · ${op.fornecedor}` : ''}
+      </span>
+    );
+  }
+  if (op.esperaHoras != null) {
+    return (
+      <span className="ml-2 inline-block px-2 py-0.5 text-[10px] uppercase bg-indigo-500/15 text-indigo-400 border border-indigo-500/30 rounded">
+        ⏳ espera de {op.esperaHoras}h
+      </span>
+    );
+  }
+  return null;
 }
 
 function ObservacoesHerdadas({ op }: { op: OPLotePendente }) {
@@ -559,6 +587,7 @@ function CardEmAndamento({
 
       <div className="text-sm text-neutral-300 mb-2">
         <span className="text-neutral-500">OP {op.codigoOp}:</span> {op.tipoServico}
+        <SeloTipoOP op={op} />
       </div>
 
       {carimbo && (

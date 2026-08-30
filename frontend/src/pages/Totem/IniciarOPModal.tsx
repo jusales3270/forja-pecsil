@@ -1,6 +1,9 @@
 // ============================================================
 // Forja - Tótem: Modal de Iniciar OP
-// Programador escolhe máquina e operador antes de iniciar
+// Programador escolhe máquina e operador antes de iniciar.
+// Duas exceções não ocupam máquina nem operador, e o modal se ajusta:
+//   - terceirizada (rebarbação): a peça sai da fábrica; registra o envio
+//   - espera (cura, resfriamento): é só o relógio correndo
 // ============================================================
 
 import { useEffect, useRef, useState } from 'react';
@@ -17,6 +20,7 @@ interface Props {
 }
 
 export function IniciarOPModal({ op, etapaId, onClose }: Props) {
+  const semMaquina = op.terceirizada || op.esperaHoras != null;
   const [maquinaId, setMaquinaId] = useState('');
   const [operadorId, setOperadorId] = useState('');
   const [observacoes, setObservacoes] = useState('');
@@ -31,30 +35,37 @@ export function IniciarOPModal({ op, etapaId, onClose }: Props) {
   const iniciar = useIniciarOP();
 
   useEffect(() => {
-    setTimeout(() => maquinaRef.current?.focus(), 50);
-  }, []);
+    if (!semMaquina) setTimeout(() => maquinaRef.current?.focus(), 50);
+  }, [semMaquina]);
 
   async function handleSubmit() {
     setErro(null);
-    if (!maquinaId) {
-      setErro('Selecione a máquina');
-      return;
-    }
-    if (!operadorId) {
-      setErro('Selecione o operador');
-      return;
+    if (!semMaquina) {
+      if (!maquinaId) {
+        setErro('Selecione a máquina');
+        return;
+      }
+      if (!operadorId) {
+        setErro('Selecione o operador');
+        return;
+      }
     }
 
     try {
       await iniciar.mutateAsync({
         opLoteId: op.id,
         input: {
-          maquinaId,
-          operadorId,
+          ...(semMaquina ? {} : { maquinaId, operadorId }),
           observacoes: observacoes.trim() || null,
         },
       });
-      toast.sucesso(`OP iniciada com sucesso.`);
+      toast.sucesso(
+        op.terceirizada
+          ? 'Envio registrado.'
+          : op.esperaHoras != null
+            ? 'Espera iniciada.'
+            : 'OP iniciada com sucesso.',
+      );
       onClose();
     } catch (e: any) {
       const msg =
@@ -75,7 +86,13 @@ export function IniciarOPModal({ op, etapaId, onClose }: Props) {
     <Modal
       open
       onClose={onClose}
-      title={`Iniciar OP ${op.codigoOp} — ${op.lote.os.codigoGrv}`}
+      title={
+        op.terceirizada
+          ? `Enviar OP ${op.codigoOp} — ${op.lote.os.codigoGrv}`
+          : op.esperaHoras != null
+            ? `Iniciar espera — OP ${op.codigoOp} · ${op.lote.os.codigoGrv}`
+            : `Iniciar OP ${op.codigoOp} — ${op.lote.os.codigoGrv}`
+      }
       size="lg"
       footer={
         <>
@@ -90,7 +107,13 @@ export function IniciarOPModal({ op, etapaId, onClose }: Props) {
             disabled={iniciar.isPending}
             className="px-5 py-2 bg-forja-500 hover:bg-forja-600 disabled:opacity-50 text-white rounded-lg font-medium transition"
           >
-            {iniciar.isPending ? 'Iniciando...' : 'Iniciar (Enter)'}
+            {iniciar.isPending
+              ? 'Registrando...'
+              : op.terceirizada
+                ? 'Registrar envio (Enter)'
+                : op.esperaHoras != null
+                  ? 'Iniciar espera (Enter)'
+                  : 'Iniciar (Enter)'}
           </button>
         </>
       }
@@ -117,8 +140,39 @@ export function IniciarOPModal({ op, etapaId, onClose }: Props) {
           </div>
         </div>
 
+        {semMaquina && (
+          <div className="p-3 rounded-lg border border-sky-500/30 bg-sky-500/5 text-sm">
+            {op.terceirizada ? (
+              <>
+                <div className="text-sky-300 font-medium mb-1">
+                  🚚 Operação feita fora da fábrica
+                </div>
+                <div className="text-neutral-300 text-xs leading-relaxed">
+                  Não abre máquina nem operador — registra a saída da peça.
+                  {op.fornecedor && <> Fornecedor: <strong>{op.fornecedor}</strong>.</>}
+                  {op.prazoPrevistoDias != null && (
+                    <> Prazo previsto: <strong>{op.prazoPrevistoDias} dias</strong>.</>
+                  )}
+                  {' '}Ao voltar, encerre a OP pra seguir o fluxo.
+                </div>
+              </>
+            ) : (
+              <>
+                <div className="text-indigo-300 font-medium mb-1">
+                  ⏳ Espera de {op.esperaHoras}h
+                </div>
+                <div className="text-neutral-300 text-xs leading-relaxed">
+                  Não ocupa máquina nem operador — é só o tempo correndo. O tótem
+                  mostra quanto falta e a OP libera para o passo seguinte quando o
+                  prazo vencer.
+                </div>
+              </>
+            )}
+          </div>
+        )}
+
         {/* Máquina */}
-        <div>
+        <div className={semMaquina ? 'hidden' : undefined}>
           <label className="label-compact">
             Máquina
           </label>
@@ -138,7 +192,7 @@ export function IniciarOPModal({ op, etapaId, onClose }: Props) {
         </div>
 
         {/* Operador */}
-        <div>
+        <div className={semMaquina ? 'hidden' : undefined}>
           <label className="label-compact">
             Operador responsável
           </label>

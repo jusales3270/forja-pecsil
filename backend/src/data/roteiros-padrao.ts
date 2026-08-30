@@ -41,6 +41,25 @@ export interface OperacaoRoteiroPadrao {
    * esperar o lote fechar.
    */
   avisaEtapaDoCodigoTipoServico?: number;
+  /**
+   * Operação feita fora da fábrica. A rebarbação da fundição é assim: a peça
+   * sai de caminhão, é rebarbada por terceiro e volta. Não abre máquina —
+   * registra envio e retorno.
+   */
+  terceirizada?: boolean;
+  fornecedor?: string;
+  prazoPrevistoDias?: number;
+  /**
+   * Operação que é só tempo: cura do molde e resfriamento na areia, 12h cada.
+   * Não ocupa máquina nem operador — o relógio corre e ela libera sozinha.
+   */
+  esperaHoras?: number;
+  /**
+   * A operação seguinte só começa com o lote INTEIRO fechado aqui. Regra do
+   * Rafael pro tratamento térmico: não vai pro desbaste peça parcialmente
+   * tratada.
+   */
+  exigeLoteCompleto?: boolean;
 }
 
 export interface RoteiroPadrao {
@@ -60,19 +79,48 @@ export const ROTEIROS_PADRAO: RoteiroPadrao[] = [
     id: 'fundicao',
     nome: 'Fundição',
     descricao:
-      'Etapas internas da fundição, da modelação ao tratamento térmico. O tratamento térmico fecha o ciclo — só libera para o desbaste quando todas as peças estiverem tratadas.',
+      'Fluxo interno da fundição, do pedido ao forno. Inclui as esperas obrigatórias (cura e resfriamento, 12h cada) e a rebarbação, que é feita fora. O tratamento térmico fecha o ciclo: só libera para o desbaste com o lote inteiro tratado.',
     origem:
-      'Reunião com o PCP (Rafael). Sequência definida por ele; o OK de cada operação é do Guilherme. Tempos a levantar com a fundição.',
+      'Reuniões com o PCP (Rafael), incluindo a caminhada pela fábrica de 29/08. Sequência e tempos de espera definidos por ele; o OK de cada operação é do Guilherme. Tempos de execução a levantar com a fundição.',
     revisaoPendente: true,
     operacoes: [
-      { codigoTipoServico: 20, observacoes: 'MODELAÇÃO', tempoUnitMin: 0, tempoSetupMin: 0, exigeInspecao: false },
+      {
+        codigoTipoServico: 20,
+        observacoes:
+          'MODELAÇÃO — conferir se a coquilha serve e se o modelo precisa de alteração ou manutenção.\nSem coquilha pronta: fabricar em madeira ou 3D e fundir antes de seguir.',
+        tempoUnitMin: 0, tempoSetupMin: 0, exigeInspecao: false,
+      },
       { codigoTipoServico: 15, observacoes: 'MOLDAGEM', tempoUnitMin: 0, tempoSetupMin: 0, exigeInspecao: false },
-      { codigoTipoServico: 17, observacoes: 'VAZAMENTO', tempoUnitMin: 0, tempoSetupMin: 0, exigeInspecao: false },
-      { codigoTipoServico: 7, observacoes: 'REBARBAÇÃO', tempoUnitMin: 0, tempoSetupMin: 0, exigeInspecao: false },
+      {
+        codigoTipoServico: 51,
+        observacoes: 'CURA DO MOLDE — 12h no mínimo, às vezes 1 dia. Só depois monta na linha.',
+        tempoUnitMin: 0, tempoSetupMin: 0, exigeInspecao: false,
+        esperaHoras: 12,
+      },
+      { codigoTipoServico: 17, observacoes: 'VAZAMENTO — fundir as peças, na linha.', tempoUnitMin: 0, tempoSetupMin: 0, exigeInspecao: false },
+      {
+        codigoTipoServico: 52,
+        observacoes: 'RESFRIAMENTO NA AREIA — 12h dentro do molde. Só depois desmolda, descarta a areia e tira a peça.',
+        tempoUnitMin: 0, tempoSetupMin: 0, exigeInspecao: false,
+        esperaHoras: 12,
+      },
+      {
+        codigoTipoServico: 7,
+        observacoes:
+          'REBARBAÇÃO — FEITA FORA. Sai de empilhadeira, vai de caminhão pro terceiro e volta.\nAntigamente era interna. Registrar envio e retorno, não abre máquina.',
+        tempoUnitMin: 0, tempoSetupMin: 0, exigeInspecao: false,
+        terceirizada: true,
+        prazoPrevistoDias: 3,
+      },
+      {
+        codigoTipoServico: 53,
+        observacoes: 'JATO DE GRANALHA — interno, assim que a peça volta da rebarbação. Depois desce pro forno.',
+        tempoUnitMin: 0, tempoSetupMin: 0, exigeInspecao: false,
+      },
       {
         codigoTipoServico: 50,
         observacoes:
-          'TRATAMENTO TÉRMICO — início e fim.\nCiclo de aprox. 3 dias (tempo de forno, não por peça).\nPode rodar parcial: a engenharia já programa com o parcial, mas só libera para o desbaste com o lote todo tratado.',
+          'TRATAMENTO TÉRMICO — início e fim. Forno fica embaixo.\nCiclo de 2 a 3 dias (tempo de forno, não por peça).\nA engenharia é avisada na entrada e usa esse tempo pra programar o desbaste.\nNÃO libera pro desbaste com lote parcialmente tratado.',
         tempoUnitMin: 0,
         tempoSetupMin: 0,
         exigeInspecao: false,
@@ -80,6 +128,8 @@ export const ROTEIROS_PADRAO: RoteiroPadrao[] = [
         // os ~3 dias de ciclo pra deixar o programa de desbaste pronto.
         avisaAoIniciar: true,
         avisaEtapaDoCodigoTipoServico: 36,
+        // Regra do Rafael: o que sai do forno parcial não desce pro desbaste.
+        exigeLoteCompleto: true,
       },
     ],
   },

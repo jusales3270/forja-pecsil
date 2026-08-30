@@ -42,6 +42,16 @@ export interface CardPipeline {
   /** Quando o aviso de início foi disparado pra etapa avisada. */
   alertaInicioEm: Date | null;
   etapaAvisada: string | null;
+  /** Feita fora da fábrica (rebarbação). */
+  terceirizada: boolean;
+  fornecedor: string | null;
+  prazoPrevistoDias: number | null;
+  /** Só tempo (cura, resfriamento). Null = operação normal. */
+  esperaHoras: number | null;
+  /** Quando a espera termina. Null se não é espera ou ainda não começou. */
+  liberaEm: Date | null;
+  /** A próxima só começa com o lote inteiro fechado aqui. */
+  exigeLoteCompleto: boolean;
 }
 
 export interface FasePipeline {
@@ -106,6 +116,11 @@ export async function montarPipelineEtapa(etapaId: string): Promise<PipelineEtap
       status: true,
       quantidadeConcluida: true,
       alertaInicioEm: true,
+      terceirizada: true,
+      fornecedor: true,
+      prazoPrevistoDias: true,
+      esperaHoras: true,
+      exigeLoteCompleto: true,
       operacaoArtigo: { select: { tipoServicoId: true } },
       etapaAvisada: { select: { nome: true } },
       carimbos: {
@@ -215,6 +230,15 @@ export async function montarPipelineEtapa(etapaId: string): Promise<PipelineEtap
         : null,
       alertaInicioEm: op.alertaInicioEm,
       etapaAvisada: op.etapaAvisada?.nome ?? null,
+      terceirizada: op.terceirizada,
+      fornecedor: op.fornecedor,
+      prazoPrevistoDias: op.prazoPrevistoDias,
+      esperaHoras: op.esperaHoras,
+      liberaEm:
+        op.esperaHoras != null && carimbo?.timestampEntrada
+          ? new Date(carimbo.timestampEntrada.getTime() + op.esperaHoras * 3_600_000)
+          : null,
+      exigeLoteCompleto: op.exigeLoteCompleto,
     };
 
     const fkId = op.operacaoArtigo?.tipoServicoId;

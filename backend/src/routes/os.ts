@@ -380,6 +380,12 @@ export async function osRoutes(app: FastifyInstance) {
                 gatilhoAlertaPecas: op.gatilhoAlertaPecas,
                 avisaAoIniciar: op.avisaAoIniciar,
                 etapaAvisadaId: op.etapaAvisadaId,
+                terceirizada: op.terceirizada,
+                fornecedor: op.fornecedor,
+                prazoPrevistoDias: op.prazoPrevistoDias,
+                custoPrevisto: op.custoPrevisto,
+                esperaHoras: op.esperaHoras,
+                exigeLoteCompleto: op.exigeLoteCompleto,
                 observacoes: op.observacoes ?? null,
               },
             });

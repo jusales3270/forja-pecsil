@@ -11,7 +11,7 @@
 // ============================================================
 
 import type { FasePipeline, PipelineEtapa } from '../hooks/usePipelineEtapa';
-import { tempoNaFase } from '../hooks/usePipelineEtapa';
+import { tempoNaFase, faltaPara } from '../hooks/usePipelineEtapa';
 
 interface Props {
   pipeline: PipelineEtapa;
@@ -68,6 +68,9 @@ export function PipelineEtapa({
   const T = classes(claro);
   const interativa = variante === 'interativa';
   const totalNaEtapa = pipeline.fases.reduce((s, f) => s + f.total, 0);
+  // A fundição tem 8 fases. Com caixa fixa a última — o tratamento térmico,
+  // justamente a que importa — sai da tela. Aperta conforme o número de fases.
+  const largura = pipeline.fases.length > 6 ? 'w-[116px] min-w-[116px]' : 'w-[150px] min-w-[150px]';
 
   return (
     <div className="mb-6">
@@ -96,6 +99,7 @@ export function PipelineEtapa({
             <CaixaFase
               fase={fase}
               T={T}
+              largura={largura}
               interativa={interativa}
               selecionada={faseSelecionada === fase.tipoServicoId}
               onClick={() =>
@@ -105,7 +109,7 @@ export function PipelineEtapa({
               }
             />
             {i < pipeline.fases.length - 1 && (
-              <div className={`flex items-center ${T.seta} text-lg select-none`}>→</div>
+              <div className={`flex items-center ${T.seta} text-sm select-none px-0.5`}>→</div>
             )}
           </div>
         ))}
@@ -124,12 +128,14 @@ export function PipelineEtapa({
 function CaixaFase({
   fase,
   T,
+  largura,
   interativa,
   selecionada,
   onClick,
 }: {
   fase: FasePipeline;
   T: ReturnType<typeof classes>;
+  largura: string;
   interativa: boolean;
   selecionada: boolean;
   onClick: () => void;
@@ -141,6 +147,12 @@ function CaixaFase({
     .filter((c) => c.desdeQuando)
     .sort((a, b) => new Date(a.desdeQuando!).getTime() - new Date(b.desdeQuando!).getTime())[0];
   const avisados = fase.cards.filter((c) => c.alertaInicioEm).length;
+  // Fase que não é trabalho: ou a peça está fora da fábrica, ou é só o relógio.
+  const fora = fase.cards.filter((c) => c.terceirizada).length;
+  const esperando = fase.cards.filter((c) => c.liberaEm);
+  const proximaLiberacao = esperando
+    .map((c) => c.liberaEm!)
+    .sort()[0];
 
   const borda = selecionada ? T.caixaAtiva : vazia ? T.caixaVazia : T.caixa;
 
@@ -158,7 +170,7 @@ function CaixaFase({
 
       <div className="flex items-baseline gap-2 mt-1">
         <span
-          className={`text-3xl font-bold tabular-nums ${vazia ? T.numeroVazio : T.numero}`}
+          className={`text-2xl font-bold tabular-nums ${vazia ? T.numeroVazio : T.numero}`}
         >
           {fase.total}
         </span>
@@ -177,11 +189,20 @@ function CaixaFase({
         )}
       </div>
 
-      {maisAntiga && (
+      {proximaLiberacao ? (
+        <div className="text-[10px] mt-1 text-indigo-400">
+          ⏳ libera {faltaPara(proximaLiberacao)}
+        </div>
+      ) : fora > 0 ? (
+        <div className="text-[10px] mt-1 text-sky-400">
+          🚚 {fora === 1 ? 'fora da fábrica' : `${fora} fora da fábrica`}
+          {maisAntiga && ` · ${tempoNaFase(maisAntiga.desdeQuando!)}`}
+        </div>
+      ) : maisAntiga ? (
         <div className={`text-[10px] mt-1 ${T.sub}`}>
           mais antiga: {tempoNaFase(maisAntiga.desdeQuando!)}
         </div>
-      )}
+      ) : null}
 
       {fase.cards.length > 0 && (
         <div className={`mt-2 pt-2 border-t ${T.divisor} space-y-0.5`}>
@@ -220,7 +241,7 @@ function CaixaFase({
     </>
   );
 
-  const base = `min-w-[150px] w-[150px] shrink-0 rounded-xl border p-3 text-left transition ${borda}`;
+  const base = `${largura} shrink-0 rounded-xl border p-2.5 text-left transition ${borda}`;
 
   return interativa ? (
     <button onClick={onClick} className={`${base} hover:border-forja-500/60`}>

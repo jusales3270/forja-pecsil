@@ -30,6 +30,13 @@ export interface CardPipeline {
   paradaAtiva: { motivo: string; planejado: boolean; inicio: string } | null;
   alertaInicioEm: string | null;
   etapaAvisada: string | null;
+  terceirizada: boolean;
+  fornecedor: string | null;
+  prazoPrevistoDias: number | null;
+  esperaHoras: number | null;
+  /** Quando a espera vence. Null se não é espera ou ainda não começou. */
+  liberaEm: string | null;
+  exigeLoteCompleto: boolean;
 }
 
 export interface FasePipeline {
@@ -64,6 +71,16 @@ export function usePipelineEtapa(etapaId: string | null | undefined) {
     },
     refetchInterval: 30_000,
   });
+}
+
+/** "em 4h" / "em 30min" / "vencida" — quanto falta pra espera liberar. */
+export function faltaPara(iso: string): string {
+  const min = Math.round((new Date(iso).getTime() - Date.now()) / 60_000);
+  if (min <= 0) return 'liberada';
+  if (min < 60) return `em ${min}min`;
+  const h = Math.floor(min / 60);
+  if (h < 24) return `em ${h}h`;
+  return `em ${Math.floor(h / 24)}d`;
 }
 
 /** "3d 4h" / "5h" / "12min" — tempo que a OS está na fase. */

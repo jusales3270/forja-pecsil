@@ -408,6 +408,19 @@ model OperacaoArtigo {
   /// sem esperar peça nenhuma. É o caso do tratamento térmico: o ciclo leva
   /// ~3 dias e a engenharia usa essa janela pra programar o desbaste.
   avisaAoIniciar  Boolean @default(false) @map("avisa_ao_iniciar")
+  /// Operação feita FORA da fábrica. A rebarbação da fundição é assim: a peça
+  /// sai de caminhão e volta. Não abre máquina — registra envio e retorno.
+  terceirizada      Boolean  @default(false)
+  fornecedor        String?
+  prazoPrevistoDias Int?     @map("prazo_previsto_dias")
+  custoPrevisto     Decimal? @map("custo_previsto") @db.Decimal(12, 2)
+  /// Operação que é só tempo: cura do molde (12h), resfriamento na areia (12h).
+  /// Não ocupa máquina nem operador — conta o relógio e libera sozinha.
+  esperaHoras       Int?     @map("espera_horas")
+  /// A operação seguinte só começa quando esta fechar o lote INTEIRO.
+  /// Regra do Rafael para o tratamento térmico: não libera pro desbaste com
+  /// lote parcialmente tratado.
+  exigeLoteCompleto Boolean  @default(false) @map("exige_lote_completo")
   /// Estação que recebe o aviso (ex: metalização avisa a Engenharia para
   /// começar o próximo programa). Sem isso, o gatilho não avisa ninguém.
   etapaAvisadaId  String? @map("etapa_avisada_id")
@@ -560,6 +573,15 @@ model OPLote {
   /// Avisa a etapa de etapaAvisadaId assim que esta OP for iniciada.
   /// Herdado do roteiro na criação da OS. Usado pelo tratamento térmico.
   avisaAoIniciar      Boolean      @default(false) @map("avisa_ao_iniciar")
+  /// Feita fora da fábrica: registra envio e retorno, não abre máquina.
+  terceirizada        Boolean      @default(false)
+  fornecedor          String?
+  prazoPrevistoDias   Int?         @map("prazo_previsto_dias")
+  custoPrevisto       Decimal?     @map("custo_previsto") @db.Decimal(12, 2)
+  /// Só tempo de espera (cura, resfriamento): libera sozinha depois de N horas.
+  esperaHoras         Int?         @map("espera_horas")
+  /// A próxima OP do lote só começa quando esta fechar o lote inteiro.
+  exigeLoteCompleto   Boolean      @default(false) @map("exige_lote_completo")
   /// Estação que recebe o aviso quando o gatilho dispara.
   etapaAvisadaId      String?      @map("etapa_avisada_id")
   /// Momento em que o gatilho disparou (evita alertar de novo a cada peça).

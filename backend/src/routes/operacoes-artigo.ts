@@ -27,6 +27,12 @@ const criarOperacaoSchema = z.object({
   exigeInspecao: z.boolean().default(false),
   gatilhoAlertaPecas: z.number().int().positive().nullable().optional(),
   avisaAoIniciar: z.boolean().optional(),
+  terceirizada: z.boolean().optional(),
+  fornecedor: z.string().max(200).nullable().optional(),
+  prazoPrevistoDias: z.number().int().positive().nullable().optional(),
+  custoPrevisto: z.number().nonnegative().nullable().optional(),
+  esperaHoras: z.number().int().positive().nullable().optional(),
+  exigeLoteCompleto: z.boolean().optional(),
   etapaAvisadaId: z.string().uuid().nullable().optional(),
   observacoes: z.string().max(2000).nullable().optional(),
 });
@@ -187,6 +193,12 @@ export async function operacoesArtigoRoutes(app: FastifyInstance) {
             exigeInspecao: parsed.data.exigeInspecao,
             gatilhoAlertaPecas: parsed.data.gatilhoAlertaPecas ?? null,
             avisaAoIniciar: parsed.data.avisaAoIniciar ?? false,
+            terceirizada: parsed.data.terceirizada ?? false,
+            fornecedor: parsed.data.fornecedor ?? null,
+            prazoPrevistoDias: parsed.data.prazoPrevistoDias ?? null,
+            custoPrevisto: parsed.data.custoPrevisto ?? null,
+            esperaHoras: parsed.data.esperaHoras ?? null,
+            exigeLoteCompleto: parsed.data.exigeLoteCompleto ?? false,
             etapaAvisadaId: parsed.data.etapaAvisadaId ?? null,
             observacoes: parsed.data.observacoes,
           },
@@ -439,6 +451,11 @@ export async function operacoesArtigoRoutes(app: FastifyInstance) {
                   exigeInspecao: op.exigeInspecao,
                   gatilhoAlertaPecas: op.gatilhoAlertaPecas ?? null,
                   avisaAoIniciar: op.avisaAoIniciar ?? false,
+                  terceirizada: op.terceirizada ?? false,
+                  fornecedor: op.fornecedor ?? null,
+                  prazoPrevistoDias: op.prazoPrevistoDias ?? null,
+                  esperaHoras: op.esperaHoras ?? null,
+                  exigeLoteCompleto: op.exigeLoteCompleto ?? false,
                   etapaAvisadaId:
                     op.avisaEtapaDoCodigoTipoServico != null
                       ? (porCodigo.get(op.avisaEtapaDoCodigoTipoServico)?.etapaId ?? null)

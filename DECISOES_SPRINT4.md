@@ -284,3 +284,79 @@ SELECT count(*) FROM operacoes_artigo WHERE tipo_servico ILIKE '%TRATAMENTO%';
 - **Sub-fluxo da coquilha**: verificar se existe → serve? → senão fabricar em
   madeira/3D e fundir. É um ativo reaproveitável, não uma etapa linear.
 - Tempos das 5 operações continuam zerados, a levantar com a fundição.
+
+## Fundição fiel ao chão de fábrica: terceiros, esperas e trava do forno (30/08/2026)
+
+A caminhada com o Rafael (29/08) mostrou que o roteiro de 5 operações descrevia
+menos do que a fundição faz. Faltavam três coisas, e nenhuma é detalhe:
+
+**1. A rebarbação é feita FORA.** A peça sai de empilhadeira, vai de caminhão pro
+terceiro e volta. Antigamente era interna. O sistema tratava como operação normal
+— abria máquina para trabalho que acontece em outra empresa.
+
+**2. Duas esperas obrigatórias que ninguém via.** Cura do molde (12h, às vezes um
+dia) antes de montar na linha, e resfriamento na areia (12h) antes de desmoldar.
+São 24h de calendário que não apareciam em lugar nenhum, mas que o PCP precisa
+contar quando promete prazo.
+
+**3. Jato de granalha.** Interno, entre o retorno da rebarbação e o forno. Não
+existia no roteiro.
+
+E a regra que o Rafael repetiu: **o que sai parcial do forno não desce pro
+desbaste**. Isso estava só como texto numa observação — o sistema deixava iniciar
+o desbaste com o lote metade tratado.
+
+### Como ficou
+
+Três campos novos em `OperacaoArtigo`/`OPLote`, todos data-driven:
+
+| campo | pra quê |
+|---|---|
+| `terceirizada` + `fornecedor` + `prazoPrevistoDias` + `custoPrevisto` | operação fora da fábrica |
+| `esperaHoras` | operação que é só o relógio |
+| `exigeLoteCompleto` | trava a operação seguinte até o lote fechar aqui |
+
+`POST /op-lote/:id/iniciar` passou a aceitar OP **sem máquina e sem operador**
+quando ela é terceirizada ou de espera — o carimbo marca só o relógio, e nenhum
+`ProcessamentoMaquina` é aberto. `Carimbo.maquinaId` já era nullable, então não
+precisou de mudança estrutural.
+
+A guarda do `exigeLoteCompleto` roda no início de qualquer OP: se existe uma OP
+anterior no lote marcada assim e ainda não concluída, devolve 409 dizendo quantas
+peças faltam. Fechado o lote, libera.
+
+**O roteiro da fundição foi de 5 para 8 operações:**
+
+```
+1 Modelação   2 Moldagem   3 Cura do molde (12h)   4 Vazamento
+5 Resfriamento na areia (12h)   6 Rebarbação (FORA, 3d)
+7 Jato de granalha   8 Tratamento térmico (avisa eng. + exige lote completo)
+```
+
+Três tipos de serviço novos no catálogo: **51 CURA DO MOLDE**, **52 RESFRIAMENTO
+NA AREIA**, **53 JATO DE GRANALHA**.
+
+No tótem o botão muda conforme a OP: "🚚 Enviar" na terceirizada, "⏳ Iniciar
+espera (12h)" nas esperas, "Iniciar OP" no resto — e o modal esconde máquina e
+operador explicando por quê. A faixa de fluxo mostra "⏳ libera em 8h" e "🚚 fora
+da fábrica" no lugar do tempo comum. Com 8 fases as caixas apertam sozinhas, pra
+o tratamento térmico não sair da tela.
+
+### O que replicar em cada ambiente
+
+```sql
+-- os 3 tipos de serviço novos (ou cadastrar pela tela)
+-- e depois a ordem das 8 fases:
+UPDATE tipos_servico SET ordem_na_etapa = CASE codigo
+  WHEN 20 THEN 1 WHEN 15 THEN 2 WHEN 51 THEN 3 WHEN 17 THEN 4
+  WHEN 52 THEN 5 WHEN 7 THEN 6 WHEN 53 THEN 7 WHEN 50 THEN 8 END
+WHERE codigo IN (20,15,51,17,52,7,53,50);
+```
+
+### Ainda aberto
+
+- **Sub-fluxo da coquilha** — verificar se existe, se serve, senão fabricar em
+  madeira/3D e fundir. Hoje está só como observação na modelação.
+- Tempos de execução das operações continuam zerados.
+- O prazo de 3 dias da rebarbação terceirizada é chute — confirmar com quem
+  controla o envio.

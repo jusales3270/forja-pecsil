@@ -20,9 +20,12 @@ const filtroEstacaoSchema = z.object({
   busca: z.string().optional(),
 });
 
+// Operação terceirizada (feita fora) e operação de espera (cura, resfriamento)
+// não ocupam máquina nem operador — por isso os dois campos são opcionais aqui
+// e a exigência é validada conforme o tipo da OP.
 const iniciarSchema = z.object({
-  maquinaId: z.string().uuid('maquinaId inválido'),
-  operadorId: z.string().uuid('operadorId inválido'),
+  maquinaId: z.string().uuid('maquinaId inválido').optional(),
+  operadorId: z.string().uuid('operadorId inválido').optional(),
   observacoes: z.string().max(1000).nullable().optional(),
 });
 
@@ -358,6 +361,118 @@ export async function opLoteRoutes(app: FastifyInstance) {
         return reply.code(400).send({
           error: 'os_nao_ativa',
           message: `OS está com status "${opLote.lote.os.status}" e não permite iniciar OPs`,
+        });
+      }
+
+      // Regra do Rafael: operação marcada como exigeLoteCompleto trava o que vem
+      // depois. O tratamento térmico é assim — lote parcialmente tratado não
+      // desce pro desbaste.
+      const travando = await prisma.oPLote.findFirst({
+        where: {
+          loteId: opLote.loteId,
+          ordem: { lt: opLote.ordem },
+          exigeLoteCompleto: true,
+          status: { not: 'concluida' },
+        },
+        orderBy: { ordem: 'desc' },
+        select: { tipoServico: true, quantidadeConcluida: true },
+      });
+      if (travando) {
+        return reply.code(409).send({
+          error: 'lote_incompleto_na_operacao_anterior',
+          message: `${travando.tipoServico} ainda não fechou o lote (${travando.quantidadeConcluida}/${opLote.lote.quantidadePecas}). Esta operação só libera com o lote inteiro.`,
+        });
+      }
+
+      const semMaquina = opLote.terceirizada || opLote.esperaHoras != null;
+
+      // Terceirizada e espera não abrem máquina: o carimbo marca só o relógio.
+      if (semMaquina) {
+        const carimbo = await prisma.$transaction(async (tx) => {
+          const c = await tx.carimbo.create({
+            data: {
+              opLoteId: opLote.id,
+              loteId: opLote.loteId,
+              etapaId: opLote.etapaId,
+              programadorId,
+              observacoes: observacoes ?? null,
+            },
+          });
+          await tx.oPLote.update({
+            where: { id: opLote.id },
+            data: { status: 'em_processo' },
+          });
+          const lote = await tx.lote.findUnique({
+            where: { id: opLote.loteId },
+            select: { status: true },
+          });
+          if (lote?.status === 'na_fila') {
+            await tx.lote.update({
+              where: { id: opLote.loteId },
+              data: { status: 'em_processo' },
+            });
+          }
+          const os = await tx.oS.findUnique({
+            where: { id: opLote.lote.os.id },
+            select: { status: true },
+          });
+          if (os?.status === 'aberta') {
+            await tx.oS.update({
+              where: { id: opLote.lote.os.id },
+              data: { status: 'em_producao' },
+            });
+          }
+          await criarEvento(tx, {
+            osId: opLote.lote.os.id,
+            loteId: opLote.loteId,
+            tipo: 'op_lote_iniciada',
+            autorId: programadorId,
+            payload: {
+              opLoteId: opLote.id,
+              codigoOp: opLote.codigoOp,
+              tipoServico: opLote.tipoServico,
+              etapaId: opLote.etapaId,
+              carimboId: c.id,
+              acao: opLote.terceirizada ? 'enviado_para_terceiro' : 'espera_iniciada',
+              fornecedor: opLote.fornecedor,
+              esperaHoras: opLote.esperaHoras,
+            },
+          });
+          return c;
+        });
+
+        app.io.to(`estacao:${opLote.etapaId}`).emit('op:iniciada', {
+          opLoteId: opLote.id,
+          loteId: opLote.loteId,
+          etapaId: opLote.etapaId,
+          maquinaId: null,
+        });
+
+        const completo = await prisma.oPLote.findUnique({
+          where: { id: opLote.id },
+          include: {
+            etapa: { select: { id: true, nome: true } },
+            carimbos: { where: { id: carimbo.id } },
+            lote: {
+              include: {
+                os: {
+                  select: {
+                    id: true,
+                    codigoGrv: true,
+                    artigo: { select: { codigo: true, descricao: true } },
+                  },
+                },
+              },
+            },
+          },
+        });
+        return reply.code(201).send({ data: completo });
+      }
+
+      if (!maquinaId || !operadorId) {
+        return reply.code(400).send({
+          error: 'invalid_input',
+          message: 'Máquina e operador são obrigatórios nesta operação',
         });
       }
 

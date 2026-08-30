@@ -56,6 +56,14 @@ export interface OPLotePendente {
   tempoUnitPlanejado: number;
   tempoTotalPlanejado: number;
   exigeInspecao: boolean;
+  /** Feita fora da fábrica: registra envio e retorno, não abre máquina. */
+  terceirizada: boolean;
+  fornecedor: string | null;
+  prazoPrevistoDias: number | null;
+  /** Só tempo (cura, resfriamento). Não ocupa máquina nem operador. */
+  esperaHoras: number | null;
+  /** A próxima OP do lote só começa com o lote inteiro fechado aqui. */
+  exigeLoteCompleto: boolean;
   observacoes: string | null;
   carimboAnterior?: CarimboAnterior | null;
   etapa: { id: string; nome: string };
@@ -124,8 +132,9 @@ export interface FiltroEmAndamento {
 }
 
 export interface IniciarOPInput {
-  maquinaId: string;
-  operadorId: string;
+  /** Opcional: operação terceirizada ou de espera não ocupa máquina. */
+  maquinaId?: string;
+  operadorId?: string;
   observacoes?: string | null;
 }
 
