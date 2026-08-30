@@ -37,11 +37,18 @@ export interface Aviso {
 
 const QUERY_KEY = ['avisos'] as const;
 
-export function useAvisos() {
+/**
+ * Avisos da estação aberta + os endereçados à pessoa logada.
+ * O aviso do tratamento térmico é da ESTAÇÃO engenharia: quem abrir aquele
+ * tótem vê, não importa quem está logado.
+ */
+export function useAvisos(etapaId?: string | null) {
   return useQuery({
-    queryKey: QUERY_KEY,
+    queryKey: [...QUERY_KEY, etapaId ?? null],
     queryFn: async () => {
-      const { data } = await api.get<{ data: Aviso[] }>('/avisos');
+      const { data } = await api.get<{ data: Aviso[] }>('/avisos', {
+        params: etapaId ? { etapaId } : undefined,
+      });
       return data.data;
     },
     refetchInterval: 30_000,
@@ -61,8 +68,8 @@ export function useMarcarAvisoLido() {
 export function useMarcarTodosLidos() {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: async () => {
-      await api.post('/avisos/marcar-lidos');
+    mutationFn: async (etapaId?: string | null) => {
+      await api.post('/avisos/marcar-lidos', etapaId ? { etapaId } : {});
     },
     onSuccess: () => qc.invalidateQueries({ queryKey: QUERY_KEY }),
   });

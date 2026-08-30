@@ -162,6 +162,11 @@ enum TipoEventoOS {
 
 enum TipoAlerta {
   lote_parado
+  /// Operação atingiu o gatilho de peças: a próxima etapa já pode se adiantar.
+  parcial_pronta
+  /// Operação de ciclo longo começou (tratamento térmico): a etapa avisada
+  /// tem essa janela pra preparar o próximo programa.
+  fase_iniciada
   qualidade_reprovada
   cota_fora_tolerancia
   volume_correcao_alta
@@ -255,6 +260,8 @@ model Etapa {
   /// Operações que avisam esta estação ao atingir o gatilho parcial
   avisosOperacao OperacaoArtigo[] @relation("EtapaAvisadaOperacao")
   avisosOPLote   OPLote[]         @relation("EtapaAvisadaOPLote")
+  /// Avisos endereçados a esta estação (aparecem no tótem dela)
+  alertas        Alerta[]         @relation("EtapaDestinoAlerta")
 
   @@map("etapas")
 }
@@ -290,6 +297,9 @@ model TipoServico {
   codigo        Int?     @unique
   nome          String   @unique
   etapaId       String   @map("etapa_id")
+  /// Posição do serviço dentro da etapa (1, 2, 3...). Nulo = a etapa é de
+  /// processo único. Preenchido só na fundição, que tem operações internas.
+  ordemNaEtapa  Int?     @map("ordem_na_etapa")
   exigeInspecao Boolean  @default(false) @map("exige_inspecao")
   ativo         Boolean  @default(true)
   observacoes   String?
@@ -394,6 +404,10 @@ model OperacaoArtigo {
   /// Avisa quando esta operação atingir N peças, sem esperar o lote fechar.
   /// Padrão do roteiro; ajustável por lote em OPLote.gatilhoAlertaPecas.
   gatilhoAlertaPecas Int? @map("gatilho_alerta_pecas")
+  /// Avisa a etapa de etapaAvisadaId assim que esta operação for INICIADA,
+  /// sem esperar peça nenhuma. É o caso do tratamento térmico: o ciclo leva
+  /// ~3 dias e a engenharia usa essa janela pra programar o desbaste.
+  avisaAoIniciar  Boolean @default(false) @map("avisa_ao_iniciar")
   /// Estação que recebe o aviso (ex: metalização avisa a Engenharia para
   /// começar o próximo programa). Sem isso, o gatilho não avisa ninguém.
   etapaAvisadaId  String? @map("etapa_avisada_id")
@@ -543,10 +557,16 @@ model OPLote {
   /// Avisa a próxima etapa ao atingir N peças, sem esperar o lote fechar.
   /// Herdado do roteiro na criação da OS; o PCP edita por lote.
   gatilhoAlertaPecas  Int?         @map("gatilho_alerta_pecas")
+  /// Avisa a etapa de etapaAvisadaId assim que esta OP for iniciada.
+  /// Herdado do roteiro na criação da OS. Usado pelo tratamento térmico.
+  avisaAoIniciar      Boolean      @default(false) @map("avisa_ao_iniciar")
   /// Estação que recebe o aviso quando o gatilho dispara.
   etapaAvisadaId      String?      @map("etapa_avisada_id")
   /// Momento em que o gatilho disparou (evita alertar de novo a cada peça).
   alertaParcialEm     DateTime?    @map("alerta_parcial_em")
+  /// Momento em que o aviso de início disparou (garante disparo único mesmo
+  /// se a OP for reiniciada depois de um encerramento parcial).
+  alertaInicioEm      DateTime?    @map("alerta_inicio_em")
   observacoes         String?
   criadoEm            DateTime     @default(now()) @map("criado_em")
   atualizadoEm        DateTime     @updatedAt @map("atualizado_em")
@@ -781,14 +801,20 @@ model Alerta {
   severidade     SeveridadeAlerta
   entidadeTipo   String           @map("entidade_tipo")
   entidadeId     String           @map("entidade_id")
-  destinatarioId String           @map("destinatario_id")
+  /// Aviso dirigido a uma PESSOA. Nulo quando o aviso é da estação.
+  destinatarioId String?          @map("destinatario_id")
+  /// Aviso dirigido a uma ESTAÇÃO: quem abrir aquele tótem vê, seja quem for.
+  /// É assim que o alerta do tratamento térmico chega na engenharia sem
+  /// depender de quem está cadastrado com qual papel.
+  etapaDestinoId String?          @map("etapa_destino_id")
   canal          CanalAlerta
   mensagem       String
   enviadoEm      DateTime?        @map("enviado_em")
   visualizadoEm  DateTime?        @map("visualizado_em")
   criadoEm       DateTime         @default(now()) @map("criado_em")
 
-  destinatario Pessoa @relation(fields: [destinatarioId], references: [id])
+  destinatario Pessoa? @relation(fields: [destinatarioId], references: [id])
+  etapaDestino Etapa?  @relation("EtapaDestinoAlerta", fields: [etapaDestinoId], references: [id])
 
   @@map("alertas")
 }

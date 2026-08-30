@@ -48,6 +48,7 @@ export async function roteirosPadraoRoutes(app: FastifyInstance) {
             tempoSetupMin: op.tempoSetupMin,
             exigeInspecao: op.exigeInspecao,
             gatilhoAlertaPecas: op.gatilhoAlertaPecas ?? null,
+            avisaAoIniciar: op.avisaAoIniciar ?? false,
             avisaEtapa:
               op.avisaEtapaDoCodigoTipoServico != null
                 ? (porCodigo.get(op.avisaEtapaDoCodigoTipoServico)?.etapa.nome ?? null)

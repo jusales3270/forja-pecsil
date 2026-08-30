@@ -4,9 +4,13 @@
 // Alertas que ficam DENTRO da aplicação. WhatsApp é outro canal,
 // avaliado no Sprint 7 — aqui nada sai do sistema.
 //
-//   GET   /api/avisos             — não lidos de quem está logado
-//   PATCH /api/avisos/:id/lido    — marca um como lido
+//   GET   /api/avisos?etapaId=  — não lidos da estação + os pessoais
+//   PATCH /api/avisos/:id/lido  — marca um como lido
 //   POST  /api/avisos/marcar-lidos — marca todos como lidos
+//
+// Aviso de estação é o caso normal: o tratamento térmico avisa a ENGENHARIA,
+// e quem estiver no tótem da engenharia vê — não importa quem está logado nem
+// quem foi cadastrado com qual papel.
 // ============================================================
 
 import { FastifyInstance } from 'fastify';
@@ -19,18 +23,26 @@ export async function avisosRoutes(app: FastifyInstance) {
     const user = request.user as any;
 
     const querySchema = z.object({
-      incluirLidos: z.coerce.boolean().default(false),
+      etapaId: z.string().uuid().optional(),
+      incluirLidos: z
+        .enum(['true', 'false'])
+        .default('false')
+        .transform((v) => v === 'true'),
       limit: z.coerce.number().min(1).max(100).default(30),
     });
     const parsed = querySchema.safeParse(request.query);
-    const { incluirLidos, limit } = parsed.success
+    const { etapaId, incluirLidos, limit } = parsed.success
       ? parsed.data
-      : { incluirLidos: false, limit: 30 };
+      : { etapaId: undefined, incluirLidos: false, limit: 30 };
 
     const avisos = await prisma.alerta.findMany({
       where: {
-        destinatarioId: user.pessoaId,
         canal: 'dashboard',
+        // Avisos da estação que está aberta + os endereçados à pessoa.
+        OR: [
+          { destinatarioId: user.pessoaId },
+          ...(etapaId ? [{ etapaDestinoId: etapaId }] : []),
+        ],
         ...(incluirLidos ? {} : { visualizadoEm: null }),
       },
       orderBy: { criadoEm: 'desc' },
@@ -96,7 +108,12 @@ export async function avisosRoutes(app: FastifyInstance) {
       }
 
       const aviso = await prisma.alerta.findUnique({ where: { id: parsed.data.id } });
-      if (!aviso || aviso.destinatarioId !== user.pessoaId) {
+      // Aviso de estação é do posto, não de uma pessoa: qualquer um que esteja
+      // ali pode dar como lido, como se apagasse do quadro da parede.
+      const podeLer =
+        aviso &&
+        (aviso.etapaDestinoId !== null || aviso.destinatarioId === user.pessoaId);
+      if (!podeLer) {
         return reply.code(404).send({ error: 'not_found', message: 'Aviso não encontrado' });
       }
 
@@ -115,11 +132,19 @@ export async function avisosRoutes(app: FastifyInstance) {
     { onRequest: [app.authenticate] },
     async (request) => {
       const user = request.user as any;
+      const body = z
+        .object({ etapaId: z.string().uuid().optional() })
+        .safeParse(request.body ?? {});
+      const etapaId = body.success ? body.data.etapaId : undefined;
+
       const r = await prisma.alerta.updateMany({
         where: {
-          destinatarioId: user.pessoaId,
           canal: 'dashboard',
           visualizadoEm: null,
+          OR: [
+            { destinatarioId: user.pessoaId },
+            ...(etapaId ? [{ etapaDestinoId: etapaId }] : []),
+          ],
         },
         data: { visualizadoEm: new Date() },
       });

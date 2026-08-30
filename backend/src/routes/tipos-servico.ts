@@ -22,6 +22,9 @@ const criarTipoServicoSchema = z.object({
   codigo: z.number().int().positive('codigo deve ser um inteiro positivo').nullable().optional(),
   nome: z.string().min(2, 'Nome deve ter ao menos 2 caracteres').max(200),
   etapaId: z.string().uuid('etapaId inválido'),
+  // Posição do serviço dentro da etapa. Nulo = etapa de processo único.
+  // Preenchido só onde a etapa tem operações internas (fundição).
+  ordemNaEtapa: z.number().int().positive('ordemNaEtapa deve ser >= 1').nullable().optional(),
   exigeInspecao: z.boolean().default(false),
   ativo: z.boolean().optional(),
   observacoes: z.string().nullable().optional(),
@@ -62,7 +65,13 @@ export async function tiposServicoRoutes(app: FastifyInstance) {
             select: { id: true, nome: true, ordemPadrao: true },
           },
         },
-        orderBy: [{ etapa: { ordemPadrao: 'asc' } }, { nome: 'asc' }],
+        // Dentro da etapa, quem tem ordem de fase vem na sequência produtiva;
+        // o resto (etapas de processo único) segue alfabético como sempre.
+        orderBy: [
+          { etapa: { ordemPadrao: 'asc' } },
+          { ordemNaEtapa: 'asc' },
+          { nome: 'asc' },
+        ],
       });
 
       return { data: tipos };

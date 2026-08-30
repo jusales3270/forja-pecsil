@@ -4,6 +4,7 @@
 
 import { useQuery } from '@tanstack/react-query';
 import { api } from '../lib/api';
+import type { PipelineEtapa } from './usePipelineEtapa';
 
 export interface OSAtrasada {
   id: string;
@@ -56,6 +57,8 @@ export interface DashboardData {
   osPorStatusLista: Record<string, OSResumo[]>;
   osAtrasadas: OSAtrasada[];
   kanban: KanbanEtapa[];
+  /** Etapas com operações internas (hoje só a fundição), fase a fase. */
+  pipelines: PipelineEtapa[];
   inspecao: Record<string, number>;
   paradas: {
     ativas: {

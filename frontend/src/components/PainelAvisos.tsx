@@ -11,8 +11,9 @@ import {
   tempoRelativo,
 } from '../hooks/useAvisos';
 
-export function PainelAvisos() {
-  const { data: avisos } = useAvisos();
+/** etapaId: estação aberta no tótem. Os avisos dela aparecem aqui. */
+export function PainelAvisos({ etapaId }: { etapaId?: string | null }) {
+  const { data: avisos } = useAvisos(etapaId);
   const marcarLido = useMarcarAvisoLido();
   const marcarTodos = useMarcarTodosLidos();
   const [aberto, setAberto] = useState(false);
@@ -48,7 +49,7 @@ export function PainelAvisos() {
               </span>
               {total > 0 && (
                 <button
-                  onClick={() => marcarTodos.mutate()}
+                  onClick={() => marcarTodos.mutate(etapaId)}
                   disabled={marcarTodos.isPending}
                   className="text-xs text-neutral-400 hover:text-neutral-200"
                 >

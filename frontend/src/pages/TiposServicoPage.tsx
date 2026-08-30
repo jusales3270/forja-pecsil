@@ -132,6 +132,13 @@ export function TiposServicoPage() {
                     </td>
                     <td className={`px-4 py-3 ${claro ? 'text-slate-600' : 'text-neutral-300'}`}>
                       {t.etapa?.nome ?? '—'}
+                      {t.ordemNaEtapa != null && (
+                        <span
+                          className={`ml-2 text-xs ${claro ? 'text-slate-400' : 'text-neutral-500'}`}
+                        >
+                          fase {t.ordemNaEtapa}
+                        </span>
+                      )}
                     </td>
                     <td className="px-4 py-3">
                       {t.exigeInspecao ? (
@@ -209,8 +216,10 @@ interface TipoServicoModalProps {
 
 function TipoServicoModal({ open, tipo, onClose }: TipoServicoModalProps) {
   const ehEdicao = tipo !== null;
+  const { claro } = useTheme();
 
   const [codigo, setCodigo] = useState('');
+  const [ordemNaEtapa, setOrdemNaEtapa] = useState('');
   const [nome, setNome] = useState('');
   const [etapaId, setEtapaId] = useState('');
   const [exigeInspecao, setExigeInspecao] = useState(false);
@@ -227,6 +236,7 @@ function TipoServicoModal({ open, tipo, onClose }: TipoServicoModalProps) {
   useEffect(() => {
     if (open) {
       setCodigo(tipo?.codigo != null ? String(tipo.codigo) : '');
+      setOrdemNaEtapa(tipo?.ordemNaEtapa != null ? String(tipo.ordemNaEtapa) : '');
       setNome(tipo?.nome ?? '');
       setEtapaId(tipo?.etapaId ?? '');
       setExigeInspecao(tipo?.exigeInspecao ?? false);
@@ -258,6 +268,14 @@ function TipoServicoModal({ open, tipo, onClose }: TipoServicoModalProps) {
         return;
       }
     }
+    let ordemNum: number | null = null;
+    if (ordemNaEtapa.trim()) {
+      ordemNum = parseInt(ordemNaEtapa, 10);
+      if (isNaN(ordemNum) || ordemNum <= 0) {
+        setErro('Ordem na etapa deve ser um número inteiro positivo');
+        return;
+      }
+    }
 
     try {
       if (ehEdicao && tipo) {
@@ -267,6 +285,7 @@ function TipoServicoModal({ open, tipo, onClose }: TipoServicoModalProps) {
             codigo: codigoNum,
             nome: nome.trim(),
             etapaId,
+            ordemNaEtapa: ordemNum,
             exigeInspecao,
             ativo,
             observacoes: observacoes.trim() || null,
@@ -277,6 +296,7 @@ function TipoServicoModal({ open, tipo, onClose }: TipoServicoModalProps) {
           codigo: codigoNum,
           nome: nome.trim(),
           etapaId,
+          ordemNaEtapa: ordemNum,
           exigeInspecao,
           observacoes: observacoes.trim() || undefined,
         });
@@ -360,6 +380,24 @@ function TipoServicoModal({ open, tipo, onClose }: TipoServicoModalProps) {
               </option>
             ))}
           </select>
+        </div>
+
+        <div>
+          <label className="label">Ordem dentro da etapa</label>
+          <input
+            type="number"
+            min="1"
+            value={ordemNaEtapa}
+            onChange={(e) => setOrdemNaEtapa(e.target.value)}
+            className="input"
+            placeholder="Deixe vazio se a etapa é de processo único"
+          />
+          <p className={`text-xs mt-1 ${claro ? 'text-slate-500' : 'text-neutral-500'}`}>
+            Só preencha onde a etapa tem operações internas em sequência — hoje,
+            a fundição (1 Modelação, 2 Moldagem, 3 Vazamento, 4 Rebarbação,
+            5 Tratamento Térmico). Preenchido, o serviço vira uma fase na faixa
+            de fluxo do tótem e do painel.
+          </p>
         </div>
 
         <div className="flex items-center gap-3">

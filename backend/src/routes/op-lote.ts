@@ -433,6 +433,62 @@ export async function opLoteRoutes(app: FastifyInstance) {
             data: { status: 'em_processo' },
           });
 
+          // Aviso de operação longa: o tratamento térmico leva ~3 dias e essa é
+          // justamente a janela em que a engenharia programa o desbaste. Sem
+          // isto o aviso é verbal — e quando ninguém avisa, a peça fica parada.
+          // Dispara uma vez só: reiniciar depois de um encerramento parcial não
+          // alerta de novo.
+          let avisouInicio = false;
+          if (
+            opLote.avisaAoIniciar &&
+            !opLote.alertaInicioEm &&
+            opLote.etapaAvisadaId
+          ) {
+            await tx.oPLote.update({
+              where: { id: opLote.id },
+              data: { alertaInicioEm: new Date() },
+            });
+            avisouInicio = true;
+
+            const contexto = await tx.oPLote.findUnique({
+              where: { id: opLote.id },
+              select: {
+                tipoServico: true,
+                lote: {
+                  select: {
+                    numeroLote: true,
+                    os: {
+                      select: {
+                        codigoGrv: true,
+                        artigo: { select: { codigo: true } },
+                      },
+                    },
+                  },
+                },
+                etapaAvisada: { select: { nome: true } },
+              },
+            });
+
+            const mensagem = contexto
+              ? `${contexto.lote.os.codigoGrv} (${contexto.lote.os.artigo.codigo}) — lote ${contexto.lote.numeroLote} entrou em ${contexto.tipoServico}. Já dá pra adiantar o próximo programa.`
+              : 'Operação de ciclo longo iniciada. Já dá pra adiantar o próximo programa.';
+
+            // O aviso é da ESTAÇÃO avisada, não de uma pessoa: quem abrir o
+            // tótem da engenharia vê, independente de quem está logado ou de
+            // quem foi cadastrado com qual papel.
+            await tx.alerta.create({
+              data: {
+                tipo: 'fase_iniciada',
+                severidade: 'info',
+                entidadeTipo: 'OPLote',
+                entidadeId: opLote.id,
+                etapaDestinoId: opLote.etapaAvisadaId,
+                canal: 'dashboard',
+                mensagem,
+              },
+            });
+          }
+
           // Se for a primeira OP do lote a ir pra em_processo, atualiza Lote também
           const lote = await tx.lote.findUnique({
             where: { id: opLote.loteId },
@@ -477,7 +533,7 @@ export async function opLoteRoutes(app: FastifyInstance) {
             },
           });
 
-          return { carimbo, processamento };
+          return { carimbo, processamento, avisouInicio };
         });
 
         // Emite evento em tempo real pra estação
@@ -489,6 +545,17 @@ export async function opLoteRoutes(app: FastifyInstance) {
             etapaId: opLote.etapaId,
             maquinaId,
           });
+
+        if (resultado.avisouInicio) {
+          // Global: quem precisa saber está na etapa avisada, não nesta.
+          app.io.emit('op:fase-iniciada', {
+            opLoteId: opLote.id,
+            etapaId: opLote.etapaId,
+            etapaAvisadaId: opLote.etapaAvisadaId,
+            codigoOp: opLote.codigoOp,
+            tipoServico: opLote.tipoServico,
+          });
+        }
 
         // Re-fetch com dados completos pra retornar
         const completo = await prisma.oPLote.findUnique({

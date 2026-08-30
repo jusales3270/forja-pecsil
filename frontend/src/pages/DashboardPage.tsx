@@ -6,6 +6,8 @@ import { useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDashboard, type KanbanCard } from '../hooks/useDashboard';
 import { useTheme } from '../lib/theme-store';
+import { PipelineEtapa } from '../components/PipelineEtapa';
+import { tempoNaFase, type PipelineEtapa as PipelineEtapaData } from '../hooks/usePipelineEtapa';
 
 const LABELS_STATUS_OS: Record<string, string> = {
   aberta: 'Abertas',
@@ -226,6 +228,12 @@ export default function DashboardPage() {
         </div>
       </div>
 
+      {/* Etapas com operações internas (fundição): o kanban geral mostra só
+          "está na fundição"; aqui o chefe vê em qual das 5 fases cada OS está. */}
+      {d.pipelines?.map((p) => (
+        <DetalheEtapaInterna key={p.etapaId} pipeline={p} claro={claro} T={T} />
+      ))}
+
       {/* Kanban: mapa de lotes por etapa */}
       <div>
         <h2 className={`text-lg font-semibold ${T.texto} mb-3`}>Onde está cada lote</h2>
@@ -377,6 +385,91 @@ export default function DashboardPage() {
                 )}
               </div>
             )}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ============================================================
+// Detalhe de uma etapa com operações internas (fundição)
+// ============================================================
+// A faixa de fluxo é a mesma peça que o tótem usa, então o que o chefe vê no
+// painel é literalmente o que o pessoal vê no chão de fábrica.
+function DetalheEtapaInterna({
+  pipeline,
+  claro,
+  T,
+}: {
+  pipeline: PipelineEtapaData;
+  claro: boolean;
+  T: Record<string, string>;
+}) {
+  // Operações configuradas pra avisar outra etapa — na fundição, o tratamento
+  // térmico. É o ciclo longo que dá (ou tira) previsibilidade do desbaste.
+  const cicloLongo = pipeline.fases
+    .flatMap((f) => f.cards)
+    .filter((c) => c.etapaAvisada !== null);
+  const nomesDoCiclo = [...new Set(cicloLongo.map((c) => c.tipoServico))];
+
+  return (
+    <div className={T.card}>
+      <h2 className={`text-lg font-semibold ${T.texto} mb-3`}>
+        {pipeline.etapaNome} em detalhe
+      </h2>
+
+      <PipelineEtapa pipeline={pipeline} variante="compacta" claro={claro} />
+
+      {cicloLongo.length > 0 && (
+        <div>
+          <h3 className={`text-sm font-semibold ${T.texto} mb-2`}>
+            Ciclo de {nomesDoCiclo.join(' / ')}
+          </h3>
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm min-w-[640px]">
+              <thead className={`${T.sub} text-left`}>
+                <tr>
+                  <th className="py-1 pr-3 font-medium">OS</th>
+                  <th className="py-1 pr-3 font-medium">Artigo</th>
+                  <th className="py-1 pr-3 font-medium">Cliente</th>
+                  <th className="py-1 pr-3 font-medium">No ciclo há</th>
+                  <th className="py-1 pr-3 font-medium">Avisou</th>
+                </tr>
+              </thead>
+              <tbody className={T.cardKTexto}>
+                {cicloLongo.map((c) => (
+                  <tr key={c.opLoteId} className={`border-t ${T.divisor}`}>
+                    <td className="py-1.5 pr-3 font-mono">
+                      {c.codigoGrv}
+                      {c.prioridade === 'urgente' && (
+                        <span className="ml-1 text-[10px] uppercase text-red-500 font-bold">
+                          urgente
+                        </span>
+                      )}
+                    </td>
+                    <td className="py-1.5 pr-3">{c.artigo}</td>
+                    <td className="py-1.5 pr-3">{c.cliente}</td>
+                    <td className="py-1.5 pr-3">
+                      {c.desdeQuando ? (
+                        tempoNaFase(c.desdeQuando)
+                      ) : (
+                        <span className={T.sub}>ainda na fila</span>
+                      )}
+                    </td>
+                    <td className="py-1.5 pr-3">
+                      {c.alertaInicioEm ? (
+                        <span className="text-emerald-500">
+                          {c.etapaAvisada} · há {tempoNaFase(c.alertaInicioEm)}
+                        </span>
+                      ) : (
+                        <span className={T.sub}>—</span>
+                      )}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
         </div>
       )}

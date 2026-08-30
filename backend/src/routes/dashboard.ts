@@ -6,6 +6,7 @@
 
 import { FastifyInstance } from 'fastify';
 import { prisma } from '../db/prisma.js';
+import { montarPipelineEtapa, listarEtapasComFases } from '../lib/pipeline-etapa.js';
 
 export async function dashboardRoutes(app: FastifyInstance) {
   // GET /api/dashboard  -> visao macro pro chefe
@@ -241,6 +242,13 @@ export async function dashboardRoutes(app: FastifyInstance) {
       .filter((o) => !fecharam.has(o.id))
       .map((o) => ({ operador: o.nome }));
 
+    // Etapas com operações internas (hoje só a fundição): o chefe acompanha
+    // fase a fase, não só "está na fundição". Mesma função que serve o tótem.
+    const idsComFases = await listarEtapasComFases();
+    const pipelines = (
+      await Promise.all(idsComFases.map((id) => montarPipelineEtapa(id)))
+    ).filter((p): p is NonNullable<typeof p> => p !== null && p.temFases);
+
     return {
       data: {
         geradoEm: agora,
@@ -248,6 +256,7 @@ export async function dashboardRoutes(app: FastifyInstance) {
         osPorStatusLista,
         osAtrasadas,
         kanban,
+        pipelines,
         inspecao,
         paradas: {
           ativas: paradasAtivas,

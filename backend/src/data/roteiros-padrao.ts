@@ -29,6 +29,13 @@ export interface OperacaoRoteiroPadrao {
    */
   gatilhoAlertaPecas?: number;
   /**
+   * Avisa a etapa assim que a operação for INICIADA, sem esperar peça nenhuma.
+   * É o caso do tratamento térmico: o ciclo leva ~3 dias e é justamente essa a
+   * janela em que a engenharia programa o desbaste. Hoje esse aviso é verbal —
+   * quando ninguém avisa, a peça fica parada esperando o programa.
+   */
+  avisaAoIniciar?: boolean;
+  /**
    * Código do Tipo de Serviço cuja etapa recebe o aviso. Ex: a metalização
    * avisa a Engenharia, que começa o programa de encaixe+arredondamento sem
    * esperar o lote fechar.
@@ -69,6 +76,10 @@ export const ROTEIROS_PADRAO: RoteiroPadrao[] = [
         tempoUnitMin: 0,
         tempoSetupMin: 0,
         exigeInspecao: false,
+        // Ao apontar a entrada no forno, a engenharia é avisada na hora e usa
+        // os ~3 dias de ciclo pra deixar o programa de desbaste pronto.
+        avisaAoIniciar: true,
+        avisaEtapaDoCodigoTipoServico: 36,
       },
     ],
   },

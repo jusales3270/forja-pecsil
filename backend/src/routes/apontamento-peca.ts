@@ -88,25 +88,19 @@ export async function apontamentoPecaRoutes(app: FastifyInstance) {
               ? `${contexto.lote.os.codigoGrv} (${contexto.lote.os.artigo.codigo}) — lote ${contexto.lote.numeroLote}: ${numeroPeca} peça(s) prontas em ${contexto.tipoServico}. Pode adiantar o próximo programa.`
               : `${numeroPeca} peça(s) prontas. Pode adiantar o próximo programa.`;
 
-            // Destinatários: quem atua na estação avisada.
-            const destinatarios = await tx.pessoa.findMany({
-              where: { ativo: true, papel: { in: ['engenharia', 'programador', 'pcp'] } },
-              select: { id: true },
+            // O aviso é da ESTAÇÃO avisada, não de uma pessoa: quem abrir
+            // aquele tótem vê, seja quem for que esteja lá.
+            await tx.alerta.create({
+              data: {
+                tipo: 'parcial_pronta',
+                severidade: 'info',
+                entidadeTipo: 'OPLote',
+                entidadeId: opLoteId,
+                etapaDestinoId: opLote.etapaAvisadaId,
+                canal: 'dashboard',
+                mensagem,
+              },
             });
-
-            if (destinatarios.length > 0) {
-              await tx.alerta.createMany({
-                data: destinatarios.map((p) => ({
-                  tipo: 'lote_parado' as const, // TODO: enum ganha `parcial_pronta` quando o Sprint 7 mexer em alertas
-                  severidade: 'info' as const,
-                  entidadeTipo: 'OPLote',
-                  entidadeId: opLoteId,
-                  destinatarioId: p.id,
-                  canal: 'dashboard' as const,
-                  mensagem,
-                })),
-              });
-            }
           }
         }
 

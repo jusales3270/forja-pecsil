@@ -187,3 +187,100 @@ legado de Tipos de Serviço:
    Ajuste de Máquina, Controle de Medição, Falta de Operador, Micro Parada,
    Serviço de Terceiros) ainda não foram cadastrados via tela — o catálogo
    está vazio em produção até alguém inserir.
+
+## Fases da fundição visíveis no tótem e no painel + alerta do tratamento térmico (29/08/2026)
+
+Duas coisas que a caminhada pela fábrica com o Rafael deixou claras:
+
+**1. A fundição é a única etapa com processo interno.** Saindo dela, cada etapa
+de usinagem é "processo único" — a peça entra, faz e sai, não circula. Só que
+como as 5 operações da fundição apontam pra mesma Etapa, o tótem mostrava dois
+baldes ("Em andamento"/"Pendentes") sem dizer em qual das fases cada OS estava.
+O painel do chefe tinha o mesmo buraco: a coluna "Fundição" do kanban é um
+número só, sem previsibilidade de cadenciamento dentro da etapa mais longa
+(~7 dias).
+
+**2. O aviso do tratamento térmico é o gargalo real.** O ciclo leva 2-3 dias e
+hoje ninguém avisa a engenharia que uma OS entrou no forno — o Domingo descobre
+de passagem, e quando não descobre, a peça fica parada esperando programa. Esses
+2-3 dias são exatamente a janela pra programar o desbaste.
+
+### Como ficou
+
+**Fases são cadastro, não código.** `TipoServico.ordemNaEtapa` (1..N) define a
+posição do serviço dentro da etapa. Nulo = etapa de processo único, e a tela
+segue idêntica ao que sempre foi. Só a fundição recebeu valores:
+
+| ordem | código | tipo de serviço |
+|-------|--------|-----------------|
+| 1 | 20 | MODELAÇÃO |
+| 2 | 15 | MOLDAGEM |
+| 3 | 17 | VAZAMENTO |
+| 4 | 7  | REBARBAÇÃO FUNDIÇÃO |
+| 5 | 50 | TRATAMENTO TÉRMICO |
+
+Os outros 3 códigos que a fundição herdou do GRV (6 FORNO INDUÇÃO, 12 SERRA,
+16 LEVANTAMENTO) ficaram sem ordem de propósito — não fazem parte da sequência
+que o Rafael definiu. Se aparecerem numa OS, o pipeline os mostra num aviso de
+"fora das fases cadastradas", em vez de sumir com eles.
+
+`montarPipelineEtapa()` (`backend/src/lib/pipeline-etapa.ts`) é a fonte única:
+o tótem chama por `GET /api/etapas/:id/pipeline`, o painel recebe no bloco
+`pipelines` do `GET /api/dashboard`. O que o chefe vê é literalmente o que o
+chão de fábrica vê.
+
+**Faixa de fluxo** (`PipelineEtapa.tsx`) nas duas telas: as 5 fases ligadas por
+seta, contador por fase, quantos rodando/na fila/parado, há quanto tempo está a
+OS mais antiga da fase e a lista dos GRV. No tótem ela filtra a lista abaixo;
+no painel é só leitura, seguida da tabela "Ciclo de TRATAMENTO TÉRMICO" (OS,
+artigo, cliente, tempo no ciclo, se já avisou a engenharia e quando).
+
+**Alerta ao iniciar.** `avisaAoIniciar` + `alertaInicioEm` em `OperacaoArtigo` e
+`OPLote` — par simétrico ao `gatilhoAlertaPecas`/`alertaParcialEm` que já
+existia, usando o mesmo `etapaAvisadaId`. Ao apontar o início do tratamento
+térmico no tótem (o momento em que o Guilherme põe a peça no forno), o
+`POST /op-lote/:id/iniciar` cria o `Alerta` e emite `op:fase-iniciada`. Dispara
+**uma vez só**: reiniciar depois de um encerramento parcial não alerta de novo.
+
+**O alerta é da ESTAÇÃO, não de pessoas.** `Alerta.etapaDestinoId` endereça o
+aviso à etapa avisada, e `destinatarioId` virou opcional. Quem abrir o tótem da
+Engenharia vê o aviso — não importa quem está logado nem quem foi cadastrado com
+qual papel. A primeira versão mandava pra toda pessoa com papel `engenharia`,
+`programador` ou `pcp`, o que era frágil de dois jeitos: dependia de existir
+alguém cadastrado com aquele papel (não existia), e espalhava o aviso pra
+programadores de outras estações que não têm nada a ver com aquilo. O aviso da
+metalização (gatilho de peças) usa o mesmo mecanismo.
+
+Marcar como lido é da estação também: qualquer um que esteja ali pode limpar,
+como quem apaga do quadro da parede.
+
+O enum `TipoAlerta` ganhou `fase_iniciada` e `parcial_pronta` — este último
+substitui o `lote_parado` que o gatilho de peças usava como placeholder.
+
+Continua valendo: **os alertas ficam dentro da aplicação**. WhatsApp segue
+adiado pro Sprint 7.
+
+### O que replicar em cada ambiente (não vai no deploy)
+
+```sql
+-- 1) as 5 fases da fundição
+UPDATE tipos_servico SET ordem_na_etapa = CASE codigo
+  WHEN 20 THEN 1 WHEN 15 THEN 2 WHEN 17 THEN 3 WHEN 7 THEN 4 WHEN 50 THEN 5 END
+WHERE codigo IN (20, 15, 17, 7, 50);
+
+-- 2) artigos que já tinham o roteiro de fundição aplicado ANTES desta mudança
+--    não têm o aviso ligado. Conferir:
+SELECT count(*) FROM operacoes_artigo WHERE tipo_servico ILIKE '%TRATAMENTO%';
+--    Se houver, o PCP reaplica o roteiro na aba Operações do artigo.
+--    Em dev, na data desta mudança, não havia nenhum.
+```
+
+### Ainda aberto
+
+- **Passos que o Rafael descreveu e não estão no roteiro**: cura do molde
+  (12h–1 dia), resfriamento na areia (12h), jato de granalha (entre rebarbação
+  e forno), e o fato de a **rebarbação ser terceirizada** (a peça sai de
+  caminhão e volta). Hoje nada disso é visível no sistema.
+- **Sub-fluxo da coquilha**: verificar se existe → serve? → senão fabricar em
+  madeira/3D e fundir. É um ativo reaproveitável, não uma etapa linear.
+- Tempos das 5 operações continuam zerados, a levantar com a fundição.

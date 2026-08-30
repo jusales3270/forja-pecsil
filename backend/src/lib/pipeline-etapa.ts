@@ -1,0 +1,262 @@
+// ============================================================
+// Forja - Pipeline de fases dentro de uma etapa
+// ============================================================
+// A fundição é a única etapa com operações internas (Modelação → Moldagem →
+// Vazamento → Rebarbação → Tratamento Térmico). Todas apontam pra MESMA Etapa,
+// então sem isto o tótem e o painel mostram um balde só, sem dizer em que fase
+// cada OS está.
+//
+// A ordem vem de TipoServico.ordemNaEtapa — cadastro, não código chumbado.
+// Etapa sem nenhum tipo de serviço ordenado devolve temFases: false e o
+// consumidor mantém o comportamento de processo único.
+//
+// Usado pelo tótem (GET /api/etapas/:id/pipeline) e pelo painel do chefe
+// (GET /api/dashboard), pra não existirem duas verdades sobre a mesma coisa.
+// ============================================================
+
+import { prisma } from '../db/prisma.js';
+
+export type Semaforo = 'verde' | 'amarelo' | 'vermelho';
+
+export interface CardPipeline {
+  opLoteId: string;
+  codigoOp: string;
+  codigoGrv: string;
+  osId: string;
+  numeroLote: number;
+  cliente: string;
+  artigo: string;
+  artigoDescricao: string;
+  tipoServico: string;
+  status: string;
+  prioridade: string;
+  quantidadeConcluida: number;
+  quantidadePecas: number;
+  diasAtePrazo: number;
+  semaforo: Semaforo;
+  /** Entrada do carimbo aberto. Null quando a OP ainda não começou. */
+  desdeQuando: Date | null;
+  operador: string | null;
+  maquina: string | null;
+  paradaAtiva: { motivo: string; planejado: boolean; inicio: Date } | null;
+  /** Quando o aviso de início foi disparado pra etapa avisada. */
+  alertaInicioEm: Date | null;
+  etapaAvisada: string | null;
+}
+
+export interface FasePipeline {
+  tipoServicoId: string;
+  nome: string;
+  ordem: number;
+  codigo: number | null;
+  naFila: number;
+  emProcesso: number;
+  parado: number;
+  total: number;
+  cards: CardPipeline[];
+}
+
+export interface PipelineEtapa {
+  etapaId: string;
+  etapaNome: string;
+  temFases: boolean;
+  fases: FasePipeline[];
+  /** OPs da etapa que não casaram com nenhuma fase cadastrada. */
+  semFase: CardPipeline[];
+}
+
+/** Mesma regra de semáforo do kanban do painel (dashboard.ts). */
+function semaforoDoPrazo(diasAtePrazo: number): Semaforo {
+  if (diasAtePrazo < 3) return 'vermelho';
+  if (diasAtePrazo < 7) return 'amarelo';
+  return 'verde';
+}
+
+export async function montarPipelineEtapa(etapaId: string): Promise<PipelineEtapa | null> {
+  const etapa = await prisma.etapa.findUnique({
+    where: { id: etapaId },
+    select: { id: true, nome: true },
+  });
+  if (!etapa) return null;
+
+  const tiposOrdenados = await prisma.tipoServico.findMany({
+    where: { etapaId, ordemNaEtapa: { not: null } },
+    orderBy: { ordemNaEtapa: 'asc' },
+    select: { id: true, nome: true, codigo: true, ordemNaEtapa: true },
+  });
+
+  if (tiposOrdenados.length === 0) {
+    return {
+      etapaId: etapa.id,
+      etapaNome: etapa.nome,
+      temFases: false,
+      fases: [],
+      semFase: [],
+    };
+  }
+
+  const opsAtivas = await prisma.oPLote.findMany({
+    where: { etapaId, status: { notIn: ['concluida'] } },
+    select: {
+      id: true,
+      loteId: true,
+      ordem: true,
+      codigoOp: true,
+      tipoServico: true,
+      status: true,
+      quantidadeConcluida: true,
+      alertaInicioEm: true,
+      operacaoArtigo: { select: { tipoServicoId: true } },
+      etapaAvisada: { select: { nome: true } },
+      carimbos: {
+        where: { timestampSaida: null },
+        orderBy: { timestampEntrada: 'desc' },
+        take: 1,
+        select: {
+          timestampEntrada: true,
+          maquina: { select: { nome: true } },
+          operadorResponsavel: { select: { nome: true } },
+          paradas: {
+            where: { fim: null },
+            orderBy: { inicio: 'desc' },
+            take: 1,
+            select: {
+              inicio: true,
+              motivoParada: { select: { nome: true, planejado: true } },
+            },
+          },
+        },
+      },
+      lote: {
+        select: {
+          numeroLote: true,
+          quantidadePecas: true,
+          os: {
+            select: {
+              id: true,
+              codigoGrv: true,
+              prazoEntrega: true,
+              prioridade: true,
+              cliente: { select: { nome: true } },
+              artigo: { select: { codigo: true, descricao: true } },
+            },
+          },
+        },
+      },
+    },
+    orderBy: [{ lote: { os: { prazoEntrega: 'asc' } } }, { ordem: 'asc' }],
+  });
+
+  // Um lote ocupa UMA fase: aquela em que ele realmente está. As OPs seguintes
+  // nascem `na_fila` junto com as outras na criação da OS, mas ninguém está
+  // esperando o lote no vazamento enquanto ele ainda está na modelação — se
+  // contássemos todas, a mesma OS apareceria nas cinco caixas e a faixa não
+  // responderia à única pergunta que ela existe pra responder.
+  // A posição do lote é a OP não concluída de menor ordem, considerando o
+  // roteiro inteiro (não só as OPs desta etapa).
+  const frenteDoLote = new Map<string, number>();
+  if (opsAtivas.length > 0) {
+    const frentes = await prisma.oPLote.groupBy({
+      by: ['loteId'],
+      where: {
+        loteId: { in: [...new Set(opsAtivas.map((o) => o.loteId))] },
+        status: { notIn: ['concluida'] },
+      },
+      _min: { ordem: true },
+    });
+    for (const f of frentes) {
+      if (f._min.ordem !== null) frenteDoLote.set(f.loteId, f._min.ordem);
+    }
+  }
+
+  // Duas formas de achar a fase de uma OP: pela FK do roteiro (preenchida pelo
+  // aplicar-roteiro) ou, quando ela é nula, pelo nome do tipo de serviço — que
+  // é @unique no catálogo. Operações cadastradas na mão caem no segundo caso.
+  const idsDeFase = new Set(tiposOrdenados.map((t) => t.id));
+  const porNome = new Map(tiposOrdenados.map((t) => [t.nome.trim().toLowerCase(), t.id]));
+
+  const baldes = new Map<string, CardPipeline[]>(tiposOrdenados.map((t) => [t.id, []]));
+  const semFase: CardPipeline[] = [];
+
+  for (const op of opsAtivas) {
+    // OP que ainda não é a vez do lote não ocupa fase nenhuma.
+    if (frenteDoLote.get(op.loteId) !== op.ordem) continue;
+
+    const prazo = op.lote.os.prazoEntrega;
+    const diasAtePrazo = Math.ceil((new Date(prazo).getTime() - Date.now()) / 86_400_000);
+    const carimbo = op.carimbos[0];
+    const parada = carimbo?.paradas[0];
+
+    const card: CardPipeline = {
+      opLoteId: op.id,
+      codigoOp: op.codigoOp,
+      codigoGrv: op.lote.os.codigoGrv,
+      osId: op.lote.os.id,
+      numeroLote: op.lote.numeroLote,
+      cliente: op.lote.os.cliente.nome,
+      artigo: op.lote.os.artigo.codigo,
+      artigoDescricao: op.lote.os.artigo.descricao,
+      tipoServico: op.tipoServico,
+      status: op.status,
+      prioridade: op.lote.os.prioridade,
+      quantidadeConcluida: op.quantidadeConcluida,
+      quantidadePecas: op.lote.quantidadePecas,
+      diasAtePrazo,
+      semaforo: semaforoDoPrazo(diasAtePrazo),
+      desdeQuando: carimbo?.timestampEntrada ?? null,
+      operador: carimbo?.operadorResponsavel?.nome ?? null,
+      maquina: carimbo?.maquina?.nome ?? null,
+      paradaAtiva: parada
+        ? {
+            motivo: parada.motivoParada.nome,
+            planejado: parada.motivoParada.planejado,
+            inicio: parada.inicio,
+          }
+        : null,
+      alertaInicioEm: op.alertaInicioEm,
+      etapaAvisada: op.etapaAvisada?.nome ?? null,
+    };
+
+    const fkId = op.operacaoArtigo?.tipoServicoId;
+    const faseId =
+      fkId && idsDeFase.has(fkId)
+        ? fkId
+        : (porNome.get(op.tipoServico.trim().toLowerCase()) ?? null);
+
+    if (faseId) baldes.get(faseId)!.push(card);
+    else semFase.push(card);
+  }
+
+  const fases: FasePipeline[] = tiposOrdenados.map((t) => {
+    const cards = baldes.get(t.id)!;
+    return {
+      tipoServicoId: t.id,
+      nome: t.nome,
+      ordem: t.ordemNaEtapa!,
+      codigo: t.codigo,
+      naFila: cards.filter((c) => c.status === 'na_fila').length,
+      emProcesso: cards.filter((c) => c.status === 'em_processo' && !c.paradaAtiva).length,
+      parado: cards.filter((c) => c.paradaAtiva !== null).length,
+      total: cards.length,
+      cards,
+    };
+  });
+
+  return {
+    etapaId: etapa.id,
+    etapaNome: etapa.nome,
+    temFases: true,
+    fases,
+    semFase,
+  };
+}
+
+/** Etapas que têm fases cadastradas. Hoje é só a fundição. */
+export async function listarEtapasComFases(): Promise<string[]> {
+  const tipos = await prisma.tipoServico.findMany({
+    where: { ordemNaEtapa: { not: null } },
+    select: { etapaId: true },
+    distinct: ['etapaId'],
+  });
+  return tipos.map((t) => t.etapaId);
+}

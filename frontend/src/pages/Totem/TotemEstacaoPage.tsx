@@ -15,6 +15,8 @@ import {
   corPrazoOS,
 } from '../../hooks/useOPLote';
 import { useEtapasList } from '../../hooks/useEtapas';
+import { usePipelineEtapa } from '../../hooks/usePipelineEtapa';
+import { PipelineEtapa } from '../../components/PipelineEtapa';
 import { useApontamentosPeca, useRegistrarPeca, useDesfazerPeca } from '../../hooks/useApontamentoPeca';
 import { useAbrirInspecao } from '../../hooks/useInspecao';
 import { temCapacidade, type Papel } from '../../lib/permissions';
@@ -39,6 +41,7 @@ export function TotemEstacaoPage() {
   const etapa = etapas?.find((e) => e.id === etapaId);
 
   const [busca, setBusca] = useState('');
+  const [faseSelecionada, setFaseSelecionada] = useState<string | null>(null);
   const [opIniciar, setOpIniciar] = useState<OPLotePendente | null>(null);
   const [opEncerrar, setOpEncerrar] = useState<OPLoteEmAndamento | null>(null);
   const [opPausar, setOpPausar] = useState<OPLoteEmAndamento | null>(null);
@@ -57,8 +60,24 @@ export function TotemEstacaoPage() {
     etapaId ? { etapaId } : null,
   );
 
-  const pendentes = pendentesData?.data ?? [];
-  const emAndamento = andamentoData?.data ?? [];
+  const { data: pipeline } = usePipelineEtapa(etapaId);
+
+  const pendentesTodos = pendentesData?.data ?? [];
+  const emAndamentoTodos = andamentoData?.data ?? [];
+
+  // Fases só existem onde a etapa tem operações internas (fundição). Sem elas,
+  // nada é filtrado e a tela é a de sempre.
+  const nomeFaseSelecionada = useMemo(() => {
+    if (!faseSelecionada || !pipeline?.temFases) return null;
+    return pipeline.fases.find((f) => f.tipoServicoId === faseSelecionada)?.nome ?? null;
+  }, [faseSelecionada, pipeline]);
+
+  const naFase = (tipoServico: string) =>
+    !nomeFaseSelecionada ||
+    tipoServico.trim().toLowerCase() === nomeFaseSelecionada.trim().toLowerCase();
+
+  const pendentes = pendentesTodos.filter((op) => naFase(op.tipoServico));
+  const emAndamento = emAndamentoTodos.filter((op) => naFase(op.tipoServico));
 
   // Socket.IO: entra na sala da estação e revalida queries em eventos
   useEffect(() => {
@@ -69,16 +88,22 @@ export function TotemEstacaoPage() {
     const refetch = () => {
       qc.invalidateQueries({ queryKey: ['op-lote-pendentes'] });
       qc.invalidateQueries({ queryKey: ['op-lote-em-andamento'] });
+      qc.invalidateQueries({ queryKey: ['pipeline-etapa'] });
+      // O sino da estação avisada tem que acender na hora, sem esperar o
+      // refetch de 30s — é justamente o aviso do tratamento térmico.
+      qc.invalidateQueries({ queryKey: ['avisos'] });
     };
 
     socket.on('op:iniciada', refetch);
     socket.on('op:encerrada', refetch);
     socket.on('op:nova-na-fila', refetch);
+    socket.on('op:fase-iniciada', refetch);
 
     return () => {
       socket.off('op:iniciada', refetch);
       socket.off('op:encerrada', refetch);
       socket.off('op:nova-na-fila', refetch);
+      socket.off('op:fase-iniciada', refetch);
       leaveEstacao(etapaId);
     };
   }, [etapaId, qc]);
@@ -119,7 +144,7 @@ export function TotemEstacaoPage() {
             </p>
           </div>
           <div className="flex items-center gap-2">
-            <PainelAvisos />
+            <PainelAvisos etapaId={etapaId} />
             <button
               onClick={() => navigate('/fim-de-turno')}
               className="px-4 py-2 text-sm text-forja-400 hover:text-forja-300 border border-forja-500/30 hover:border-forja-500 rounded-lg"
@@ -137,6 +162,17 @@ export function TotemEstacaoPage() {
             </button>
           </div>
         </div>
+
+        {/* Fluxo interno da etapa — só aparece onde a etapa tem operações
+            internas (hoje, a fundição). Nas demais a tela segue igual. */}
+        {pipeline?.temFases && (
+          <PipelineEtapa
+            pipeline={pipeline}
+            variante="interativa"
+            faseSelecionada={faseSelecionada}
+            onSelecionarFase={setFaseSelecionada}
+          />
+        )}
 
         {/* Busca */}
         <div className="mb-6">
@@ -169,7 +205,9 @@ export function TotemEstacaoPage() {
               )}
               {!loadingAnd && emAndamento.length === 0 && (
                 <div className="p-6 text-center text-neutral-500 bg-neutral-900 border border-dashed border-neutral-800 rounded-xl">
-                  Nenhuma OP em andamento
+                  {nomeFaseSelecionada
+                    ? `Nenhuma OP em andamento em ${nomeFaseSelecionada}`
+                    : 'Nenhuma OP em andamento'}
                 </div>
               )}
               {emAndamento.map((op) => (
@@ -205,7 +243,9 @@ export function TotemEstacaoPage() {
               )}
               {!loadingPend && pendentes.length === 0 && (
                 <div className="p-6 text-center text-neutral-500 bg-neutral-900 border border-dashed border-neutral-800 rounded-xl">
-                  Nenhuma OP pendente
+                  {nomeFaseSelecionada
+                    ? `Nenhuma OP pendente em ${nomeFaseSelecionada}`
+                    : 'Nenhuma OP pendente'}
                 </div>
               )}
               {pendentes.map((op) => (

@@ -10,6 +10,8 @@ export interface TipoServico {
   codigo: number | null;
   nome: string;
   etapaId: string;
+  /** Posição dentro da etapa. Nulo = etapa de processo único. */
+  ordemNaEtapa: number | null;
   exigeInspecao: boolean;
   ativo: boolean;
   observacoes: string | null;
@@ -22,6 +24,7 @@ export interface CriarTipoServicoInput {
   codigo?: number | null;
   nome: string;
   etapaId: string;
+  ordemNaEtapa?: number | null;
   exigeInspecao?: boolean;
   observacoes?: string;
 }
@@ -30,6 +33,7 @@ export interface AtualizarTipoServicoInput {
   codigo?: number | null;
   nome?: string;
   etapaId?: string;
+  ordemNaEtapa?: number | null;
   exigeInspecao?: boolean;
   ativo?: boolean;
   observacoes?: string | null;

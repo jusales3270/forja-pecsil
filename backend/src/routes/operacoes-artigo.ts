@@ -26,6 +26,7 @@ const criarOperacaoSchema = z.object({
   tempoSetupMin: z.number().int().nonnegative().default(0),
   exigeInspecao: z.boolean().default(false),
   gatilhoAlertaPecas: z.number().int().positive().nullable().optional(),
+  avisaAoIniciar: z.boolean().optional(),
   etapaAvisadaId: z.string().uuid().nullable().optional(),
   observacoes: z.string().max(2000).nullable().optional(),
 });
@@ -185,6 +186,7 @@ export async function operacoesArtigoRoutes(app: FastifyInstance) {
             tempoSetupMin: parsed.data.tempoSetupMin,
             exigeInspecao: parsed.data.exigeInspecao,
             gatilhoAlertaPecas: parsed.data.gatilhoAlertaPecas ?? null,
+            avisaAoIniciar: parsed.data.avisaAoIniciar ?? false,
             etapaAvisadaId: parsed.data.etapaAvisadaId ?? null,
             observacoes: parsed.data.observacoes,
           },
@@ -436,6 +438,7 @@ export async function operacoesArtigoRoutes(app: FastifyInstance) {
                   tempoSetupMin: op.tempoSetupMin,
                   exigeInspecao: op.exigeInspecao,
                   gatilhoAlertaPecas: op.gatilhoAlertaPecas ?? null,
+                  avisaAoIniciar: op.avisaAoIniciar ?? false,
                   etapaAvisadaId:
                     op.avisaEtapaDoCodigoTipoServico != null
                       ? (porCodigo.get(op.avisaEtapaDoCodigoTipoServico)?.etapaId ?? null)
