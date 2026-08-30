@@ -329,7 +329,7 @@ peças faltam. Fechado o lote, libera.
 
 ```
 1 Modelação   2 Moldagem   3 Cura do molde (12h)   4 Vazamento
-5 Resfriamento na areia (12h)   6 Rebarbação (FORA, 3d)
+5 Resfriamento na areia (12h)   6 Rebarbação (FORA, prazo a levantar)
 7 Jato de granalha   8 Tratamento térmico (avisa eng. + exige lote completo)
 ```
 
@@ -358,5 +358,20 @@ WHERE codigo IN (20,15,51,17,52,7,53,50);
 - **Sub-fluxo da coquilha** — verificar se existe, se serve, senão fabricar em
   madeira/3D e fundir. Hoje está só como observação na modelação.
 - Tempos de execução das operações continuam zerados.
-- O prazo de 3 dias da rebarbação terceirizada é chute — confirmar com quem
-  controla o envio.
+- **Prazo da rebarbação terceirizada: em aberto.** O Rafael descreveu o trajeto
+  (empilhadeira → caminhão → terceiro → volta → jato de granalha) mas **não disse
+  quanto tempo leva**. O campo `prazoPrevistoDias` existe e está vazio de
+  propósito — preencher só depois de perguntar a quem controla o envio.
+
+### Os únicos tempos que o Rafael deu
+
+Registrados aqui pra ninguém inventar número depois:
+
+| Etapa | Palavras dele |
+|---|---|
+| Cura do molde | "um dia ou no mínimo 12 horas" |
+| Resfriamento na areia | "12 horas para poder resfriar dentro do molde de areia" |
+| Tratamento térmico | "mais ou menos dois a três dias" |
+| Pedido → desbaste | "cerca de 4 [ou] 5 dias... eu deixo aí em uma semana... o certo é 7 dias" |
+
+Qualquer outro tempo do fluxo da fundição **ainda não foi levantado**.

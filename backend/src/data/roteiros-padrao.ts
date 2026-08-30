@@ -107,10 +107,9 @@ export const ROTEIROS_PADRAO: RoteiroPadrao[] = [
       {
         codigoTipoServico: 7,
         observacoes:
-          'REBARBAÇÃO — FEITA FORA. Sai de empilhadeira, vai de caminhão pro terceiro e volta.\nAntigamente era interna. Registrar envio e retorno, não abre máquina.',
+          'REBARBAÇÃO — FEITA FORA. Sai de empilhadeira, vai de caminhão pro terceiro e volta.\nAntigamente era interna. Registrar envio e retorno, não abre máquina.\nPRAZO A LEVANTAR: o Rafael descreveu o trajeto mas não disse quanto tempo leva.',
         tempoUnitMin: 0, tempoSetupMin: 0, exigeInspecao: false,
         terceirizada: true,
-        prazoPrevistoDias: 3,
       },
       {
         codigoTipoServico: 53,
