@@ -64,6 +64,12 @@ export interface OPLotePendente {
   esperaHoras: number | null;
   /** A próxima OP do lote só começa com o lote inteiro fechado aqui. */
   exigeLoteCompleto: boolean;
+  /** Peças esperando nesta operação agora. */
+  pecasDisponiveis: number;
+  /** Quanto a operação anterior liberou — o "de 12" do "3 de 12". */
+  liberadasPelaAnterior: number;
+  /** Preenchido quando uma operação anterior segura esta (tratamento térmico). */
+  bloqueadoPor: { tipoServico: string; concluidas: number; total: number } | null;
   observacoes: string | null;
   carimboAnterior?: CarimboAnterior | null;
   etapa: { id: string; nome: string };
@@ -108,9 +114,10 @@ export interface CarimboAberto {
   timestampSaida: string | null;
   quantidadeConcluida: number;
   observacoes: string | null;
-  maquina: { id: string; nome: string; codigoInterno?: string };
-  programador: { id: string; nome: string };
-  operadorResponsavel: { id: string; nome: string };
+  /** Nulos em OP terceirizada ou de espera: não há máquina nem operador. */
+  maquina: { id: string; nome: string; codigoInterno?: string } | null;
+  programador: { id: string; nome: string } | null;
+  operadorResponsavel: { id: string; nome: string } | null;
   paradas?: ParadaMaquina[];
 }
 

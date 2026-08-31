@@ -121,14 +121,19 @@ export function EncerrarOPModal({ op, onClose }: Props) {
           </div>
           {carimbo && (
             <>
-              <div className="text-neutral-300">
-                <span className="text-neutral-500">Máquina:</span>{' '}
-                {carimbo.maquina.nome}
-              </div>
-              <div className="text-neutral-300">
-                <span className="text-neutral-500">Operador:</span>{' '}
-                {carimbo.operadorResponsavel.nome}
-              </div>
+              {/* Espera e terceirizada não têm máquina nem operador. */}
+              {carimbo.maquina && (
+                <div className="text-neutral-300">
+                  <span className="text-neutral-500">Máquina:</span>{' '}
+                  {carimbo.maquina.nome}
+                </div>
+              )}
+              {carimbo.operadorResponsavel && (
+                <div className="text-neutral-300">
+                  <span className="text-neutral-500">Operador:</span>{' '}
+                  {carimbo.operadorResponsavel.nome}
+                </div>
+              )}
               <div className="text-amber-400 text-xs">
                 Aberta há {tempoDesde(carimbo.timestampEntrada)}
               </div>

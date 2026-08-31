@@ -4,6 +4,8 @@
 // ============================================================
 
 import { useState } from 'react';
+import { AvisoDetalheModal } from './AvisoDetalheModal';
+import type { Aviso } from '../hooks/useAvisos';
 import {
   useAvisos,
   useMarcarAvisoLido,
@@ -17,6 +19,7 @@ export function PainelAvisos({ etapaId }: { etapaId?: string | null }) {
   const marcarLido = useMarcarAvisoLido();
   const marcarTodos = useMarcarTodosLidos();
   const [aberto, setAberto] = useState(false);
+  const [detalhe, setDetalhe] = useState<Aviso | null>(null);
 
   const total = avisos?.length ?? 0;
 
@@ -67,31 +70,46 @@ export function PainelAvisos({ etapaId }: { etapaId?: string | null }) {
             <div className="divide-y divide-neutral-800">
               {avisos?.map((a) => (
                 <div key={a.id} className="px-4 py-3 hover:bg-neutral-800/40">
-                  <div className="flex items-start justify-between gap-2">
-                    <span className="text-[10px] uppercase tracking-wide text-forja-400 font-semibold">
-                      {a.opLote?.etapaAvisada
-                        ? `para ${a.opLote.etapaAvisada.nome}`
-                        : 'produção'}
-                    </span>
-                    <span className="text-[10px] text-neutral-500 shrink-0">
-                      {tempoRelativo(a.criadoEm)}
-                    </span>
-                  </div>
-
-                  <p className="text-sm text-neutral-200 mt-1 leading-snug">
-                    {a.mensagem}
-                  </p>
-
-                  {a.opLote && (
-                    <div className="text-[11px] text-neutral-500 mt-1">
-                      {a.opLote.quantidadeConcluida}/{a.opLote.lote.quantidadePecas} peças ·{' '}
-                      {a.opLote.etapa.nome}
+                  {/* O aviso inteiro abre o detalhe: a engenharia precisa do
+                      artigo, do desenho e do que vem depois pra montar o
+                      programa, não só da frase. */}
+                  <button
+                    onClick={() => {
+                      setDetalhe(a);
+                      setAberto(false);
+                    }}
+                    className="w-full text-left group"
+                  >
+                    <div className="flex items-start justify-between gap-2">
+                      <span className="text-[10px] uppercase tracking-wide text-forja-400 font-semibold">
+                        {a.opLote?.etapaAvisada
+                          ? `para ${a.opLote.etapaAvisada.nome}`
+                          : 'produção'}
+                      </span>
+                      <span className="text-[10px] text-neutral-500 shrink-0">
+                        {tempoRelativo(a.criadoEm)}
+                      </span>
                     </div>
-                  )}
+
+                    <p className="text-sm text-neutral-200 mt-1 leading-snug group-hover:text-white">
+                      {a.mensagem}
+                    </p>
+
+                    {a.opLote && (
+                      <div className="text-[11px] text-neutral-500 mt-1">
+                        {a.opLote.pecasNaOperacao} peça(s) · {a.opLote.etapa.nome} ·{' '}
+                        {a.opLote.lote.os.artigo.codigo}
+                      </div>
+                    )}
+
+                    <span className="inline-block text-[11px] text-forja-400 mt-2 group-hover:underline">
+                      ver o que programar ↗
+                    </span>
+                  </button>
 
                   <button
                     onClick={() => marcarLido.mutate(a.id)}
-                    className="text-[11px] text-neutral-400 hover:text-forja-400 mt-2"
+                    className="block text-[11px] text-neutral-400 hover:text-forja-400 mt-1"
                   >
                     marcar como lido
                   </button>
@@ -100,6 +118,14 @@ export function PainelAvisos({ etapaId }: { etapaId?: string | null }) {
             </div>
           </div>
         </>
+      )}
+
+      {detalhe && (
+        <AvisoDetalheModal
+          aviso={detalhe}
+          onClose={() => setDetalhe(null)}
+          onMarcarLido={() => marcarLido.mutate(detalhe.id)}
+        />
       )}
     </div>
   );

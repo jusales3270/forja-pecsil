@@ -187,6 +187,42 @@ export function TotemEstacaoPage() {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          {/* Pendentes primeiro: é a fila que o operador ataca. O que já está
+              rodando fica à direita, como consequência do que ele iniciou. */}
+          <section>
+            <div className="flex items-center justify-between mb-3">
+              <h2 className="text-xl font-semibold text-forja-400">
+                Pendentes
+              </h2>
+              <span className="text-sm text-neutral-500">{pendentes.length}</span>
+            </div>
+            <div className="space-y-3">
+              {loadingPend && (
+                <div className="p-6 text-center text-neutral-500 bg-neutral-900 rounded-xl">
+                  Carregando...
+                </div>
+              )}
+              {!loadingPend && pendentes.length === 0 && (
+                <div className="p-6 text-center text-neutral-500 bg-neutral-900 border border-dashed border-neutral-800 rounded-xl">
+                  {nomeFaseSelecionada
+                    ? `Nenhuma OP pendente em ${nomeFaseSelecionada}`
+                    : 'Nenhuma OP pendente'}
+                </div>
+              )}
+              {pendentes.map((op) => (
+                <CardPendente
+                  key={op.id}
+                  op={op}
+                  podeOperar={podeOperar}
+                  onIniciar={() => setOpIniciar(op)}
+                  onAbrirDesenhos={(artigo, desenhos) =>
+                    setModalDesenhos({ artigo, desenhos })
+                  }
+                />
+              ))}
+            </div>
+          </section>
+
           {/* Em andamento */}
           <section>
             <div className="flex items-center justify-between mb-3">
@@ -219,41 +255,6 @@ export function TotemEstacaoPage() {
                   onPausar={() => setOpPausar(op)}
                   onRetomar={() => retomar.mutate({ opLoteId: op.id })}
                   retomando={retomar.isPending}
-                  onAbrirDesenhos={(artigo, desenhos) =>
-                    setModalDesenhos({ artigo, desenhos })
-                  }
-                />
-              ))}
-            </div>
-          </section>
-
-          {/* Pendentes */}
-          <section>
-            <div className="flex items-center justify-between mb-3">
-              <h2 className="text-xl font-semibold text-forja-400">
-                Pendentes
-              </h2>
-              <span className="text-sm text-neutral-500">{pendentes.length}</span>
-            </div>
-            <div className="space-y-3">
-              {loadingPend && (
-                <div className="p-6 text-center text-neutral-500 bg-neutral-900 rounded-xl">
-                  Carregando...
-                </div>
-              )}
-              {!loadingPend && pendentes.length === 0 && (
-                <div className="p-6 text-center text-neutral-500 bg-neutral-900 border border-dashed border-neutral-800 rounded-xl">
-                  {nomeFaseSelecionada
-                    ? `Nenhuma OP pendente em ${nomeFaseSelecionada}`
-                    : 'Nenhuma OP pendente'}
-                </div>
-              )}
-              {pendentes.map((op) => (
-                <CardPendente
-                  key={op.id}
-                  op={op}
-                  podeOperar={podeOperar}
-                  onIniciar={() => setOpIniciar(op)}
                   onAbrirDesenhos={(artigo, desenhos) =>
                     setModalDesenhos({ artigo, desenhos })
                   }
@@ -318,21 +319,8 @@ function CardPendente({
   return (
     <div className="bg-neutral-900 border border-neutral-800 rounded-xl p-4 hover:border-forja-600 transition">
       <div className="flex items-start justify-between gap-3 mb-2">
-        <div className="flex items-center gap-2">
-          {urgente && (
-            <span className="inline-flex items-center justify-center w-5 h-5 rounded bg-red-500/20 text-red-400 text-xs font-bold">
-              !
-            </span>
-          )}
-          <span className="font-mono text-forja-400 font-semibold">
-            {op.lote.os.codigoGrv}
-          </span>
-          <span className="text-xs text-neutral-500">·</span>
-          <span className="text-xs text-neutral-400">
-            Lote {op.lote.numeroLote}/{op.lote.quantidadePecas}pç
-          </span>
-        </div>
-        <span className={`text-xs ${corPrazoOS(op.lote.os.prazoEntrega)}`}>
+        <CabecalhoOP op={op} urgente={urgente} />
+        <span className={`text-xs shrink-0 ${corPrazoOS(op.lote.os.prazoEntrega)}`}>
           {new Date(op.lote.os.prazoEntrega).toLocaleDateString('pt-BR')}
         </span>
       </div>
@@ -376,15 +364,13 @@ function CardPendente({
         </button>
       </div>
 
-      <div className="text-sm text-neutral-300 my-3">
-        <span className="text-neutral-500">OP {op.codigoOp}:</span> {op.tipoServico}
-        {op.exigeInspecao && (
-          <span className="ml-2 inline-block px-2 py-0.5 text-[10px] uppercase bg-purple-500/15 text-purple-400 border border-purple-500/30 rounded">
+      {op.exigeInspecao && (
+        <div className="my-3">
+          <span className="inline-block px-2 py-0.5 text-[10px] uppercase bg-purple-500/15 text-purple-400 border border-purple-500/30 rounded">
             inspeção
           </span>
-        )}
-        <SeloTipoOP op={op} />
-      </div>
+        </div>
+      )}
 
       {/* Observações herdadas (OS, OP, Artigo) */}
       <ObservacoesHerdadas op={op} />
@@ -418,21 +404,79 @@ function CardPendente({
             <span>📐</span>
             <span>Ver Desenho</span>
           </button>
-          {podeOperar && (
-            <button
-              onClick={onIniciar}
-              className="px-5 py-2 bg-forja-500 hover:bg-forja-600 text-white text-sm font-medium rounded-lg transition"
-            >
-              {op.terceirizada
-                ? '🚚 Enviar'
-                : op.esperaHoras != null
-                  ? `⏳ Iniciar espera (${op.esperaHoras}h)`
-                  : 'Iniciar OP'}
-            </button>
-          )}
+          {podeOperar &&
+            (op.bloqueadoPor ? (
+              <span
+                className="px-4 py-2 text-xs rounded-lg border border-amber-500/40 bg-amber-500/10 text-amber-300"
+                title={`${op.bloqueadoPor.tipoServico} fechou ${op.bloqueadoPor.concluidas} de ${op.bloqueadoPor.total}. Esta operação só libera com o lote inteiro.`}
+              >
+                🔒 aguarda {op.bloqueadoPor.tipoServico} fechar o lote (
+                {op.bloqueadoPor.concluidas}/{op.bloqueadoPor.total})
+              </span>
+            ) : (
+              <button
+                onClick={onIniciar}
+                className="px-5 py-2 bg-forja-500 hover:bg-forja-600 text-white text-sm font-medium rounded-lg transition"
+              >
+                {op.terceirizada
+                  ? '🚚 Enviar'
+                  : op.esperaHoras != null
+                    ? `⏳ Iniciar espera (${op.esperaHoras}h)`
+                    : 'Iniciar OP'}
+              </button>
+            ))}
         </div>
       </div>
 
+    </div>
+  );
+}
+
+/**
+ * A fase vem PRIMEIRO, em caixa alta e sem negrito; a OS logo abaixo, em
+ * negrito. O operador olha a coluna e sabe na hora a que parte do processo
+ * aquela pendência pertence, sem ler linha por linha.
+ *
+ * Quando o lote vem parcial, mostra "3 de 12" — quantas peças chegaram desta
+ * vez, sempre coladas na OS a que pertencem.
+ */
+function CabecalhoOP({ op, urgente }: { op: OPLotePendente; urgente: boolean }) {
+  const parcial = op.pecasDisponiveis < op.lote.quantidadePecas;
+
+  return (
+    <div className="min-w-0">
+      <div className="flex items-center gap-2 mb-0.5">
+        <span className="text-xs uppercase tracking-wider text-neutral-400">
+          {op.tipoServico}
+        </span>
+        <SeloTipoOP op={op} />
+      </div>
+
+      <div className="flex items-center gap-2 flex-wrap">
+        {urgente && (
+          <span className="inline-flex items-center justify-center w-5 h-5 rounded bg-red-500/20 text-red-400 text-xs font-bold shrink-0">
+            !
+          </span>
+        )}
+        <span className="font-mono text-forja-400 font-bold uppercase">
+          {op.lote.os.codigoGrv}
+        </span>
+        <span
+          className={`text-xs font-semibold px-1.5 py-0.5 rounded ${
+            parcial
+              ? 'bg-amber-500/15 text-amber-300 border border-amber-500/30'
+              : 'text-neutral-400'
+          }`}
+          title={
+            parcial
+              ? `${op.pecasDisponiveis} peças chegaram desta vez; o lote inteiro tem ${op.lote.quantidadePecas}`
+              : 'Lote completo'
+          }
+        >
+          {op.pecasDisponiveis} de {op.lote.quantidadePecas} pç
+        </span>
+        <span className="text-xs text-neutral-500">Lote {op.lote.numeroLote}</span>
+      </div>
     </div>
   );
 }
@@ -530,17 +574,9 @@ function CardEmAndamento({
       }`}
     >
       <div className="flex items-start justify-between gap-3 mb-2">
-        <div className="flex items-center gap-2">
-          <span className="font-mono text-forja-400 font-semibold">
-            {op.lote.os.codigoGrv}
-          </span>
-          <span className="text-xs text-neutral-500">·</span>
-          <span className="text-xs text-neutral-400">
-            Lote {op.lote.numeroLote}/{op.lote.quantidadePecas}pç
-          </span>
-        </div>
+        <CabecalhoOP op={op} urgente={op.lote.os.prioridade === 'urgente'} />
         {carimbo && (
-          <span className="text-xs text-amber-400">
+          <span className="text-xs text-amber-400 shrink-0">
             há {tempoDesde(carimbo.timestampEntrada)}
           </span>
         )}
@@ -585,20 +621,34 @@ function CardEmAndamento({
         </button>
       </div>
 
-      <div className="text-sm text-neutral-300 mb-2">
-        <span className="text-neutral-500">OP {op.codigoOp}:</span> {op.tipoServico}
-        <SeloTipoOP op={op} />
-      </div>
+
 
       {carimbo && (
         <div className="text-xs text-neutral-400 mb-3 space-y-0.5">
-          <div>
-            <span className="text-neutral-500">Máquina:</span> {carimbo.maquina.nome}
-          </div>
-          <div>
-            <span className="text-neutral-500">Operador:</span>{' '}
-            {carimbo.operadorResponsavel.nome}
-          </div>
+          {/* Espera e terceirizada não têm máquina nem operador — no lugar
+              disso, o que interessa é quando libera ou desde quando saiu. */}
+          {op.esperaHoras != null ? (
+            <div className="text-indigo-300">
+              ⏳ Espera de {op.esperaHoras}h — começou há{' '}
+              {tempoDesde(carimbo.timestampEntrada)}
+            </div>
+          ) : op.terceirizada ? (
+            <div className="text-sky-300">
+              🚚 Fora da fábrica há {tempoDesde(carimbo.timestampEntrada)}
+              {op.fornecedor && ` · ${op.fornecedor}`}
+            </div>
+          ) : (
+            <>
+              <div>
+                <span className="text-neutral-500">Máquina:</span>{' '}
+                {carimbo.maquina?.nome ?? '—'}
+              </div>
+              <div>
+                <span className="text-neutral-500">Operador:</span>{' '}
+                {carimbo.operadorResponsavel?.nome ?? '—'}
+              </div>
+            </>
+          )}
           {carimbo.observacoes && (
             <div className="mt-2 pt-2 border-t border-amber-500/20 text-neutral-300">
               <span className="text-neutral-500">Obs:</span> {carimbo.observacoes}
@@ -619,8 +669,12 @@ function CardEmAndamento({
         </div>
       )}
 
-      {carimbo && !paradaAtiva && podeOperar && (
-        <BotaoMaisUmaPeca opLoteId={op.id} maquinaId={carimbo.maquina.id} />
+      {carimbo?.maquina && !paradaAtiva && podeOperar && (
+        <BotaoMaisUmaPeca
+          opLoteId={op.id}
+          maquinaId={carimbo.maquina.id}
+          teto={op.liberadasPelaAnterior}
+        />
       )}
 
       <div className="flex items-center justify-between gap-2 mt-3 pt-2 border-t border-neutral-800">
@@ -675,29 +729,44 @@ function CardEmAndamento({
 function BotaoMaisUmaPeca({
   opLoteId,
   maquinaId,
+  teto,
 }: {
   opLoteId: string;
   maquinaId: string;
+  /** Máximo que esta OP pode registrar: o que a operação anterior liberou. */
+  teto: number;
 }) {
   const { data } = useApontamentosPeca(opLoteId);
   const registrar = useRegistrarPeca();
   const desfazer = useDesfazerPeca();
   const total = data?.data.total ?? 0;
   const ocupado = registrar.isPending || desfazer.isPending;
+  const completou = total >= teto;
 
   return (
     <div className="mt-3 pt-3 border-t border-amber-500/20">
       <div className="flex items-center justify-between mb-2">
         <span className="text-xs text-neutral-500">Peças registradas</span>
-        <span className="text-2xl font-bold text-forja-400 tabular-nums">{total}</span>
+        <span
+          className={`text-2xl font-bold tabular-nums ${
+            completou ? 'text-emerald-400' : 'text-forja-400'
+          }`}
+        >
+          {total} <span className="text-base text-neutral-500">de {teto}</span>
+        </span>
       </div>
       <div className="flex items-center gap-2">
         <button
           onClick={() => registrar.mutate({ opLoteId, maquinaId })}
-          disabled={ocupado}
-          className="flex-1 px-4 py-3 bg-forja-600 hover:bg-forja-700 disabled:opacity-50 text-white text-lg font-bold rounded-lg transition"
+          disabled={ocupado || completou}
+          className="flex-1 px-4 py-3 bg-forja-600 hover:bg-forja-700 disabled:bg-neutral-800 disabled:text-neutral-500 disabled:cursor-not-allowed text-white text-lg font-bold rounded-lg transition"
+          title={
+            completou
+              ? 'Todas as peças que chegaram nesta operação já foram registradas'
+              : undefined
+          }
         >
-          + 1 peça
+          {completou ? '✓ Tudo registrado' : '+ 1 peça'}
         </button>
         <button
           onClick={() => desfazer.mutate({ opLoteId, maquinaId })}
@@ -707,6 +776,11 @@ function BotaoMaisUmaPeca({
           Desfazer
         </button>
       </div>
+      {completou && (
+        <p className="text-[11px] text-emerald-400/80 mt-2">
+          Encerre a OP para liberar as {teto} peças para o próximo passo.
+        </p>
+      )}
     </div>
   );
 }

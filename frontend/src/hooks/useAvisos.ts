@@ -6,21 +6,59 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { api } from '../lib/api';
 
-export interface AvisoOpLote {
+import type { Desenho } from './useDesenhos';
+
+export interface ProximaOperacao {
   id: string;
   codigoOp: string;
   tipoServico: string;
   status: string;
+  terceirizada: boolean;
+  esperaHoras: number | null;
+  observacoes: string | null;
+  etapa: { id: string; nome: string };
+}
+
+export interface AvisoOpLote {
+  id: string;
+  codigoOp: string;
+  ordem: number;
+  tipoServico: string;
+  status: string;
   quantidadeConcluida: number;
+  observacoes: string | null;
+  esperaHoras: number | null;
+  terceirizada: boolean;
+  /** Quando a operação começou — o relógio do ciclo do forno. */
+  iniciadaEm: string | null;
+  /** Peças que chegaram nesta operação (não o lote inteiro). */
+  pecasNaOperacao: number;
+  /** O que vem depois: é o programa que a engenharia precisa montar. */
+  proximasOperacoes: ProximaOperacao[];
   etapa: { id: string; nome: string };
   etapaAvisada: { id: string; nome: string } | null;
   lote: {
+    id: string;
     numeroLote: number;
     quantidadePecas: number;
+    observacoes: string | null;
     os: {
       id: string;
       codigoGrv: string;
-      artigo: { codigo: string; descricao: string };
+      prazoEntrega: string;
+      prioridade: 'normal' | 'urgente';
+      quantidadeTotal: number;
+      observacoes: string | null;
+      cliente: { id: string; nome: string };
+      artigo: {
+        id: string;
+        codigo: string;
+        descricao: string;
+        tipoProduto: string;
+        material: string | null;
+        observacoes: string | null;
+        desenhos: Desenho[];
+      };
     };
   };
 }

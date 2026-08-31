@@ -15,6 +15,7 @@
 // ============================================================
 
 import { prisma } from '../db/prisma.js';
+import { calcularFluxoDePecas } from './fluxo-pecas.js';
 
 export type Semaforo = 'verde' | 'amarelo' | 'vermelho';
 
@@ -52,6 +53,10 @@ export interface CardPipeline {
   liberaEm: Date | null;
   /** A próxima só começa com o lote inteiro fechado aqui. */
   exigeLoteCompleto: boolean;
+  /** Peças esperando nesta operação agora (a anterior liberou, esta não fez). */
+  pecasDisponiveis: number;
+  /** Quanto a operação anterior liberou — o "de 12" do "3 de 12". */
+  liberadasPelaAnterior: number;
 }
 
 export interface FasePipeline {
@@ -162,27 +167,10 @@ export async function montarPipelineEtapa(etapaId: string): Promise<PipelineEtap
     orderBy: [{ lote: { os: { prazoEntrega: 'asc' } } }, { ordem: 'asc' }],
   });
 
-  // Um lote ocupa UMA fase: aquela em que ele realmente está. As OPs seguintes
-  // nascem `na_fila` junto com as outras na criação da OS, mas ninguém está
-  // esperando o lote no vazamento enquanto ele ainda está na modelação — se
-  // contássemos todas, a mesma OS apareceria nas cinco caixas e a faixa não
-  // responderia à única pergunta que ela existe pra responder.
-  // A posição do lote é a OP não concluída de menor ordem, considerando o
-  // roteiro inteiro (não só as OPs desta etapa).
-  const frenteDoLote = new Map<string, number>();
-  if (opsAtivas.length > 0) {
-    const frentes = await prisma.oPLote.groupBy({
-      by: ['loteId'],
-      where: {
-        loteId: { in: [...new Set(opsAtivas.map((o) => o.loteId))] },
-        status: { notIn: ['concluida'] },
-      },
-      _min: { ordem: true },
-    });
-    for (const f of frentes) {
-      if (f._min.ordem !== null) frenteDoLote.set(f.loteId, f._min.ordem);
-    }
-  }
+  // Onde o lote está é uma pergunta sobre PEÇAS, não sobre OPs. Um lote parcial
+  // fica em dois lugares: a modelação fecha 3 de 12 e essas 3 seguem, enquanto
+  // 9 continuam esperando lá. A fase mostra o que está parado nela agora.
+  const fluxo = await calcularFluxoDePecas([...new Set(opsAtivas.map((o) => o.loteId))]);
 
   // Duas formas de achar a fase de uma OP: pela FK do roteiro (preenchida pelo
   // aplicar-roteiro) ou, quando ela é nula, pelo nome do tipo de serviço — que
@@ -194,8 +182,13 @@ export async function montarPipelineEtapa(etapaId: string): Promise<PipelineEtap
   const semFase: CardPipeline[] = [];
 
   for (const op of opsAtivas) {
-    // OP que ainda não é a vez do lote não ocupa fase nenhuma.
-    if (frenteDoLote.get(op.loteId) !== op.ordem) continue;
+    const pecas = fluxo.get(op.id);
+    const disponiveis = pecas?.disponiveis ?? 0;
+
+    // Fase vazia é fase vazia: OP sem peça esperando e sem ninguém trabalhando
+    // não ocupa lugar nenhum. É o que impede a mesma OS de aparecer nas oito
+    // caixas só porque as OPs nascem todas na fila.
+    if (disponiveis === 0 && op.status !== 'em_processo') continue;
 
     const prazo = op.lote.os.prazoEntrega;
     const diasAtePrazo = Math.ceil((new Date(prazo).getTime() - Date.now()) / 86_400_000);
@@ -239,6 +232,8 @@ export async function montarPipelineEtapa(etapaId: string): Promise<PipelineEtap
           ? new Date(carimbo.timestampEntrada.getTime() + op.esperaHoras * 3_600_000)
           : null,
       exigeLoteCompleto: op.exigeLoteCompleto,
+      pecasDisponiveis: disponiveis,
+      liberadasPelaAnterior: pecas?.liberadasPelaAnterior ?? op.lote.quantidadePecas,
     };
 
     const fkId = op.operacaoArtigo?.tipoServicoId;

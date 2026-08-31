@@ -7,6 +7,7 @@
 import { FastifyInstance } from 'fastify';
 import { z } from 'zod';
 import { prisma } from '../db/prisma.js';
+import { calcularFluxoDePecas } from '../lib/fluxo-pecas.js';
 
 const registrarSchema = z.object({
   opLoteId: z.string().uuid('opLoteId inválido'),
@@ -30,6 +31,27 @@ export async function apontamentoPecaRoutes(app: FastifyInstance) {
       const opLote = await prisma.oPLote.findUnique({ where: { id: opLoteId } });
       if (!opLote) {
         return reply.code(404).send({ error: 'not_found', message: 'OP não encontrada' });
+      }
+
+      // Uma OP não produz mais do que recebeu. Na primeira operação isso é o
+      // tamanho do lote; nas seguintes, o que a anterior liberou — não dá pra
+      // moldar 5 peças se só 3 foram modeladas.
+      //
+      // Sem esse teto o contador passava do lote (25 numa OS de 12), e a conta
+      // que a engenharia usa pra saber quanto está chegando no tratamento
+      // térmico ficava inflada.
+      const fluxo = await calcularFluxoDePecas([opLote.loteId]);
+      const teto = fluxo.get(opLoteId)?.liberadasPelaAnterior ?? 0;
+      const jaFeitas = await prisma.apontamentoPeca.count({ where: { opLoteId } });
+
+      if (jaFeitas >= teto) {
+        return reply.code(409).send({
+          error: 'limite_de_pecas_atingido',
+          message:
+            teto === 0
+              ? 'Nenhuma peça chegou nesta operação ainda.'
+              : `Esta operação já registrou as ${teto} peça(s) que recebeu. Encerre a OP para liberá-las para o próximo passo.`,
+        });
       }
 
       const resultado = await prisma.$transaction(async (tx) => {

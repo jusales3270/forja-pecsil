@@ -375,3 +375,74 @@ Registrados aqui pra ninguém inventar número depois:
 | Pedido → desbaste | "cerca de 4 [ou] 5 dias... eu deixo aí em uma semana... o certo é 7 dias" |
 
 Qualquer outro tempo do fluxo da fundição **ainda não foi levantado**.
+
+## O lote anda por peça, não por operação (31/08/2026)
+
+Validando o fluxo da fundição na tela, três coisas apareceram — as três com a
+mesma raiz.
+
+**A regra "um lote ocupa uma fase" estava errada.** Ela dizia que o lote está na
+primeira operação não concluída. Só que quando a modelação fecha 3 de 12, essas
+3 seguem pra moldagem e 9 continuam na modelação: o lote está em **dois lugares
+ao mesmo tempo**, e é assim mesmo no chão de fábrica. Na prática, a moldagem
+rodava e a faixa continuava dizendo que a OS estava na modelação.
+
+A conta certa é sobre **peça**, não sobre OP (`backend/src/lib/fluxo-pecas.ts`):
+
+```
+o que uma operação tem disponível
+  = o que a anterior liberou − o que ela própria já processou
+(na primeira operação, "o que a anterior liberou" é o tamanho do lote)
+```
+
+Uma fase mostra a OS quando tem peça esperando nela ou quando alguém está
+trabalhando. Isso resolve de uma vez três perguntas: onde o lote está, quantas
+peças estão em cada ponto, e **quais operações são de fato a próxima ação**.
+
+**Pendentes deixou de listar o roteiro inteiro.** As OPs nascem todas `na_fila`
+na criação da OS, então o tótem da fundição mostrava as 8 operações de uma vez e
+o operador tinha que adivinhar a da vez. Agora só aparece OP com peça esperando
+— caiu de 8 para 1 ou 2. Era o ponto que estava em aberto pra decidir com o
+Rafael sobre travar a ordem; o fluxo de peças responde sozinho, sem regra nova.
+
+Exceção visível: operação segurada por `exigeLoteCompleto` continua na lista com
+um cadeado e o motivo (`aguarda TRATAMENTO TÉRMICO fechar o lote (5/12)`), em vez
+de sumir sem explicação.
+
+**O contador de peças não tinha teto.** Deu pra registrar 25 peças num lote de
+12. O teto certo não é o tamanho do lote, é **o que aquela operação recebeu**:
+não dá pra moldar 5 peças se só 3 foram modeladas. Vale no `+1 peça` e no
+`encerrar`. Sem isso, o aviso que chega na engenharia informaria uma quantidade
+inflada — e é justamente esse número que o Domingo usa pra se programar.
+
+### Regressão introduzida e corrigida no mesmo dia
+
+Ao fazer as OPs terceirizadas e de espera rodarem sem máquina, o card em
+andamento continuou lendo `carimbo.maquina.nome` direto. Iniciar a cura do molde
+derrubava o tótem inteiro (tela branca). O `tsc` apontou o mesmo padrão no modal
+de encerrar, que quebraria no clique seguinte. `Carimbo.maquina` e
+`operadorResponsavel` agora são nulos no tipo do frontend, e o card mostra o que
+faz sentido no lugar: "⏳ Espera de 12h — começou há 2min" ou "🚚 Fora da fábrica
+há 3h".
+
+## O aviso da engenharia leva o programa junto (31/08/2026)
+
+O aviso de "entrou no tratamento térmico" só serve se a engenharia conseguir
+agir sem sair da tela. Clicar no aviso abre o detalhe com o que ela usa pra
+montar o programa:
+
+- **A peça** — artigo, descrição, tipo, material, cliente
+- **Quanto e para quando** — peças que estão chegando (e, se parcial, quantas do
+  lote), prazo com semáforo, prioridade
+- **O que vem depois** — as operações seguintes do roteiro, em ordem, com etapa.
+  É literalmente a lista do que programar durante os 2-3 dias de forno.
+  Terceirizadas e esperas vêm marcadas, pra ela saber que ali não é programa dela
+- **Desenho técnico** — abre o visualizador; quando não há desenho, avisa em
+  âmbar (é informação acionável: precisa cobrar antes de começar)
+- **Observações** herdadas da OS, artigo, lote e operação
+
+A linha da lista mostrava `0/12 peças`, o que estava errado: o tratamento térmico
+não produziu nada ainda, mas 12 chegaram. Passou a mostrar o que chegou.
+
+**No tótem, Pendentes veio pra esquerda** e Em andamento pra direita: a fila é o
+que o operador ataca, o que está rodando é consequência.

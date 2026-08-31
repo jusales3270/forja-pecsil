@@ -10,6 +10,7 @@ import { FastifyInstance } from 'fastify';
 import { z } from 'zod';
 import { Prisma } from '@prisma/client';
 import { prisma } from '../db/prisma.js';
+import { calcularFluxoDePecas } from '../lib/fluxo-pecas.js';
 
 // ============================================================
 // Schemas
@@ -177,11 +178,27 @@ export async function opLoteRoutes(app: FastifyInstance) {
         ],
       });
 
-      // Pra cada OP pendente, busca o último carimbo de saída de uma OP anterior
-      // do mesmo lote (passo anterior) com observação preenchida.
-      // Isso garante que a comunicação do programador anterior chegue ao próximo.
+      // Uma OP só é pendente quando tem peça esperando nela. As OPs de um lote
+      // nascem todas na fila na criação da OS, mas ninguém molda o que ainda não
+      // foi modelado — sem isso o operador via as 8 operações de uma vez e
+      // precisava adivinhar qual era a da vez.
+      const fluxo = await calcularFluxoDePecas([...new Set(ops.map((o) => o.loteId))]);
+
+      // Operação anterior marcada como exigeLoteCompleto (o tratamento térmico)
+      // segura o que vem depois até o lote fechar. A OP continua visível, com o
+      // motivo, em vez de sumir sem explicação.
+      const bloqueios = await prisma.oPLote.findMany({
+        where: {
+          loteId: { in: [...new Set(ops.map((o) => o.loteId))] },
+          exigeLoteCompleto: true,
+          status: { not: 'concluida' },
+        },
+        select: { loteId: true, ordem: true, tipoServico: true, quantidadeConcluida: true },
+      });
+
       const opsComContexto = await Promise.all(
         ops.map(async (op) => {
+          const pecas = fluxo.get(op.id);
           const carimboAnterior = await prisma.carimbo.findFirst({
             where: {
               loteId: op.loteId,
@@ -198,11 +215,30 @@ export async function opLoteRoutes(app: FastifyInstance) {
               opLote: { select: { id: true, codigoOp: true, tipoServico: true } },
             },
           });
-          return { ...op, carimboAnterior };
+
+          const trava = bloqueios.find(
+            (b) => b.loteId === op.loteId && b.ordem < op.ordem,
+          );
+
+          return {
+            ...op,
+            carimboAnterior,
+            pecasDisponiveis: pecas?.disponiveis ?? 0,
+            liberadasPelaAnterior: pecas?.liberadasPelaAnterior ?? op.lote.quantidadePecas,
+            bloqueadoPor: trava
+              ? {
+                  tipoServico: trava.tipoServico,
+                  concluidas: trava.quantidadeConcluida,
+                  total: op.lote.quantidadePecas,
+                }
+              : null,
+          };
         }),
       );
 
-      return { data: opsComContexto };
+      return {
+        data: opsComContexto.filter((op) => op.pecasDisponiveis > 0),
+      };
     },
   );
 
@@ -297,7 +333,21 @@ export async function opLoteRoutes(app: FastifyInstance) {
         ],
       });
 
-      return { data: ops };
+      // Quantas peças esta OP recebeu da anterior — é o "3 de 12" que o
+      // operador precisa ver quando o lote vem parcial.
+      const fluxo = await calcularFluxoDePecas([...new Set(ops.map((o) => o.loteId))]);
+
+      return {
+        data: ops.map((op) => {
+          const pecas = fluxo.get(op.id);
+          return {
+            ...op,
+            pecasDisponiveis: pecas?.disponiveis ?? 0,
+            liberadasPelaAnterior: pecas?.liberadasPelaAnterior ?? op.lote.quantidadePecas,
+            bloqueadoPor: null,
+          };
+        }),
+      };
     },
   );
 
@@ -764,10 +814,20 @@ export async function opLoteRoutes(app: FastifyInstance) {
         });
       }
 
-      if (quantidadeConcluida > opLote.lote.quantidadePecas) {
+      // O teto não é o lote inteiro, é o que ESTA operação recebeu da anterior.
+      // Encerrar a moldagem com 12 quando só 3 foram modeladas inflaria a conta
+      // que a engenharia usa pra se programar.
+      const fluxoLote = await calcularFluxoDePecas([opLote.loteId]);
+      const recebidas =
+        fluxoLote.get(opLote.id)?.liberadasPelaAnterior ?? opLote.lote.quantidadePecas;
+
+      if (quantidadeConcluida > recebidas) {
         return reply.code(400).send({
           error: 'quantidade_invalida',
-          message: `Quantidade (${quantidadeConcluida}) maior que o tamanho do lote (${opLote.lote.quantidadePecas})`,
+          message:
+            recebidas === opLote.lote.quantidadePecas
+              ? `Quantidade (${quantidadeConcluida}) maior que o tamanho do lote (${opLote.lote.quantidadePecas})`
+              : `Quantidade (${quantidadeConcluida}) maior que as ${recebidas} peça(s) que chegaram nesta operação.`,
         });
       }
 
