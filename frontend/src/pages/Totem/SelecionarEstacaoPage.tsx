@@ -20,24 +20,26 @@ export function SelecionarEstacaoPage() {
   const [indice, setIndice] = useState(0);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  // A estação da conta vem primeiro: é onde a pessoa trabalha, e as outras
-  // ela só observa. Sem isso o operador procura a dele no meio de 12.
-  const filtradas = etapas
-    .filter((e) => e.nome.toLowerCase().includes(busca.toLowerCase()))
-    .sort((a, b) => {
-      const aMinha = podeOperarEstacao(pessoa, a.id) ? 0 : 1;
-      const bMinha = podeOperarEstacao(pessoa, b.id) ? 0 : 1;
-      if (aMinha !== bMinha) return aMinha - bMinha;
-      return a.ordemPadrao - b.ordemPadrao;
-    });
+  // A lista segue a ordem real da linha de produção, sempre. Trazer a estação
+  // da pessoa pro topo faria o desbaste parecer a primeira etapa do processo —
+  // a hierarquia da linha é informação, não ruído. Quem é dela se identifica
+  // pelo selo, não pela posição.
+  const filtradas = etapas.filter((e) =>
+    e.nome.toLowerCase().includes(busca.toLowerCase()),
+  );
 
   useEffect(() => {
     inputRef.current?.focus();
   }, []);
 
+  // O cursor abre na estação da própria conta, sem tirá-la do lugar: a lista
+  // continua na ordem da linha, mas Enter leva direto pra onde a pessoa
+  // trabalha, e o realce não briga com o selo "sua estação".
   useEffect(() => {
-    setIndice(0);
-  }, [busca]);
+    const minha = filtradas.findIndex((e) => podeOperarEstacao(pessoa, e.id));
+    setIndice(minha >= 0 ? minha : 0);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [busca, etapas, pessoa]);
 
   function selecionar(etapaId: string) {
     navigate(`/totem/${etapaId}`);
