@@ -79,7 +79,7 @@ export function LoginPage() {
         >
           <div>
             <label htmlFor="codigo" className="label">
-              Código ou estação
+              Código pessoal
             </label>
             {/* Aceita número (0020) e nome de estação (fundicao). Antes só
                 dígitos, o que barrava as contas de estação. O teclado do tótem
@@ -98,7 +98,7 @@ export function LoginPage() {
               onKeyDown={handleCodigoKeyDown}
               disabled={loading}
               className="input-lg tracking-widest text-center font-mono"
-              placeholder="0000 ou fundicao"
+              placeholder="0000"
               autoComplete="off"
             />
           </div>
