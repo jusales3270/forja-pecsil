@@ -8,6 +8,7 @@ import { FastifyInstance } from 'fastify';
 import { z } from 'zod';
 import { prisma } from '../db/prisma.js';
 import { calcularFluxoDePecas } from '../lib/fluxo-pecas.js';
+import { checarEstacaoDaOP } from '../lib/permissoes-estacao.js';
 
 const registrarSchema = z.object({
   opLoteId: z.string().uuid('opLoteId inválido'),
@@ -26,12 +27,20 @@ export async function apontamentoPecaRoutes(app: FastifyInstance) {
     { onRequest: [app.authenticate] },
     async (request, reply) => {
       const { opLoteId, maquinaId, observacoes } = registrarSchema.parse(request.body);
-      const operadorId = (request.user as any).pessoaId;
+      const user = request.user as any;
+      const operadorId = user.pessoaId;
 
       const opLote = await prisma.oPLote.findUnique({ where: { id: opLoteId } });
       if (!opLote) {
         return reply.code(404).send({ error: 'not_found', message: 'OP não encontrada' });
       }
+
+      // Até aqui esta rota não tinha checagem NENHUMA: qualquer usuário
+      // autenticado somava peça em qualquer OP do sistema. Como a contagem
+      // alimenta o aviso que a engenharia usa pra se programar, apontamento na
+      // estação errada inflava o número sem deixar rastro.
+      const bloqueio = await checarEstacaoDaOP(user, opLoteId);
+      if (bloqueio) return reply.code(403).send(bloqueio);
 
       // Uma OP não produz mais do que recebeu. Na primeira operação isso é o
       // tamanho do lote; nas seguintes, o que a anterior liberou — não dá pra
@@ -166,7 +175,11 @@ export async function apontamentoPecaRoutes(app: FastifyInstance) {
       const { opLoteId, maquinaId } = registrarSchema
         .pick({ opLoteId: true, maquinaId: true })
         .parse(request.body);
-      const operadorId = (request.user as any).pessoaId;
+      const user = request.user as any;
+      const operadorId = user.pessoaId;
+
+      const bloqueio = await checarEstacaoDaOP(user, opLoteId);
+      if (bloqueio) return reply.code(403).send(bloqueio);
 
       const ultimo = await prisma.apontamentoPeca.findFirst({
         where: { opLoteId, maquinaId, operadorId },

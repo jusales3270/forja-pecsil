@@ -79,24 +79,26 @@ export function LoginPage() {
         >
           <div>
             <label htmlFor="codigo" className="label">
-              Código pessoal
+              Código ou estação
             </label>
+            {/* Aceita número (0020) e nome de estação (fundicao). Antes só
+                dígitos, o que barrava as contas de estação. O teclado do tótem
+                continua abrindo numérico, que é o caso mais comum. */}
             <input
               ref={codigoRef}
               id="codigo"
               type="text"
               inputMode="numeric"
-              pattern="[0-9]*"
-              maxLength={6}
+              maxLength={40}
               value={codigo}
               onChange={(e) => {
                 setError(null);
-                setCodigo(e.target.value.replace(/\D/g, ''));
+                setCodigo(e.target.value.replace(/[^a-zA-Z0-9_-]/g, '').toLowerCase());
               }}
               onKeyDown={handleCodigoKeyDown}
               disabled={loading}
               className="input-lg tracking-widest text-center font-mono"
-              placeholder="0000"
+              placeholder="0000 ou fundicao"
               autoComplete="off"
             />
           </div>

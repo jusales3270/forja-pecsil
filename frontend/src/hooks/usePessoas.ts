@@ -1,19 +1,10 @@
 // ============================================================
-// Forja - Hook de Pessoas (read-only)
+// Forja - Hooks de Pessoas e contas de estação
 // ============================================================
 
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import type { Papel } from '@forja/shared';
 import { api } from '../lib/api';
-
-export type Papel =
-  | 'admin'
-  | 'chefe'
-  | 'pcp'
-  | 'engenharia'
-  | 'programador'
-  | 'operador'
-  | 'inspetor'
-  | 'embalador';
 
 export interface Pessoa {
   id: string;
@@ -21,6 +12,28 @@ export interface Pessoa {
   codigoPessoal: string;
   papel: Papel;
   ativo: boolean;
+  /** Estação que a conta opera. Nulo = sem vínculo. */
+  etapaId: string | null;
+  etapa?: { id: string; nome: string } | null;
+}
+
+export interface CriarPessoaInput {
+  nome: string;
+  codigoPessoal: string;
+  pin: string;
+  papel: Papel;
+  etapaId?: string | null;
+  ativo?: boolean;
+}
+
+export interface AtualizarPessoaInput {
+  nome?: string;
+  codigoPessoal?: string;
+  /** Vazio ou ausente = mantém o PIN atual. */
+  pin?: string | null;
+  papel?: Papel;
+  etapaId?: string | null;
+  ativo?: boolean;
 }
 
 export interface ListaPessoasFiltros {
@@ -28,16 +41,50 @@ export interface ListaPessoasFiltros {
   ativo?: boolean;
 }
 
+// Mantém o envelope { data } e a queryKey originais: o modal de iniciar OP já
+// consome assim, e mudar isso aqui só criaria trabalho sem ganho.
+const QUERY_KEY = ['pessoas-list'] as const;
+
 export function usePessoasList(filtros?: ListaPessoasFiltros) {
   return useQuery<{ data: Pessoa[] }>({
-    queryKey: ['pessoas-list', filtros],
+    queryKey: [...QUERY_KEY, filtros],
     queryFn: async () => {
-      const params = new URLSearchParams();
-      if (filtros?.papel) params.set('papel', filtros.papel);
-      if (filtros?.ativo !== undefined) params.set('ativo', String(filtros.ativo));
-      const qs = params.toString();
-      const res = await api.get(`/pessoas${qs ? `?${qs}` : ''}`);
-      return res.data;
+      const { data } = await api.get<{ data: Pessoa[] }>('/pessoas', {
+        params: filtros,
+      });
+      return data;
     },
+  });
+}
+
+export function useCriarPessoa() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async (input: CriarPessoaInput) => {
+      const { data } = await api.post<{ data: Pessoa }>('/pessoas', input);
+      return data.data;
+    },
+    onSuccess: () => qc.invalidateQueries({ queryKey: QUERY_KEY }),
+  });
+}
+
+export function useAtualizarPessoa() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async ({ id, input }: { id: string; input: AtualizarPessoaInput }) => {
+      const { data } = await api.put<{ data: Pessoa }>(`/pessoas/${id}`, input);
+      return data.data;
+    },
+    onSuccess: () => qc.invalidateQueries({ queryKey: QUERY_KEY }),
+  });
+}
+
+export function useDesativarPessoa() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async (id: string) => {
+      await api.delete(`/pessoas/${id}`);
+    },
+    onSuccess: () => qc.invalidateQueries({ queryKey: QUERY_KEY }),
   });
 }

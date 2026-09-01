@@ -15,7 +15,9 @@ export type Papel =
   | 'programador'
   | 'operador'
   | 'inspetor'
-  | 'embalador';
+  | 'embalador'
+  /** Conta compartilhada de um posto de trabalho. */
+  | 'estacao';
 
 export type TipoProduto =
   | 'forma'
@@ -130,6 +132,7 @@ export const PAPEL_LABEL: Record<Papel, string> = {
   operador: 'Operador',
   inspetor: 'Inspetor de Qualidade',
   embalador: 'Embalador',
+  estacao: 'Conta de Estação',
 };
 
 export const TIPO_PRODUTO_LABEL: Record<TipoProduto, string> = {
@@ -191,6 +194,9 @@ export interface PessoaPublica {
   nome: string;
   papel: Papel;
   ativo: boolean;
+  /** Estação vinculada à conta. Nulo = sem vínculo com estação. */
+  etapaId?: string | null;
+  etapa?: { id: string; nome: string } | null;
 }
 
 // ===========================

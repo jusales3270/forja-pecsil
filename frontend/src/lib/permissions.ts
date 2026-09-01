@@ -12,7 +12,8 @@ export type Papel =
   | 'programador'
   | 'operador'
   | 'inspetor'
-  | 'embalador';
+  | 'embalador'
+  | 'estacao';
 
 // ============================================================
 // Capacidades (o que cada papel pode FAZER no sistema)
@@ -42,6 +43,8 @@ export type Capacidade =
   | 'inspecao_realizar'
   // Embalagem (Sprint 7)
   | 'embalagem_confirmar'
+  // Cadastro de usuários e contas de estação
+  | 'cadastros_pessoas'
   // Admin
   | 'admin_configurar_sistema'
   // Lotes Fantasmas (Sprint 4 - Bloco D)
@@ -57,6 +60,7 @@ const MAPA: Record<Papel, Capacidade[]> = {
     'cadastros_tolerancias',
     'cadastros_artigos',
     'cadastros_clientes',
+    'cadastros_pessoas',
     'os_listar',
     'os_criar',
     'os_editar',
@@ -121,6 +125,15 @@ const MAPA: Record<Papel, Capacidade[]> = {
     'totem_encerrar_op',
   ],
 
+  // Conta do posto de trabalho. Acessa o tótem de todas as estações, mas só
+  // OPERA a sua — quem decide isso é podeOperarEstacao(), porque depende da
+  // etapa aberta e não só do papel.
+  estacao: [
+    'totem_acessar',
+    'totem_iniciar_op',
+    'totem_encerrar_op',
+  ],
+
   operador: [
     'totem_acessar',
     'operador_apontar_turno',
@@ -166,4 +179,42 @@ export function rotaInicialPorPapel(papel: Papel | undefined | null): string {
   if (temCapacidade(papel, 'backoffice_acessar')) return '/';
   if (temCapacidade(papel, 'totem_acessar')) return '/totem';
   return '/';
+}
+
+// ============================================================
+// Permissão por ESTAÇÃO
+// ============================================================
+// Espelha backend/src/lib/permissoes-estacao.ts. O mapa de capacidades acima
+// diz o que o papel pode fazer; esta função diz ONDE — sem ela, a conta da
+// fundição operaria o torno.
+//
+// O backend valida de novo em toda ação. Aqui é só pra tela não oferecer
+// botão que vai tomar 403.
+
+const SEM_ACESSO_AO_TOTEM: Papel[] = [
+  'chefe',
+  'operador',
+  'inspetor',
+  'embalador',
+  'engenharia',
+];
+
+export function podeOperarEstacao(
+  pessoa: { papel?: Papel | null; etapaId?: string | null } | null | undefined,
+  etapaId: string | null | undefined,
+): boolean {
+  const papel = pessoa?.papel;
+  if (!papel || !etapaId) return false;
+
+  if (papel === 'admin' || papel === 'pcp') return true;
+  if (SEM_ACESSO_AO_TOTEM.includes(papel)) return false;
+
+  if (papel === 'estacao') return pessoa?.etapaId === etapaId;
+
+  if (papel === 'programador') {
+    // Sem vínculo, opera tudo — é o comportamento de antes das contas de estação.
+    return pessoa?.etapaId == null || pessoa?.etapaId === etapaId;
+  }
+
+  return false;
 }

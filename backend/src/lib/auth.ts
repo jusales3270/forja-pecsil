@@ -8,6 +8,8 @@ declare module '@fastify/jwt' {
       pessoaId: string;
       papel: string;
       nome: string;
+      /** Estação vinculada à conta. Nulo = sem vínculo com estação. */
+      etapaId?: string | null;
     };
   }
 }

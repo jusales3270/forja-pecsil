@@ -19,7 +19,7 @@ import { usePipelineEtapa } from '../../hooks/usePipelineEtapa';
 import { PipelineEtapa } from '../../components/PipelineEtapa';
 import { useApontamentosPeca, useRegistrarPeca, useDesfazerPeca } from '../../hooks/useApontamentoPeca';
 import { useAbrirInspecao } from '../../hooks/useInspecao';
-import { temCapacidade, type Papel } from '../../lib/permissions';
+import { temCapacidade, podeOperarEstacao, type Papel } from '../../lib/permissions';
 import { useAuth } from '../../lib/auth-store';
 import { getSocket, joinEstacao, leaveEstacao } from '../../lib/socket';
 import { useQueryClient } from '@tanstack/react-query';
@@ -112,10 +112,17 @@ export function TotemEstacaoPage() {
     inputRef.current?.focus();
   }, []);
 
-  const podeOperar = useMemo(() => {
-    const p = pessoa?.papel;
-    return p === 'programador' || p === 'pcp' || p === 'admin';
-  }, [pessoa]);
+  // Operar depende da ESTAÇÃO aberta, não só do papel: a conta da fundição
+  // enxerga o torno, mas não mexe nele. O backend valida de novo em cada ação —
+  // aqui é só pra não oferecer botão que vai tomar 403.
+  const podeOperar = useMemo(
+    () => podeOperarEstacao(pessoa, etapaId),
+    [pessoa, etapaId],
+  );
+
+  const somenteObservando = Boolean(
+    etapaId && !podeOperar && temCapacidade(pessoa?.papel as Papel, 'totem_acessar'),
+  );
 
   if (!etapaId) {
     navigate('/totem');
@@ -140,7 +147,8 @@ export function TotemEstacaoPage() {
               {etapa?.nome ?? 'Estação'}
             </h1>
             <p className="text-neutral-400 mt-1">
-              Programador: <span className="text-forja-400">{pessoa?.nome}</span>
+              {pessoa?.papel === 'estacao' ? 'Conta' : 'Programador'}:{' '}
+              <span className="text-forja-400">{pessoa?.nome}</span>
             </p>
           </div>
           <div className="flex items-center gap-2">
@@ -162,6 +170,20 @@ export function TotemEstacaoPage() {
             </button>
           </div>
         </div>
+
+        {somenteObservando && (
+          <div className="mb-6 px-4 py-3 rounded-xl border border-neutral-700 bg-neutral-900 flex items-start gap-3">
+            <span className="text-lg leading-none mt-0.5">👁</span>
+            <div className="text-sm">
+              <div className="text-neutral-200 font-medium">Modo observação</div>
+              <div className="text-neutral-400 mt-0.5">
+                Você está vendo {etapa?.nome ?? 'esta estação'}
+                {pessoa?.etapa ? ` com a conta ${pessoa.etapa.nome}` : ''}. Para
+                operar, entre com a conta desta estação.
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Fluxo interno da etapa — só aparece onde a etapa tem operações
             internas (hoje, a fundição). Nas demais a tela segue igual. */}

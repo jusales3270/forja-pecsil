@@ -446,3 +446,98 @@ não produziu nada ainda, mas 12 chegaram. Passou a mostrar o que chegou.
 
 **No tótem, Pendentes veio pra esquerda** e Em andamento pra direita: a fila é o
 que o operador ataca, o que está rodando é consequência.
+
+## Credenciais por estação: cada processo opera o seu (01/09/2026)
+
+Até aqui o tótem não sabia de estação nenhuma no controle de acesso. A checagem
+era uma linha:
+
+```ts
+function podeOperarTotem(papel: string) {
+  return ['programador', 'pcp', 'admin'].includes(papel);
+}
+```
+
+Qualquer programador operava qualquer posto. E o apontamento peça a peça era
+pior: **não tinha checagem alguma** — qualquer usuário autenticado somava peça
+em qualquer OP do sistema. Como essa contagem alimenta o aviso que a engenharia
+usa pra se programar, apontamento na estação errada inflava o número sem deixar
+rastro.
+
+### Conta de estação, com a pessoa preservada na ação
+
+Cada processo ganhou login próprio (`fundicao`, `desbaste`, `torno`, …). A conta
+abre o tótem e define o que aquela estação pode fazer; **máquina e operador
+continuam sendo escolhidos ao iniciar a OP**, como sempre foram.
+
+Isso foi decisão consciente: um login puramente de estação apagaria a assinatura
+individual, e a conferência de turno e a produtividade por pessoa deixariam de
+fazer sentido. Do jeito que ficou, o carimbo grava a estação como quem abriu e o
+operador como quem executou.
+
+### Modelo
+
+Sem tabela nova. Uma conta de estação é uma `Pessoa` com `papel: estacao` e
+`etapaId` da sua etapa — `Pessoa` já é dona de todas as FKs de autoria, e
+`codigoPessoal` é `@unique`, então serve de login. Criar uma entidade paralela
+obrigaria a mexer nessa plumbing toda sem ganho nenhum.
+
+As estações **não** viraram valores do enum: elas já existem como `Etapa` no
+banco. Estação nova é cadastro, não migration.
+
+`Pessoa.etapaId` serve também pra prender um programador a um posto. Nulo mantém
+o comportamento antigo — ninguém perdeu acesso na virada.
+
+### A regra, em um lugar só
+
+`backend/src/lib/permissoes-estacao.ts`:
+
+| Papel | Onde opera |
+|---|---|
+| `admin`, `pcp` | qualquer estação — o PCP precisa destravar as coisas |
+| `chefe` | nenhuma; acompanha pelo painel |
+| `estacao` | só a própria |
+| `programador` | a sua, se tiver; senão todas (compatibilidade) |
+| demais | não operam o tótem |
+
+Aplicada em **iniciar, encerrar, pausar, retomar** e — o furo que existia —
+**`+1 peça` e desfazer**. O 403 diz o que fazer: *"Esta OP é da estação Desbaste.
+Entre com a conta dessa estação para operar."*
+
+O frontend espelha a regra em `podeOperarEstacao()`, só pra não oferecer botão
+que vai tomar 403. Quem valida é o backend, em toda ação.
+
+### Na tela
+
+Estação alheia mostra uma faixa **"👁 Modo observação — você está vendo Fundição
+com a conta Desbaste"**, e os cards ficam sem Iniciar, Encerrar, Pausar e
+`+1 peça`. A faixa de fluxo, as OS e quem está operando continuam visíveis: a
+ideia é acompanhar, não esconder.
+
+Na seleção de estação, a própria vem primeiro com selo **"sua estação"**; as
+outras, **"👁 só visualização"**.
+
+Tela nova em `/pessoas` (só admin) cadastra os dois tipos de conta. Ao escolher a
+estação numa conta nova, nome e login saem prontos.
+
+### Um efeito colateral que apareceu no teste
+
+A tela de login aceitava **só dígitos, máximo 6** (`pattern="[0-9]*"`,
+`maxLength={6}`) — desenhada pro código numérico do operador. Logins como
+`fundicao` não passavam. Agora aceita letras e números até 40 caracteres; o
+teclado do tótem continua abrindo numérico, que segue sendo o caso mais comum.
+
+### O que replicar em cada ambiente
+
+As 12 contas de estação, uma por `Etapa`, com PIN inicial que o PCP troca depois.
+Podem ser criadas pela tela `/pessoas` ou pela API. Logins usados no dev:
+`fundicao`, `engenharia`, `desbaste`, `metalizacao`, `encaixe`, `torno`,
+`vertiflow`, `rebaixo`, `chaveta`, `acabamento`, `qualidade`, `embalagem`.
+
+### Ainda aberto
+
+- **PIN igual pra todas as contas (1234)** no dev. Em produção o PCP precisa
+  definir senhas de verdade — a tela já permite trocar.
+- Inspeção e controle de volume continuam presos ao papel (`inspetor`), sem
+  vínculo de estação. Não foi pedido; se um inspetor de uma área não deve
+  inspecionar outra, é conversa a ter.

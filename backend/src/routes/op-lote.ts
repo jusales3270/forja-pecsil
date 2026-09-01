@@ -11,6 +11,7 @@ import { z } from 'zod';
 import { Prisma } from '@prisma/client';
 import { prisma } from '../db/prisma.js';
 import { calcularFluxoDePecas } from '../lib/fluxo-pecas.js';
+import { checarEstacaoDaOP } from '../lib/permissoes-estacao.js';
 
 // ============================================================
 // Schemas
@@ -73,8 +74,11 @@ async function criarEvento(
 }
 
 // Verifica se o usuário tem papel pra operar tótem
+// Primeiro filtro, barato: papéis que nunca operam o tótem morrem aqui, sem ir
+// ao banco. Qual estação cada um pode operar é decidido depois, por
+// checarEstacaoDaOP, que precisa saber de que etapa é a OP.
 function podeOperarTotem(papel: string): boolean {
-  return ['programador', 'pcp', 'admin'].includes(papel);
+  return ['programador', 'pcp', 'admin', 'estacao'].includes(papel);
 }
 
 // ============================================================
@@ -377,13 +381,16 @@ export async function opLoteRoutes(app: FastifyInstance) {
       if (!podeOperarTotem(user.papel)) {
         return reply.code(403).send({
           error: 'forbidden',
-          message: 'Apenas programador, PCP ou admin podem iniciar OPs',
+          message: 'Seu usuário não opera o tótem. Entre com a conta da estação para iniciar OPs.',
         });
       }
 
       const { id: opLoteId } = paramsParsed.data;
       const { maquinaId, operadorId, observacoes } = bodyParsed.data;
       const programadorId = user.pessoaId;
+
+      const bloqueio = await checarEstacaoDaOP(user, opLoteId);
+      if (bloqueio) return reply.code(403).send(bloqueio);
 
       // Carrega a OP e valida
       const opLote = await prisma.oPLote.findUnique({
@@ -786,13 +793,16 @@ export async function opLoteRoutes(app: FastifyInstance) {
       if (!podeOperarTotem(user.papel)) {
         return reply.code(403).send({
           error: 'forbidden',
-          message: 'Apenas programador, PCP ou admin podem encerrar OPs',
+          message: 'Seu usuário não opera o tótem. Entre com a conta da estação para encerrar OPs.',
         });
       }
 
       const { id: opLoteId } = paramsParsed.data;
       const { quantidadeConcluida, observacoes } = bodyParsed.data;
       const autorId = user.pessoaId;
+
+      const bloqueio = await checarEstacaoDaOP(user, opLoteId);
+      if (bloqueio) return reply.code(403).send(bloqueio);
 
       // Carrega a OP com lote pra validar quantidade
       const opLote = await prisma.oPLote.findUnique({
@@ -1082,13 +1092,16 @@ export async function opLoteRoutes(app: FastifyInstance) {
       if (!podeOperarTotem(user.papel)) {
         return reply.code(403).send({
           error: 'forbidden',
-          message: 'Apenas programador, PCP ou admin podem pausar OPs',
+          message: 'Seu usuário não opera o tótem. Entre com a conta da estação para pausar OPs.',
         });
       }
 
       const { id: opLoteId } = paramsParsed.data;
       const { motivoParadaId, observacoes } = bodyParsed.data;
       const registradoPorId = user.pessoaId;
+
+      const bloqueio = await checarEstacaoDaOP(user, opLoteId);
+      if (bloqueio) return reply.code(403).send(bloqueio);
 
       const opLote = await prisma.oPLote.findUnique({
         where: { id: opLoteId },
@@ -1170,11 +1183,14 @@ export async function opLoteRoutes(app: FastifyInstance) {
       if (!podeOperarTotem(user.papel)) {
         return reply.code(403).send({
           error: 'forbidden',
-          message: 'Apenas programador, PCP ou admin podem retomar OPs',
+          message: 'Seu usuário não opera o tótem. Entre com a conta da estação para retomar OPs.',
         });
       }
 
       const { id: opLoteId } = paramsParsed.data;
+
+      const bloqueio = await checarEstacaoDaOP(user, opLoteId);
+      if (bloqueio) return reply.code(403).send(bloqueio);
 
       const carimboAberto = await prisma.carimbo.findFirst({
         where: { opLoteId, timestampSaida: null },

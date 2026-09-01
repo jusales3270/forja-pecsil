@@ -25,6 +25,7 @@ export async function authRoutes(app: FastifyInstance) {
 
     const pessoa = await prisma.pessoa.findUnique({
       where: { codigoPessoal: codigo_pessoal },
+      include: { etapa: { select: { id: true, nome: true } } },
     });
 
     if (!pessoa || !pessoa.ativo) {
@@ -43,10 +44,13 @@ export async function authRoutes(app: FastifyInstance) {
       });
     }
 
+    // etapaId vai no token pra decidir permissão de estação sem ir ao banco
+    // a cada apontamento de peça.
     const token = app.jwt.sign({
       pessoaId: pessoa.id,
       papel: pessoa.papel,
       nome: pessoa.nome,
+      etapaId: pessoa.etapaId,
     });
 
     return {
@@ -57,6 +61,8 @@ export async function authRoutes(app: FastifyInstance) {
           nome: pessoa.nome,
           papel: pessoa.papel,
           ativo: pessoa.ativo,
+          etapaId: pessoa.etapaId,
+          etapa: pessoa.etapa,
         },
       },
     };
@@ -77,6 +83,8 @@ export async function authRoutes(app: FastifyInstance) {
           papel: true,
           ativo: true,
           codigoPessoal: true,
+          etapaId: true,
+          etapa: { select: { id: true, nome: true } },
         },
       });
 

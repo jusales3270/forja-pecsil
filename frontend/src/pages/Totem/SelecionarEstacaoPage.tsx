@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import { useEffect, useRef, useState } from 'react';
 import { useEtapasList } from '../../hooks/useEtapas';
 import { useAuth } from '../../lib/auth-store';
-import { temCapacidade, type Papel } from '../../lib/permissions';
+import { temCapacidade, podeOperarEstacao, type Papel } from '../../lib/permissions';
 
 export function SelecionarEstacaoPage() {
   const navigate = useNavigate();
@@ -20,9 +20,16 @@ export function SelecionarEstacaoPage() {
   const [indice, setIndice] = useState(0);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const filtradas = etapas.filter((e) =>
-    e.nome.toLowerCase().includes(busca.toLowerCase()),
-  );
+  // A estação da conta vem primeiro: é onde a pessoa trabalha, e as outras
+  // ela só observa. Sem isso o operador procura a dele no meio de 12.
+  const filtradas = etapas
+    .filter((e) => e.nome.toLowerCase().includes(busca.toLowerCase()))
+    .sort((a, b) => {
+      const aMinha = podeOperarEstacao(pessoa, a.id) ? 0 : 1;
+      const bMinha = podeOperarEstacao(pessoa, b.id) ? 0 : 1;
+      if (aMinha !== bMinha) return aMinha - bMinha;
+      return a.ordemPadrao - b.ordemPadrao;
+    });
 
   useEffect(() => {
     inputRef.current?.focus();
@@ -65,7 +72,9 @@ export function SelecionarEstacaoPage() {
             <h1 className="text-4xl font-bold text-forja-50">Tótem</h1>
             <p className="text-neutral-400 mt-2 text-lg">
               Olá, <span className="text-forja-400 font-medium">{pessoa?.nome}</span>.
-              Escolha a estação onde você está trabalhando.
+              {pessoa?.etapa
+                ? ' Você opera a sua estação e pode acompanhar as demais.'
+                : ' Escolha a estação onde você está trabalhando.'}
             </p>
           </div>
           <button
@@ -120,14 +129,25 @@ export function SelecionarEstacaoPage() {
                   : 'bg-neutral-900 border-neutral-800 hover:border-neutral-700 text-neutral-200'
               }`}
             >
-              <div className="flex items-center justify-between">
-                <div>
-                  <div className="text-xl font-semibold">{etapa.nome}</div>
+              <div className="flex items-center justify-between gap-3">
+                <div className="min-w-0">
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <span className="text-xl font-semibold">{etapa.nome}</span>
+                    {podeOperarEstacao(pessoa, etapa.id) ? (
+                      <span className="text-[10px] uppercase tracking-wide px-2 py-0.5 rounded bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">
+                        sua estação
+                      </span>
+                    ) : (
+                      <span className="text-[10px] uppercase tracking-wide px-2 py-0.5 rounded bg-neutral-800 text-neutral-400 border border-neutral-700">
+                        👁 só visualização
+                      </span>
+                    )}
+                  </div>
                   <div className="text-sm text-neutral-500 mt-1">
                     Ordem {etapa.ordemPadrao} · SLA {etapa.slaHoras}h
                   </div>
                 </div>
-                <div className="text-2xl text-neutral-600">→</div>
+                <div className="text-2xl text-neutral-600 shrink-0">→</div>
               </div>
             </button>
           ))}

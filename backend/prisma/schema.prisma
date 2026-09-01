@@ -32,6 +32,9 @@ enum Papel {
   operador
   inspetor
   embalador
+  /// Conta compartilhada de um posto de trabalho. Opera só a própria estação
+  /// e enxerga as demais sem poder alterar nada.
+  estacao
 }
 
 enum TipoProduto {
@@ -196,10 +199,14 @@ model Pessoa {
   codigoPessoal String   @unique @map("codigo_pessoal")
   pinHash       String   @map("pin_hash")
   papel         Papel
+  /// Estação que esta conta opera. Nulo = sem vínculo com estação, e o
+  /// comportamento é o de sempre (papel manda sozinho).
+  etapaId       String?  @map("etapa_id")
   ativo         Boolean  @default(true)
   criadoEm      DateTime @default(now()) @map("criado_em")
   atualizadoEm  DateTime @updatedAt @map("atualizado_em")
 
+  etapa                         Etapa?                 @relation(fields: [etapaId], references: [id])
   carimbosComoProgramador       Carimbo[]              @relation("ProgramadorCarimbo")
   carimbosComoOperador          Carimbo[]              @relation("OperadorCarimbo")
   processamentosComoProgramador ProcessamentoMaquina[] @relation("ProgramadorProcessamento")
@@ -262,6 +269,8 @@ model Etapa {
   avisosOPLote   OPLote[]         @relation("EtapaAvisadaOPLote")
   /// Avisos endereçados a esta estação (aparecem no tótem dela)
   alertas        Alerta[]         @relation("EtapaDestinoAlerta")
+  /// Contas vinculadas a esta estação (a conta do posto e programadores presos a ela)
+  pessoas        Pessoa[]
 
   @@map("etapas")
 }

@@ -76,7 +76,7 @@ export function HomePage() {
         </div>
 
         {/* Cadastros — base do roteiro de produção (1. o que existe antes de qualquer OS) */}
-        {(pode('cadastros_tipos_servico') || pode('cadastros_motivos_parada') || pode('cadastros_artigos')) && (
+        {(pode('cadastros_tipos_servico') || pode('cadastros_motivos_parada') || pode('cadastros_artigos') || pode('cadastros_pessoas')) && (
         <div className="card">
           <h3 className={`text-lg font-semibold mb-1 ${T.cardTexto}`}>Cadastros</h3>
           <p className={`text-xs mb-4 ${T.cardSub}`}>Base do roteiro de produção — mantida à parte, não é uma etapa do fluxo</p>
@@ -113,6 +113,18 @@ export function HomePage() {
               <p className={`font-medium ${T.itemTexto}`}>Artigos</p>
               <p className={`text-xs mt-1 ${T.itemSub}`}>
                 Biblioteca de peças com desenhos, OPs e plano de inspeção
+              </p>
+            </button>
+            )}
+            {pode('cadastros_pessoas') && (
+            <button
+              onClick={() => navigate('/pessoas')}
+              className={`text-left p-4 rounded-lg border transition-colors ${T.itemBorder}`}
+            >
+              <p className={`font-medium ${T.itemTexto}`}>Usuários e Estações</p>
+              <p className={`text-xs mt-1 ${T.itemSub}`}>
+                Login de cada processo e das pessoas. Cada estação opera a sua e
+                acompanha as demais
               </p>
             </button>
             )}

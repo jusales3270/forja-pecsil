@@ -15,6 +15,7 @@ import LotesFantasmasPage from './pages/LotesFantasmasPage';
 import ConferenciaTurnoPage from './pages/ConferenciaTurnoPage';
 import InspecaoPage from './pages/InspecaoPage';
 import DashboardPage from './pages/DashboardPage';
+import PessoasPage from './pages/PessoasPage';
 import { useAuth } from './lib/auth-store';
 import { ToastContainer } from './components/Toast';
 import { RoleRoute } from './components/RoleRoute';
@@ -76,6 +77,14 @@ export function App() {
             element={
               <RoleRoute requireCapability="cadastros_tipos_servico">
                 <TiposServicoPage />
+              </RoleRoute>
+            }
+          />
+          <Route
+            path="/pessoas"
+            element={
+              <RoleRoute requireCapability="cadastros_pessoas">
+                <PessoasPage />
               </RoleRoute>
             }
           />
