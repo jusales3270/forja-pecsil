@@ -192,6 +192,7 @@ export interface LoginResponse {
 export interface PessoaPublica {
   id: string;
   nome: string;
+  codigoPessoal?: string;
   papel: Papel;
   ativo: boolean;
   /** Estação vinculada à conta. Nulo = sem vínculo com estação. */

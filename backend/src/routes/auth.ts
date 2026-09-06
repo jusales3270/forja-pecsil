@@ -59,6 +59,7 @@ export async function authRoutes(app: FastifyInstance) {
         pessoa: {
           id: pessoa.id,
           nome: pessoa.nome,
+          codigoPessoal: pessoa.codigoPessoal,
           papel: pessoa.papel,
           ativo: pessoa.ativo,
           etapaId: pessoa.etapaId,
@@ -93,6 +94,96 @@ export async function authRoutes(app: FastifyInstance) {
       }
 
       return { data: pessoa };
+    }
+  );
+
+  const updateMeSchema = z.object({
+    nome: z.string().min(2, 'Nome deve ter ao menos 2 caracteres').max(120).optional(),
+    codigoPessoal: z
+      .string()
+      .min(2, 'Login deve ter ao menos 2 caracteres')
+      .max(40)
+      .regex(/^[a-z0-9_-]+$/i, 'Login deve conter apenas letras, números, hífen e underline')
+      .optional(),
+    pin: z.string().min(4, 'Senha deve ter ao menos 4 caracteres').max(60).optional(),
+  });
+
+  // PUT /auth/me - atualiza dados do próprio usuário (nome, login e senha)
+  app.put(
+    '/auth/me',
+    { onRequest: [app.authenticate] },
+    async (request, reply) => {
+      const { pessoaId } = request.user;
+
+      const parsed = updateMeSchema.safeParse(request.body);
+      if (!parsed.success) {
+        return reply.code(400).send({
+          error: 'invalid_input',
+          message: 'Dados inválidos',
+          details: parsed.error.flatten(),
+        });
+      }
+
+      const pessoaAtual = await prisma.pessoa.findUnique({
+        where: { id: pessoaId },
+      });
+
+      if (!pessoaAtual || !pessoaAtual.ativo) {
+        return reply.code(404).send({
+          error: 'not_found',
+          message: 'Usuário não encontrado',
+        });
+      }
+
+      if (
+        parsed.data.codigoPessoal &&
+        parsed.data.codigoPessoal !== pessoaAtual.codigoPessoal
+      ) {
+        const duplicado = await prisma.pessoa.findUnique({
+          where: { codigoPessoal: parsed.data.codigoPessoal },
+        });
+        if (duplicado) {
+          return reply.code(409).send({
+            error: 'duplicate_codigo',
+            message: `Já existe um usuário com o login "${parsed.data.codigoPessoal}"`,
+          });
+        }
+      }
+
+      const updateData: Record<string, any> = {};
+      if (parsed.data.nome) updateData.nome = parsed.data.nome.trim();
+      if (parsed.data.codigoPessoal) updateData.codigoPessoal = parsed.data.codigoPessoal.trim();
+      if (parsed.data.pin && parsed.data.pin.trim()) {
+        updateData.pinHash = await bcrypt.hash(parsed.data.pin.trim(), 10);
+      }
+
+      const pessoaAtualizada = await prisma.pessoa.update({
+        where: { id: pessoaId },
+        data: updateData,
+        select: {
+          id: true,
+          nome: true,
+          codigoPessoal: true,
+          papel: true,
+          ativo: true,
+          etapaId: true,
+          etapa: { select: { id: true, nome: true } },
+        },
+      });
+
+      const token = app.jwt.sign({
+        pessoaId: pessoaAtualizada.id,
+        papel: pessoaAtualizada.papel,
+        nome: pessoaAtualizada.nome,
+        etapaId: pessoaAtualizada.etapaId,
+      });
+
+      return {
+        data: {
+          token,
+          pessoa: pessoaAtualizada,
+        },
+      };
     }
   );
 }

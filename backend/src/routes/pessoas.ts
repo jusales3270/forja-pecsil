@@ -209,13 +209,12 @@ export async function pessoasRoutes(app: FastifyInstance) {
     return { data: pessoa };
   });
 
-  // ---------------- DESATIVAR ----------------
-  // Não apaga: a pessoa é autora de carimbos, apontamentos e inspeções.
+  // ---------------- DESATIVAR OU EXCLUIR ----------------
   app.delete('/pessoas/:id', { onRequest: [app.authenticate] }, async (request, reply) => {
     if (!ehAdmin(request)) {
       return reply.code(403).send({
         error: 'forbidden',
-        message: 'Apenas o admin desativa usuários',
+        message: 'Apenas o admin gerencia usuários',
       });
     }
 
@@ -227,8 +226,39 @@ export async function pessoasRoutes(app: FastifyInstance) {
     if (params.data.id === (request.user as any).pessoaId) {
       return reply.code(400).send({
         error: 'auto_desativacao',
-        message: 'Você não pode desativar a própria conta',
+        message: 'Você não pode desativar ou excluir a própria conta',
       });
+    }
+
+    const query = z
+      .object({
+        hard: z
+          .union([z.literal('true'), z.literal('false')])
+          .optional()
+          .transform((v) => v === 'true'),
+      })
+      .safeParse(request.query);
+
+    const hardDelete = query.success && query.data.hard;
+
+    if (hardDelete) {
+      try {
+        await prisma.pessoa.delete({
+          where: { id: params.data.id },
+        });
+        return { data: { id: params.data.id, excluido: true }, message: 'Usuário excluído com sucesso' };
+      } catch (err: any) {
+        // Se houver histórico de produção vinculado (FKs), desativa em vez de falhar
+        const pessoa = await prisma.pessoa.update({
+          where: { id: params.data.id },
+          data: { ativo: false },
+          select: SELECT_PESSOA,
+        });
+        return reply.code(200).send({
+          data: pessoa,
+          message: 'Usuário possui histórico de produção vinculado e foi desativado para preservar os registros.',
+        });
+      }
     }
 
     const pessoa = await prisma.pessoa.update({

@@ -88,3 +88,16 @@ export function useDesativarPessoa() {
     onSuccess: () => qc.invalidateQueries({ queryKey: QUERY_KEY }),
   });
 }
+
+export function useExcluirPessoa() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async ({ id, hard = true }: { id: string; hard?: boolean }) => {
+      const res = await api.delete<{ data: any; message?: string }>(`/pessoas/${id}`, {
+        params: hard ? { hard: 'true' } : undefined,
+      });
+      return res.data;
+    },
+    onSuccess: () => qc.invalidateQueries({ queryKey: QUERY_KEY }),
+  });
+}

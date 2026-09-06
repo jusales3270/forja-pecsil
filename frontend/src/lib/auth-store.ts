@@ -9,6 +9,7 @@ interface AuthState {
   isAuthenticated: boolean;
   login: (codigoPessoal: string, pin: string) => Promise<void>;
   logout: () => void;
+  updatePerfil: (dados: { nome?: string; codigoPessoal?: string; pin?: string }) => Promise<void>;
 }
 
 export const useAuth = create<AuthState>()(
@@ -41,6 +42,18 @@ export const useAuth = create<AuthState>()(
           token: null,
           pessoa: null,
           isAuthenticated: false,
+        });
+      },
+
+      updatePerfil: async (dados) => {
+        const res = await api.put('/auth/me', dados);
+        const { token, pessoa } = res.data.data;
+        if (token) {
+          localStorage.setItem('forja_token', token);
+        }
+        set({
+          token,
+          pessoa,
         });
       },
     }),

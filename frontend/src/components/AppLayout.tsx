@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../lib/auth-store';
 import { useTheme } from '../lib/theme-store';
 import { PAPEL_LABEL } from '@forja/shared';
+import { UserHeaderWidget } from './UserHeaderWidget';
 
 export interface BreadcrumbItem {
   label: string;
@@ -143,8 +144,8 @@ export function AppLayout({
             ) : null}
           </div>
 
-          {/* Lado direito: tema + usuário + sair */}
-          <div className="flex items-center gap-4 shrink-0">
+          {/* Lado direito: tema + usuário com engrenagem + sair */}
+          <div className="flex items-center gap-3 shrink-0">
             <button
               onClick={toggleTema}
               className={`px-3 py-2 text-sm rounded-lg transition-colors ${T.temaBtn}`}
@@ -152,14 +153,7 @@ export function AppLayout({
             >
               {claro ? '🌙 Escuro' : '☀️ Claro'}
             </button>
-            <div className="text-right leading-tight">
-              <p className={`text-sm font-medium ${T.userTexto}`}>
-                {pessoa?.nome}
-              </p>
-              <p className={`text-xs ${T.userSub}`}>
-                {PAPEL_LABEL[pessoa?.papel ?? 'admin']}
-              </p>
-            </div>
+            <UserHeaderWidget subtitulo={PAPEL_LABEL[pessoa?.papel ?? 'admin']} />
             <button onClick={handleLogout} className={`btn-ghost px-3 py-2 text-sm ${claro ? 'text-slate-600 hover:bg-slate-100' : ''}`}>
               Sair
             </button>

@@ -8,6 +8,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useEtapasList } from '../../hooks/useEtapas';
 import { useAuth } from '../../lib/auth-store';
 import { temCapacidade, podeOperarEstacao, type Papel } from '../../lib/permissions';
+import { UserHeaderWidget } from '../../components/UserHeaderWidget';
 
 export function SelecionarEstacaoPage() {
   const navigate = useNavigate();
@@ -79,15 +80,18 @@ export function SelecionarEstacaoPage() {
                 : ' Escolha a estação onde você está trabalhando.'}
             </p>
           </div>
-          <button
-            onClick={() => {
-              logout();
-              navigate('/login');
-            }}
-            className="px-4 py-2 text-sm text-neutral-400 hover:text-neutral-200 border border-neutral-800 rounded-lg"
-          >
-            Sair
-          </button>
+          <div className="flex items-center gap-3">
+            <UserHeaderWidget />
+            <button
+              onClick={() => {
+                logout();
+                navigate('/login');
+              }}
+              className="px-4 py-2 text-sm text-neutral-400 hover:text-neutral-200 border border-neutral-800 rounded-lg"
+            >
+              Sair
+            </button>
+          </div>
         </div>
 
         <div className="mb-6">

@@ -28,6 +28,7 @@ import { EncerrarOPModal } from './EncerrarOPModal';
 import { PausarOPModal } from './PausarOPModal';
 import { PainelAvisos } from '../../components/PainelAvisos';
 import { VisualizadorDesenhoModal } from '../../components/VisualizadorDesenhoModal';
+import { UserHeaderWidget } from '../../components/UserHeaderWidget';
 import type { Desenho } from '../../hooks/useDesenhos';
 
 export function TotemEstacaoPage() {
@@ -151,7 +152,8 @@ export function TotemEstacaoPage() {
               <span className="text-forja-400">{pessoa?.nome}</span>
             </p>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2.5">
+            <UserHeaderWidget />
             <PainelAvisos etapaId={etapaId} />
             <button
               onClick={() => navigate('/fim-de-turno')}
