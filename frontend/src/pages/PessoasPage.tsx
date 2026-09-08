@@ -449,8 +449,8 @@ function PessoaModal({ pessoa, onClose }: { pessoa: Pessoa | null; onClose: () =
       return setErro('Login deve conter apenas letras, números, hífen (-) ou underline (_) sem espaços');
     }
 
-    if (!ehEdicao && pinFormatado.length < 4) {
-      return setErro('Senha de acesso deve ter ao menos 4 caracteres');
+    if (!ehEdicao && !pinFormatado) {
+      return setErro('Senha de acesso é obrigatória');
     }
 
     if (papel === 'estacao' && !etapaId) {
@@ -613,14 +613,14 @@ function PessoaModal({ pessoa, onClose }: { pessoa: Pessoa | null; onClose: () =
         {/* Senha */}
         <div>
           <label className="label">
-            Senha / PIN {ehEdicao ? '(Opcional — deixe em branco para manter)' : '*'}
+            Senha {ehEdicao ? '(Opcional — deixe em branco para manter)' : '*'}
           </label>
           <input
             type="password"
             value={pin}
             onChange={(e) => setPin(e.target.value)}
             className="input"
-            placeholder={ehEdicao ? 'Manter senha atual' : 'Mínimo de 4 caracteres (ex: 1234)'}
+            placeholder={ehEdicao ? 'Manter senha atual' : 'Digite a senha desejada (letras, números, símbolos)'}
             autoComplete="new-password"
             required={!ehEdicao}
           />

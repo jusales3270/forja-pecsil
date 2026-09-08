@@ -28,8 +28,8 @@ export function LoginPage() {
       return;
     }
 
-    if (pin.length < 4) {
-      setError('PIN deve ter ao menos 4 dígitos');
+    if (!pin) {
+      setError('Informe a senha');
       pinRef.current?.focus();
       return;
     }
@@ -105,24 +105,21 @@ export function LoginPage() {
 
           <div>
             <label htmlFor="pin" className="label">
-              PIN
+              Senha
             </label>
             <input
               ref={pinRef}
               id="pin"
               type="password"
-              inputMode="numeric"
-              pattern="[0-9]*"
-              maxLength={6}
               value={pin}
               onChange={(e) => {
                 setError(null);
-                setPin(e.target.value.replace(/\D/g, ''));
+                setPin(e.target.value);
               }}
               disabled={loading}
               className="input-lg tracking-widest text-center font-mono"
-              placeholder="••••"
-              autoComplete="off"
+              placeholder="••••••••"
+              autoComplete="current-password"
             />
           </div>
 
@@ -130,7 +127,7 @@ export function LoginPage() {
 
           <button
             type="submit"
-            disabled={loading || !codigo || pin.length < 4}
+            disabled={loading || !codigo || !pin}
             className="btn-primary w-full py-3 text-base"
           >
             {loading ? 'Entrando...' : 'Entrar'}

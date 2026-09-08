@@ -68,9 +68,6 @@ export function EditarPerfilModal({ open, onClose }: EditarPerfilModalProps) {
     }
 
     if (pin) {
-      if (pin.length < 4) {
-        return setErro('Nova senha deve ter ao menos 4 caracteres');
-      }
       if (pin !== confirmarPin) {
         return setErro('A confirmação de senha não confere');
       }
@@ -202,7 +199,7 @@ export function EditarPerfilModal({ open, onClose }: EditarPerfilModalProps) {
         <div className="pt-3 border-t border-neutral-800 space-y-3">
           <div>
             <label className="block text-xs font-semibold uppercase tracking-wider text-neutral-300 mb-1.5">
-              Nova Senha / PIN <span className="text-neutral-500 font-normal lowercase">(opcional)</span>
+              Nova Senha <span className="text-neutral-500 font-normal lowercase">(opcional)</span>
             </label>
             <input
               type="password"
@@ -213,7 +210,7 @@ export function EditarPerfilModal({ open, onClose }: EditarPerfilModalProps) {
               autoComplete="new-password"
             />
             <p className="text-xs mt-1.5 text-neutral-400">
-              Mínimo de 4 dígitos ou caracteres.
+              Aceita letras, números e caracteres especiais sem limite de tamanho.
             </p>
           </div>
 

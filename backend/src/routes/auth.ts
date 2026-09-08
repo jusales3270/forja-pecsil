@@ -5,7 +5,7 @@ import { prisma } from '../db/prisma.js';
 
 const loginSchema = z.object({
   codigo_pessoal: z.string().min(1, 'Código pessoal é obrigatório'),
-  pin: z.string().min(4, 'PIN deve ter ao menos 4 dígitos'),
+  pin: z.string().min(1, 'Senha é obrigatória'),
 });
 
 export async function authRoutes(app: FastifyInstance) {
@@ -31,7 +31,7 @@ export async function authRoutes(app: FastifyInstance) {
     if (!pessoa || !pessoa.ativo) {
       return reply.code(401).send({
         error: 'invalid_credentials',
-        message: 'Código ou PIN inválidos',
+        message: 'Código ou senha inválidos',
       });
     }
 
@@ -40,7 +40,7 @@ export async function authRoutes(app: FastifyInstance) {
     if (!pinOk) {
       return reply.code(401).send({
         error: 'invalid_credentials',
-        message: 'Código ou PIN inválidos',
+        message: 'Código ou senha inválidos',
       });
     }
 
@@ -69,11 +69,11 @@ export async function authRoutes(app: FastifyInstance) {
     };
   });
 
-  // GET /auth/me - retorna dados do usuário logado
+  // GET /auth/me
   app.get(
     '/auth/me',
     { onRequest: [app.authenticate] },
-    async (request) => {
+    async (request, reply) => {
       const { pessoaId } = request.user;
 
       const pessoa = await prisma.pessoa.findUnique({
@@ -81,16 +81,19 @@ export async function authRoutes(app: FastifyInstance) {
         select: {
           id: true,
           nome: true,
+          codigoPessoal: true,
           papel: true,
           ativo: true,
-          codigoPessoal: true,
           etapaId: true,
           etapa: { select: { id: true, nome: true } },
         },
       });
 
-      if (!pessoa) {
-        throw new Error('Pessoa não encontrada');
+      if (!pessoa || !pessoa.ativo) {
+        return reply.code(404).send({
+          error: 'not_found',
+          message: 'Usuário não encontrado',
+        });
       }
 
       return { data: pessoa };
@@ -105,7 +108,7 @@ export async function authRoutes(app: FastifyInstance) {
       .max(40)
       .regex(/^[a-z0-9_-]+$/i, 'Login deve conter apenas letras, números, hífen e underline')
       .optional(),
-    pin: z.string().min(4, 'Senha deve ter ao menos 4 caracteres').max(60).optional(),
+    pin: z.string().min(1, 'Senha não pode ser vazia').optional(),
   });
 
   // PUT /auth/me - atualiza dados do próprio usuário (nome, login e senha)

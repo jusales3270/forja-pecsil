@@ -93,11 +93,11 @@ describe('POST /api/auth/login', () => {
     assert.equal(body.error, 'invalid_input');
   });
 
-  test('login com PIN muito curto retorna 400', async () => {
+  test('login com senha vazia retorna 400', async () => {
     const res = await app.inject({
       method: 'POST',
       url: '/api/auth/login',
-      payload: { codigo_pessoal: TEST_CODIGO, pin: '12' },
+      payload: { codigo_pessoal: TEST_CODIGO, pin: '' },
     });
 
     assert.equal(res.statusCode, 400);

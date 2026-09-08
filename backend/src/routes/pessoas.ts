@@ -47,7 +47,7 @@ const criarPessoaSchema = z.object({
     .min(2, 'Código deve ter ao menos 2 caracteres')
     .max(40)
     .regex(/^[a-z0-9_-]+$/i, 'Use apenas letras, números, hífen e underline'),
-  pin: z.string().min(4, 'PIN deve ter ao menos 4 caracteres').max(60),
+  pin: z.string().min(1, 'Senha é obrigatória'),
   papel: z.enum(PAPEIS),
   /** Estação que a conta opera. Obrigatória quando o papel é `estacao`. */
   etapaId: z.string().uuid('etapaId inválido').nullable().optional(),
@@ -56,8 +56,8 @@ const criarPessoaSchema = z.object({
 
 const atualizarPessoaSchema = criarPessoaSchema
   .partial()
-  // No update o PIN é opcional: vazio significa "não mexer na senha".
-  .extend({ pin: z.string().min(4).max(60).nullable().optional() });
+  // No update o PIN/senha é opcional: vazio significa "não mexer na senha".
+  .extend({ pin: z.string().min(1).nullable().optional() });
 
 const SELECT_PESSOA = {
   id: true,
