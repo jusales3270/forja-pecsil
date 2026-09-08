@@ -269,6 +269,21 @@ export function useCancelarOS() {
   });
 }
 
+export function useGerarTestesFundicao() {
+  const qc = useQueryClient();
+  return useMutation<{ data: { mensagem: string; oses: any[] } }, Error, void>({
+    mutationFn: async () => {
+      const res = await api.post('/os/gerar-teste-fundicao');
+      return res.data;
+    },
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ['os-list'] });
+      qc.invalidateQueries({ queryKey: ['pipeline-etapa'] });
+      qc.invalidateQueries({ queryKey: ['fluxo-pecas'] });
+    },
+  });
+}
+
 // ============================================================
 // Helpers UI
 // ============================================================

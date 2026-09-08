@@ -14,6 +14,7 @@ import {
   formatarPrazo,
   corPrazo,
   diasAtePrazo,
+  useGerarTestesFundicao,
 } from '../../hooks/useOS';
 import { useClientesList as useClientes } from '../../hooks/useClientes';
 import { ObservacaoBadge } from '../../components/ObservacaoBadge';
@@ -38,6 +39,7 @@ export function OSListPage() {
   const [clienteFiltro, setClienteFiltro] = useState('');
   const [statusFiltro, setStatusFiltro] = useState('');
   const [criando, setCriando] = useState(false);
+  const gerarTestes = useGerarTestesFundicao();
 
   const { data: clientesData } = useClientes();
   const clientes = clientesData ?? [];
@@ -125,16 +127,41 @@ export function OSListPage() {
               Gerencie as OS abertas, em produção e finalizadas.
             </p>
           </div>
-          <button
-            onClick={() => setCriando(true)}
-            className="px-4 py-2 bg-forja-500 hover:bg-forja-600 text-white rounded-lg font-medium transition flex items-center gap-2"
-          >
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-              <line x1="12" y1="5" x2="12" y2="19" />
-              <line x1="5" y1="12" x2="19" y2="12" />
-            </svg>
-            Nova OS
-          </button>
+          <div className="flex items-center gap-3">
+            <button
+              onClick={() => {
+                if (
+                  window.confirm(
+                    'Deseja criar 3 novas OPs de teste (OS-TEST-FUND-02, 03, 04) com a linha completa de 13 operações (Modelação até Qualidade)?',
+                  )
+                ) {
+                  gerarTestes.mutate(undefined, {
+                    onSuccess: (res) => alert(res.data.mensagem),
+                    onError: (err: any) =>
+                      alert(
+                        err?.response?.data?.message || 'Erro ao gerar OPs de teste',
+                      ),
+                  });
+                }
+              }}
+              disabled={gerarTestes.isPending}
+              className="px-3.5 py-2 bg-purple-700 hover:bg-purple-800 disabled:opacity-50 text-white rounded-lg font-medium transition flex items-center gap-2 text-sm shadow-sm"
+              title="Cria 3 novas OPs com fluxo completo (Modelação, Moldagem, Vazamento, Rebarbação, Tratamento Térmico, Engenharia Torno/Centro, Desbaste, Metalização, Encaixe, Torno, Acabamento, Qualidade)"
+            >
+              <span>🧪</span>
+              {gerarTestes.isPending ? 'Gerando 3 OPs...' : 'Gerar 3 OPs Teste (13 Etapas)'}
+            </button>
+            <button
+              onClick={() => setCriando(true)}
+              className="px-4 py-2 bg-forja-500 hover:bg-forja-600 text-white rounded-lg font-medium transition flex items-center gap-2"
+            >
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                <line x1="12" y1="5" x2="12" y2="19" />
+                <line x1="5" y1="12" x2="19" y2="12" />
+              </svg>
+              Nova OS
+            </button>
+          </div>
         </div>
 
         {/* Filtros */}
