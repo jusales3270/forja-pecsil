@@ -118,6 +118,7 @@ export function IniciarOPModal({ op, etapaId, onClose }: Props) {
               : `Iniciar OP ${op.codigoOp} — ${op.lote.os.codigoGrv}`
       }
       size="lg"
+      forcarEscuro
       footer={
         <>
           <button

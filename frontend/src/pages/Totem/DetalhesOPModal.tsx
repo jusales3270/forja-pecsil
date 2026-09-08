@@ -83,6 +83,7 @@ export function DetalhesOPModal({ op, onClose, onAbrirDesenhos }: Props) {
       onClose={onClose}
       title={`Detalhes da OP ${op.codigoOp} — ${os.codigoGrv}`}
       size="xl"
+      forcarEscuro
       footer={
         <div className="flex items-center justify-between w-full">
           <div className="flex items-center gap-2">

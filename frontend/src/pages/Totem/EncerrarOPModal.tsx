@@ -103,6 +103,7 @@ export function EncerrarOPModal({ op, onClose }: Props) {
           : `Encerrar OP ${op.codigoOp} — ${op.lote.os.codigoGrv}`
       }
       size="lg"
+      forcarEscuro
       footer={
         <>
           <button

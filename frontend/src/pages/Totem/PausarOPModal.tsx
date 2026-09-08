@@ -62,6 +62,7 @@ export function PausarOPModal({ opLoteId, codigoOp, onClose }: Props) {
       onClose={onClose}
       title={`Pausar OP ${codigoOp}`}
       size="md"
+      forcarEscuro
       footer={
         <>
           <button onClick={onClose} className="btn-ghost px-4 py-2">

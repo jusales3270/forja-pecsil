@@ -6,7 +6,7 @@
 import { useState, useEffect, type FormEvent } from 'react';
 import { Modal } from './Modal';
 import { useAuth } from '../lib/auth-store';
-import { useTheme } from '../lib/theme-store';
+import { PAPEL_LABEL } from '@forja/shared';
 import { toast } from './Toast';
 import { api } from '../lib/api';
 
@@ -17,7 +17,6 @@ interface EditarPerfilModalProps {
 
 export function EditarPerfilModal({ open, onClose }: EditarPerfilModalProps) {
   const { pessoa, updatePerfil } = useAuth();
-  const { claro } = useTheme();
 
   const [nome, setNome] = useState('');
   const [codigoPessoal, setCodigoPessoal] = useState('');
@@ -103,7 +102,7 @@ export function EditarPerfilModal({ open, onClose }: EditarPerfilModalProps) {
     }
   }
 
-  const ajudaClass = claro ? 'text-slate-500' : 'text-neutral-400';
+  const roleLabel = PAPEL_LABEL[pessoa?.papel ?? 'estacao'] || 'Usuário';
 
   return (
     <Modal
@@ -111,12 +110,13 @@ export function EditarPerfilModal({ open, onClose }: EditarPerfilModalProps) {
       onClose={loading ? () => {} : onClose}
       title="Minha Conta"
       size="md"
+      forcarEscuro
       footer={
         <>
           <button
             type="button"
             onClick={onClose}
-            className="btn-ghost px-4 py-2"
+            className="px-4 py-2 text-sm text-neutral-400 hover:text-neutral-200 hover:bg-neutral-800 rounded-lg transition-colors font-medium"
             disabled={loading}
           >
             Cancelar
@@ -125,7 +125,7 @@ export function EditarPerfilModal({ open, onClose }: EditarPerfilModalProps) {
             type="submit"
             form="editar-perfil-form"
             disabled={loading}
-            className="px-5 py-2 bg-forja-500 hover:bg-forja-600 disabled:opacity-50 text-white rounded-lg font-medium transition"
+            className="px-5 py-2 text-sm bg-forja-500 hover:bg-forja-600 disabled:opacity-50 text-white rounded-lg font-medium shadow-lg shadow-forja-500/20 transition-all active:scale-[0.98]"
           >
             {loading ? 'Salvando...' : 'Salvar alterações'}
           </button>
@@ -133,69 +133,107 @@ export function EditarPerfilModal({ open, onClose }: EditarPerfilModalProps) {
       }
     >
       <form id="editar-perfil-form" onSubmit={handleSubmit} className="space-y-4">
-        {erro && <div className="error-message">{erro}</div>}
+        {/* Banner do usuário atual */}
+        <div className="flex items-center gap-3 p-3 bg-neutral-950/80 border border-neutral-800 rounded-xl">
+          <div className="w-10 h-10 rounded-xl bg-forja-500/15 border border-forja-500/30 text-forja-400 font-bold flex items-center justify-center text-sm shrink-0">
+            {(nome || pessoa?.nome || 'U').slice(0, 2).toUpperCase()}
+          </div>
+          <div className="min-w-0 flex-1">
+            <div className="flex items-center gap-2">
+              <span className="text-sm font-semibold text-neutral-100 truncate">
+                {nome || pessoa?.nome || 'Usuário'}
+              </span>
+              <span className="text-[11px] px-2 py-0.5 rounded bg-neutral-800 border border-neutral-700 text-neutral-300 font-medium">
+                {roleLabel}
+              </span>
+            </div>
+            <p className="text-xs text-neutral-400 font-mono mt-0.5">
+              Login: @{codigoPessoal || pessoa?.codigoPessoal || '—'}
+            </p>
+          </div>
+        </div>
 
+        {erro && (
+          <div className="text-sm text-red-300 bg-red-950/40 border border-red-800/60 rounded-lg px-3.5 py-2.5 flex items-start gap-2">
+            <span className="text-red-400 font-bold">⚠</span>
+            <span>{erro}</span>
+          </div>
+        )}
+
+        {/* Nome de Exibição */}
         <div>
-          <label className="label">Nome de exibição *</label>
+          <label className="block text-xs font-semibold uppercase tracking-wider text-neutral-300 mb-1.5">
+            Nome de exibição <span className="text-forja-400">*</span>
+          </label>
           <input
             type="text"
             value={nome}
             onChange={(e) => setNome(e.target.value)}
-            className="input"
+            className="w-full bg-neutral-950 border border-neutral-700/80 rounded-lg px-3.5 py-2.5 text-neutral-100 placeholder-neutral-500 focus:border-forja-500 focus:ring-1 focus:ring-forja-500 text-sm transition-colors"
             placeholder="Seu nome ou nome da estação"
             required
             autoComplete="name"
           />
-          <p className={`text-xs mt-1 ${ajudaClass}`}>
+          <p className="text-xs mt-1.5 text-neutral-400">
             Como você ou seu posto aparecem no sistema e relatórios.
           </p>
         </div>
 
+        {/* Nome de Usuário / Login */}
         <div>
-          <label className="label">Nome de usuário / Login *</label>
+          <label className="block text-xs font-semibold uppercase tracking-wider text-neutral-300 mb-1.5">
+            Nome de usuário / Login <span className="text-forja-400">*</span>
+          </label>
           <input
             type="text"
             value={codigoPessoal}
             onChange={(e) => setCodigoPessoal(e.target.value.replace(/\s+/g, '-'))}
-            className="input font-mono"
+            className="w-full bg-neutral-950 border border-neutral-700/80 rounded-lg px-3.5 py-2.5 text-neutral-100 placeholder-neutral-500 focus:border-forja-500 focus:ring-1 focus:ring-forja-500 text-sm font-mono transition-colors"
             placeholder="Ex: joao, desbaste, 0020"
             required
             autoComplete="username"
           />
-          <p className={`text-xs mt-1 ${ajudaClass}`}>
+          <p className="text-xs mt-1.5 text-neutral-400">
             Identificador para entrar no sistema. Letras, números, hífen e underline (sem espaços).
           </p>
         </div>
 
-        <div className="pt-2 border-t border-neutral-800">
-          <label className="label">Nova Senha / PIN (opcional)</label>
-          <input
-            type="password"
-            value={pin}
-            onChange={(e) => setPin(e.target.value)}
-            className="input"
-            placeholder="Deixe em branco para manter a atual"
-            autoComplete="new-password"
-          />
-          <p className={`text-xs mt-1 ${ajudaClass}`}>
-            Mínimo de 4 dígitos ou caracteres.
-          </p>
-        </div>
-
-        {pin.length > 0 && (
+        {/* Divisão Nova Senha */}
+        <div className="pt-3 border-t border-neutral-800 space-y-3">
           <div>
-            <label className="label">Confirmar Nova Senha *</label>
+            <label className="block text-xs font-semibold uppercase tracking-wider text-neutral-300 mb-1.5">
+              Nova Senha / PIN <span className="text-neutral-500 font-normal lowercase">(opcional)</span>
+            </label>
             <input
               type="password"
-              value={confirmarPin}
-              onChange={(e) => setConfirmarPin(e.target.value)}
-              className="input"
-              placeholder="Digite a nova senha novamente"
+              value={pin}
+              onChange={(e) => setPin(e.target.value)}
+              className="w-full bg-neutral-950 border border-neutral-700/80 rounded-lg px-3.5 py-2.5 text-neutral-100 placeholder-neutral-500 focus:border-forja-500 focus:ring-1 focus:ring-forja-500 text-sm transition-colors"
+              placeholder="Deixe em branco para manter a atual"
               autoComplete="new-password"
-              required
             />
+            <p className="text-xs mt-1.5 text-neutral-400">
+              Mínimo de 4 dígitos ou caracteres.
+            </p>
           </div>
-        )}
+
+          {pin.length > 0 && (
+            <div>
+              <label className="block text-xs font-semibold uppercase tracking-wider text-neutral-300 mb-1.5">
+                Confirmar Nova Senha <span className="text-forja-400">*</span>
+              </label>
+              <input
+                type="password"
+                value={confirmarPin}
+                onChange={(e) => setConfirmarPin(e.target.value)}
+                className="w-full bg-neutral-950 border border-neutral-700/80 rounded-lg px-3.5 py-2.5 text-neutral-100 placeholder-neutral-500 focus:border-forja-500 focus:ring-1 focus:ring-forja-500 text-sm transition-colors"
+                placeholder="Digite a nova senha novamente"
+                autoComplete="new-password"
+                required
+              />
+            </div>
+          )}
+        </div>
       </form>
     </Modal>
   );

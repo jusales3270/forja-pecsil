@@ -22,6 +22,11 @@ interface ModalProps {
    * Tipicamente um Cancelar + um Confirmar/Salvar.
    */
   footer?: ReactNode;
+  /**
+   * Força a exibição em modo escuro mesmo se o tema claro estiver ativo.
+   * Recomendado para totens de fábrica e telas de perfil.
+   */
+  forcarEscuro?: boolean;
 }
 
 const SIZE_CLASS: Record<NonNullable<ModalProps['size']>, string> = {
@@ -38,6 +43,7 @@ export function Modal({
   children,
   size = 'md',
   footer,
+  forcarEscuro = false,
 }: ModalProps) {
   const { claro } = useTheme();
 
@@ -63,7 +69,9 @@ export function Modal({
 
   if (!open) return null;
 
-  const T = claro
+  const isClaro = claro && !forcarEscuro;
+
+  const T = isClaro
     ? {
         modalBg: 'bg-white border-slate-200',
         headerBorder: 'border-slate-200',
@@ -75,7 +83,7 @@ export function Modal({
         modalBg: 'bg-neutral-900 border-neutral-800',
         headerBorder: 'border-neutral-800',
         headerTexto: 'text-neutral-100',
-        closeBtn: 'text-neutral-500 hover:text-neutral-200',
+        closeBtn: 'text-neutral-400 hover:text-neutral-200',
         footerBorder: 'border-neutral-800',
       };
 
@@ -88,7 +96,9 @@ export function Modal({
       aria-label={title}
     >
       <div
-        className={`w-full ${SIZE_CLASS[size]} ${T.modalBg} border rounded-xl shadow-2xl flex flex-col max-h-[90vh]`}
+        className={`w-full ${SIZE_CLASS[size]} ${T.modalBg} border rounded-xl shadow-2xl flex flex-col max-h-[90vh] ${
+          isClaro ? 'theme-light' : ''
+        }`}
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
