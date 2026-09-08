@@ -11,6 +11,7 @@ import {
   CORES_STATUS_OS,
 } from '../../hooks/useOS';
 import { ConfirmDialog } from '../../components/ConfirmDialog';
+import { useAuth } from '../../lib/auth-store';
 import { DadosOSTab } from './tabs/DadosOSTab';
 import { LotesOpsTab } from './tabs/LotesOpsTab';
 import { TimelineTab } from './tabs/TimelineTab';
@@ -63,6 +64,11 @@ export function OSDetailPage() {
   }
 
   const podeEditar = os.status !== 'finalizada' && os.status !== 'cancelada';
+  const pessoa = useAuth((s) => s.pessoa);
+  const podeCancelar =
+    pessoa?.papel === 'admin' &&
+    os.status !== 'finalizada' &&
+    os.status !== 'cancelada';
 
   return (
     <div className="min-h-screen bg-neutral-950 text-neutral-100">
@@ -109,7 +115,7 @@ export function OSDetailPage() {
               </p>
             </div>
 
-            {podeEditar && (
+            {podeCancelar && (
               <button
                 onClick={() => setConfirmandoCancelar(true)}
                 className="px-3 py-2 text-sm bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/30 rounded-lg transition"

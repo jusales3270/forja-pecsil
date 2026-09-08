@@ -33,6 +33,7 @@ export type Capacidade =
   | 'os_criar'
   | 'os_editar'
   | 'os_cancelar'
+  | 'excluir_dados'
   // Tótem
   | 'totem_acessar'
   | 'totem_iniciar_op'
@@ -65,6 +66,7 @@ const MAPA: Record<Papel, Capacidade[]> = {
     'os_criar',
     'os_editar',
     'os_cancelar',
+    'excluir_dados',
     'totem_acessar',
     'totem_iniciar_op',
     'totem_encerrar_op',
@@ -86,7 +88,6 @@ const MAPA: Record<Papel, Capacidade[]> = {
     'os_listar',
     'os_criar',
     'os_editar',
-    'os_cancelar',
     'totem_acessar',
     'fantasmas_ver',
     'dashboard_chefe',
@@ -102,7 +103,6 @@ const MAPA: Record<Papel, Capacidade[]> = {
     'os_listar',
     'os_criar',
     'os_editar',
-    'os_cancelar',
     'totem_acessar',
     'totem_iniciar_op',
     'totem_encerrar_op',

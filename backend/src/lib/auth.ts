@@ -29,10 +29,22 @@ export async function registerAuth(app: FastifyInstance) {
       reply.code(401).send({ error: 'unauthorized', message: 'Token inválido ou expirado' });
     }
   });
+
+  app.decorate('requireAdmin', async function (request: any, reply: any) {
+    try {
+      await request.jwtVerify();
+    } catch (err) {
+      return reply.code(401).send({ error: 'unauthorized', message: 'Token inválido ou expirado' });
+    }
+    if (request.user?.papel !== 'admin') {
+      return reply.code(403).send({ error: 'forbidden', message: 'Apenas administradores têm permissão para excluir dados do sistema' });
+    }
+  });
 }
 
 declare module 'fastify' {
   interface FastifyInstance {
     authenticate: (request: any, reply: any) => Promise<void>;
+    requireAdmin: (request: any, reply: any) => Promise<void>;
   }
 }

@@ -10,6 +10,7 @@ import {
   type Desenho,
 } from '../../../hooks/useDesenhos';
 import { DesenhoModal } from './DesenhoModal';
+import { useAuth } from '../../../lib/auth-store';
 
 interface DesenhosTabProps {
   artigoId: string;
@@ -21,6 +22,9 @@ interface DesenhosTabProps {
 }
 
 export function DesenhosTab({ artigoId, artigo }: DesenhosTabProps) {
+  const pessoa = useAuth((s) => s.pessoa);
+  const ehAdmin = pessoa?.papel === 'admin';
+
   const { data: desenhos, isLoading, isError } = useDesenhosList(artigoId);
   const deleteMut = useDeleteDesenho(artigoId);
   const uploadMut = useUploadDesenhoArquivo(artigoId);
@@ -198,12 +202,14 @@ export function DesenhosTab({ artigoId, artigo }: DesenhosTabProps) {
                     >
                       Editar
                     </button>
-                    <button
-                      onClick={() => setDeletando(d)}
-                      className="btn px-3 py-1.5 text-xs bg-red-900/40 hover:bg-red-900/60 text-red-200"
-                    >
-                      Deletar
-                    </button>
+                    {ehAdmin && (
+                      <button
+                        onClick={() => setDeletando(d)}
+                        className="btn px-3 py-1.5 text-xs bg-red-900/40 hover:bg-red-900/60 text-red-200"
+                      >
+                        Deletar
+                      </button>
+                    )}
                   </td>
                 </tr>
               ))}

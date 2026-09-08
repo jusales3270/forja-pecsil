@@ -233,7 +233,7 @@ export async function desenhosRoutes(app: FastifyInstance) {
   // ---------------- DELETAR ----------------
   app.delete(
     '/artigos/:artigoId/desenhos/:id',
-    { onRequest: [app.authenticate] },
+    { onRequest: [app.requireAdmin] },
     async (request, reply) => {
       const { artigoId, id } = request.params as { artigoId: string; id: string };
 

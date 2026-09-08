@@ -20,6 +20,7 @@ import { prisma } from '../src/db/prisma.js';
 let app: FastifyInstance;
 let tokenProgramador: string;
 let tokenInspetor: string;
+let tokenAdmin: string;
 let programadorId: string;
 let operadorId: string;
 let clienteId: string;
@@ -59,8 +60,16 @@ before(async () => {
     papel: 'inspetor',
   });
 
+  await ensurePessoa({
+    codigoPessoal: 'TEST-ADMIN-OPL',
+    pin: '9999',
+    nome: 'Admin Teste OPL',
+    papel: 'admin',
+  });
+
   tokenProgramador = await loginAs(app, 'TEST-PROG-OPL', '1111');
   tokenInspetor = await loginAs(app, 'TEST-INSP-OPL', '3333');
+  tokenAdmin = await loginAs(app, 'TEST-ADMIN-OPL', '9999');
 
   const cliente = await ensureCliente('Cliente Teste OPL');
   clienteId = cliente.id;
@@ -206,7 +215,7 @@ describe('GET /op-lote/pendentes', () => {
     await app.inject({
       method: 'DELETE',
       url: `/api/os/${osId}`,
-      headers: { authorization: `Bearer ${tokenProgramador}` },
+      headers: { authorization: `Bearer ${tokenAdmin}` },
     });
 
     const res = await app.inject({

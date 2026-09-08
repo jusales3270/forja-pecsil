@@ -16,9 +16,12 @@ import {
   useDeleteToleranciaGeral,
   type ToleranciaGeral,
 } from '../hooks/useToleranciasGerais';
+import { useAuth } from '../lib/auth-store';
 
 export function ToleranciasPage() {
   const { claro } = useTheme();
+  const pessoa = useAuth((s) => s.pessoa);
+  const ehAdmin = pessoa?.papel === 'admin';
   const [clienteId, setClienteId] = useState<string>('');
   const [criando, setCriando] = useState(false);
   const [editando, setEditando] = useState<ToleranciaGeral | null>(null);
@@ -158,12 +161,14 @@ export function ToleranciasPage() {
                       >
                         Editar
                       </button>
-                      <button
-                        onClick={() => setDeletando(t)}
-                        className="btn px-3 py-1.5 text-xs bg-red-900/40 hover:bg-red-900/60 text-red-200"
-                      >
-                        Deletar
-                      </button>
+                      {ehAdmin && (
+                        <button
+                          onClick={() => setDeletando(t)}
+                          className="btn px-3 py-1.5 text-xs bg-red-900/40 hover:bg-red-900/60 text-red-200"
+                        >
+                          Deletar
+                        </button>
+                      )}
                     </td>
                   </tr>
                 ))}

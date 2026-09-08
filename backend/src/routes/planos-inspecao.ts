@@ -165,7 +165,7 @@ export async function planosInspecaoRoutes(app: FastifyInstance) {
   // ---------------- DELETAR ----------------
   app.delete(
     '/artigos/:artigoId/operacoes/:opId/plano',
-    { onRequest: [app.authenticate] },
+    { onRequest: [app.requireAdmin] },
     async (request, reply) => {
       const { artigoId, opId } = request.params as {
         artigoId: string;

@@ -210,7 +210,7 @@ export async function pessoasRoutes(app: FastifyInstance) {
   });
 
   // ---------------- DESATIVAR OU EXCLUIR ----------------
-  app.delete('/pessoas/:id', { onRequest: [app.authenticate] }, async (request, reply) => {
+  app.delete('/pessoas/:id', { onRequest: [app.requireAdmin] }, async (request, reply) => {
     if (!ehAdmin(request)) {
       return reply.code(403).send({
         error: 'forbidden',

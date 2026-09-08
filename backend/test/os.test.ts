@@ -18,6 +18,7 @@ import { prisma } from '../src/db/prisma.js';
 
 let app: FastifyInstance;
 let tokenPcp: string;
+let tokenAdmin: string;
 let pcpId: string;
 let clienteId: string;
 let clienteInativoId: string;
@@ -38,6 +39,14 @@ before(async () => {
   });
   pcpId = pcp.id;
   tokenPcp = await loginAs(app, 'TEST-PCP-OS', '1234');
+
+  await ensurePessoa({
+    codigoPessoal: 'TEST-ADMIN-OS',
+    pin: '1234',
+    nome: 'Admin Teste OS',
+    papel: 'admin',
+  });
+  tokenAdmin = await loginAs(app, 'TEST-ADMIN-OS', '1234');
 
   const cliente = await ensureCliente('Cliente Teste OS');
   clienteId = cliente.id;
@@ -417,7 +426,7 @@ describe('PATCH /os/:id', () => {
     await app.inject({
       method: 'DELETE',
       url: `/api/os/${osId}`,
-      headers: { authorization: `Bearer ${tokenPcp}` },
+      headers: { authorization: `Bearer ${tokenAdmin}` },
     });
 
     const res = await app.inject({
@@ -432,10 +441,10 @@ describe('PATCH /os/:id', () => {
 });
 
 // ============================================================
-// DELETE /os/:id (cancelamento soft)
+// DELETE /os/:id (cancelamento soft - somente admin)
 // ============================================================
 describe('DELETE /os/:id', () => {
-  test('cancela OS retorna cancelada: true', async () => {
+  test('bloqueia não-admin (PCP) com 403', async () => {
     const criada = await criarOS();
     const osId = criada.json().data.id;
 
@@ -443,6 +452,19 @@ describe('DELETE /os/:id', () => {
       method: 'DELETE',
       url: `/api/os/${osId}`,
       headers: { authorization: `Bearer ${tokenPcp}` },
+    });
+    assert.equal(res.statusCode, 403);
+    assert.equal(res.json().error, 'forbidden');
+  });
+
+  test('cancela OS quando admin retorna cancelada: true', async () => {
+    const criada = await criarOS();
+    const osId = criada.json().data.id;
+
+    const res = await app.inject({
+      method: 'DELETE',
+      url: `/api/os/${osId}`,
+      headers: { authorization: `Bearer ${tokenAdmin}` },
     });
     assert.equal(res.statusCode, 200);
     assert.equal(res.json().data.cancelada, true);
@@ -458,12 +480,12 @@ describe('DELETE /os/:id', () => {
     await app.inject({
       method: 'DELETE',
       url: `/api/os/${osId}`,
-      headers: { authorization: `Bearer ${tokenPcp}` },
+      headers: { authorization: `Bearer ${tokenAdmin}` },
     });
     const res = await app.inject({
       method: 'DELETE',
       url: `/api/os/${osId}`,
-      headers: { authorization: `Bearer ${tokenPcp}` },
+      headers: { authorization: `Bearer ${tokenAdmin}` },
     });
     assert.equal(res.statusCode, 400);
     assert.equal(res.json().error, 'ja_cancelada');

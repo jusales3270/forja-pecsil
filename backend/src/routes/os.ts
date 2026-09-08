@@ -556,7 +556,7 @@ export async function osRoutes(app: FastifyInstance) {
   // ---------------- CANCELAR (soft) ----------------
   app.delete(
     '/os/:id',
-    { onRequest: [app.authenticate] },
+    { onRequest: [app.requireAdmin] },
     async (request, reply) => {
       const paramsSchema = z.object({ id: z.string().uuid() });
       const parsed = paramsSchema.safeParse(request.params);

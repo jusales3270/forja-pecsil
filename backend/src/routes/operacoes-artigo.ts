@@ -303,7 +303,7 @@ export async function operacoesArtigoRoutes(app: FastifyInstance) {
   // ---------------- DELETAR ----------------
   app.delete(
     '/artigos/:artigoId/operacoes/:id',
-    { onRequest: [app.authenticate] },
+    { onRequest: [app.requireAdmin] },
     async (request, reply) => {
       const { artigoId, id } = request.params as {
         artigoId: string;

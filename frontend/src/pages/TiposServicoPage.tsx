@@ -16,9 +16,12 @@ import {
   type TipoServico,
 } from '../hooks/useTiposServico';
 import { useEtapasList } from '../hooks/useEtapas';
+import { useAuth } from '../lib/auth-store';
 
 export function TiposServicoPage() {
   const { claro } = useTheme();
+  const pessoa = useAuth((s) => s.pessoa);
+  const ehAdmin = pessoa?.papel === 'admin';
   const [busca, setBusca] = useState('');
   const [editando, setEditando] = useState<TipoServico | null>(null);
   const [criando, setCriando] = useState(false);
@@ -161,12 +164,14 @@ export function TiposServicoPage() {
                       >
                         Editar
                       </button>
-                      <button
-                        onClick={() => setDeletando(t)}
-                        className={`btn px-3 py-1.5 text-xs ${claro ? 'bg-slate-200 hover:bg-slate-300 text-slate-700' : 'bg-neutral-800 hover:bg-neutral-700 text-neutral-200'}`}
-                      >
-                        Desativar
-                      </button>
+                      {ehAdmin && (
+                        <button
+                          onClick={() => setDeletando(t)}
+                          className={`btn px-3 py-1.5 text-xs ${claro ? 'bg-slate-200 hover:bg-slate-300 text-slate-700' : 'bg-neutral-800 hover:bg-neutral-700 text-neutral-200'}`}
+                        >
+                          Desativar
+                        </button>
+                      )}
                     </td>
                   </tr>
                 ))}

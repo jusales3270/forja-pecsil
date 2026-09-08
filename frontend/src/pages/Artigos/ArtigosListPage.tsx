@@ -9,6 +9,7 @@ import { AppLayout } from '../../components/AppLayout';
 import { Modal } from '../../components/Modal';
 import { ConfirmDialog } from '../../components/ConfirmDialog';
 import { ObservacaoBadge } from '../../components/ObservacaoBadge';
+import { useAuth } from '../../lib/auth-store';
 import { useClientesList } from '../../hooks/useClientes';
 import {
   useArtigosList,
@@ -52,6 +53,9 @@ const LABELS_STATUS: Record<string, string> = {
 
 export function ArtigosListPage() {
   const navigate = useNavigate();
+  const pessoa = useAuth((s) => s.pessoa);
+  const ehAdmin = pessoa?.papel === 'admin';
+
   const [busca, setBusca] = useState('');
   const [clienteFiltro, setClienteFiltro] = useState('');
   const [criando, setCriando] = useState(false);
@@ -222,12 +226,14 @@ export function ArtigosListPage() {
                       >
                         Abrir
                       </button>
-                      <button
-                        onClick={() => setDeletando(a)}
-                        className="btn px-3 py-1.5 text-xs bg-neutral-800 hover:bg-neutral-700 text-neutral-200"
-                      >
-                        Desativar
-                      </button>
+                      {ehAdmin && (
+                        <button
+                          onClick={() => setDeletando(a)}
+                          className="btn px-3 py-1.5 text-xs bg-neutral-800 hover:bg-neutral-700 text-neutral-200"
+                        >
+                          Desativar
+                        </button>
+                      )}
                     </td>
                   </tr>
                 ))}

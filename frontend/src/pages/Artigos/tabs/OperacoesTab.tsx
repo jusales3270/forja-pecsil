@@ -19,6 +19,7 @@ import {
 } from '../../../hooks/useOperacoesArtigo';
 import { AplicarRoteiroModal } from './AplicarRoteiroModal';
 import { useTheme } from '../../../lib/theme-store';
+import { useAuth } from '../../../lib/auth-store';
 
 interface OperacoesTabProps {
   artigoId: string;
@@ -26,6 +27,9 @@ interface OperacoesTabProps {
 
 export function OperacoesTab({ artigoId }: OperacoesTabProps) {
   const { claro } = useTheme();
+  const pessoa = useAuth((s) => s.pessoa);
+  const ehAdmin = pessoa?.papel === 'admin';
+
   const { data: operacoes, isLoading, isError } =
     useOperacoesArtigoList(artigoId);
   const reordenarMut = useReordenarOperacoes(artigoId);
@@ -211,12 +215,14 @@ export function OperacoesTab({ artigoId }: OperacoesTabProps) {
                     >
                       Editar
                     </button>
-                    <button
-                      onClick={() => setDeletando(op)}
-                      className="btn px-3 py-1.5 text-xs bg-red-900/40 hover:bg-red-900/60 text-red-200"
-                    >
-                      Deletar
-                    </button>
+                    {ehAdmin && (
+                      <button
+                        onClick={() => setDeletando(op)}
+                        className="btn px-3 py-1.5 text-xs bg-red-900/40 hover:bg-red-900/60 text-red-200"
+                      >
+                        Deletar
+                      </button>
+                    )}
                   </td>
                 </tr>
               ))}

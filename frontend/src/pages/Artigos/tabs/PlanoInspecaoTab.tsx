@@ -22,12 +22,16 @@ import {
   type CotaInspecao,
 } from '../../../hooks/useCotasInspecao';
 import { CotaInspecaoModal } from './CotaInspecaoModal';
+import { useAuth } from '../../../lib/auth-store';
 
 interface PlanoInspecaoTabProps {
   artigoId: string;
 }
 
 export function PlanoInspecaoTab({ artigoId }: PlanoInspecaoTabProps) {
+  const pessoa = useAuth((s) => s.pessoa);
+  const ehAdmin = pessoa?.papel === 'admin';
+
   const { data: operacoes, isLoading: opsLoading } =
     useOperacoesArtigoList(artigoId);
 
@@ -117,6 +121,9 @@ interface PlanoDeOperacaoProps {
 }
 
 function PlanoDeOperacao({ artigoId, opId, opLabel }: PlanoDeOperacaoProps) {
+  const pessoa = useAuth((s) => s.pessoa);
+  const ehAdmin = pessoa?.papel === 'admin';
+
   const { data: plano, isLoading: planoLoading } = usePlanoInspecao(
     artigoId,
     opId
@@ -234,12 +241,14 @@ function PlanoDeOperacao({ artigoId, opId, opLabel }: PlanoDeOperacaoProps) {
           </p>
         </div>
         <div className="flex gap-2">
-          <button
-            onClick={() => setConfirmandoDeletarPlano(true)}
-            className="btn-ghost px-3 py-2 text-xs"
-          >
-            Excluir Plano
-          </button>
+          {ehAdmin && (
+            <button
+              onClick={() => setConfirmandoDeletarPlano(true)}
+              className="btn-ghost px-3 py-2 text-xs text-red-400 hover:text-red-300"
+            >
+              Excluir Plano
+            </button>
+          )}
           <button
             onClick={() => setCriandoCota(true)}
             className="btn-primary px-4 py-2 text-sm"
@@ -337,12 +346,14 @@ function PlanoDeOperacao({ artigoId, opId, opLabel }: PlanoDeOperacaoProps) {
                     >
                       Editar
                     </button>
-                    <button
-                      onClick={() => setDeletandoCota(c)}
-                      className="btn px-3 py-1.5 text-xs bg-red-900/40 hover:bg-red-900/60 text-red-200"
-                    >
-                      Deletar
-                    </button>
+                    {ehAdmin && (
+                      <button
+                        onClick={() => setDeletandoCota(c)}
+                        className="btn px-3 py-1.5 text-xs bg-red-900/40 hover:bg-red-900/60 text-red-200"
+                      >
+                        Deletar
+                      </button>
+                    )}
                   </td>
                 </tr>
               ))}
