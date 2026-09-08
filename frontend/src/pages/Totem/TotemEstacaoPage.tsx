@@ -9,8 +9,11 @@ import {
   useOPsPendentes,
   useOPsEmAndamento,
   useRetomarOP,
+  useEncerrarOP,
+  useIniciarOP,
   type OPLotePendente,
   type OPLoteEmAndamento,
+  type ParadaMaquina,
   tempoDesde,
   corPrazoOS,
 } from '../../hooks/useOPLote';
@@ -19,13 +22,16 @@ import { usePipelineEtapa } from '../../hooks/usePipelineEtapa';
 import { PipelineEtapa } from '../../components/PipelineEtapa';
 import { useApontamentosPeca, useRegistrarPeca, useDesfazerPeca } from '../../hooks/useApontamentoPeca';
 import { useAbrirInspecao } from '../../hooks/useInspecao';
+import { useMaquinasList } from '../../hooks/useMaquinas';
 import { temCapacidade, podeOperarEstacao, type Papel } from '../../lib/permissions';
 import { useAuth } from '../../lib/auth-store';
 import { getSocket, joinEstacao, leaveEstacao } from '../../lib/socket';
 import { useQueryClient } from '@tanstack/react-query';
+import { toast } from '../../components/Toast';
 import { IniciarOPModal } from './IniciarOPModal';
 import { EncerrarOPModal } from './EncerrarOPModal';
 import { PausarOPModal } from './PausarOPModal';
+import { DetalhesOPModal } from './DetalhesOPModal';
 import { PainelAvisos } from '../../components/PainelAvisos';
 import { VisualizadorDesenhoModal } from '../../components/VisualizadorDesenhoModal';
 import { UserHeaderWidget } from '../../components/UserHeaderWidget';
@@ -46,6 +52,7 @@ export function TotemEstacaoPage() {
   const [opIniciar, setOpIniciar] = useState<OPLotePendente | null>(null);
   const [opEncerrar, setOpEncerrar] = useState<OPLoteEmAndamento | null>(null);
   const [opPausar, setOpPausar] = useState<OPLoteEmAndamento | null>(null);
+  const [opDetalhes, setOpDetalhes] = useState<OPLotePendente | OPLoteEmAndamento | null>(null);
   const [modalDesenhos, setModalDesenhos] = useState<{
     artigo: { id: string; codigo: string; descricao?: string };
     desenhos: Desenho[];
@@ -53,6 +60,49 @@ export function TotemEstacaoPage() {
 
   const inputRef = useRef<HTMLInputElement>(null);
   const retomar = useRetomarOP();
+  const iniciar = useIniciarOP();
+  const encerrar = useEncerrarOP();
+  const { data: maquinasData } = useMaquinasList({ etapaId, ativa: true });
+  const [concluindoOpId, setConcluindoOpId] = useState<string | null>(null);
+
+  async function handleConcluirDiretoPendente(op: OPLotePendente) {
+    setConcluindoOpId(op.id);
+    try {
+      const maquinas = maquinasData?.data ?? [];
+      const maquinaId = maquinas[0]?.id;
+      const operadorId = pessoa?.id;
+
+      if (!maquinaId) {
+        setOpIniciar(op);
+        setConcluindoOpId(null);
+        return;
+      }
+
+      await iniciar.mutateAsync({
+        opLoteId: op.id,
+        input: {
+          maquinaId,
+          operadorId: operadorId || undefined,
+          observacoes: 'Início automático para liberação de programa CNC',
+        },
+      });
+
+      await encerrar.mutateAsync({
+        opLoteId: op.id,
+        input: {
+          quantidadeConcluida: op.lote.quantidadePecas,
+          observacoes: 'Programa CNC concluído e liberado pela Engenharia',
+        },
+      });
+
+      toast.sucesso(`✓ Programa da OP ${op.codigoOp} concluído e liberado para usinagem!`);
+    } catch (e: any) {
+      const msg = e?.response?.data?.message ?? 'Erro ao concluir programa da OP.';
+      toast.erro(msg);
+    } finally {
+      setConcluindoOpId(null);
+    }
+  }
 
   const { data: pendentesData, isLoading: loadingPend } = useOPsPendentes(
     etapaId ? { etapaId, busca: busca || undefined } : null,
@@ -239,9 +289,12 @@ export function TotemEstacaoPage() {
                   op={op}
                   podeOperar={podeOperar}
                   onIniciar={() => setOpIniciar(op)}
+                  onAbrirDetalhes={() => setOpDetalhes(op)}
                   onAbrirDesenhos={(artigo, desenhos) =>
                     setModalDesenhos({ artigo, desenhos })
                   }
+                  onConcluirDireto={handleConcluirDiretoPendente}
+                  concluindoDireto={concluindoOpId === op.id}
                 />
               ))}
             </div>
@@ -279,6 +332,7 @@ export function TotemEstacaoPage() {
                   onPausar={() => setOpPausar(op)}
                   onRetomar={() => retomar.mutate({ opLoteId: op.id })}
                   retomando={retomar.isPending}
+                  onAbrirDetalhes={() => setOpDetalhes(op)}
                   onAbrirDesenhos={(artigo, desenhos) =>
                     setModalDesenhos({ artigo, desenhos })
                   }
@@ -306,6 +360,15 @@ export function TotemEstacaoPage() {
           onClose={() => setOpPausar(null)}
         />
       )}
+      {opDetalhes && (
+        <DetalhesOPModal
+          op={opDetalhes}
+          onClose={() => setOpDetalhes(null)}
+          onAbrirDesenhos={(artigo, desenhos) =>
+            setModalDesenhos({ artigo, desenhos })
+          }
+        />
+      )}
       {modalDesenhos && (
         <VisualizadorDesenhoModal
           open={true}
@@ -322,31 +385,62 @@ export function TotemEstacaoPage() {
 // Cards
 // ============================================================
 
+export function isOperacaoEngenharia(op: {
+  etapa?: { nome?: string; codigo?: number };
+  tipoServico?: string;
+}): boolean {
+  const nomeEtapa = (op.etapa?.nome ?? '').toLowerCase();
+  const servico = (op.tipoServico ?? '').toLowerCase();
+  return (
+    nomeEtapa.includes('engenharia') ||
+    nomeEtapa.includes('programaç') ||
+    servico.includes('prog.') ||
+    servico.includes('programa') ||
+    servico.startsWith('eng.')
+  );
+}
+
 function CardPendente({
   op,
   podeOperar,
   onIniciar,
+  onAbrirDetalhes,
   onAbrirDesenhos,
+  onConcluirDireto,
+  concluindoDireto,
 }: {
   op: OPLotePendente;
   podeOperar: boolean;
   onIniciar: () => void;
+  onAbrirDetalhes: () => void;
   onAbrirDesenhos: (
     artigo: { id: string; codigo: string; descricao?: string },
     desenhos: Desenho[],
   ) => void;
+  onConcluirDireto?: (op: OPLotePendente) => void;
+  concluindoDireto?: boolean;
 }) {
   const urgente = op.lote.os.prioridade === 'urgente';
   const desenhos = op.lote.os.artigo.desenhos ?? [];
   const temDesenhosComArquivo = desenhos.some((d) => Boolean(d.arquivoKey));
+  const dataCriacao = op.criadoEm || op.lote.os.criadoEm;
 
   return (
     <div className="bg-neutral-900 border border-neutral-800 rounded-xl p-4 hover:border-forja-600 transition">
       <div className="flex items-start justify-between gap-3 mb-2">
-        <CabecalhoOP op={op} urgente={urgente} />
-        <span className={`text-xs shrink-0 ${corPrazoOS(op.lote.os.prazoEntrega)}`}>
-          {new Date(op.lote.os.prazoEntrega).toLocaleDateString('pt-BR')}
-        </span>
+        <CabecalhoOP op={op} urgente={urgente} onAbrirDetalhes={onAbrirDetalhes} />
+        <div className="text-right shrink-0 space-y-0.5">
+          {dataCriacao && (
+            <div className="text-[11px] text-neutral-400">
+              <span className="text-neutral-500">Criada:</span>{' '}
+              {new Date(dataCriacao).toLocaleDateString('pt-BR')}
+            </div>
+          )}
+          <div className={`text-xs ${corPrazoOS(op.lote.os.prazoEntrega)}`}>
+            <span className="text-neutral-500 text-[11px]">Entrega:</span>{' '}
+            {new Date(op.lote.os.prazoEntrega).toLocaleDateString('pt-BR')}
+          </div>
+        </div>
       </div>
 
       <div className="flex items-start justify-between gap-2 mb-1">
@@ -422,6 +516,15 @@ function CardPendente({
         <div className="flex items-center gap-2">
           <button
             type="button"
+            onClick={onAbrirDetalhes}
+            className="px-3 py-2 bg-neutral-800 hover:bg-neutral-750 text-neutral-200 text-sm font-medium rounded-lg border border-neutral-700 transition flex items-center gap-1.5"
+            title="Ver detalhes da OP, datas e esteira do lote"
+          >
+            <span>🔍</span>
+            <span>Detalhes</span>
+          </button>
+          <button
+            type="button"
             onClick={() => onAbrirDesenhos(op.lote.os.artigo, desenhos)}
             className="px-3 py-2 bg-neutral-800 hover:bg-neutral-750 text-neutral-200 text-sm font-medium rounded-lg border border-neutral-700 transition flex items-center gap-1.5"
           >
@@ -437,6 +540,28 @@ function CardPendente({
                 🔒 aguarda {op.bloqueadoPor.tipoServico} fechar o lote (
                 {op.bloqueadoPor.concluidas}/{op.bloqueadoPor.total})
               </span>
+            ) : isOperacaoEngenharia(op) ? (
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={onIniciar}
+                  className="px-3.5 py-2 bg-neutral-800 hover:bg-neutral-700 text-neutral-200 text-sm font-medium rounded-lg border border-neutral-700 transition flex items-center gap-1.5"
+                  title="Iniciar contagem de tempo de programação"
+                >
+                  <span>💻</span>
+                  <span>Iniciar Programação</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => onConcluirDireto?.(op)}
+                  disabled={concluindoDireto}
+                  className="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 disabled:opacity-50 text-white text-sm font-bold rounded-lg transition shadow flex items-center gap-1.5 cursor-pointer"
+                  title={`Dar OK direto na criação do programa da OP ${op.codigoOp}`}
+                >
+                  <span>✓</span>
+                  <span>Programa OP {op.codigoOp} OK</span>
+                </button>
+              </div>
             ) : (
               <button
                 onClick={onIniciar}
@@ -464,7 +589,16 @@ function CardPendente({
  * Quando o lote vem parcial, mostra "3 de 12" — quantas peças chegaram desta
  * vez, sempre coladas na OS a que pertencem.
  */
-function CabecalhoOP({ op, urgente }: { op: OPLotePendente; urgente: boolean }) {
+function CabecalhoOP({
+  op,
+  urgente,
+  onAbrirDetalhes,
+}: {
+  op: OPLotePendente;
+  urgente: boolean;
+  onAbrirDetalhes?: () => void;
+}) {
+  const isEng = isOperacaoEngenharia(op);
   const parcial = op.pecasDisponiveis < op.lote.quantidadePecas;
 
   return (
@@ -482,23 +616,43 @@ function CabecalhoOP({ op, urgente }: { op: OPLotePendente; urgente: boolean }) 
             !
           </span>
         )}
-        <span className="font-mono text-forja-400 font-bold uppercase">
-          {op.lote.os.codigoGrv}
-        </span>
-        <span
-          className={`text-xs font-semibold px-1.5 py-0.5 rounded ${
-            parcial
-              ? 'bg-amber-500/15 text-amber-300 border border-amber-500/30'
-              : 'text-neutral-400'
-          }`}
-          title={
-            parcial
-              ? `${op.pecasDisponiveis} peças chegaram desta vez; o lote inteiro tem ${op.lote.quantidadePecas}`
-              : 'Lote completo'
-          }
-        >
-          {op.pecasDisponiveis} de {op.lote.quantidadePecas} pç
-        </span>
+        {onAbrirDetalhes ? (
+          <button
+            type="button"
+            onClick={onAbrirDetalhes}
+            className="font-mono text-forja-400 hover:text-forja-300 font-bold uppercase transition hover:underline cursor-pointer text-left"
+            title="Clique para ver detalhes completos da OP"
+          >
+            {op.lote.os.codigoGrv}
+          </button>
+        ) : (
+          <span className="font-mono text-forja-400 font-bold uppercase">
+            {op.lote.os.codigoGrv}
+          </span>
+        )}
+        {isEng ? (
+          <span
+            className="text-xs font-semibold px-2 py-0.5 rounded bg-emerald-500/15 text-emerald-300 border border-emerald-500/30"
+            title="Etapa de engenharia: criação do programa CNC"
+          >
+            💻 Programa CNC · Lote {op.lote.quantidadePecas} pç
+          </span>
+        ) : (
+          <span
+            className={`text-xs font-semibold px-1.5 py-0.5 rounded ${
+              parcial
+                ? 'bg-amber-500/15 text-amber-300 border border-amber-500/30'
+                : 'text-neutral-400'
+            }`}
+            title={
+              parcial
+                ? `${op.pecasDisponiveis} peças chegaram desta vez; o lote inteiro tem ${op.lote.quantidadePecas}`
+                : 'Lote completo'
+            }
+          >
+            {op.pecasDisponiveis} de {op.lote.quantidadePecas} pç
+          </span>
+        )}
         <span className="text-xs text-neutral-500">Lote {op.lote.numeroLote}</span>
       </div>
     </div>
@@ -571,6 +725,7 @@ function CardEmAndamento({
   onPausar,
   onRetomar,
   retomando,
+  onAbrirDetalhes,
   onAbrirDesenhos,
 }: {
   op: OPLoteEmAndamento;
@@ -579,6 +734,7 @@ function CardEmAndamento({
   onPausar: () => void;
   onRetomar: () => void;
   retomando: boolean;
+  onAbrirDetalhes: () => void;
   onAbrirDesenhos: (
     artigo: { id: string; codigo: string; descricao?: string },
     desenhos: Desenho[],
@@ -588,6 +744,9 @@ function CardEmAndamento({
   const paradaAtiva = carimbo?.paradas?.[0];
   const desenhos = op.lote.os.artigo.desenhos ?? [];
   const temDesenhosComArquivo = desenhos.some((d) => Boolean(d.arquivoKey));
+  const dataCriacao = op.criadoEm || op.lote.os.criadoEm;
+
+  const isEng = isOperacaoEngenharia(op);
 
   return (
     <div
@@ -598,12 +757,24 @@ function CardEmAndamento({
       }`}
     >
       <div className="flex items-start justify-between gap-3 mb-2">
-        <CabecalhoOP op={op} urgente={op.lote.os.prioridade === 'urgente'} />
-        {carimbo && (
-          <span className="text-xs text-amber-400 shrink-0">
-            há {tempoDesde(carimbo.timestampEntrada)}
-          </span>
-        )}
+        <CabecalhoOP op={op} urgente={op.lote.os.prioridade === 'urgente'} onAbrirDetalhes={onAbrirDetalhes} />
+        <div className="text-right shrink-0 space-y-0.5">
+          {dataCriacao && (
+            <div className="text-[11px] text-neutral-400">
+              <span className="text-neutral-500">Criada:</span>{' '}
+              {new Date(dataCriacao).toLocaleDateString('pt-BR')}
+            </div>
+          )}
+          <div className={`text-xs ${corPrazoOS(op.lote.os.prazoEntrega)}`}>
+            <span className="text-neutral-500 text-[11px]">Entrega:</span>{' '}
+            {new Date(op.lote.os.prazoEntrega).toLocaleDateString('pt-BR')}
+          </div>
+          {carimbo && (
+            <div className="text-[11px] text-amber-400">
+              há {tempoDesde(carimbo.timestampEntrada)}
+            </div>
+          )}
+        </div>
       </div>
 
       <div className="flex items-start justify-between gap-2 mb-2">
@@ -664,11 +835,13 @@ function CardEmAndamento({
           ) : (
             <>
               <div>
-                <span className="text-neutral-500">Máquina:</span>{' '}
+                <span className="text-neutral-500">Máquina / Estação:</span>{' '}
                 {carimbo.maquina?.nome ?? '—'}
               </div>
               <div>
-                <span className="text-neutral-500">Operador:</span>{' '}
+                <span className="text-neutral-500">
+                  {isEng ? 'Programador:' : 'Operador:'}
+                </span>{' '}
                 {carimbo.operadorResponsavel?.nome ?? '—'}
               </div>
             </>
@@ -693,26 +866,46 @@ function CardEmAndamento({
         </div>
       )}
 
-      {carimbo?.maquina && !paradaAtiva && podeOperar && (
-        <BotaoMaisUmaPeca
-          opLoteId={op.id}
-          maquinaId={carimbo.maquina.id}
-          teto={op.liberadasPelaAnterior}
+      {/* Na engenharia não há contagem física de peças, há liberação do programa CNC */}
+      {isEng ? (
+        <BotaoProgramaEngenharia
+          op={op}
+          podeOperar={podeOperar}
+          paradaAtiva={paradaAtiva}
         />
+      ) : (
+        carimbo?.maquina && !paradaAtiva && podeOperar && (
+          <BotaoMaisUmaPeca
+            opLoteId={op.id}
+            maquinaId={carimbo.maquina.id}
+            teto={op.liberadasPelaAnterior}
+          />
+        )
       )}
 
       <div className="flex items-center justify-between gap-2 mt-3 pt-2 border-t border-neutral-800">
-        <button
-          type="button"
-          onClick={() => onAbrirDesenhos(op.lote.os.artigo, desenhos)}
-          className="px-3 py-2 bg-neutral-800 hover:bg-neutral-750 text-neutral-200 text-sm font-medium rounded-lg border border-neutral-700 transition flex items-center gap-1.5"
-        >
-          <span>📐</span>
-          <span>Ver Desenho</span>
-        </button>
+        <div className="flex items-center gap-2">
+          <button
+            type="button"
+            onClick={onAbrirDetalhes}
+            className="px-3 py-2 bg-neutral-800 hover:bg-neutral-750 text-neutral-200 text-sm font-medium rounded-lg border border-neutral-700 transition flex items-center gap-1.5"
+            title="Ver detalhes da OP, datas e esteira do lote"
+          >
+            <span>🔍</span>
+            <span>Detalhes</span>
+          </button>
+          <button
+            type="button"
+            onClick={() => onAbrirDesenhos(op.lote.os.artigo, desenhos)}
+            className="px-3 py-2 bg-neutral-800 hover:bg-neutral-750 text-neutral-200 text-sm font-medium rounded-lg border border-neutral-700 transition flex items-center gap-1.5"
+          >
+            <span>📐</span>
+            <span>Ver Desenho</span>
+          </button>
+        </div>
 
         <div className="flex items-center gap-2">
-          <BotaoInspecionar opLoteId={op.id} />
+          {!isEng && <BotaoInspecionar opLoteId={op.id} />}
           {podeOperar && paradaAtiva && (
             <button
               onClick={onRetomar}
@@ -730,7 +923,7 @@ function CardEmAndamento({
               Pausar
             </button>
           )}
-          {podeOperar && (
+          {podeOperar && !isEng && (
             <button
               onClick={onEncerrar}
               className="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-medium rounded-lg transition"
@@ -745,7 +938,115 @@ function CardEmAndamento({
   );
 }
 
+/**
+ * Painel adaptado para Engenharia / Programação CNC:
+ * Em vez de contagem de peças (+1 peça), disponibiliza o botão único
+ * de liberação do programa CNC para a OP com o tamanho do lote.
+ */
+function BotaoProgramaEngenharia({
+  op,
+  podeOperar,
+  paradaAtiva,
+}: {
+  op: OPLoteEmAndamento;
+  podeOperar: boolean;
+  paradaAtiva?: ParadaMaquina;
+}) {
+  const encerrar = useEncerrarOP();
+  const [obs, setObs] = useState('');
+  const [mostrarObs, setMostrarObs] = useState(false);
+  const [confirmando, setConfirmando] = useState(false);
 
+  async function handleConcluir() {
+    try {
+      await encerrar.mutateAsync({
+        opLoteId: op.id,
+        input: {
+          quantidadeConcluida: op.lote.quantidadePecas,
+          observacoes: obs.trim()
+            ? `[Programa CNC] ${obs.trim()}`
+            : 'Programa CNC concluído e liberado pela Engenharia',
+        },
+      });
+      toast.sucesso(`✓ Programa da OP ${op.codigoOp} concluído e liberado para usinagem!`);
+    } catch (e: any) {
+      const msg = e?.response?.data?.message ?? 'Erro ao concluir programa da OP.';
+      toast.erro(msg);
+    }
+  }
+
+  if (!podeOperar || paradaAtiva) return null;
+
+  return (
+    <div className="mt-3 pt-3 border-t border-emerald-500/20 bg-emerald-950/20 p-4 rounded-xl border border-emerald-500/30">
+      <div className="flex items-center justify-between gap-2 mb-2">
+        <div className="flex items-center gap-2">
+          <span className="text-base">💻</span>
+          <span className="text-xs font-semibold uppercase tracking-wider text-emerald-400">
+            Liberação de Engenharia / Programação
+          </span>
+        </div>
+        <button
+          type="button"
+          onClick={() => setMostrarObs(!mostrarObs)}
+          className="text-[11px] text-neutral-400 hover:text-emerald-300 underline transition cursor-pointer"
+        >
+          {mostrarObs ? 'Ocultar observação' : '+ Adicionar ref. programa / arquivo'}
+        </button>
+      </div>
+
+      {mostrarObs && (
+        <div className="mb-3">
+          <input
+            type="text"
+            value={obs}
+            onChange={(e) => setObs(e.target.value)}
+            placeholder="Ex: Programa O1231 no pendrive / pasta CAM..."
+            className="w-full px-3 py-2 bg-neutral-900 border border-emerald-500/40 rounded-lg text-xs text-neutral-200 placeholder-neutral-500 focus:outline-none focus:border-emerald-400"
+          />
+        </div>
+      )}
+
+      {confirmando ? (
+        <div className="flex items-center gap-2 bg-neutral-900 p-3 rounded-lg border border-amber-500/40">
+          <span className="text-xs text-amber-300 flex-1">
+            Liberar programa da OP <strong>{op.codigoOp}</strong> ({op.tipoServico}) para usinagem?
+          </span>
+          <button
+            type="button"
+            onClick={() => setConfirmando(false)}
+            disabled={encerrar.isPending}
+            className="px-3 py-1.5 text-xs bg-neutral-800 hover:bg-neutral-700 text-neutral-300 rounded-md transition cursor-pointer"
+          >
+            Cancelar
+          </button>
+          <button
+            type="button"
+            onClick={handleConcluir}
+            disabled={encerrar.isPending}
+            className="px-4 py-1.5 text-xs bg-emerald-600 hover:bg-emerald-500 font-bold text-white rounded-md transition flex items-center gap-1 shadow cursor-pointer"
+          >
+            {encerrar.isPending ? 'Liberando...' : 'Sim, confirmar'}
+          </button>
+        </div>
+      ) : (
+        <button
+          type="button"
+          onClick={() => setConfirmando(true)}
+          disabled={encerrar.isPending}
+          className="w-full py-3.5 px-4 bg-emerald-600 hover:bg-emerald-500 active:scale-[0.99] text-white font-bold text-base rounded-xl transition shadow-lg shadow-emerald-950/50 flex items-center justify-center gap-2.5 cursor-pointer"
+        >
+          <span className="text-xl">✓</span>
+          <span>Programa OP {op.codigoOp} OK</span>
+        </button>
+      )}
+
+      <p className="text-[11px] text-emerald-400/80 text-center mt-2">
+        Confirma a criação do programa CNC da OP {op.codigoOp} e libera o lote ({op.lote.quantidadePecas} pç) para a próxima etapa.
+      </p>
+    </div>
+  );
+}
 
 // ============================================================
 // Bloco A (Sprint 4) - Botao "+1 peca"

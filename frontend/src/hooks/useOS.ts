@@ -4,6 +4,7 @@
 
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { api } from '../lib/api';
+import type { Desenho } from './useDesenhos';
 
 // ============================================================
 // Tipos
@@ -98,7 +99,14 @@ export interface OS {
   criadoEm: string;
   atualizadoEm: string;
   cliente?: { id: string; nome: string };
-  artigo?: { id: string; codigo: string; descricao: string; tipoProduto?: string };
+  artigo?: {
+    id: string;
+    codigo: string;
+    descricao: string;
+    tipoProduto?: string;
+    observacoes?: string | null;
+    desenhos?: Desenho[];
+  };
   criadoPor?: { id: string; nome: string };
   lotes?: Lote[];
   _count?: { lotes: number };

@@ -12,6 +12,8 @@ import { toast } from '../../components/Toast';
 import { useIniciarOP, type OPLotePendente } from '../../hooks/useOPLote';
 import { useMaquinasList } from '../../hooks/useMaquinas';
 import { usePessoasList } from '../../hooks/usePessoas';
+import { useAuth } from '../../lib/auth-store';
+import { isOperacaoEngenharia } from './TotemEstacaoPage';
 
 interface Props {
   op: OPLotePendente;
@@ -20,6 +22,8 @@ interface Props {
 }
 
 export function IniciarOPModal({ op, etapaId, onClose }: Props) {
+  const isEng = isOperacaoEngenharia(op);
+  const usuarioLogado = useAuth((s) => s.pessoa);
   const semMaquina = op.terceirizada || op.esperaHoras != null;
   const [maquinaId, setMaquinaId] = useState('');
   const [operadorId, setOperadorId] = useState('');
@@ -28,11 +32,29 @@ export function IniciarOPModal({ op, etapaId, onClose }: Props) {
   const maquinaRef = useRef<HTMLSelectElement>(null);
 
   const { data: maquinasData } = useMaquinasList({ etapaId, ativa: true });
-  const { data: pessoasData } = usePessoasList({ papel: 'operador', ativo: true });
+  const { data: pessoasData } = usePessoasList({ ativo: true });
   const maquinas = maquinasData?.data ?? [];
-  const operadores = pessoasData?.data ?? [];
+  const operadores = (pessoasData?.data ?? []).filter((p) =>
+    ['operador', 'programador', 'engenharia', 'pcp', 'admin', 'chefe', 'estacao'].includes(p.papel),
+  );
 
   const iniciar = useIniciarOP();
+
+  // Auto-seleciona máquina se houver apenas 1 na etapa
+  useEffect(() => {
+    if (!semMaquina && maquinas.length === 1 && !maquinaId) {
+      setMaquinaId(maquinas[0].id);
+    }
+  }, [semMaquina, maquinas, maquinaId]);
+
+  // Auto-seleciona operador se o usuário logado for compatível ou se houver só 1
+  useEffect(() => {
+    if (!operadorId && usuarioLogado && operadores.some((o) => o.id === usuarioLogado.id)) {
+      setOperadorId(usuarioLogado.id);
+    } else if (!operadorId && operadores.length === 1) {
+      setOperadorId(operadores[0].id);
+    }
+  }, [operadores, operadorId, usuarioLogado]);
 
   useEffect(() => {
     if (!semMaquina) setTimeout(() => maquinaRef.current?.focus(), 50);
@@ -87,11 +109,13 @@ export function IniciarOPModal({ op, etapaId, onClose }: Props) {
       open
       onClose={onClose}
       title={
-        op.terceirizada
-          ? `Enviar OP ${op.codigoOp} — ${op.lote.os.codigoGrv}`
-          : op.esperaHoras != null
-            ? `Iniciar espera — OP ${op.codigoOp} · ${op.lote.os.codigoGrv}`
-            : `Iniciar OP ${op.codigoOp} — ${op.lote.os.codigoGrv}`
+        isEng
+          ? `Iniciar Programação — OP ${op.codigoOp} · ${op.lote.os.codigoGrv}`
+          : op.terceirizada
+            ? `Enviar OP ${op.codigoOp} — ${op.lote.os.codigoGrv}`
+            : op.esperaHoras != null
+              ? `Iniciar espera — OP ${op.codigoOp} · ${op.lote.os.codigoGrv}`
+              : `Iniciar OP ${op.codigoOp} — ${op.lote.os.codigoGrv}`
       }
       size="lg"
       footer={
@@ -109,11 +133,13 @@ export function IniciarOPModal({ op, etapaId, onClose }: Props) {
           >
             {iniciar.isPending
               ? 'Registrando...'
-              : op.terceirizada
-                ? 'Registrar envio (Enter)'
-                : op.esperaHoras != null
-                  ? 'Iniciar espera (Enter)'
-                  : 'Iniciar (Enter)'}
+              : isEng
+                ? 'Iniciar Programação (Enter)'
+                : op.terceirizada
+                  ? 'Registrar envio (Enter)'
+                  : op.esperaHoras != null
+                    ? 'Iniciar espera (Enter)'
+                    : 'Iniciar (Enter)'}
           </button>
         </>
       }
@@ -174,7 +200,7 @@ export function IniciarOPModal({ op, etapaId, onClose }: Props) {
         {/* Máquina */}
         <div className={semMaquina ? 'hidden' : undefined}>
           <label className="label-compact">
-            Máquina
+            {isEng ? 'Computador / Estação de Programação' : 'Máquina'}
           </label>
           <select
             ref={maquinaRef}
@@ -194,7 +220,7 @@ export function IniciarOPModal({ op, etapaId, onClose }: Props) {
         {/* Operador */}
         <div className={semMaquina ? 'hidden' : undefined}>
           <label className="label-compact">
-            Operador responsável
+            {isEng ? 'Programador responsável' : 'Operador responsável'}
           </label>
           <select
             value={operadorId}

@@ -4,6 +4,10 @@
 
 import { useState } from 'react';
 import type { OS, Lote, OPLote, StatusLote, StatusOPLote } from '../../../hooks/useOS';
+import type { OPLotePendente } from '../../../hooks/useOPLote';
+import type { Desenho } from '../../../hooks/useDesenhos';
+import { DetalhesOPModal } from '../../Totem/DetalhesOPModal';
+import { VisualizadorDesenhoModal } from '../../../components/VisualizadorDesenhoModal';
 
 interface LotesOpsTabProps {
   os: OS;
@@ -50,6 +54,11 @@ function formatarMinutos(min: number): string {
 
 export function LotesOpsTab({ os }: LotesOpsTabProps) {
   const lotes = os.lotes ?? [];
+  const [opDetalhes, setOpDetalhes] = useState<OPLotePendente | null>(null);
+  const [modalDesenhos, setModalDesenhos] = useState<{
+    artigo: { id: string; codigo: string; descricao?: string };
+    desenhos: Desenho[];
+  } | null>(null);
 
   if (lotes.length === 0) {
     return (
@@ -59,18 +68,109 @@ export function LotesOpsTab({ os }: LotesOpsTabProps) {
     );
   }
 
+  function handleAbrirDetalhes(lote: Lote, op: OPLote) {
+    const opConvertida: OPLotePendente = {
+      id: op.id,
+      loteId: lote.id,
+      etapaId: op.etapaId,
+      codigoOp: op.codigoOp,
+      tipoServico: op.tipoServico,
+      ordem: op.ordem,
+      status: op.status as any,
+      quantidadeConcluida: op.quantidadeConcluida,
+      tempoUnitPlanejado: op.tempoUnitPlanejado,
+      tempoTotalPlanejado: op.tempoTotalPlanejado,
+      exigeInspecao: op.exigeInspecao,
+      terceirizada: false,
+      fornecedor: null,
+      prazoPrevistoDias: null,
+      esperaHoras: null,
+      exigeLoteCompleto: false,
+      pecasDisponiveis: op.quantidadeConcluida,
+      liberadasPelaAnterior: lote.quantidadePecas,
+      bloqueadoPor: null,
+      observacoes: op.observacoes,
+      criadoEm: op.criadoEm,
+      etapa: op.etapa ?? { id: op.etapaId, nome: '—' },
+      lote: {
+        id: lote.id,
+        numeroLote: lote.numeroLote,
+        quantidadePecas: lote.quantidadePecas,
+        status: lote.status,
+        observacoes: null,
+        opsLote: (lote.opsLote ?? []).map((o) => ({
+          id: o.id,
+          codigoOp: o.codigoOp,
+          tipoServico: o.tipoServico,
+          ordem: o.ordem,
+          status: o.status as any,
+          quantidadeConcluida: o.quantidadeConcluida,
+          etapa: o.etapa ?? { nome: '—' },
+        })),
+        os: {
+          id: os.id,
+          codigoGrv: os.codigoGrv,
+          prazoEntrega: os.prazoEntrega,
+          criadoEm: os.criadoEm,
+          prioridade: os.prioridade,
+          status: os.status,
+          observacoes: os.observacoes,
+          cliente: os.cliente ?? { id: '', nome: '—' },
+          criadoPor: os.criadoPor,
+          artigo: {
+            id: os.artigo?.id ?? '',
+            codigo: os.artigo?.codigo ?? '—',
+            descricao: os.artigo?.descricao ?? '—',
+            observacoes: os.artigo?.observacoes,
+            desenhos: (os.artigo?.desenhos as any) ?? [],
+          },
+        },
+      },
+    };
+    setOpDetalhes(opConvertida);
+  }
+
   return (
     <div className="space-y-4">
       {lotes.map((lote) => (
-        <LoteCard key={lote.id} lote={lote} />
+        <LoteCard
+          key={lote.id}
+          lote={lote}
+          onAbrirDetalhes={(op) => handleAbrirDetalhes(lote, op)}
+        />
       ))}
+
+      {opDetalhes && (
+        <DetalhesOPModal
+          op={opDetalhes}
+          onClose={() => setOpDetalhes(null)}
+          onAbrirDesenhos={(artigo, desenhos) =>
+            setModalDesenhos({ artigo, desenhos })
+          }
+        />
+      )}
+
+      {modalDesenhos && (
+        <VisualizadorDesenhoModal
+          open={true}
+          artigo={modalDesenhos.artigo}
+          desenhos={modalDesenhos.desenhos}
+          onClose={() => setModalDesenhos(null)}
+        />
+      )}
     </div>
   );
 }
 
 // ============================================================
 
-function LoteCard({ lote }: { lote: Lote }) {
+function LoteCard({
+  lote,
+  onAbrirDetalhes,
+}: {
+  lote: Lote;
+  onAbrirDetalhes: (op: OPLote) => void;
+}) {
   const [aberto, setAberto] = useState(true);
   const ops = lote.opsLote ?? [];
   const concluidas = ops.filter((o) => o.status === 'concluida').length;
@@ -141,14 +241,20 @@ function LoteCard({ lote }: { lote: Lote }) {
                 <th className="px-4 py-2 text-left font-medium">Operação</th>
                 <th className="px-4 py-2 text-left font-medium">Etapa</th>
                 <th className="px-4 py-2 text-center font-medium">Inspeção</th>
-                <th className="px-4 py-2 text-right font-medium">Tempo</th>
+                <th className="px-4 py-2 text-right font-mono font-medium">Tempo</th>
                 <th className="px-4 py-2 text-center font-medium">Progresso</th>
                 <th className="px-4 py-2 text-left font-medium">Status</th>
+                <th className="px-4 py-2 text-center font-medium w-16">Ação</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-neutral-800">
               {ops.map((op) => (
-                <OPLoteRow key={op.id} op={op} qtdLote={lote.quantidadePecas} />
+                <OPLoteRow
+                  key={op.id}
+                  op={op}
+                  qtdLote={lote.quantidadePecas}
+                  onAbrirDetalhes={() => onAbrirDetalhes(op)}
+                />
               ))}
             </tbody>
           </table>
@@ -158,14 +264,29 @@ function LoteCard({ lote }: { lote: Lote }) {
   );
 }
 
-function OPLoteRow({ op, qtdLote }: { op: OPLote; qtdLote: number }) {
+function OPLoteRow({
+  op,
+  qtdLote,
+  onAbrirDetalhes,
+}: {
+  op: OPLote;
+  qtdLote: number;
+  onAbrirDetalhes: () => void;
+}) {
   return (
-    <tr className="hover:bg-neutral-800/30 transition">
+    <tr
+      onClick={onAbrirDetalhes}
+      className="hover:bg-neutral-800/60 transition cursor-pointer group"
+      title="Clique para ver os detalhes da OP"
+    >
       <td className="px-4 py-2 font-mono text-neutral-400 text-center">
         {op.codigoOp}
       </td>
       <td className="px-4 py-2">
-        <div className="text-neutral-200">{op.tipoServico}</div>
+        <div className="text-neutral-200 group-hover:text-forja-400 font-medium transition flex items-center gap-1.5">
+          <span>{op.tipoServico}</span>
+          <span className="text-xs text-neutral-500 opacity-0 group-hover:opacity-100 transition">↗</span>
+        </div>
         {op.observacoes && (
           <div className="text-xs text-neutral-500 mt-0.5">{op.observacoes}</div>
         )}
@@ -192,6 +313,19 @@ function OPLoteRow({ op, qtdLote }: { op: OPLote; qtdLote: number }) {
         >
           {LABELS_STATUS_OP[op.status]}
         </span>
+      </td>
+      <td className="px-4 py-2 text-center">
+        <button
+          type="button"
+          onClick={(e) => {
+            e.stopPropagation();
+            onAbrirDetalhes();
+          }}
+          className="px-2 py-1 text-xs text-neutral-400 hover:text-forja-300 hover:bg-neutral-800 rounded border border-transparent hover:border-neutral-700 transition"
+          title="Ver detalhes da OP"
+        >
+          🔍
+        </button>
       </td>
     </tr>
   );

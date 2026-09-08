@@ -12,12 +12,15 @@ import {
   tempoDesde,
 } from '../../hooks/useOPLote';
 
+import { isOperacaoEngenharia } from './TotemEstacaoPage';
+
 interface Props {
   op: OPLoteEmAndamento;
   onClose: () => void;
 }
 
 export function EncerrarOPModal({ op, onClose }: Props) {
+  const isEng = isOperacaoEngenharia(op);
   const total = op.lote.quantidadePecas;
   const [quantidade, setQuantidade] = useState<string>(String(total));
   const [observacoes, setObservacoes] = useState('');
@@ -28,15 +31,17 @@ export function EncerrarOPModal({ op, onClose }: Props) {
   const encerrar = useEncerrarOP();
 
   useEffect(() => {
-    setTimeout(() => {
-      qtdRef.current?.focus();
-      qtdRef.current?.select();
-    }, 50);
-  }, []);
+    if (!isEng) {
+      setTimeout(() => {
+        qtdRef.current?.focus();
+        qtdRef.current?.select();
+      }, 50);
+    }
+  }, [isEng]);
 
   async function handleSubmit() {
     setErro(null);
-    const q = Number.parseInt(quantidade, 10);
+    const q = isEng ? total : Number.parseInt(quantidade, 10);
     if (Number.isNaN(q) || q < 0) {
       setErro('Quantidade inválida');
       return;
@@ -51,20 +56,25 @@ export function EncerrarOPModal({ op, onClose }: Props) {
         opLoteId: op.id,
         input: {
           quantidadeConcluida: q,
-          observacoes: observacoes.trim() || null,
+          observacoes: observacoes.trim()
+            ? (isEng ? `[Programa CNC] ${observacoes.trim()}` : observacoes.trim())
+            : (isEng ? 'Programa CNC concluído e liberado pela Engenharia' : null),
         },
       });
 
-      // Toast contextual baseado no resultado
-      const meta = res.meta;
-      if (meta.completou && meta.novoStatus === 'aguardando_qualidade') {
-        toast.aviso(`OP ${q}/${total} concluída — enviada pra inspeção de qualidade.`);
-      } else if (meta.completou && meta.novoStatus === 'concluida' && meta.loteConcluido) {
-        toast.sucesso(`OP encerrada (${q}/${total}). Lote inteiro concluído.`);
-      } else if (meta.completou && meta.novoStatus === 'concluida') {
-        toast.sucesso(`OP encerrada (${q}/${total}). Lote avançou pra próxima OP.`);
+      if (isEng) {
+        toast.sucesso(`✓ Programa da OP ${op.codigoOp} concluído e liberado para usinagem!`);
       } else {
-        toast.info(`OP parcial: ${q}/${total} peças. OP volta pra fila pra continuar.`);
+        const meta = res.meta;
+        if (meta.completou && meta.novoStatus === 'aguardando_qualidade') {
+          toast.aviso(`OP ${q}/${total} concluída — enviada pra inspeção de qualidade.`);
+        } else if (meta.completou && meta.novoStatus === 'concluida' && meta.loteConcluido) {
+          toast.sucesso(`OP encerrada (${q}/${total}). Lote inteiro concluído.`);
+        } else if (meta.completou && meta.novoStatus === 'concluida') {
+          toast.sucesso(`OP encerrada (${q}/${total}). Lote avançou pra próxima OP.`);
+        } else {
+          toast.info(`OP parcial: ${q}/${total} peças. OP volta pra fila pra continuar.`);
+        }
       }
 
       onClose();
@@ -87,7 +97,11 @@ export function EncerrarOPModal({ op, onClose }: Props) {
     <Modal
       open
       onClose={onClose}
-      title={`Encerrar OP ${op.codigoOp} — ${op.lote.os.codigoGrv}`}
+      title={
+        isEng
+          ? `Concluir Programa da OP ${op.codigoOp} — ${op.lote.os.codigoGrv}`
+          : `Encerrar OP ${op.codigoOp} — ${op.lote.os.codigoGrv}`
+      }
       size="lg"
       footer={
         <>
@@ -102,7 +116,11 @@ export function EncerrarOPModal({ op, onClose }: Props) {
             disabled={encerrar.isPending}
             className="px-5 py-2 bg-emerald-600 hover:bg-emerald-700 disabled:opacity-50 text-white rounded-lg font-medium transition"
           >
-            {encerrar.isPending ? 'Encerrando...' : 'Encerrar (Enter)'}
+            {encerrar.isPending
+              ? 'Concluindo...'
+              : isEng
+                ? `✓ Programa OP ${op.codigoOp} OK (Enter)`
+                : 'Encerrar (Enter)'}
           </button>
         </>
       }
@@ -121,16 +139,19 @@ export function EncerrarOPModal({ op, onClose }: Props) {
           </div>
           {carimbo && (
             <>
-              {/* Espera e terceirizada não têm máquina nem operador. */}
               {carimbo.maquina && (
                 <div className="text-neutral-300">
-                  <span className="text-neutral-500">Máquina:</span>{' '}
+                  <span className="text-neutral-500">
+                    {isEng ? 'Estação / Computador:' : 'Máquina:'}
+                  </span>{' '}
                   {carimbo.maquina.nome}
                 </div>
               )}
               {carimbo.operadorResponsavel && (
                 <div className="text-neutral-300">
-                  <span className="text-neutral-500">Operador:</span>{' '}
+                  <span className="text-neutral-500">
+                    {isEng ? 'Programador:' : 'Operador:'}
+                  </span>{' '}
                   {carimbo.operadorResponsavel.nome}
                 </div>
               )}
@@ -141,30 +162,42 @@ export function EncerrarOPModal({ op, onClose }: Props) {
           )}
         </div>
 
-        {/* Quantidade concluída */}
-        <div>
-          <label className="label-compact">
-            Quantidade concluída
-          </label>
-          <div className="flex items-baseline gap-3">
-            <input
-              ref={qtdRef}
-              type="number"
-              min={0}
-              max={total}
-              value={quantidade}
-              onChange={(e) => setQuantidade(e.target.value)}
-              className="input w-32 py-2 text-2xl font-mono text-right"
-            />
-            <span className="text-neutral-500">de {total} peças</span>
+        {/* Quantidade concluída ou Liberação de Programa */}
+        {isEng ? (
+          <div className="p-3.5 rounded-xl border border-emerald-500/40 bg-emerald-950/20">
+            <div className="flex items-center gap-2 text-emerald-300 font-semibold text-sm mb-1">
+              <span>💻</span>
+              <span>Liberação do programa CNC para usinagem</span>
+            </div>
+            <div className="text-xs text-neutral-400">
+              Esta confirmação atesta que o programa da OP {op.codigoOp} foi elaborado e está pronto para o lote de {total} peças.
+            </div>
           </div>
-          {op.exigeInspecao && (
-            <p className="text-xs text-purple-400 mt-2">
-              Esta OP exige inspeção. Se completar 100%, ela vai pra fila de
-              qualidade.
-            </p>
-          )}
-        </div>
+        ) : (
+          <div>
+            <label className="label-compact">
+              Quantidade concluída
+            </label>
+            <div className="flex items-baseline gap-3">
+              <input
+                ref={qtdRef}
+                type="number"
+                min={0}
+                max={total}
+                value={quantidade}
+                onChange={(e) => setQuantidade(e.target.value)}
+                className="input w-32 py-2 text-2xl font-mono text-right"
+              />
+              <span className="text-neutral-500">de {total} peças</span>
+            </div>
+            {op.exigeInspecao && (
+              <p className="text-xs text-purple-400 mt-2">
+                Esta OP exige inspeção. Se completar 100%, ela vai pra fila de
+                qualidade.
+              </p>
+            )}
+          </div>
+        )}
 
         {/* Observações */}
         <div>
@@ -175,7 +208,11 @@ export function EncerrarOPModal({ op, onClose }: Props) {
             value={observacoes}
             onChange={(e) => setObservacoes(e.target.value)}
             rows={2}
-            placeholder="Ex: parou pra trocar pastilha, retomar amanhã..."
+            placeholder={
+              isEng
+                ? 'Ex: Nº do programa CAM, nome do arquivo ou anotações...'
+                : 'Ex: parou pra trocar pastilha, retomar amanhã...'
+            }
             className="input py-2 text-sm resize-none"
           />
         </div>

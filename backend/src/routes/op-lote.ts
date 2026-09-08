@@ -142,6 +142,7 @@ export async function opLoteRoutes(app: FastifyInstance) {
                   prioridade: true,
                   status: true,
                   observacoes: true,
+                  criadoEm: true,
                   cliente: { select: { id: true, nome: true } },
                   criadoPor: { select: { id: true, nome: true } },
                   artigo: {
@@ -170,6 +171,18 @@ export async function opLoteRoutes(app: FastifyInstance) {
                       },
                     },
                   },
+                },
+              },
+              opsLote: {
+                orderBy: { ordem: 'asc' },
+                select: {
+                  id: true,
+                  codigoOp: true,
+                  tipoServico: true,
+                  ordem: true,
+                  status: true,
+                  quantidadeConcluida: true,
+                  etapa: { select: { id: true, nome: true } },
                 },
               },
             },
@@ -278,6 +291,9 @@ export async function opLoteRoutes(app: FastifyInstance) {
                   codigoGrv: true,
                   prazoEntrega: true,
                   prioridade: true,
+                  status: true,
+                  observacoes: true,
+                  criadoEm: true,
                   cliente: { select: { id: true, nome: true } },
                   criadoPor: { select: { id: true, nome: true } },
                   artigo: {
@@ -306,6 +322,18 @@ export async function opLoteRoutes(app: FastifyInstance) {
                       },
                     },
                   },
+                },
+              },
+              opsLote: {
+                orderBy: { ordem: 'asc' },
+                select: {
+                  id: true,
+                  codigoOp: true,
+                  tipoServico: true,
+                  ordem: true,
+                  status: true,
+                  quantidadeConcluida: true,
+                  etapa: { select: { id: true, nome: true } },
                 },
               },
             },
@@ -1296,4 +1324,112 @@ export async function opLoteRoutes(app: FastifyInstance) {
       return { data: atualizado };
     },
   );
+
+  // ---------------- OBTER DETALHES DE UMA OP ----------------
+  app.get(
+    '/op-lote/:id',
+    { onRequest: [app.authenticate] },
+    async (request, reply) => {
+      const paramsSchema = z.object({ id: z.string().uuid() });
+      const paramsParsed = paramsSchema.safeParse(request.params);
+      if (!paramsParsed.success) {
+        return reply
+          .code(400)
+          .send({ error: 'invalid_input', message: 'ID inválido' });
+      }
+
+      const { id } = paramsParsed.data;
+
+      const op = await prisma.oPLote.findUnique({
+        where: { id },
+        include: {
+          etapa: { select: { id: true, nome: true } },
+          lote: {
+            include: {
+              os: {
+                select: {
+                  id: true,
+                  codigoGrv: true,
+                  prazoEntrega: true,
+                  prioridade: true,
+                  status: true,
+                  observacoes: true,
+                  criadoEm: true,
+                  cliente: { select: { id: true, nome: true } },
+                  criadoPor: { select: { id: true, nome: true } },
+                  artigo: {
+                    select: {
+                      id: true,
+                      codigo: true,
+                      descricao: true,
+                      observacoes: true,
+                      desenhos: {
+                        select: {
+                          id: true,
+                          artigoId: true,
+                          tipo: true,
+                          codigoDesenho: true,
+                          revisao: true,
+                          dataRevisao: true,
+                          arquivoKey: true,
+                          arquivoTipo: true,
+                          arquivoTamanho: true,
+                          arquivoNomeOriginal: true,
+                          observacoes: true,
+                          criadoEm: true,
+                          atualizadoEm: true,
+                        },
+                        orderBy: [
+                          { tipo: 'asc' },
+                          { codigoDesenho: 'asc' },
+                          { revisao: 'asc' },
+                        ],
+                      },
+                    },
+                  },
+                },
+              },
+              opsLote: {
+                orderBy: { ordem: 'asc' },
+                select: {
+                  id: true,
+                  codigoOp: true,
+                  tipoServico: true,
+                  ordem: true,
+                  status: true,
+                  quantidadeConcluida: true,
+                  etapa: { select: { id: true, nome: true } },
+                },
+              },
+            },
+          },
+          carimbos: {
+            orderBy: { timestampEntrada: 'desc' },
+            include: {
+              maquina: { select: { id: true, nome: true, codigoInterno: true } },
+              programador: { select: { id: true, nome: true } },
+              operadorResponsavel: { select: { id: true, nome: true } },
+              paradas: {
+                orderBy: { inicio: 'desc' },
+                include: {
+                  motivoParada: {
+                    select: { id: true, nome: true, planejado: true },
+                  },
+                },
+              },
+            },
+          },
+        },
+      });
+
+      if (!op) {
+        return reply
+          .code(404)
+          .send({ error: 'not_found', message: 'OP não encontrada' });
+      }
+
+      return { data: op };
+    },
+  );
 }
+

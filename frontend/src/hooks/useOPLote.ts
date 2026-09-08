@@ -44,6 +44,16 @@ export interface CarimboAnterior {
   opLote: { id: string; codigoOp: string; tipoServico: string };
 }
 
+export interface OPLoteResumo {
+  id: string;
+  codigoOp: string;
+  tipoServico: string;
+  ordem: number;
+  status: StatusOPLote;
+  quantidadeConcluida: number;
+  etapa: { id?: string; nome: string };
+}
+
 export interface OPLotePendente {
   id: string;
   loteId: string;
@@ -71,6 +81,7 @@ export interface OPLotePendente {
   /** Preenchido quando uma operação anterior segura esta (tratamento térmico). */
   bloqueadoPor: { tipoServico: string; concluidas: number; total: number } | null;
   observacoes: string | null;
+  criadoEm: string;
   carimboAnterior?: CarimboAnterior | null;
   etapa: { id: string; nome: string };
   lote: {
@@ -79,10 +90,12 @@ export interface OPLotePendente {
     quantidadePecas: number;
     status: string;
     observacoes: string | null;
+    opsLote?: OPLoteResumo[];
     os: {
       id: string;
       codigoGrv: string;
       prazoEntrega: string;
+      criadoEm: string;
       prioridade: 'normal' | 'urgente';
       status: string;
       observacoes: string | null;
@@ -267,6 +280,18 @@ export function useRetomarOP() {
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ['op-lote-em-andamento'] });
     },
+  });
+}
+
+export function useOPLoteDetail(id: string | null) {
+  return useQuery({
+    queryKey: ['op-lote-detail', id],
+    queryFn: async () => {
+      if (!id) return null;
+      const res = await api.get<{ data: OPLoteEmAndamento }>(`/op-lote/${id}`);
+      return res.data.data;
+    },
+    enabled: Boolean(id),
   });
 }
 

@@ -30,7 +30,7 @@ describe('Plano de Inspeção — CRUD', () => {
   let artigoId: string;
   let opId: string;
   let opSemPlanoId: string;
-  const TEST_CODIGO = '9992';
+  const TEST_CODIGO = '9993';
   const TEST_PIN = '1234';
   const TEST_CLIENTE = '__TEST_CLIENTE_PLANOS';
   const TEST_ARTIGO = '__TEST_ART_PLANOS_001';
@@ -86,6 +86,7 @@ describe('Plano de Inspeção — CRUD', () => {
     await prisma.operacaoArtigo.deleteMany({
       where: { id: { in: [opId, opSemPlanoId] } },
     });
+    await prisma.artigo.deleteMany({ where: { criadoPor: { codigoPessoal: TEST_CODIGO } } });
     await prisma.artigo.deleteMany({ where: { id: artigoId } });
     await prisma.cliente.deleteMany({ where: { nome: TEST_CLIENTE } });
     await prisma.pessoa.deleteMany({ where: { codigoPessoal: TEST_CODIGO } });

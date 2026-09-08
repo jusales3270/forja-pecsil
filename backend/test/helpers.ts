@@ -21,6 +21,7 @@ import { etapasRoutes } from '../src/routes/etapas.js';
 import { clientesRoutes } from '../src/routes/clientes.js';
 import { osRoutes } from '../src/routes/os.js';
 import { opLoteRoutes } from '../src/routes/op-lote.js';
+import { roteirosPadraoRoutes } from '../src/routes/roteiros-padrao.js';
 import { prisma } from '../src/db/prisma.js';
 import type { TipoProduto, PapelPessoa, TipoMaquina } from '@prisma/client';
 
@@ -51,6 +52,7 @@ export async function buildTestApp(): Promise<FastifyInstance> {
   await app.register(artigosRoutes, { prefix: '/api' });
   await app.register(desenhosRoutes, { prefix: '/api' });
   await app.register(operacoesArtigoRoutes, { prefix: '/api' });
+  await app.register(roteirosPadraoRoutes, { prefix: '/api' });
   await app.register(planosInspecaoRoutes, { prefix: '/api' });
   await app.register(cotasInspecaoRoutes, { prefix: '/api' });
   await app.register(etapasRoutes, { prefix: '/api' });

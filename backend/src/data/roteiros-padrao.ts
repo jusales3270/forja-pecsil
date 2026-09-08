@@ -74,30 +74,492 @@ export interface RoteiroPadrao {
 }
 
 export const ROTEIROS_PADRAO: RoteiroPadrao[] = [
-  // ----------------------------------------------------------
+  // ==========================================================
+  // ROTEIROS OFICIAIS GRV (Processos Padrão exportados do GRV)
+  // ==========================================================
+
+  // 1. Doc 13328 — PROCESSO PADRÃO FUNDIÇÃO + USINAGEM COMPLETA
   {
-    id: 'fundicao',
-    nome: 'Fundição',
+    id: 'fundicao-grv',
+    nome: 'Fundição e Linha Completa (Padrão GRV + Forno + Usinagem)',
     descricao:
-      'Fluxo interno da fundição, do pedido ao forno. Inclui as esperas obrigatórias (cura e resfriamento, 12h cada) e a rebarbação, que é feita fora. O tratamento térmico fecha o ciclo: só libera para o desbaste com o lote inteiro tratado.',
+      'Fluxo completo de fabricação da fábrica: Modelação, Moldagem, Vazamento, Rebarbação, Tratamento Térmico (com aviso à Engenharia), Programação CNC Centro/Torno, Desbaste para Metalização, Metalização, Encaixe e Arredondamento, Torno, Acabamento/Polimento e Inspeção Final.',
+    origem: 'Processo Padrão GRV Doc 13328 (Fundição + Linha de Produção)',
+    revisaoPendente: false,
+    operacoes: [
+      {
+        codigoTipoServico: 20,
+        observacoes: 'VERIFICAÇÃO / FABRICAÇÃO DO MODELO',
+        tempoUnitMin: 20,
+        tempoSetupMin: 0,
+        exigeInspecao: false,
+      },
+      {
+        codigoTipoServico: 15,
+        observacoes: 'MOLDAGEM',
+        tempoUnitMin: 20,
+        tempoSetupMin: 0,
+        exigeInspecao: false,
+      },
+      {
+        codigoTipoServico: 17,
+        observacoes: 'VAZAMENTO',
+        tempoUnitMin: 15,
+        tempoSetupMin: 0,
+        exigeInspecao: false,
+      },
+      {
+        codigoTipoServico: 7,
+        observacoes: 'REBARBAÇÃO FUNDIÇÃO',
+        tempoUnitMin: 10,
+        tempoSetupMin: 0,
+        exigeInspecao: false,
+      },
+      {
+        codigoTipoServico: 50,
+        observacoes:
+          'TRATAMENTO TÉRMICO — início e fim no forno. Ao iniciar avisa a Engenharia.',
+        tempoUnitMin: 10,
+        tempoSetupMin: 0,
+        exigeInspecao: false,
+        avisaAoIniciar: true,
+        avisaEtapaDoCodigoTipoServico: 36,
+        exigeLoteCompleto: true,
+      },
+      {
+        codigoTipoServico: 36,
+        observacoes: 'PROGRAMAR CENTRO',
+        tempoUnitMin: 5,
+        tempoSetupMin: 0,
+        exigeInspecao: false,
+      },
+      {
+        codigoTipoServico: 37,
+        observacoes: 'PROGRAMAR TORNO',
+        tempoUnitMin: 2,
+        tempoSetupMin: 0,
+        exigeInspecao: false,
+      },
+      {
+        codigoTipoServico: 25,
+        observacoes: 'DESBASTE PARA METALIZAÇÃO',
+        tempoUnitMin: 15,
+        tempoSetupMin: 0,
+        exigeInspecao: false,
+      },
+      {
+        codigoTipoServico: 10,
+        observacoes: 'DESCRIÇÃO DO PÓ: _____________\nQUANTIDADE POR PEÇA (KG): _____________',
+        tempoUnitMin: 10,
+        tempoSetupMin: 0,
+        exigeInspecao: false,
+        gatilhoAlertaPecas: 10,
+        avisaEtapaDoCodigoTipoServico: 36,
+      },
+      {
+        codigoTipoServico: 26,
+        observacoes: 'ENCAIXE E ARREDONDAMENTO',
+        tempoUnitMin: 15,
+        tempoSetupMin: 0,
+        exigeInspecao: false,
+      },
+      {
+        codigoTipoServico: 30,
+        observacoes: 'CÉLULA DE TORNEAMENTO DE BLOCOS',
+        tempoUnitMin: 20,
+        tempoSetupMin: 0,
+        exigeInspecao: false,
+      },
+      {
+        codigoTipoServico: 13,
+        observacoes: 'POLIMENTO / ACABAMENTO',
+        tempoUnitMin: 10,
+        tempoSetupMin: 0,
+        exigeInspecao: false,
+      },
+      {
+        codigoTipoServico: 18,
+        observacoes: 'INSPEÇÃO FINAL / VOLUME / RELATÓRIOS',
+        tempoUnitMin: 10,
+        tempoSetupMin: 0,
+        exigeInspecao: true,
+      },
+    ],
+  },
+
+  // 2. Doc 13329 — PROCESSO PADRÃO ARRUELA
+  {
+    id: 'arruela-grv',
+    nome: 'Arruela (Padrão GRV 13329)',
+    descricao:
+      'Linha de produção de arruelas: Programação de Torno, Corte em Serra, Célula de Torneamento de Arruelas (Traseiro e Dianteiro), Fresamento/Gravação, Usinagem Convencional, Acabamento/Polimento e Qualidade Final.',
+    origem: 'Processo Padrão GRV Doc 13329 (Arruela)',
+    revisaoPendente: false,
+    operacoes: [
+      {
+        codigoTipoServico: 37,
+        observacoes: 'PROGRAMAR TORNO',
+        tempoUnitMin: 1,
+        tempoSetupMin: 0,
+        exigeInspecao: false,
+      },
+      {
+        codigoTipoServico: 12,
+        observacoes: 'CORTAR PEÇAS COM Ø... X ...MM',
+        tempoUnitMin: 2,
+        tempoSetupMin: 0,
+        exigeInspecao: false,
+      },
+      {
+        codigoTipoServico: 32,
+        observacoes: 'LADO TRASEIRO',
+        tempoUnitMin: 6,
+        tempoSetupMin: 0,
+        exigeInspecao: false,
+      },
+      {
+        codigoTipoServico: 32,
+        observacoes: 'LADO DIANTEIRO',
+        tempoUnitMin: 6,
+        tempoSetupMin: 0,
+        exigeInspecao: false,
+      },
+      {
+        codigoTipoServico: 28,
+        observacoes: 'GRAVAÇÃO',
+        tempoUnitMin: 8,
+        tempoSetupMin: 0,
+        exigeInspecao: false,
+      },
+      {
+        codigoTipoServico: 11,
+        observacoes: 'FURAÇÃO FRESA CONVENCIONAL',
+        tempoUnitMin: 5,
+        tempoSetupMin: 0,
+        exigeInspecao: false,
+      },
+      {
+        codigoTipoServico: 13,
+        observacoes: 'POLIMENTO / REBARBAÇÃO / EMBALAGEM',
+        tempoUnitMin: 5,
+        tempoSetupMin: 0,
+        exigeInspecao: false,
+      },
+      {
+        codigoTipoServico: 18,
+        observacoes: 'INSPEÇÃO FINAL / VOLUME / RELATÓRIOS',
+        tempoUnitMin: 5,
+        tempoSetupMin: 0,
+        exigeInspecao: true,
+      },
+    ],
+  },
+
+  // 3. Doc 13327 — PROCESSO PADRÃO FUNDO (COMPLETO: FUNDIÇÃO + USINAGEM)
+  {
+    id: 'fundo-completo-grv',
+    nome: 'Fundo Completo — Fundição + Usinagem CNC (Padrão GRV 13327)',
+    descricao:
+      'Fluxo completo de fabricação do fundo a partir do metal líquido: Modelação, Moldagem, Programação CNC Centro/Torno, Vazamento, Torno CNC Desbaste, Metalização, Esquadro, Torneamento Dianteiro/Traseiro, Integrex 5 Eixos, Acabamento/Polimento/Embalagem/Rebarbação e Inspeção Final.',
+    origem: 'Processo Padrão GRV Doc 13327 (Fundo)',
+    revisaoPendente: false,
+    operacoes: [
+      {
+        codigoTipoServico: 20,
+        observacoes: 'VERIFICAÇÃO / FABRICAÇÃO DO MODELO',
+        tempoUnitMin: 20,
+        tempoSetupMin: 0,
+        exigeInspecao: false,
+      },
+      {
+        codigoTipoServico: 15,
+        observacoes: 'MOLDAGEM',
+        tempoUnitMin: 20,
+        tempoSetupMin: 0,
+        exigeInspecao: false,
+      },
+      {
+        codigoTipoServico: 36,
+        observacoes: 'PROGRAMAR CENTRO',
+        tempoUnitMin: 5,
+        tempoSetupMin: 0,
+        exigeInspecao: false,
+      },
+      {
+        codigoTipoServico: 37,
+        observacoes: 'PROGRAMAR TORNO',
+        tempoUnitMin: 1,
+        tempoSetupMin: 0,
+        exigeInspecao: false,
+      },
+      {
+        codigoTipoServico: 17,
+        observacoes: 'VAZAMENTO',
+        tempoUnitMin: 15,
+        tempoSetupMin: 0,
+        exigeInspecao: false,
+      },
+      {
+        codigoTipoServico: 8,
+        observacoes: 'DESBASTE PARA METALIZAÇÃO',
+        tempoUnitMin: 10,
+        tempoSetupMin: 0,
+        exigeInspecao: false,
+      },
+      {
+        codigoTipoServico: 10,
+        observacoes: 'DESCRIÇÃO DO PÓ: _____________\nQUANTIDADE POR PEÇA (KG): _____________',
+        tempoUnitMin: 6,
+        tempoSetupMin: 0,
+        exigeInspecao: false,
+        gatilhoAlertaPecas: 10,
+        avisaEtapaDoCodigoTipoServico: 36,
+      },
+      {
+        codigoTipoServico: 8,
+        observacoes: 'ESQUADRO',
+        tempoUnitMin: 4,
+        tempoSetupMin: 60,
+        exigeInspecao: false,
+      },
+      {
+        codigoTipoServico: 8,
+        observacoes: 'LADO TRASEIRO',
+        tempoUnitMin: 7,
+        tempoSetupMin: 0,
+        exigeInspecao: false,
+      },
+      {
+        codigoTipoServico: 8,
+        observacoes: 'LADO DIANTEIRO',
+        tempoUnitMin: 7,
+        tempoSetupMin: 0,
+        exigeInspecao: false,
+      },
+      {
+        codigoTipoServico: 21,
+        observacoes: 'ACABAMENTO / FURAÇÃO',
+        tempoUnitMin: 10,
+        tempoSetupMin: 0,
+        exigeInspecao: false,
+      },
+      {
+        codigoTipoServico: 13,
+        observacoes: 'POLIMENTO',
+        tempoUnitMin: 5,
+        tempoSetupMin: 0,
+        exigeInspecao: false,
+      },
+      {
+        codigoTipoServico: 13,
+        observacoes: 'EMBALAGEM',
+        tempoUnitMin: 10,
+        tempoSetupMin: 0,
+        exigeInspecao: false,
+      },
+      {
+        codigoTipoServico: 13,
+        observacoes: 'REBARBAÇÃO',
+        tempoUnitMin: 10,
+        tempoSetupMin: 1,
+        exigeInspecao: false,
+      },
+      {
+        codigoTipoServico: 18,
+        observacoes: 'INSPEÇÃO FINAL / VOLUME / RELATÓRIOS',
+        tempoUnitMin: 5,
+        tempoSetupMin: 0,
+        exigeInspecao: true,
+      },
+    ],
+  },
+
+  // 4. Doc 13326 — PROCESSO PADRÃO FUNDO COM CENTROS VERTICAIS
+  {
+    id: 'fundo-centros-verticais-grv',
+    nome: 'Fundo com Centros Verticais (Padrão GRV 13326)',
+    descricao:
+      'Usinagem de fundo pré-fundido: Programação CNC Centro/Torno, Torno CNC Dianteiro/Traseiro, Centros Verticais (Gravação), Acabamento/Polimento/Embalagem e Inspeção Final.',
+    origem: 'Processo Padrão GRV Doc 13326 (Fundo com Centros Verticais)',
+    revisaoPendente: false,
+    operacoes: [
+      {
+        codigoTipoServico: 36,
+        observacoes: 'PROGRAMAR CENTRO',
+        tempoUnitMin: 5,
+        tempoSetupMin: 0,
+        exigeInspecao: false,
+      },
+      {
+        codigoTipoServico: 37,
+        observacoes: 'PROGRAMAR TORNO',
+        tempoUnitMin: 2,
+        tempoSetupMin: 0,
+        exigeInspecao: false,
+      },
+      {
+        codigoTipoServico: 8,
+        observacoes: 'LADO DIANTEIRO',
+        tempoUnitMin: 5,
+        tempoSetupMin: 0,
+        exigeInspecao: false,
+      },
+      {
+        codigoTipoServico: 8,
+        observacoes: 'LADO TRASEIRO',
+        tempoUnitMin: 5,
+        tempoSetupMin: 0,
+        exigeInspecao: false,
+      },
+      {
+        codigoTipoServico: 33,
+        observacoes: 'GRAVAÇÃO',
+        tempoUnitMin: 7,
+        tempoSetupMin: 0,
+        exigeInspecao: false,
+      },
+      {
+        codigoTipoServico: 13,
+        observacoes: 'POLIMENTO / REBARBAÇÃO / EMBALAGEM',
+        tempoUnitMin: 5,
+        tempoSetupMin: 0,
+        exigeInspecao: false,
+      },
+      {
+        codigoTipoServico: 18,
+        observacoes: 'INSPEÇÃO FINAL / VOLUME / RELATÓRIOS',
+        tempoUnitMin: 5,
+        tempoSetupMin: 0,
+        exigeInspecao: true,
+      },
+    ],
+  },
+
+  // 5. Doc 13325 — PROCESSO PADRÃO FORMA / BLOCO
+  {
+    id: 'forma-bloco-grv',
+    nome: 'Forma / Bloco em Células (Padrão GRV 13325)',
+    descricao:
+      'Usinagem em células de formas e blocos: Programação CNC, Célula de Desbaste para Metalização, Metalização, Célula de Encaixe e Arredondamento, Célula de Torneamento de Forminhas, Torno 5 Eixos Integrex, Célula de Fresamento/Furação, Polimento/Embalagem e Inspeção Final.',
+    origem: 'Processo Padrão GRV Doc 13325 (Forma / Bloco)',
+    revisaoPendente: false,
+    operacoes: [
+      {
+        codigoTipoServico: 36,
+        observacoes: 'PROGRAMAR CENTRO',
+        tempoUnitMin: 1,
+        tempoSetupMin: 0,
+        exigeInspecao: false,
+      },
+      {
+        codigoTipoServico: 37,
+        observacoes: 'PROGRAMAR TORNO',
+        tempoUnitMin: 1,
+        tempoSetupMin: 0,
+        exigeInspecao: false,
+      },
+      {
+        codigoTipoServico: 25,
+        observacoes: 'DESBASTE PARA METALIZAÇÃO',
+        tempoUnitMin: 5,
+        tempoSetupMin: 0,
+        exigeInspecao: false,
+      },
+      {
+        codigoTipoServico: 10,
+        observacoes: 'DESCRIÇÃO DO PÓ: _____________\nQUANTIDADE POR PEÇA (KG): _____________',
+        tempoUnitMin: 40,
+        tempoSetupMin: 0,
+        exigeInspecao: false,
+        gatilhoAlertaPecas: 10,
+        avisaEtapaDoCodigoTipoServico: 36,
+      },
+      {
+        codigoTipoServico: 26,
+        observacoes: 'ENCAIXE',
+        tempoUnitMin: 10,
+        tempoSetupMin: 0,
+        exigeInspecao: false,
+      },
+      {
+        codigoTipoServico: 26,
+        observacoes: 'ARREDONDAMENTO',
+        tempoUnitMin: 10,
+        tempoSetupMin: 0,
+        exigeInspecao: false,
+      },
+      {
+        codigoTipoServico: 31,
+        observacoes: 'LADO TRASEIRO',
+        tempoUnitMin: 7,
+        tempoSetupMin: 0,
+        exigeInspecao: false,
+      },
+      {
+        codigoTipoServico: 21,
+        observacoes: 'LADO DIANTEIRO / ROSCA',
+        tempoUnitMin: 7,
+        tempoSetupMin: 0,
+        exigeInspecao: false,
+      },
+      {
+        codigoTipoServico: 28,
+        observacoes: 'CHAVETA / REBAIXOS',
+        tempoUnitMin: 10,
+        tempoSetupMin: 0,
+        exigeInspecao: false,
+      },
+      {
+        codigoTipoServico: 28,
+        observacoes: 'FURAÇÃO / ALETAS / GRAVAÇÃO',
+        tempoUnitMin: 10,
+        tempoSetupMin: 0,
+        exigeInspecao: false,
+      },
+      {
+        codigoTipoServico: 13,
+        observacoes: 'POLIMENTO / REBARBAÇÃO / EMBALAGEM',
+        tempoUnitMin: 5,
+        tempoSetupMin: 0,
+        exigeInspecao: false,
+      },
+      {
+        codigoTipoServico: 18,
+        observacoes: 'INSPEÇÃO FINAL / VOLUME / RELATÓRIOS',
+        tempoUnitMin: 5,
+        tempoSetupMin: 0,
+        exigeInspecao: true,
+      },
+    ],
+  },
+
+  // ==========================================================
+  // MODELOS EXPANDIDOS DE CHÃO DE FÁBRICA / REUNIÕES PCP
+  // ==========================================================
+
+  {
+    id: 'fundicao-estendida',
+    nome: 'Fundição (Fluxo Estendido com Esperas e Forno)',
+    descricao:
+      'Fluxo interno completo da fundição, incluindo as esperas obrigatórias de cura do molde e resfriamento na areia (12h cada), rebarbação terceirizada, jato de granalha e ciclo completo de tratamento térmico.',
     origem:
-      'Reuniões com o PCP (Rafael), incluindo a caminhada pela fábrica de 29/08. Sequência e tempos de espera definidos por ele; o OK de cada operação é do Guilherme. Tempos de execução a levantar com a fundição.',
+      'Reuniões com o PCP (Rafael), incluindo a caminhada pela fábrica de 29/08. Sequência e tempos de espera definidos por ele; o OK de cada operação é do Guilherme.',
     revisaoPendente: true,
     operacoes: [
       {
         codigoTipoServico: 20,
         observacoes:
           'MODELAÇÃO — conferir se a coquilha serve e se o modelo precisa de alteração ou manutenção.\nSem coquilha pronta: fabricar em madeira ou 3D e fundir antes de seguir.',
-        tempoUnitMin: 0, tempoSetupMin: 0, exigeInspecao: false,
+        tempoUnitMin: 20, tempoSetupMin: 0, exigeInspecao: false,
       },
-      { codigoTipoServico: 15, observacoes: 'MOLDAGEM', tempoUnitMin: 0, tempoSetupMin: 0, exigeInspecao: false },
+      { codigoTipoServico: 15, observacoes: 'MOLDAGEM', tempoUnitMin: 20, tempoSetupMin: 0, exigeInspecao: false },
       {
         codigoTipoServico: 51,
         observacoes: 'CURA DO MOLDE — 12h no mínimo, às vezes 1 dia. Só depois monta na linha.',
         tempoUnitMin: 0, tempoSetupMin: 0, exigeInspecao: false,
         esperaHoras: 12,
       },
-      { codigoTipoServico: 17, observacoes: 'VAZAMENTO — fundir as peças, na linha.', tempoUnitMin: 0, tempoSetupMin: 0, exigeInspecao: false },
+      { codigoTipoServico: 17, observacoes: 'VAZAMENTO — fundir as peças, na linha.', tempoUnitMin: 15, tempoSetupMin: 0, exigeInspecao: false },
       {
         codigoTipoServico: 52,
         observacoes: 'RESFRIAMENTO NA AREIA — 12h dentro do molde. Só depois desmolda, descarta a areia e tira a peça.',
@@ -107,14 +569,14 @@ export const ROTEIROS_PADRAO: RoteiroPadrao[] = [
       {
         codigoTipoServico: 7,
         observacoes:
-          'REBARBAÇÃO — FEITA FORA. Sai de empilhadeira, vai de caminhão pro terceiro e volta.\nAntigamente era interna. Registrar envio e retorno, não abre máquina.\nPRAZO A LEVANTAR: o Rafael descreveu o trajeto mas não disse quanto tempo leva.',
-        tempoUnitMin: 0, tempoSetupMin: 0, exigeInspecao: false,
+          'REBARBAÇÃO — FEITA FORA. Sai de empilhadeira, vai de caminhão pro terceiro e volta.\nRegistrar envio e retorno, não abre máquina.',
+        tempoUnitMin: 10, tempoSetupMin: 0, exigeInspecao: false,
         terceirizada: true,
       },
       {
         codigoTipoServico: 53,
         observacoes: 'JATO DE GRANALHA — interno, assim que a peça volta da rebarbação. Depois desce pro forno.',
-        tempoUnitMin: 0, tempoSetupMin: 0, exigeInspecao: false,
+        tempoUnitMin: 10, tempoSetupMin: 0, exigeInspecao: false,
       },
       {
         codigoTipoServico: 50,
@@ -123,11 +585,8 @@ export const ROTEIROS_PADRAO: RoteiroPadrao[] = [
         tempoUnitMin: 0,
         tempoSetupMin: 0,
         exigeInspecao: false,
-        // Ao apontar a entrada no forno, a engenharia é avisada na hora e usa
-        // os ~3 dias de ciclo pra deixar o programa de desbaste pronto.
         avisaAoIniciar: true,
         avisaEtapaDoCodigoTipoServico: 36,
-        // Regra do Rafael: o que sai do forno parcial não desce pro desbaste.
         exigeLoteCompleto: true,
       },
     ],
@@ -136,7 +595,7 @@ export const ROTEIROS_PADRAO: RoteiroPadrao[] = [
   // ----------------------------------------------------------
   {
     id: 'bloco-pre-molde',
-    nome: 'Bloco / Pré-molde',
+    nome: 'Bloco / Pré-molde (Células)',
     descricao:
       'Torneamento em célula de blocos, com acabamento em centros verticais e furação Vertiflow.',
     origem: 'OS 12563/001 — PRÉ-MOLDE GFA. CERVEJA 600ML 420GR ART. 25M006 FOFO 96A (lote de 72)',
@@ -161,7 +620,7 @@ export const ROTEIROS_PADRAO: RoteiroPadrao[] = [
   // ----------------------------------------------------------
   {
     id: 'forma-dupla',
-    nome: 'Forma Dupla',
+    nome: 'Forma Dupla (Célula DC + 5 Eixos)',
     descricao:
       'Usinagem em célula de Formas DC e centros de 5 eixos, com furação convencional (inclinada e de vácuo).',
     origem: 'Roteiro "forma dupla" exportado do GRV (processos 184466-184480, lote de 12)',
@@ -188,7 +647,7 @@ export const ROTEIROS_PADRAO: RoteiroPadrao[] = [
   // ----------------------------------------------------------
   {
     id: 'forma-centros-verticais',
-    nome: 'Forma — acabamento em centros verticais',
+    nome: 'Forma — Acabamento em Centros Verticais',
     descricao:
       'Torneamento em célula de formas, com acabamento em centros verticais, 4º eixo e PH400. Roteiro mais longo (18 operações).',
     origem:
