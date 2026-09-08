@@ -8,6 +8,7 @@ import {
   type OS,
   type UpdateOSInput,
 } from '../../../hooks/useOS';
+import { useTheme } from '../../../lib/theme-store';
 
 interface DadosOSTabProps {
   os: OS;
@@ -19,17 +20,29 @@ function isoToDateInput(iso: string | null | undefined): string {
   if (!iso) return '';
   const d = new Date(iso);
   if (isNaN(d.getTime())) return '';
-  return d.toISOString().slice(0, 10);
+  try {
+    return d.toISOString().slice(0, 10);
+  } catch {
+    return '';
+  }
 }
 
 // Converte 'yyyy-mm-dd' → ISO datetime fim do dia
-function dateInputToIso(s: string): string | null {
+function dateInputToIso(s: string | null | undefined): string | null {
   if (!s) return null;
-  return new Date(s + 'T17:00:00').toISOString();
+  try {
+    const d = new Date(s + 'T17:00:00');
+    if (isNaN(d.getTime())) return null;
+    return d.toISOString();
+  } catch {
+    return null;
+  }
 }
 
 export function DadosOSTab({ os, podeEditar }: DadosOSTabProps) {
+  const { claro } = useTheme();
   const updateOS = useUpdateOS(os.id);
+
 
   // Form state
   const [prazoEntrega, setPrazoEntrega] = useState(isoToDateInput(os.prazoEntrega));
@@ -129,7 +142,7 @@ export function DadosOSTab({ os, podeEditar }: DadosOSTabProps) {
     <form onSubmit={handleSubmit} className="space-y-6 max-w-4xl">
       {/* ============ DADOS GERAIS ============ */}
       <section className="card p-5">
-        <h3 className="text-sm font-semibold text-neutral-200 uppercase tracking-wide mb-4">
+        <h3 className={`text-sm font-semibold uppercase tracking-wide mb-4 ${claro ? 'text-slate-800' : 'text-neutral-200'}`}>
           Dados Gerais
         </h3>
 
@@ -160,7 +173,7 @@ export function DadosOSTab({ os, podeEditar }: DadosOSTabProps) {
                   disabled={!podeEditar}
                   className="accent-forja-500"
                 />
-                <span className="text-sm">Normal</span>
+                <span className={`text-sm ${claro ? 'text-slate-700' : 'text-neutral-300'}`}>Normal</span>
               </label>
               <label className="flex items-center gap-2 cursor-pointer">
                 <input
@@ -192,7 +205,7 @@ export function DadosOSTab({ os, podeEditar }: DadosOSTabProps) {
 
       {/* ============ FINANCEIRO ============ */}
       <section className="card p-5">
-        <h3 className="text-sm font-semibold text-neutral-200 uppercase tracking-wide mb-4">
+        <h3 className={`text-sm font-semibold uppercase tracking-wide mb-4 ${claro ? 'text-slate-800' : 'text-neutral-200'}`}>
           Financeiro / Comercial
         </h3>
 
@@ -214,10 +227,10 @@ export function DadosOSTab({ os, podeEditar }: DadosOSTabProps) {
           </div>
           <div>
             <label className="label-compact">
-              Valor total <span className="text-neutral-600">(calculado)</span>
+              Valor total <span className={`text-xs ${claro ? 'text-slate-500' : 'text-neutral-500'}`}>(calculado)</span>
             </label>
             <div className="field-readonly py-2 text-sm">
-              {valorTotalCalculado !== null
+              {valorTotalCalculado !== null && !isNaN(valorTotalCalculado)
                 ? valorTotalCalculado.toLocaleString('pt-BR', {
                     style: 'currency',
                     currency: 'BRL',

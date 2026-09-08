@@ -2,7 +2,8 @@
 // Forja - Aba "Timeline" do detalhe da OS
 // ============================================================
 
-import { useOSTimeline, type EventoOS } from '../../../hooks/useOS';
+import { useOSTimeline, type EventoOS, formatarDataSegura } from '../../../hooks/useOS';
+import { useTheme } from '../../../lib/theme-store';
 
 interface TimelineTabProps {
   osId: string;
@@ -37,24 +38,36 @@ const CORES_TIPO_EVENTO: Record<string, string> = {
   inspecao_reprovada: 'bg-red-500/15 text-red-400 border-red-500/30',
 };
 
-function formatarTimestamp(iso: string): { data: string; hora: string } {
+function formatarTimestamp(iso: string | null | undefined): { data: string; hora: string } {
+  if (!iso) return { data: '—', hora: '—' };
   const d = new Date(iso);
-  return {
-    data: d.toLocaleDateString('pt-BR'),
-    hora: d.toLocaleTimeString('pt-BR', {
-      hour: '2-digit',
-      minute: '2-digit',
-    }),
-  };
+  if (isNaN(d.getTime())) return { data: '—', hora: '—' };
+  try {
+    return {
+      data: d.toLocaleDateString('pt-BR'),
+      hora: d.toLocaleTimeString('pt-BR', {
+        hour: '2-digit',
+        minute: '2-digit',
+      }),
+    };
+  } catch {
+    return { data: '—', hora: '—' };
+  }
 }
 
 export function TimelineTab({ osId }: TimelineTabProps) {
+  const { claro } = useTheme();
   const { data, isLoading, isError } = useOSTimeline(osId);
   const eventos = data?.data ?? [];
 
+
   if (isLoading) {
     return (
-      <div className="bg-neutral-900 border border-neutral-800 rounded-xl p-12 text-center text-neutral-400">
+      <div
+        className={`${
+          claro ? 'bg-white border-slate-200 text-slate-500' : 'bg-neutral-900 border-neutral-800 text-neutral-400'
+        } border rounded-xl p-12 text-center`}
+      >
         Carregando timeline...
       </div>
     );
@@ -62,7 +75,11 @@ export function TimelineTab({ osId }: TimelineTabProps) {
 
   if (isError) {
     return (
-      <div className="bg-neutral-900 border border-neutral-800 rounded-xl p-12 text-center text-red-400">
+      <div
+        className={`${
+          claro ? 'bg-white border-slate-200 text-red-500' : 'bg-neutral-900 border-neutral-800 text-red-400'
+        } border rounded-xl p-12 text-center`}
+      >
         Erro ao carregar timeline.
       </div>
     );
@@ -70,7 +87,11 @@ export function TimelineTab({ osId }: TimelineTabProps) {
 
   if (eventos.length === 0) {
     return (
-      <div className="bg-neutral-900 border border-neutral-800 rounded-xl p-12 text-center text-neutral-400">
+      <div
+        className={`${
+          claro ? 'bg-white border-slate-200 text-slate-500' : 'bg-neutral-900 border-neutral-800 text-neutral-400'
+        } border rounded-xl p-12 text-center`}
+      >
         Nenhum evento registrado.
       </div>
     );
@@ -80,17 +101,21 @@ export function TimelineTab({ osId }: TimelineTabProps) {
   const ordenados = [...eventos].reverse();
 
   return (
-    <div className="bg-neutral-900 border border-neutral-800 rounded-xl overflow-hidden">
-      <ul className="divide-y divide-neutral-800">
+    <div
+      className={`${
+        claro ? 'bg-white border-slate-200' : 'bg-neutral-900 border-neutral-800'
+      } border rounded-xl overflow-hidden`}
+    >
+      <ul className={`divide-y ${claro ? 'divide-slate-200' : 'divide-neutral-800'}`}>
         {ordenados.map((ev) => (
-          <EventoItem key={ev.id} evento={ev} />
+          <EventoItem key={ev.id} evento={ev} claro={claro} />
         ))}
       </ul>
     </div>
   );
 }
 
-function EventoItem({ evento }: { evento: EventoOS }) {
+function EventoItem({ evento, claro }: { evento: EventoOS; claro: boolean }) {
   const { data, hora } = formatarTimestamp(evento.timestamp);
   const label = LABELS_TIPO_EVENTO[evento.tipo] ?? evento.tipo;
   const cor =
@@ -98,12 +123,12 @@ function EventoItem({ evento }: { evento: EventoOS }) {
     'bg-neutral-500/15 text-neutral-400 border-neutral-500/30';
 
   return (
-    <li className="p-4 hover:bg-neutral-800/30 transition">
+    <li className={`p-4 transition ${claro ? 'hover:bg-slate-50' : 'hover:bg-neutral-800/30'}`}>
       <div className="flex items-start gap-3">
         {/* Timestamp à esquerda */}
         <div className="flex-shrink-0 text-right w-20">
-          <div className="text-sm font-mono text-neutral-300">{hora}</div>
-          <div className="text-xs text-neutral-500">{data}</div>
+          <div className={`text-sm font-mono ${claro ? 'text-slate-800' : 'text-neutral-300'}`}>{hora}</div>
+          <div className={`text-xs ${claro ? 'text-slate-400' : 'text-neutral-500'}`}>{data}</div>
         </div>
 
         {/* Ponto + linha vertical */}
@@ -120,16 +145,16 @@ function EventoItem({ evento }: { evento: EventoOS }) {
               {label}
             </span>
             {evento.lote && (
-              <span className="text-xs text-neutral-400">
+              <span className={`text-xs ${claro ? 'text-slate-500' : 'text-neutral-400'}`}>
                 Lote {evento.lote.numeroLote}
               </span>
             )}
           </div>
-          <div className="text-sm text-neutral-300">
-            por <span className="text-neutral-100">{evento.autor?.nome ?? '—'}</span>
+          <div className={`text-sm ${claro ? 'text-slate-600' : 'text-neutral-300'}`}>
+            por <span className={claro ? 'text-slate-900 font-medium' : 'text-neutral-100'}>{evento.autor?.nome ?? '—'}</span>
           </div>
           {evento.payload && (
-            <PayloadResumo tipo={evento.tipo} payload={evento.payload} />
+            <PayloadResumo tipo={evento.tipo} payload={evento.payload} claro={claro} />
           )}
         </div>
       </div>
@@ -137,12 +162,15 @@ function EventoItem({ evento }: { evento: EventoOS }) {
   );
 }
 
-function PayloadResumo({ tipo, payload }: { tipo: string; payload: any }) {
+function PayloadResumo({ tipo, payload, claro }: { tipo: string; payload: any; claro?: boolean }) {
   if (!payload) return null;
+
+  const textMuted = claro ? 'text-slate-500' : 'text-neutral-400';
+  const textHighlight = claro ? 'text-slate-800 font-medium' : 'text-neutral-200';
 
   if (tipo === 'os_criada') {
     return (
-      <div className="mt-2 text-xs text-neutral-400 space-y-0.5">
+      <div className={`mt-2 text-xs space-y-0.5 ${textMuted}`}>
         <div>
           Quantidade total: <span className="font-mono">{payload.quantidadeTotal}</span> peças
         </div>
@@ -158,7 +186,7 @@ function PayloadResumo({ tipo, payload }: { tipo: string; payload: any }) {
 
   if (tipo === 'lote_criado') {
     return (
-      <div className="mt-2 text-xs text-neutral-400">
+      <div className={`mt-2 text-xs ${textMuted}`}>
         {payload.quantidadePecas} peças · {payload.totalOps} operações
       </div>
     );
@@ -166,14 +194,14 @@ function PayloadResumo({ tipo, payload }: { tipo: string; payload: any }) {
 
   if (tipo === 'prazo_alterado') {
     return (
-      <div className="mt-2 text-xs text-neutral-400">
+      <div className={`mt-2 text-xs ${textMuted}`}>
         De{' '}
         <span className="font-mono">
-          {new Date(payload.prazoAnterior).toLocaleDateString('pt-BR')}
+          {formatarDataSegura(payload.prazoAnterior)}
         </span>{' '}
         para{' '}
-        <span className="font-mono text-neutral-200">
-          {new Date(payload.prazoNovo).toLocaleDateString('pt-BR')}
+        <span className={`font-mono ${textHighlight}`}>
+          {formatarDataSegura(payload.prazoNovo)}
         </span>
       </div>
     );
@@ -181,12 +209,13 @@ function PayloadResumo({ tipo, payload }: { tipo: string; payload: any }) {
 
   if (tipo === 'prioridade_alterada') {
     return (
-      <div className="mt-2 text-xs text-neutral-400">
-        De <span className="text-neutral-200">{payload.prioridadeAnterior}</span> para{' '}
-        <span className="text-neutral-200">{payload.prioridadeNova}</span>
+      <div className={`mt-2 text-xs ${textMuted}`}>
+        De <span className={textHighlight}>{payload.prioridadeAnterior}</span> para{' '}
+        <span className={textHighlight}>{payload.prioridadeNova}</span>
       </div>
     );
   }
+
 
   if (tipo === 'os_alterada' && payload.camposAtualizados) {
     return (

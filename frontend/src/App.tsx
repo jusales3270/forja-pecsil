@@ -19,7 +19,9 @@ import PessoasPage from './pages/PessoasPage';
 import { useAuth } from './lib/auth-store';
 import { ToastContainer } from './components/Toast';
 import { RoleRoute } from './components/RoleRoute';
+import { ErrorBoundary } from './components/ErrorBoundary';
 import { rotaInicialPorPapel, type Papel } from './lib/permissions';
+
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -55,8 +57,10 @@ export function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
-        <Routes>
-          <Route
+        <ErrorBoundary fallbackTitle="Falha na aplicação" fallbackMessage="Ocorreu um erro ao renderizar esta página. Clique abaixo para voltar." voltarUrl="/">
+          <Routes>
+            <Route
+
             path="/login"
             element={
               <PublicRoute>
@@ -186,8 +190,10 @@ export function App() {
           />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
+        </ErrorBoundary>
       </BrowserRouter>
       <ToastContainer />
     </QueryClientProvider>
+
   );
 }

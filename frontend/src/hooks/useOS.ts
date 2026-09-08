@@ -288,7 +288,7 @@ export function useGerarTestesFundicao() {
 // Helpers UI
 // ============================================================
 
-export const CORES_STATUS_OS: Record<StatusOS, string> = {
+export const CORES_STATUS_OS: Record<string, string> = {
   aberta: 'bg-blue-500/15 text-blue-400 border-blue-500/30',
   em_producao: 'bg-amber-500/15 text-amber-400 border-amber-500/30',
   finalizada: 'bg-emerald-500/15 text-emerald-400 border-emerald-500/30',
@@ -296,17 +296,30 @@ export const CORES_STATUS_OS: Record<StatusOS, string> = {
   cancelada: 'bg-neutral-500/15 text-neutral-400 border-neutral-500/30',
 };
 
-export function formatarPrazo(iso: string): string {
+export function formatarDataSegura(iso: string | null | undefined): string {
+  if (!iso) return '—';
   const d = new Date(iso);
-  return d.toLocaleDateString('pt-BR');
+  if (isNaN(d.getTime())) return '—';
+  try {
+    return d.toLocaleDateString('pt-BR');
+  } catch {
+    return '—';
+  }
 }
 
-export function diasAtePrazo(iso: string): number {
-  const ms = new Date(iso).getTime() - Date.now();
+export function formatarPrazo(iso: string | null | undefined): string {
+  return formatarDataSegura(iso);
+}
+
+export function diasAtePrazo(iso: string | null | undefined): number {
+  if (!iso) return 0;
+  const d = new Date(iso);
+  if (isNaN(d.getTime())) return 0;
+  const ms = d.getTime() - Date.now();
   return Math.ceil(ms / (1000 * 60 * 60 * 24));
 }
 
-export function corPrazo(iso: string, status: StatusOS): string {
+export function corPrazo(iso: string | null | undefined, status: StatusOS): string {
   if (status === 'finalizada' || status === 'cancelada') return 'text-neutral-400';
   const dias = diasAtePrazo(iso);
   if (dias < 0) return 'text-red-400 font-semibold';
@@ -314,3 +327,4 @@ export function corPrazo(iso: string, status: StatusOS): string {
   if (dias < 7) return 'text-amber-400';
   return 'text-neutral-200';
 }
+
