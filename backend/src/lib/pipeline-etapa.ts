@@ -164,7 +164,13 @@ export async function montarPipelineEtapa(etapaId: string): Promise<PipelineEtap
         },
       },
     },
-    orderBy: [{ lote: { os: { prazoEntrega: 'asc' } } }, { ordem: 'asc' }],
+    orderBy: [
+      { lote: { os: { prioridade: 'desc' } } },
+      { lote: { os: { prazoEntrega: 'asc' } } },
+      { ordem: 'asc' },
+      { codigoOp: 'asc' },
+      { id: 'asc' },
+    ],
   });
 
   // Onde o lote está é uma pergunta sobre PEÇAS, não sobre OPs. Um lote parcial

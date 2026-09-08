@@ -3,7 +3,7 @@
 // Lista OPs pendentes + em andamento, permite buscar e operar
 // ============================================================
 
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import {
   useOPsPendentes,
@@ -40,6 +40,7 @@ import type { Desenho } from '../../hooks/useDesenhos';
 export function TotemEstacaoPage() {
   const navigate = useNavigate();
   const { etapaId } = useParams<{ etapaId: string }>();
+  const [searchParams, setSearchParams] = useSearchParams();
   const pessoa = useAuth((s) => s.pessoa);
   const logout = useAuth((s) => s.logout);
   const qc = useQueryClient();
@@ -48,7 +49,22 @@ export function TotemEstacaoPage() {
   const etapa = etapas?.find((e) => e.id === etapaId);
 
   const [busca, setBusca] = useState('');
-  const [faseSelecionada, setFaseSelecionada] = useState<string | null>(null);
+  const faseSelecionada = searchParams.get('fase');
+
+  const setFaseSelecionada = (novaFase: string | null) => {
+    setSearchParams(
+      (prev) => {
+        const p = new URLSearchParams(prev);
+        if (novaFase) {
+          p.set('fase', novaFase);
+        } else {
+          p.delete('fase');
+        }
+        return p;
+      },
+      { replace: true },
+    );
+  };
   const [opIniciar, setOpIniciar] = useState<OPLotePendente | null>(null);
   const [opEncerrar, setOpEncerrar] = useState<OPLoteEmAndamento | null>(null);
   const [opPausar, setOpPausar] = useState<OPLoteEmAndamento | null>(null);

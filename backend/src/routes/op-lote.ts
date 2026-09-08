@@ -174,7 +174,7 @@ export async function opLoteRoutes(app: FastifyInstance) {
                 },
               },
               opsLote: {
-                orderBy: { ordem: 'asc' },
+                orderBy: [{ ordem: 'asc' }, { codigoOp: 'asc' }, { id: 'asc' }],
                 select: {
                   id: true,
                   codigoOp: true,
@@ -192,6 +192,8 @@ export async function opLoteRoutes(app: FastifyInstance) {
           { lote: { os: { prioridade: 'desc' } } },
           { lote: { os: { prazoEntrega: 'asc' } } },
           { ordem: 'asc' },
+          { codigoOp: 'asc' },
+          { id: 'asc' },
         ],
       });
 

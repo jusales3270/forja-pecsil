@@ -44,7 +44,7 @@ export async function calcularFluxoDePecas(
       id: true,
       quantidadePecas: true,
       opsLote: {
-        orderBy: { ordem: 'asc' },
+        orderBy: [{ ordem: 'asc' }, { codigoOp: 'asc' }, { id: 'asc' }],
         select: { id: true, ordem: true, quantidadeConcluida: true },
       },
     },
