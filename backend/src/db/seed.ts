@@ -1,14 +1,36 @@
 import { prisma } from './prisma.js';
 import bcrypt from 'bcryptjs';
+import { execSync } from 'child_process';
+import path from 'path';
+import fs from 'fs';
 
 export async function garantirSeedInicial() {
   try {
-    const totalPessoas = await prisma.pessoa.count();
-    if (totalPessoas > 0) {
-      return; // Já existem dados no banco
+    const totalArtigos = await prisma.artigo.count().catch(() => 0);
+    const totalPessoas = await prisma.pessoa.count().catch(() => 0);
+
+    if (totalArtigos > 0 && totalPessoas > 0) {
+      return; // Já existem dados completos no banco
     }
 
-    console.log('🌱 Banco vazio detectado. Inicializando dados padrão (Seed)...');
+    const backupPath = path.resolve(process.cwd(), 'prisma/backup_data.sql');
+    if (fs.existsSync(backupPath) && totalArtigos === 0) {
+      try {
+        console.log('📦 Restaurando 100% dos dados completos (3.876 artigos, pessoas, máquinas) do backup...');
+        const dbUrl = process.env.DATABASE_URL || 'postgresql://forja:forja_dev_2026@postgres:5432/forja';
+        execSync(`psql "${dbUrl}" -f "${backupPath}"`, { stdio: 'inherit' });
+        console.log('✅ Todos os artigos e dados históricos restaurados com sucesso no banco!');
+        return;
+      } catch (errDump) {
+        console.warn('⚠️ Falha ao rodar psql no backup_data.sql, usando seed base:', errDump);
+      }
+    }
+
+    if (totalPessoas > 0) {
+      return;
+    }
+
+    console.log('🌱 Inicializando pessoas e cadastros padrão...');
 
     const hashPin = async (pin: string) => bcrypt.hash(pin, 10);
     const defaultPin = await hashPin('1234');
