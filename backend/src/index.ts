@@ -29,6 +29,7 @@ import { inspecaoRoutes } from './routes/inspecoes.js';
 import { controleVolumeRoutes } from './routes/controle-volume.js';
 import { dashboardRoutes } from './routes/dashboard.js';
 import { garantirBuckets } from './lib/storage.js';
+import { garantirSeedInicial } from './db/seed.js';
 
 import { prisma } from './db/prisma.js';
 
@@ -49,9 +50,9 @@ async function bootstrap() {
   // O Socket.IO real é instanciado depois do listen e atribuído em app.io.
   decorateSocketPlaceholder(app);
 
-  // CORS — em dev liberamos tudo
+  // CORS — liberado para desenvolvimento e rede local
   await app.register(cors, {
-    origin: env.NODE_ENV === 'development' ? true : ['http://localhost:5173'],
+    origin: true,
     credentials: true,
   });
 
@@ -113,12 +114,14 @@ async function bootstrap() {
   await app.register(dashboardRoutes, { prefix: '/api' });
 
   try {
+    await garantirSeedInicial();
+
     await app.listen({ port: env.PORT, host: env.NODE_ENV === 'production' ? '0.0.0.0' : 'localhost' });
 
     // Socket.IO acoplado ao mesmo servidor HTTP (atribuído em app.io)
     attachSocketIO(app, {
       httpServer: app.server,
-      corsOrigin: env.NODE_ENV === 'development' ? true : ['http://localhost:5173'],
+      corsOrigin: true,
     });
 
     garantirBuckets().catch((e) => app.log.warn({ err: e }, 'Aviso: Falha ao garantir buckets no MinIO no arranque'));
