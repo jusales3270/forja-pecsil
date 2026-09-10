@@ -16,10 +16,22 @@ export async function garantirSeedInicial() {
     const backupPath = path.resolve(process.cwd(), 'prisma/backup_data.sql');
     if (fs.existsSync(backupPath) && totalArtigos === 0) {
       try {
-        console.log('📦 Restaurando 100% dos dados completos (3.876 artigos, pessoas, máquinas) do backup...');
+        console.log('📦 Limpando dados parciais e restaurando 100% do backup completo...');
         const dbUrl = process.env.DATABASE_URL || 'postgresql://forja:forja_dev_2026@postgres:5432/forja';
+        
+        // Limpa tabelas para evitar conflito de IDs/chaves únicas do seed parcial
+        await prisma.$executeRawUnsafe(`
+          TRUNCATE TABLE 
+            "Alerta", "EventoOS", "ControleVolume", "MedicaoInspecao", "InspecaoOP", 
+            "ApontamentoPeca", "ApontamentoTurno", "ParadaMaquina", "MotivoParada", 
+            "ProcessamentoMaquina", "Carimbo", "OPLote", "Lote", "OS", "CotaInspecao", 
+            "PlanoInspecao", "OperacaoArtigo", "TipoServico", "ToleranciaGeralCliente", 
+            "Desenho", "Artigo", "Maquina", "Etapa", "Cliente", "Pessoa" 
+          CASCADE;
+        `).catch((e) => console.warn('Aviso ao truncar antes do restore:', e.message));
+
         execSync(`psql "${dbUrl}" -f "${backupPath}"`, { stdio: 'inherit' });
-        console.log('✅ Todos os artigos e dados históricos restaurados com sucesso no banco!');
+        console.log('✅ Todos os 3.876 artigos, usuários e dados históricos restaurados com sucesso no banco!');
         return;
       } catch (errDump) {
         console.warn('⚠️ Falha ao rodar psql no backup_data.sql, usando seed base:', errDump);
