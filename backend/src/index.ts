@@ -28,6 +28,7 @@ import { conferenciaTurnoRoutes } from './routes/conferencia-turno.js';
 import { inspecaoRoutes } from './routes/inspecoes.js';
 import { controleVolumeRoutes } from './routes/controle-volume.js';
 import { dashboardRoutes } from './routes/dashboard.js';
+import { garantirBuckets } from './lib/storage.js';
 
 import { prisma } from './db/prisma.js';
 
@@ -119,6 +120,8 @@ async function bootstrap() {
       httpServer: app.server,
       corsOrigin: env.NODE_ENV === 'development' ? true : ['http://localhost:5173'],
     });
+
+    garantirBuckets().catch((e) => app.log.warn({ err: e }, 'Aviso: Falha ao garantir buckets no MinIO no arranque'));
 
     app.log.info(`🔥 Forja backend rodando em http://localhost:${env.PORT}`);
     app.log.info(`📊 Healthcheck: http://localhost:${env.PORT}/health`);

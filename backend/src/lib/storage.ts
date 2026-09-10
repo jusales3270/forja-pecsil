@@ -4,7 +4,14 @@
 // Usado pra armazenar desenhos (PDFs/imagens) e fotos de inspeção
 // ============================================================
 
-import { S3Client, PutObjectCommand, GetObjectCommand, DeleteObjectCommand } from '@aws-sdk/client-s3';
+import {
+  S3Client,
+  PutObjectCommand,
+  GetObjectCommand,
+  DeleteObjectCommand,
+  HeadBucketCommand,
+  CreateBucketCommand,
+} from '@aws-sdk/client-s3';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import { randomUUID } from 'node:crypto';
 import { env } from './env.js';
@@ -34,6 +41,24 @@ const s3Publico = new S3Client({
     secretAccessKey: env.MINIO_SECRET_KEY,
   },
 });
+
+/**
+ * Cria os buckets no MinIO caso ainda não existam.
+ */
+export async function garantirBuckets(): Promise<void> {
+  const buckets = [env.MINIO_BUCKET_DESENHOS, env.MINIO_BUCKET_FOTOS];
+  for (const b of buckets) {
+    try {
+      await s3.send(new HeadBucketCommand({ Bucket: b }));
+    } catch {
+      try {
+        await s3.send(new CreateBucketCommand({ Bucket: b }));
+      } catch {
+        // Ignora se já existe ou se o MinIO ainda não estiver pronto
+      }
+    }
+  }
+}
 
 /**
  * Faz upload de um buffer para o MinIO.
@@ -118,4 +143,3 @@ export async function removerArquivo(bucket: string, key: string): Promise<void>
     })
   );
 }
-
