@@ -32,4 +32,4 @@ COPY --from=build /app/backend/prisma ./backend/prisma
 COPY --from=build /app/shared ./shared
 WORKDIR /app/backend
 EXPOSE 3001
-CMD ["sh", "-c", "npx prisma db push --skip-generate && node dist/index.js"]
+CMD ["sh", "-c", "export DATABASE_URL=\"${DATABASE_URL:-postgresql://forja:forja_dev_2026@postgres:5432/forja}\"; [ -z \"$DATABASE_URL\" ] && export DATABASE_URL=\"postgresql://forja:forja_dev_2026@postgres:5432/forja\"; npx prisma db push --skip-generate && node dist/index.js"]
