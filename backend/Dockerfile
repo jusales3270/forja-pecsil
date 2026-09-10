@@ -31,5 +31,4 @@ COPY --from=build /app/backend/package.json ./backend/
 COPY --from=build /app/backend/prisma ./backend/prisma
 COPY --from=build /app/shared ./shared
 WORKDIR /app/backend
-EXPOSE 3001
-CMD ["sh", "-c", "export DATABASE_URL=\"${DATABASE_URL:-postgresql://forja:forja_dev_2026@postgres:5432/forja}\"; [ -z \"$DATABASE_URL\" ] && export DATABASE_URL=\"postgresql://forja:forja_dev_2026@postgres:5432/forja\"; npx prisma db push --skip-generate && node dist/index.js"]
+CMD ["sh", "-c", "export DATABASE_URL=\"${DATABASE_URL:-postgresql://forja:forja_dev_2026@postgres:5432/forja}\"; [ -z \"$DATABASE_URL\" ] && export DATABASE_URL=\"postgresql://forja:forja_dev_2026@postgres:5432/forja\"; until node -e \"const net=require('net'); const s=net.connect(5432, 'postgres', ()=>{s.end(); process.exit(0)}); s.on('error', ()=>process.exit(1));\"; do echo 'Aguardando postgres...'; sleep 2; done; npx prisma db push --skip-generate && node dist/index.js"]

@@ -6,10 +6,21 @@ services:
       POSTGRES_USER: ${POSTGRES_USER:-forja}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-forja_dev_2026}
       POSTGRES_DB: ${POSTGRES_DB:-forja}
+    entrypoint:
+      - sh
+      - -c
+      - |
+        export POSTGRES_USER="$${POSTGRES_USER:-forja}"
+        export POSTGRES_PASSWORD="$${POSTGRES_PASSWORD:-forja_dev_2026}"
+        export POSTGRES_DB="$${POSTGRES_DB:-forja}"
+        [ -z "$$POSTGRES_USER" ] && export POSTGRES_USER=forja
+        [ -z "$$POSTGRES_PASSWORD" ] && export POSTGRES_PASSWORD=forja_dev_2026
+        [ -z "$$POSTGRES_DB" ] && export POSTGRES_DB=forja
+        exec docker-entrypoint.sh postgres
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-forja} || exit 1"]
+      test: ["CMD-SHELL", "pg_isready -U forja || exit 1"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -31,9 +42,17 @@ services:
     environment:
       MINIO_ROOT_USER: ${MINIO_ACCESS_KEY:-forja_admin}
       MINIO_ROOT_PASSWORD: ${MINIO_SECRET_KEY:-forja_minio_dev_2026}
+    entrypoint:
+      - sh
+      - -c
+      - |
+        export MINIO_ROOT_USER="$${MINIO_ROOT_USER:-forja_admin}"
+        export MINIO_ROOT_PASSWORD="$${MINIO_ROOT_PASSWORD:-forja_minio_dev_2026}"
+        [ -z "$$MINIO_ROOT_USER" ] && export MINIO_ROOT_USER=forja_admin
+        [ -z "$$MINIO_ROOT_PASSWORD" ] && export MINIO_ROOT_PASSWORD=forja_minio_dev_2026
+        exec minio server /data --console-address ":9001"
     volumes:
       - minio_data:/data
-    command: server /data --console-address ":9001"
 
   backend:
     build:
