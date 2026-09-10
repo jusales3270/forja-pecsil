@@ -7,12 +7,15 @@
 import { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { AppLayout } from '../../components/AppLayout';
+import { useAuth } from '../../lib/auth-store';
+import { ConfirmDialog } from '../../components/ConfirmDialog';
 import {
   useArtigoDetail,
   useAtivarArtigo,
   useArquivarArtigo,
   useDesarquivarArtigo,
   useVoltarRascunhoArtigo,
+  useDeleteArtigo,
   type StatusArtigo,
 } from '../../hooks/useArtigos';
 import { DadosBasicosTab } from './tabs/DadosBasicosTab';
@@ -44,8 +47,12 @@ const STATUS_BADGE: Record<StatusArtigo, string> = {
 export function ArtigoEditPage() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const pessoa = useAuth((s) => s.pessoa);
+  const ehAdmin = pessoa?.papel === 'admin';
+
   const [aba, setAba] = useState<AbaAtiva>('dados');
   const [erroStatus, setErroStatus] = useState<string | null>(null);
+  const [confirmandoExcluir, setConfirmandoExcluir] = useState(false);
 
   const { data: artigo, isLoading, isError } = useArtigoDetail(id ?? null);
 
@@ -53,6 +60,7 @@ export function ArtigoEditPage() {
   const arquivarMut = useArquivarArtigo();
   const desarquivarMut = useDesarquivarArtigo();
   const voltarRascunhoMut = useVoltarRascunhoArtigo();
+  const deleteMut = useDeleteArtigo();
 
   if (isLoading) {
     return (
@@ -168,6 +176,21 @@ export function ArtigoEditPage() {
                 Desarquivar
               </button>
             )}
+
+            {ehAdmin && (
+              <button
+                type="button"
+                onClick={() => setConfirmandoExcluir(true)}
+                className="inline-flex items-center gap-1.5 px-3.5 py-2 text-sm font-semibold rounded-lg bg-red-600/15 hover:bg-red-600 text-red-400 hover:text-white border border-red-500/30 transition shadow-sm"
+                title="Excluir Artigo"
+              >
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                  <polyline points="3 6 5 6 21 6" />
+                  <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+                </svg>
+                Excluir Artigo
+              </button>
+            )}
           </div>
         </div>
 
@@ -201,6 +224,24 @@ export function ArtigoEditPage() {
           {aba === 'plano' && <PlanoInspecaoTab artigoId={artigo.id} />}
         </div>
 
+        {/* Diálogo de confirmação de exclusão */}
+        <ConfirmDialog
+          open={confirmandoExcluir}
+          title="Excluir Artigo"
+          message={`Tem certeza que deseja excluir o artigo "${artigo.codigo}" (${artigo.descricao})? O item ficará inativo e oculto do sistema.`}
+          confirmLabel="Sim, Excluir Artigo"
+          loading={deleteMut.isPending}
+          onConfirm={async () => {
+            try {
+              await deleteMut.mutateAsync(artigo.id);
+              navigate('/artigos');
+            } catch (err: any) {
+              setErroStatus(err?.response?.data?.message || 'Erro ao excluir artigo');
+              setConfirmandoExcluir(false);
+            }
+          }}
+          onCancel={() => setConfirmandoExcluir(false)}
+        />
       </div>
     </AppLayout>
   );

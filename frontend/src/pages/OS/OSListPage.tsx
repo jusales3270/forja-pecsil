@@ -5,8 +5,11 @@
 import { useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTheme } from '../../lib/theme-store';
+import { useAuth } from '../../lib/auth-store';
+import { ConfirmDialog } from '../../components/ConfirmDialog';
 import {
   useOSList,
+  useCancelarOS,
   LABELS_STATUS_OS,
   CORES_STATUS_OS,
   STATUS_OS,
@@ -35,11 +38,17 @@ function formatarMoeda(valor: string | number | null | undefined): string {
 export function OSListPage() {
   const navigate = useNavigate();
   const { claro } = useTheme();
+  const pessoa = useAuth((s) => s.pessoa);
+  const ehAdmin = pessoa?.papel === 'admin';
+
   const [busca, setBusca] = useState('');
   const [clienteFiltro, setClienteFiltro] = useState('');
   const [statusFiltro, setStatusFiltro] = useState('');
   const [criando, setCriando] = useState(false);
+  const [osParaExcluir, setOsParaExcluir] = useState<OS | null>(null);
+
   const gerarTestes = useGerarTestesFundicao();
+  const cancelarOS = useCancelarOS();
 
   const { data: clientesData } = useClientes();
   const clientes = clientesData ?? [];
@@ -289,6 +298,9 @@ export function OSListPage() {
                     <th className="px-4 py-3 text-left font-medium">Status</th>
                     <th className="px-4 py-3 text-right font-medium">Valor</th>
                     <th className="px-4 py-3 text-center font-medium">Obs</th>
+                    {ehAdmin && (
+                      <th className="px-4 py-3 text-right font-medium">Ações</th>
+                    )}
                   </tr>
                 </thead>
                 <tbody className={T.tabelaDivide}>
@@ -296,6 +308,8 @@ export function OSListPage() {
                     <OSRow
                       key={os.id}
                       os={os}
+                      ehAdmin={ehAdmin}
+                      onExcluir={(item) => setOsParaExcluir(item)}
                       onClick={() => navigate(`/os/${os.id}`)}
                       T={T}
                     />
@@ -316,11 +330,49 @@ export function OSListPage() {
           }}
         />
       )}
+
+      {/* Confirmação de Exclusão da OS */}
+      <ConfirmDialog
+        open={osParaExcluir !== null}
+        title={`Excluir OS ${osParaExcluir?.codigoGrv ?? ''}`}
+        message={
+          osParaExcluir?.status === 'cancelada'
+            ? `Esta OS já está cancelada. Deseja excluí-la definitivamente do banco de dados? Todos os lotes, OPs e registros vinculados serão apagados permanentemente.`
+            : `Tem certeza que deseja cancelar e excluir a Ordem de Serviço "${osParaExcluir?.codigoGrv}"? Esta ação só pode ser realizada pelo Administrador.`
+        }
+        confirmLabel={osParaExcluir?.status === 'cancelada' ? 'Excluir Definitivamente' : 'Excluir / Cancelar'}
+        loading={cancelarOS.isPending}
+        onConfirm={async () => {
+          if (!osParaExcluir) return;
+          try {
+            await cancelarOS.mutateAsync({
+              id: osParaExcluir.id,
+              force: osParaExcluir.status === 'cancelada',
+            });
+            setOsParaExcluir(null);
+          } catch (err: any) {
+            alert(err?.response?.data?.message || 'Erro ao excluir OS');
+          }
+        }}
+        onCancel={() => setOsParaExcluir(null)}
+      />
     </div>
   );
 }
 
-function OSRow({ os, onClick, T }: { os: OS; onClick: () => void; T: Record<string, string> }) {
+function OSRow({
+  os,
+  onClick,
+  ehAdmin,
+  onExcluir,
+  T,
+}: {
+  os: OS;
+  onClick: () => void;
+  ehAdmin: boolean;
+  onExcluir: (os: OS) => void;
+  T: Record<string, string>;
+}) {
   const dias = diasAtePrazo(os.prazoEntrega);
   const isUrgente = os.prioridade === 'urgente';
 
@@ -369,6 +421,22 @@ function OSRow({ os, onClick, T }: { os: OS; onClick: () => void; T: Record<stri
       <td className="px-4 py-3 text-center">
         {os.observacoes && <ObservacaoBadge texto={os.observacoes} />}
       </td>
+      {ehAdmin && (
+        <td className="px-4 py-3 text-right" onClick={(e) => e.stopPropagation()}>
+          <button
+            type="button"
+            onClick={() => onExcluir(os)}
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg bg-red-600/15 hover:bg-red-600 text-red-400 hover:text-white border border-red-500/30 transition shadow-sm"
+            title="Excluir Ordem de Serviço"
+          >
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+              <polyline points="3 6 5 6 21 6" />
+              <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+            </svg>
+            Excluir
+          </button>
+        </td>
+      )}
     </tr>
   );
 }

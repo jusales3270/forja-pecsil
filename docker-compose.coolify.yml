@@ -3,17 +3,17 @@ services:
     image: postgres:16-alpine
     restart: unless-stopped
     environment:
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER:-forja}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-forja_dev_2026}
+      POSTGRES_DB: ${POSTGRES_DB:-forja}
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -h 127.0.0.1 -p 5432 || exit 1"]
-      interval: 10s
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-forja} -d ${POSTGRES_DB:-forja} || exit 1"]
+      interval: 5s
       timeout: 5s
       retries: 10
-      start_period: 60s
+      start_period: 10s
 
   redis:
     image: redis:7-alpine
@@ -30,8 +30,8 @@ services:
     image: minio/minio:latest
     restart: unless-stopped
     environment:
-      MINIO_ROOT_USER: ${MINIO_ACCESS_KEY}
-      MINIO_ROOT_PASSWORD: ${MINIO_SECRET_KEY}
+      MINIO_ROOT_USER: ${MINIO_ACCESS_KEY:-forja_admin}
+      MINIO_ROOT_PASSWORD: ${MINIO_SECRET_KEY:-forja_minio_dev_2026}
     volumes:
       - minio_data:/data
     command: server /data --console-address ":9001"
@@ -44,11 +44,11 @@ services:
         condition: service_started
     entrypoint: >
       /bin/sh -c "
-      mc alias set local http://minio:9000 ${MINIO_ACCESS_KEY} ${MINIO_SECRET_KEY};
-      mc mb --ignore-existing local/${MINIO_BUCKET_DESENHOS};
-      mc mb --ignore-existing local/${MINIO_BUCKET_FOTOS};
-      mc anonymous set download local/${MINIO_BUCKET_DESENHOS};
-      mc anonymous set download local/${MINIO_BUCKET_FOTOS};
+      mc alias set local http://minio:9000 ${MINIO_ACCESS_KEY:-forja_admin} ${MINIO_SECRET_KEY:-forja_minio_dev_2026};
+      mc mb --ignore-existing local/${MINIO_BUCKET_DESENHOS:-forja-desenhos};
+      mc mb --ignore-existing local/${MINIO_BUCKET_FOTOS:-forja-fotos};
+      mc anonymous set download local/${MINIO_BUCKET_DESENHOS:-forja-desenhos};
+      mc anonymous set download local/${MINIO_BUCKET_FOTOS:-forja-fotos};
       echo 'Buckets criados'; exit 0;
       "
 
@@ -60,17 +60,17 @@ services:
     environment:
       NODE_ENV: production
       PORT: 3001
-      DATABASE_URL: ${DATABASE_URL}
-      REDIS_URL: redis://redis:6379
-      JWT_SECRET: ${JWT_SECRET}
+      DATABASE_URL: ${DATABASE_URL:-postgresql://forja:forja_dev_2026@postgres:5432/forja}
+      REDIS_URL: ${REDIS_URL:-redis://redis:6379}
+      JWT_SECRET: ${JWT_SECRET:-forja_dev_secret_change_in_prod_seriously}
       MINIO_ENDPOINT: minio
       MINIO_PORT: 9000
       MINIO_USE_SSL: "false"
-      MINIO_ACCESS_KEY: ${MINIO_ACCESS_KEY}
-      MINIO_SECRET_KEY: ${MINIO_SECRET_KEY}
-      MINIO_BUCKET_DESENHOS: ${MINIO_BUCKET_DESENHOS}
-      MINIO_BUCKET_FOTOS: ${MINIO_BUCKET_FOTOS}
-      MINIO_PUBLIC_URL: ${MINIO_PUBLIC_URL}
+      MINIO_ACCESS_KEY: ${MINIO_ACCESS_KEY:-forja_admin}
+      MINIO_SECRET_KEY: ${MINIO_SECRET_KEY:-forja_minio_dev_2026}
+      MINIO_BUCKET_DESENHOS: ${MINIO_BUCKET_DESENHOS:-forja-desenhos}
+      MINIO_BUCKET_FOTOS: ${MINIO_BUCKET_FOTOS:-forja-fotos}
+      MINIO_PUBLIC_URL: ${MINIO_PUBLIC_URL:-http://localhost:9100}
     depends_on:
       postgres:
         condition: service_healthy
@@ -88,7 +88,7 @@ services:
         VITE_WS_URL: ""
     restart: unless-stopped
     environment:
-      SERVICE_FQDN_FRONTEND_80: ${SERVICE_FQDN_FRONTEND}
+      SERVICE_FQDN_FRONTEND_80: ${SERVICE_FQDN_FRONTEND:-}
     depends_on:
       - backend
 

@@ -17,6 +17,7 @@ import { Modal } from '../components/Modal';
 import { ConfirmDialog } from '../components/ConfirmDialog';
 import { toast } from '../components/Toast';
 import { useTheme } from '../lib/theme-store';
+import { useAuth } from '../lib/auth-store';
 
 const OPCOES_PAPEL: { papel: Papel; label: string; descricao: string; categoria: 'estacao' | 'fabrica' | 'gestao' }[] = [
   { papel: 'estacao', label: '🖥️ Conta de Estação (Posto de Trabalho)', descricao: 'Terminal fixo na máquina. Opera só a própria estação.', categoria: 'estacao' },
@@ -48,6 +49,9 @@ const BADGES_PAPEL: Record<Papel, { bg: string; text: string; border: string }> 
 export default function PessoasPage() {
   const navigate = useNavigate();
   const { claro } = useTheme();
+  const pessoaLogada = useAuth((s) => s.pessoa);
+  const ehAdmin = pessoaLogada?.papel === 'admin';
+
   const { data: resposta, isLoading } = usePessoasList();
   const pessoas = resposta?.data ?? [];
   const atualizar = useAtualizarPessoa();
@@ -329,13 +333,19 @@ export default function PessoasPage() {
                               {p.ativo ? 'Desativar' : 'Ativar'}
                             </button>
 
-                            <button
-                              onClick={() => setConfirmarExclusao({ aberto: true, pessoa: p })}
-                              className="p-1 text-xs rounded-lg border border-red-500/30 text-red-400 hover:bg-red-500/15 transition"
-                              title="Excluir usuário"
-                            >
-                              🗑️
-                            </button>
+                            {ehAdmin && (
+                              <button
+                                onClick={() => setConfirmarExclusao({ aberto: true, pessoa: p })}
+                                className="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-semibold rounded-lg border border-red-500/40 text-red-400 bg-red-600/15 hover:bg-red-600 hover:text-white transition shadow-sm"
+                                title="Excluir usuário permanentemente"
+                              >
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                                  <polyline points="3 6 5 6 21 6" />
+                                  <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+                                </svg>
+                                <span>Excluir</span>
+                              </button>
+                            )}
                           </div>
                         </td>
                       </tr>

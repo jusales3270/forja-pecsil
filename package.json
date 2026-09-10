@@ -5,7 +5,8 @@
   "description": "Sistema de Controle de Produção Pecsil",
   "scripts": {
     "dev": "pnpm -r --parallel dev",
-    "build": "pnpm -r build",
+    "postinstall": "pnpm --filter backend db:generate",
+    "build": "pnpm --filter backend db:generate && pnpm -r build",
     "db:up": "docker compose up -d postgres redis",
     "db:down": "docker compose down",
     "db:migrate": "pnpm --filter backend db:migrate",

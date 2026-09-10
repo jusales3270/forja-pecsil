@@ -256,12 +256,19 @@ export function useUpdateOS(id: string) {
 
 export function useCancelarOS() {
   const qc = useQueryClient();
-  return useMutation<{ data: { id: string; cancelada: boolean } }, Error, string>({
-    mutationFn: async (id) => {
-      const res = await api.delete(`/os/${id}`);
+  return useMutation<
+    { data: { id: string; cancelada?: boolean; excluida?: boolean } },
+    Error,
+    string | { id: string; force?: boolean }
+  >({
+    mutationFn: async (params) => {
+      const id = typeof params === 'string' ? params : params.id;
+      const force = typeof params === 'object' && params.force ? '?force=true' : '';
+      const res = await api.delete(`/os/${id}${force}`);
       return res.data;
     },
-    onSuccess: (_data, id) => {
+    onSuccess: (_data, params) => {
+      const id = typeof params === 'string' ? params : params.id;
       qc.invalidateQueries({ queryKey: ['os-list'] });
       qc.invalidateQueries({ queryKey: ['os-detail', id] });
       qc.invalidateQueries({ queryKey: ['os-timeline', id] });

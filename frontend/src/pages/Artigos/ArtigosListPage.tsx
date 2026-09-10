@@ -229,9 +229,14 @@ export function ArtigosListPage() {
                       {ehAdmin && (
                         <button
                           onClick={() => setDeletando(a)}
-                          className="btn px-3 py-1.5 text-xs bg-neutral-800 hover:bg-neutral-700 text-neutral-200"
+                          className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg bg-red-600/15 hover:bg-red-600 text-red-400 hover:text-white border border-red-500/30 transition shadow-sm ml-1"
+                          title="Excluir Artigo"
                         >
-                          Desativar
+                          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                            <polyline points="3 6 5 6 21 6" />
+                            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+                          </svg>
+                          Excluir
                         </button>
                       )}
                     </td>
@@ -253,16 +258,16 @@ export function ArtigosListPage() {
         }}
       />
 
-      {/* Confirmação de desativação */}
+      {/* Confirmação de exclusão */}
       <ConfirmDialog
         open={deletando !== null}
-        title="Desativar Artigo"
+        title="Excluir Artigo"
         message={
           deletando
-            ? `Tem certeza que deseja desativar "${deletando.codigo}"? O Artigo ficará oculto da lista mas pode ser reativado depois marcando "Mostrar inativos".`
+            ? `Tem certeza que deseja excluir o artigo "${deletando.codigo}" (${deletando.descricao})? O item ficará inativo e oculto de novas Ordens de Serviço.`
             : ''
         }
-        confirmLabel="Desativar"
+        confirmLabel="Sim, Excluir Artigo"
         loading={deleteMut.isPending}
         onConfirm={handleConfirmarDelete}
         onCancel={() => setDeletando(null)}

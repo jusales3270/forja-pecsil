@@ -167,9 +167,14 @@ export function TiposServicoPage() {
                       {ehAdmin && (
                         <button
                           onClick={() => setDeletando(t)}
-                          className={`btn px-3 py-1.5 text-xs ${claro ? 'bg-slate-200 hover:bg-slate-300 text-slate-700' : 'bg-neutral-800 hover:bg-neutral-700 text-neutral-200'}`}
+                          className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg bg-red-600/15 hover:bg-red-600 text-red-400 hover:text-white border border-red-500/30 transition shadow-sm ml-1"
+                          title="Excluir Tipo de Serviço"
                         >
-                          Desativar
+                          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                            <polyline points="3 6 5 6 21 6" />
+                            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+                          </svg>
+                          Excluir
                         </button>
                       )}
                     </td>
@@ -191,16 +196,16 @@ export function TiposServicoPage() {
         }}
       />
 
-      {/* Confirmação de delete */}
+      {/* Confirmação de exclusão */}
       <ConfirmDialog
         open={deletando !== null}
-        title="Desativar Tipo de Serviço"
+        title="Excluir Tipo de Serviço"
         message={
           deletando
-            ? `Tem certeza que deseja desativar "${deletando.nome}"? O item ficará oculto da lista mas pode ser reativado depois marcando "Mostrar inativos".`
+            ? `Tem certeza que deseja excluir "${deletando.nome}"? O item ficará inativo e oculto da lista.`
             : ''
         }
-        confirmLabel="Desativar"
+        confirmLabel="Sim, Excluir"
         loading={deleteMut.isPending}
         onConfirm={handleConfirmarDelete}
         onCancel={() => setDeletando(null)}

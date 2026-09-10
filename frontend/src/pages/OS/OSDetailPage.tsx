@@ -37,11 +37,13 @@ function OSDetailContent() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { claro } = useTheme();
+  const pessoa = useAuth((s) => s.pessoa);
   const [aba, setAba] = useState<Aba>('dados');
   const [confirmandoCancelar, setConfirmandoCancelar] = useState(false);
 
   const { data, isLoading, isError, error } = useOSDetail(id ?? null);
   const cancelarOS = useCancelarOS();
+
 
   const os = data?.data;
 
@@ -77,10 +79,16 @@ function OSDetailContent() {
   async function handleCancelar() {
     if (!os) return;
     try {
-      await cancelarOS.mutateAsync(os.id);
+      await cancelarOS.mutateAsync({
+        id: os.id,
+        force: os.status === 'cancelada',
+      });
       setConfirmandoCancelar(false);
-    } catch (err) {
-      // Erro ja tratado pelo hook
+      if (os.status === 'cancelada') {
+        navigate('/os');
+      }
+    } catch (err: any) {
+      alert(err?.response?.data?.message || 'Erro ao excluir OS');
     }
   }
 
@@ -116,11 +124,7 @@ function OSDetailContent() {
   }
 
   const podeEditar = os.status !== 'finalizada' && os.status !== 'cancelada';
-  const pessoa = useAuth((s) => s.pessoa);
-  const podeCancelar =
-    pessoa?.papel === 'admin' &&
-    os.status !== 'finalizada' &&
-    os.status !== 'cancelada';
+  const podeCancelar = pessoa?.papel === 'admin';
 
   const statusCor = CORES_STATUS_OS[os.status] ?? 'bg-neutral-500/15 text-neutral-400 border-neutral-500/30';
   const statusLabel = (LABELS_STATUS_OS as Record<string, string>)[os.status] ?? os.status ?? '—';
@@ -170,10 +174,16 @@ function OSDetailContent() {
 
             {podeCancelar && (
               <button
+                type="button"
                 onClick={() => setConfirmandoCancelar(true)}
-                className="self-start px-3 py-2 text-sm bg-red-500/10 hover:bg-red-500/20 text-red-500 border border-red-500/30 rounded-lg transition font-medium"
+                className="self-start inline-flex items-center gap-2 px-4 py-2 text-sm bg-red-600 hover:bg-red-700 text-white rounded-lg shadow transition font-semibold"
+                title="Excluir ou Cancelar esta Ordem de Serviço"
               >
-                Cancelar OS
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <polyline points="3 6 5 6 21 6" />
+                  <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+                </svg>
+                {os.status === 'cancelada' ? 'Excluir Definitivamente' : 'Excluir / Cancelar OS'}
               </button>
             )}
           </div>
@@ -220,14 +230,19 @@ function OSDetailContent() {
         </div>
       </div>
 
-      {/* Confirmação de cancelamento */}
+      {/* Confirmação de cancelamento / exclusão */}
       <ConfirmDialog
         open={confirmandoCancelar}
-        title="Cancelar OS"
-        message={`Tem certeza que deseja cancelar a OS ${os.codigoGrv ?? ''}? Esta ação não pode ser desfeita.`}
-        confirmLabel="Sim, cancelar OS"
+        title={os.status === 'cancelada' ? 'Excluir Definitivamente do Sistema' : 'Excluir / Cancelar OS'}
+        message={
+          os.status === 'cancelada'
+            ? `Esta OS já está cancelada. Deseja excluí-la definitivamente do banco de dados? Todos os dados vinculados serão apagados permanentemente.`
+            : `Tem certeza que deseja cancelar e excluir a OS ${os.codigoGrv ?? ''}? Esta ação é restrita ao administrador.`
+        }
+        confirmLabel={os.status === 'cancelada' ? 'Sim, excluir definitivamente' : 'Sim, excluir / cancelar'}
         cancelLabel="Voltar"
         variant="danger"
+        loading={cancelarOS.isPending}
         onConfirm={handleCancelar}
         onCancel={() => setConfirmandoCancelar(false)}
       />

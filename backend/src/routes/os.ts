@@ -553,13 +553,15 @@ export async function osRoutes(app: FastifyInstance) {
     }
   );
 
-  // ---------------- CANCELAR (soft) ----------------
+  // ---------------- CANCELAR (soft) / EXCLUIR (force) ----------------
   app.delete(
     '/os/:id',
     { onRequest: [app.requireAdmin] },
     async (request, reply) => {
       const paramsSchema = z.object({ id: z.string().uuid() });
+      const querySchema = z.object({ force: z.string().optional() });
       const parsed = paramsSchema.safeParse(request.params);
+      const parsedQuery = querySchema.safeParse(request.query);
       if (!parsed.success) {
         return reply
           .code(400)
@@ -568,12 +570,48 @@ export async function osRoutes(app: FastifyInstance) {
 
       const os = await prisma.oS.findUnique({
         where: { id: parsed.data.id },
+        include: {
+          lotes: {
+            include: {
+              opsLote: { select: { id: true } },
+            },
+          },
+        },
       });
       if (!os) {
         return reply
           .code(404)
           .send({ error: 'not_found', message: 'OS não encontrada' });
       }
+
+      const forceDelete =
+        parsedQuery.success &&
+        (parsedQuery.data.force === 'true' || parsedQuery.data.force === '1');
+
+      if (forceDelete) {
+        const opIds = os.lotes.flatMap((l) => l.opsLote.map((o) => o.id));
+        const loteIds = os.lotes.map((l) => l.id);
+
+        await prisma.apontamentoPeca.deleteMany({ where: { opLoteId: { in: opIds } } });
+        await prisma.paradaMaquina.deleteMany({ where: { carimbo: { opLoteId: { in: opIds } } } });
+        await prisma.processamentoMaquina.deleteMany({ where: { carimbo: { opLoteId: { in: opIds } } } });
+        await prisma.carimbo.deleteMany({ where: { opLoteId: { in: opIds } } });
+        await prisma.alerta.deleteMany({
+          where: {
+            OR: [
+              { entidadeTipo: 'OPLote', entidadeId: { in: opIds } },
+              { entidadeTipo: 'OS', entidadeId: os.id },
+            ],
+          },
+        });
+        await prisma.oPLote.deleteMany({ where: { id: { in: opIds } } });
+        await prisma.eventoOS.deleteMany({ where: { osId: os.id } });
+        await prisma.lote.deleteMany({ where: { id: { in: loteIds } } });
+        await prisma.oS.delete({ where: { id: os.id } });
+
+        return { data: { id: os.id, excluida: true } };
+      }
+
       if (os.status === 'cancelada') {
         return reply.code(400).send({
           error: 'ja_cancelada',
