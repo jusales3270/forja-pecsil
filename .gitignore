@@ -49,3 +49,7 @@ backend/prisma/migrations/dev.db-journal
 # Uploads (caso alguém suba algo localmente fora do MinIO)
 uploads/
 .env.coolify.local
+
+# Backups contêm dados reais e credenciais. Não versionar.
+**/backup*.sql
+**/recovery-data/
