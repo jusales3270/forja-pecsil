@@ -119,8 +119,7 @@ export async function apontamentoPecaRoutes(app: FastifyInstance) {
               ? `${contexto.lote.os.codigoGrv} (${contexto.lote.os.artigo.codigo}) — lote ${contexto.lote.numeroLote}: ${numeroPeca} peça(s) prontas em ${contexto.tipoServico}. Pode adiantar o próximo programa.`
               : `${numeroPeca} peça(s) prontas. Pode adiantar o próximo programa.`;
 
-            // O aviso é da ESTAÇÃO avisada, não de uma pessoa: quem abrir
-            // aquele tótem vê, seja quem for que esteja lá.
+            // Somente contas vinculadas à estação avisada podem ler e confirmar.
             await tx.alerta.create({
               data: {
                 tipo: 'parcial_pronta',

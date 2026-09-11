@@ -1,9 +1,9 @@
 name: Database recovery
 on:
   pull_request:
-    branches: [main]
+    branches: [main, fix/recovery-intranet]
   push:
-    branches: [fix/recovery-intranet]
+    branches: [fix/recovery-intranet, fix/avisos-por-estacao]
 jobs:
   recovery:
     runs-on: ubuntu-latest
@@ -41,8 +41,11 @@ jobs:
       - run: pnpm --filter @forja/frontend build
       - name: Parser and safeguards
         run: node --test backend/test/recovery.unit.test.mjs
+      - name: Station notice panel visibility
+        working-directory: frontend
+        run: node --import ../backend/node_modules/tsx/dist/loader.mjs --test test/avisos.test.tsx
       - name: Restore, login and foundry alerts on PostgreSQL
         working-directory: backend
         env:
           RUN_RECOVERY_INTEGRATION: '1'
-        run: node --import tsx --test test/recovery.integration.test.ts
+        run: node --import tsx --test test/recovery.integration.test.ts test/avisos.integration.test.ts

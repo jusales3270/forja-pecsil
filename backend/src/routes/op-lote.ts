@@ -675,9 +675,8 @@ export async function opLoteRoutes(app: FastifyInstance) {
               ? `${contexto.lote.os.codigoGrv} (${contexto.lote.os.artigo.codigo}) — lote ${contexto.lote.numeroLote} entrou em ${contexto.tipoServico}. Já dá pra adiantar o próximo programa.`
               : 'Operação de ciclo longo iniciada. Já dá pra adiantar o próximo programa.';
 
-            // O aviso é da ESTAÇÃO avisada, não de uma pessoa: quem abrir o
-            // tótem da engenharia vê, independente de quem está logado ou de
-            // quem foi cadastrado com qual papel.
+            // A API de avisos restringe leitura e confirmação às contas
+            // vinculadas à estação destinatária.
             await tx.alerta.create({
               data: {
                 tipo: 'fase_iniciada',
@@ -1434,4 +1433,3 @@ export async function opLoteRoutes(app: FastifyInstance) {
     },
   );
 }
-

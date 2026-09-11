@@ -834,9 +834,8 @@ model Alerta {
   entidadeId     String           @map("entidade_id")
   /// Aviso dirigido a uma PESSOA. Nulo quando o aviso é da estação.
   destinatarioId String?          @map("destinatario_id")
-  /// Aviso dirigido a uma ESTAÇÃO: quem abrir aquele tótem vê, seja quem for.
-  /// É assim que o alerta do tratamento térmico chega na engenharia sem
-  /// depender de quem está cadastrado com qual papel.
+  /// Aviso dirigido a uma ESTAÇÃO: somente contas atualmente vinculadas a ela
+  /// podem ler e confirmar. Observar o tótem não concede essa permissão.
   etapaDestinoId String?          @map("etapa_destino_id")
   canal          CanalAlerta
   mensagem       String

@@ -5,6 +5,7 @@
 
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { api } from '../lib/api';
+import { useAuth } from '../lib/auth-store';
 
 import type { Desenho } from './useDesenhos';
 
@@ -76,13 +77,15 @@ export interface Aviso {
 const QUERY_KEY = ['avisos'] as const;
 
 /**
- * Avisos da estação aberta + os endereçados à pessoa logada.
- * O aviso do tratamento térmico é da ESTAÇÃO engenharia: quem abrir aquele
- * tótem vê, não importa quem está logado.
+ * Avisos da estação da conta + os endereçados à pessoa logada.
+ * O cache é separado por conta, vínculo e sessão para não reaproveitar avisos
+ * privados ao trocar de credencial no mesmo navegador.
  */
 export function useAvisos(etapaId?: string | null) {
+  const { pessoa, token, isAuthenticated } = useAuth();
   return useQuery({
-    queryKey: [...QUERY_KEY, etapaId ?? null],
+    queryKey: [...QUERY_KEY, pessoa?.id, pessoa?.etapaId ?? null, token, etapaId ?? null],
+    enabled: isAuthenticated && !!pessoa && (!etapaId || etapaId === pessoa.etapaId),
     queryFn: async () => {
       const { data } = await api.get<{ data: Aviso[] }>('/avisos', {
         params: etapaId ? { etapaId } : undefined,
