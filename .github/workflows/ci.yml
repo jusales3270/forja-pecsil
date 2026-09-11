@@ -78,6 +78,13 @@ jobs:
         working-directory: frontend
         run: pnpm build
 
+      - name: Prepare synthetic test catalog
+        working-directory: backend
+        env:
+          DATABASE_URL: postgresql://forja:forja_dev_2026@localhost:5432/forja_test
+          NODE_ENV: test
+        run: node --import tsx test/seed.ts
+
       - name: Run backend tests
         working-directory: backend
         env:
