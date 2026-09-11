@@ -9,19 +9,43 @@
 //   POST  /api/avisos/marcar-lidos — marca todos como lidos
 //
 // Aviso de estação é o caso normal: o tratamento térmico avisa a ENGENHARIA,
-// e quem estiver no tótem da engenharia vê — não importa quem está logado nem
-// quem foi cadastrado com qual papel.
+// e somente contas vinculadas à engenharia podem ler ou confirmar esse aviso.
+// Observar o tótem de outra estação não concede acesso aos avisos dela.
 // ============================================================
 
 import { FastifyInstance } from 'fastify';
+import type { Prisma } from '@prisma/client';
 import { z } from 'zod';
 import { prisma } from '../db/prisma.js';
 import { calcularFluxoDePecas } from '../lib/fluxo-pecas.js';
 
+// Consulta o vínculo atual: um JWT antigo não mantém acesso após troca de
+// estação ou desativação. Papel administrativo não dispensa o vínculo.
+async function escopoAvisos(pessoaId: string, etapaSolicitada?: string): Promise<Prisma.AlertaWhereInput> {
+  const pessoa = await prisma.pessoa.findUnique({
+    where: { id: pessoaId },
+    select: { id: true, etapaId: true, ativo: true },
+  });
+  if (!pessoa?.ativo) {
+    throw Object.assign(new Error('Conta indisponível. Entre novamente.'), { statusCode: 401 });
+  }
+  if (etapaSolicitada && etapaSolicitada !== pessoa.etapaId) {
+    throw Object.assign(new Error('Os avisos são restritos às contas da estação destinatária.'), { statusCode: 403 });
+  }
+  return {
+    canal: 'dashboard',
+    OR: [
+      // Se o aviso tem estação destinatária, o vínculo com ela é obrigatório,
+      // mesmo que o registro também contenha um destinatário pessoal.
+      { etapaDestinoId: null, destinatarioId: pessoa.id },
+      ...(pessoa.etapaId ? [{ etapaDestinoId: pessoa.etapaId }] : []),
+    ],
+  };
+}
+
 export async function avisosRoutes(app: FastifyInstance) {
   // ---------------- LISTA (não lidos) ----------------
-  app.get('/avisos', { onRequest: [app.authenticate] }, async (request) => {
-    const user = request.user as any;
+  app.get('/avisos', { onRequest: [app.authenticate] }, async (request, reply) => {
 
     const querySchema = z.object({
       etapaId: z.string().uuid().optional(),
@@ -32,18 +56,15 @@ export async function avisosRoutes(app: FastifyInstance) {
       limit: z.coerce.number().min(1).max(100).default(30),
     });
     const parsed = querySchema.safeParse(request.query);
-    const { etapaId, incluirLidos, limit } = parsed.success
-      ? parsed.data
-      : { etapaId: undefined, incluirLidos: false, limit: 30 };
+    if (!parsed.success) {
+      return reply.code(400).send({ error: 'invalid_input', message: 'Filtros inválidos' });
+    }
+    const { etapaId, incluirLidos, limit } = parsed.data;
+    const escopo = await escopoAvisos(request.user.pessoaId, etapaId);
 
     const avisos = await prisma.alerta.findMany({
       where: {
-        canal: 'dashboard',
-        // Avisos da estação que está aberta + os endereçados à pessoa.
-        OR: [
-          { destinatarioId: user.pessoaId },
-          ...(etapaId ? [{ etapaDestinoId: etapaId }] : []),
-        ],
+        ...escopo,
         ...(incluirLidos ? {} : { visualizadoEm: null }),
       },
       orderBy: { criadoEm: 'desc' },
@@ -190,26 +211,26 @@ export async function avisosRoutes(app: FastifyInstance) {
     '/avisos/:id/lido',
     { onRequest: [app.authenticate] },
     async (request, reply) => {
-      const user = request.user as any;
       const parsed = z.object({ id: z.string().uuid() }).safeParse(request.params);
       if (!parsed.success) {
         return reply.code(400).send({ error: 'invalid_input', message: 'ID inválido' });
       }
 
-      const aviso = await prisma.alerta.findUnique({ where: { id: parsed.data.id } });
-      // Aviso de estação é do posto, não de uma pessoa: qualquer um que esteja
-      // ali pode dar como lido, como se apagasse do quadro da parede.
-      const podeLer =
-        aviso &&
-        (aviso.etapaDestinoId !== null || aviso.destinatarioId === user.pessoaId);
-      if (!podeLer) {
-        return reply.code(404).send({ error: 'not_found', message: 'Aviso não encontrado' });
-      }
-
-      const atualizado = await prisma.alerta.update({
-        where: { id: parsed.data.id },
+      const escopo = await escopoAvisos(request.user.pessoaId);
+      const where = { ...escopo, id: parsed.data.id };
+      // A autorização faz parte do UPDATE, inclusive para pedidos diretos por ID.
+      // Repetir a confirmação preserva o horário da primeira leitura.
+      await prisma.alerta.updateMany({
+        where: { ...where, visualizadoEm: null },
         data: { visualizadoEm: new Date() },
       });
+      const atualizado = await prisma.alerta.findFirst({
+        where,
+        select: { id: true, visualizadoEm: true },
+      });
+      if (!atualizado) {
+        return reply.code(404).send({ error: 'not_found', message: 'Aviso não encontrado' });
+      }
 
       return { data: atualizado };
     },
@@ -219,21 +240,19 @@ export async function avisosRoutes(app: FastifyInstance) {
   app.post(
     '/avisos/marcar-lidos',
     { onRequest: [app.authenticate] },
-    async (request) => {
-      const user = request.user as any;
+    async (request, reply) => {
       const body = z
         .object({ etapaId: z.string().uuid().optional() })
         .safeParse(request.body ?? {});
-      const etapaId = body.success ? body.data.etapaId : undefined;
+      if (!body.success) {
+        return reply.code(400).send({ error: 'invalid_input', message: 'Estação inválida' });
+      }
+      const escopo = await escopoAvisos(request.user.pessoaId, body.data.etapaId);
 
       const r = await prisma.alerta.updateMany({
         where: {
-          canal: 'dashboard',
+          ...escopo,
           visualizadoEm: null,
-          OR: [
-            { destinatarioId: user.pessoaId },
-            ...(etapaId ? [{ etapaDestinoId: etapaId }] : []),
-          ],
         },
         data: { visualizadoEm: new Date() },
       });

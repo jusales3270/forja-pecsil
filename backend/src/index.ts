@@ -29,7 +29,6 @@ import { inspecaoRoutes } from './routes/inspecoes.js';
 import { controleVolumeRoutes } from './routes/controle-volume.js';
 import { dashboardRoutes } from './routes/dashboard.js';
 import { garantirBuckets } from './lib/storage.js';
-import { garantirSeedInicial } from './db/seed.js';
 
 import { prisma } from './db/prisma.js';
 
@@ -114,8 +113,9 @@ async function bootstrap() {
   await app.register(dashboardRoutes, { prefix: '/api' });
 
   try {
-    await garantirSeedInicial();
-
+    // Inicialização não cria usuários nem restaura dados. Recuperação é uma
+    // operação administrativa explícita em ops/recover-database.mjs.
+    await prisma.$queryRaw`SELECT 1`;
     await app.listen({ port: env.PORT, host: env.NODE_ENV === 'production' ? '0.0.0.0' : 'localhost' });
 
     // Socket.IO acoplado ao mesmo servidor HTTP (atribuído em app.io)

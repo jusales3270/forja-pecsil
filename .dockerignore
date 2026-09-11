@@ -5,3 +5,5 @@
 .git
 *.log
 **/test
+**/backup*.sql
+**/recovery-data
