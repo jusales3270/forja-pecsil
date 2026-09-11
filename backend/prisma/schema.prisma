@@ -221,6 +221,8 @@ model Pessoa {
   osCriadas                     OS[]                   @relation("OSCriadaPor")
   artigosCriados                Artigo[]               @relation("ArtigoCriadoPor")
   paradasRegistradas            ParadaMaquina[]
+  mensagensEnviadas             MensagemInterna[] @relation("MensagemRemetente")
+  mensagensRecebidas            MensagemInterna[] @relation("MensagemDestinatario")
 
   @@map("pessoas")
 }
@@ -271,6 +273,8 @@ model Etapa {
   alertas        Alerta[]         @relation("EtapaDestinoAlerta")
   /// Contas vinculadas a esta estação (a conta do posto e programadores presos a ela)
   pessoas        Pessoa[]
+  mensagensOrigem MensagemInterna[] @relation("MensagemOrigem")
+  mensagensDestino MensagemInterna[] @relation("MensagemDestino")
 
   @@map("etapas")
 }
@@ -825,6 +829,33 @@ model EventoOS {
 // ============================================================
 // ALERTAS
 // ============================================================
+
+model MensagemInterna {
+  id String @id @default(uuid())
+  corpo String
+  remetenteId String @map("remetente_id")
+  destinatarioId String @map("destinatario_id")
+  etapaOrigemId String @map("etapa_origem_id")
+  etapaDestinoId String @map("etapa_destino_id")
+  // Assinaturas preservadas como estavam no envio.
+  remetenteNome String @map("remetente_nome")
+  destinatarioNome String @map("destinatario_nome")
+  criadoEm DateTime @default(now()) @map("criado_em")
+  lidoEm DateTime? @map("lido_em")
+  respostaAId String? @map("resposta_a_id")
+
+  remetente Pessoa @relation("MensagemRemetente", fields: [remetenteId], references: [id])
+  destinatario Pessoa @relation("MensagemDestinatario", fields: [destinatarioId], references: [id])
+  etapaOrigem Etapa @relation("MensagemOrigem", fields: [etapaOrigemId], references: [id])
+  etapaDestino Etapa @relation("MensagemDestino", fields: [etapaDestinoId], references: [id])
+  respostaA MensagemInterna? @relation("MensagemResposta", fields: [respostaAId], references: [id], onDelete: Restrict, onUpdate: Restrict)
+  respostas MensagemInterna[] @relation("MensagemResposta")
+
+  @@index([destinatarioId, etapaDestinoId, criadoEm])
+  @@index([remetenteId, criadoEm])
+  @@index([respostaAId])
+  @@map("mensagens_internas")
+}
 
 model Alerta {
   id             String           @id @default(uuid())

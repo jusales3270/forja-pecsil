@@ -48,6 +48,10 @@ test('recupera em Postgres real, preserva origem e entrega alertas à Engenharia
       INSERT INTO alertas (id,tipo,severidade,entidade_tipo,entidade_id,etapa_destino_id,canal,mensagem) VALUES
         ('${id(13)}','os_em_risco','info','OS','${id(10)}','${id(2)}','dashboard','Aviso histórico de teste');
     `);
+    psql(sourceUrl, `INSERT INTO mensagens_internas
+      (id,corpo,remetente_id,destinatario_id,etapa_origem_id,etapa_destino_id,remetente_nome,destinatario_nome,lido_em,resposta_a_id)
+      VALUES ('${id(15)}','Resposta sintética','${id(4)}','${id(3)}','${id(2)}','${id(1)}','Engenharia','Admin',null,'${id(14)}'),
+      ('${id(14)}','Recado sintético','${id(3)}','${id(4)}','${id(1)}','${id(2)}','Admin','Engenharia',now(),null);`);
     const u = new URL(sourceUrl);
     const dump = execFileSync('pg_dump', ['--data-only', '--no-owner', '--no-privileges'], {
       encoding: 'utf8', env: { ...process.env, PGHOST: u.hostname, PGPORT: u.port || '5432',
@@ -61,6 +65,7 @@ test('recupera em Postgres real, preserva origem e entrega alertas à Engenharia
     const original = snapshot(sourceUrl);
     const result = recoverDatabase({ source: dump, databaseUrl: sourceUrl, database: destName, log: () => {} });
     assert.equal(result.counts.pessoas, 2);
+    assert.equal(result.counts.mensagens_internas, 2);
     assert.equal(result.automation.stationAccounts, 1);
     assert.deepEqual(snapshot(destUrl), original, 'Todos os dados e hashes devem ser iguais após o COPY.');
     assert.deepEqual(snapshot(sourceUrl), original, 'O banco de origem deve permanecer intacto.');

@@ -37,7 +37,7 @@ export function schemaTables(schema) {
   return result;
 }
 
-export function inspectDump(source, schema) {
+export function inspectDump(source, schema, { allowMissingMessages = false } = {}) {
   const tables = schemaTables(schema);
   const blocks = new Map();
   const lines = source.replaceAll('\r\n', '\n').split('\n');
@@ -66,7 +66,13 @@ export function inspectDump(source, schema) {
     }
     blocks.set(name, { name, columns, rows, cells: rows.map((r) => r.split('\t')) });
   }
-  for (const table of tables) if (!blocks.has(table.name)) throw new Error(`Backup incompleto: falta ${table.name}.`);
+  const warnings = [];
+  for (const table of tables) if (!blocks.has(table.name)) {
+    if (table.name === 'mensagens_internas' && allowMissingMessages) {
+      blocks.set(table.name, { name: table.name, columns: Object.values(table.columns), rows: [], cells: [] });
+      warnings.push('Backup anterior ao chat: mensagens_internas será criada vazia por opção explícita.');
+    } else throw new Error(`Backup incompleto: falta ${table.name}.`);
+  }
   // Valida relações antes de sequer conectar no servidor.
   for (const table of tables) {
     const block = blocks.get(table.name);
@@ -85,7 +91,8 @@ export function inspectDump(source, schema) {
   const ordered = [];
   const pending = [...tables];
   while (pending.length) {
-    const index = pending.findIndex((t) => t.foreignKeys.every((fk) => ordered.some((b) => b.name === fk.table)));
+    // FKs da própria tabela são verificadas pelo PostgreSQL ao concluir o COPY.
+    const index = pending.findIndex((t) => t.foreignKeys.every((fk) => fk.table === t.name || ordered.some((b) => b.name === fk.table)));
     if (index < 0) throw new Error('Relações cíclicas exigem recuperação específica; nada foi alterado.');
     ordered.push(blocks.get(pending.splice(index, 1)[0].name));
   }
@@ -93,7 +100,6 @@ export function inspectDump(source, schema) {
     const b = blocks.get(name);
     return b.cells.filter((r) => predicate(Object.fromEntries(b.columns.map((c, i) => [c, r[i]])))).length;
   };
-  const warnings = [];
   for (const name of ['operacoes_artigo', 'ops_lote']) {
     const missing = count(name, (r) => r.avisa_ao_iniciar === 't' && r.etapa_avisada_id === '\\N');
     if (missing) warnings.push(`${name}: ${missing} avisos de início sem etapa de destino no backup.`);
@@ -169,8 +175,8 @@ export function importSql(inspection) {
   return sql.join('\n') + '\n';
 }
 
-export function recoverDatabase({ source, databaseUrl, database, schemaPath = path.join(backendDir, 'prisma/schema.prisma'), log = console.log }) {
-  const inspection = inspectDump(source, readFileSync(schemaPath, 'utf8'));
+export function recoverDatabase({ source, databaseUrl, database, schemaPath = path.join(backendDir, 'prisma/schema.prisma'), log = console.log, allowMissingMessages = false }) {
+  const inspection = inspectDump(source, readFileSync(schemaPath, 'utf8'), { allowMissingMessages });
   const recoveredUrl = targetUrl(databaseUrl, database);
   // CREATE DATABASE recusa destinos existentes, inclusive recuperações parciais.
   log(`Criando banco novo: ${database}`);
@@ -186,12 +192,12 @@ export function recoverDatabase({ source, databaseUrl, database, schemaPath = pa
 
 if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.argv[1])).href) {
   try {
-    const { values } = parseArgs({ options: { source: { type: 'string' }, database: { type: 'string' }, inspect: { type: 'boolean' } } });
+    const { values } = parseArgs({ options: { source: { type: 'string' }, database: { type: 'string' }, inspect: { type: 'boolean' }, 'allow-missing-messages': { type: 'boolean' } } });
     if (!values.source || (!values.inspect && !values.database)) throw new Error('Uso: node ops/recover-database.mjs --source /caminho/backup.sql --inspect OU --database forja_recuperado_<identificador>');
     const source = readFileSync(values.source, 'utf8');
     const result = values.inspect
-      ? inspectDump(source, readFileSync(path.join(backendDir, 'prisma/schema.prisma'), 'utf8')).report
-      : recoverDatabase({ source, databaseUrl: process.env.DATABASE_URL, database: values.database });
+      ? inspectDump(source, readFileSync(path.join(backendDir, 'prisma/schema.prisma'), 'utf8'), { allowMissingMessages: values['allow-missing-messages'] }).report
+      : recoverDatabase({ source, databaseUrl: process.env.DATABASE_URL, database: values.database, allowMissingMessages: values['allow-missing-messages'] });
     console.log(JSON.stringify(result, null, 2));
   } catch (e) {
     console.error(e instanceof Error ? e.message : 'Falha na recuperação.');

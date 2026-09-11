@@ -16,31 +16,31 @@ const { useAvisos } = await import('../src/hooks/useAvisos');
 
 test('sino privado acompanha a credencial, não a estação observada', () => {
   const qc = new QueryClient({ defaultOptions: { queries: { retry: false, gcTime: 0 } } });
-  const render = (etapaId: string) => {
+  const render = () => {
     // Fornece ao snapshot de SSR a credencial já hidratada de cada cenário.
     Object.assign(useAuth.getInitialState(), useAuth.getState());
     return renderToStaticMarkup(
-      <QueryClientProvider client={qc}><PainelAvisos etapaId={etapaId} /></QueryClientProvider>,
+      <QueryClientProvider client={qc}><PainelAvisos /></QueryClientProvider>,
     );
   };
   useAuth.setState({ isAuthenticated: true, token: 'sessao-desbaste', pessoa: {
     id: 'desbaste-user', nome: 'Desbaste', papel: 'estacao', ativo: true, etapaId: 'desbaste',
   } });
-  assert.equal(render('engenharia'), '', 'Observar engenharia não deve montar sino, mensagens ou ações.');
-  assert.match(render('desbaste'), /Avisos da produção/);
+  assert.match(render(), /Mensagens e avisos/, 'A campainha permanece visível ao observar outra estação.');
+  assert.match(render(), /Mensagens e avisos/);
 
   useAuth.setState({ token: 'sessao-engenharia', pessoa: {
     id: 'engenharia-user', nome: 'Engenharia', papel: 'estacao', ativo: true, etapaId: 'engenharia',
   } });
-  assert.match(render('engenharia'), /Avisos da produção/);
-  assert.equal(render('desbaste'), '');
+  assert.match(render(), /Mensagens e avisos/);
+  assert.match(render(), /Mensagens e avisos/);
 
   for (const papel of ['admin', 'pcp', 'programador'] as const) {
     useAuth.setState({ pessoa: { id: papel, nome: papel, papel, ativo: true, etapaId: null } });
-    assert.equal(render('engenharia'), '', 'Papéis sem vínculo não recebem exceção.');
+    assert.match(render(), /Mensagens e avisos/, 'Sem vínculo o sino continua visível; o servidor restringe o conteúdo.');
   }
   useAuth.setState({ isAuthenticated: false, pessoa: null, token: null });
-  assert.equal(render('engenharia'), '');
+  assert.equal(render(), '');
   qc.clear();
 });
 

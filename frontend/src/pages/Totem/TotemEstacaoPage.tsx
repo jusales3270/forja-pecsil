@@ -248,7 +248,7 @@ export function TotemEstacaoPage() {
               </button>
             )}
             <UserHeaderWidget />
-            <PainelAvisos etapaId={etapaId} />
+            <PainelAvisos />
             <button
               onClick={() => navigate('/fim-de-turno')}
               className="px-4 py-2 text-sm text-forja-400 hover:text-forja-300 border border-forja-500/30 hover:border-forja-500 rounded-lg"
