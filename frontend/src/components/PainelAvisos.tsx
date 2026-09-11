@@ -4,6 +4,7 @@
 // ============================================================
 
 import { useState } from 'react';
+import { useAuth } from '../lib/auth-store';
 import { AvisoDetalheModal } from './AvisoDetalheModal';
 import type { Aviso } from '../hooks/useAvisos';
 import {
@@ -13,9 +14,18 @@ import {
   tempoRelativo,
 } from '../hooks/useAvisos';
 
-/** etapaId: estação aberta no tótem. Os avisos dela aparecem aqui. */
+/** Observar outra estação não dá acesso ao painel privado dela. */
 export function PainelAvisos({ etapaId }: { etapaId?: string | null }) {
-  const { data: avisos } = useAvisos(etapaId);
+  const { pessoa, token, isAuthenticated } = useAuth();
+  if (!isAuthenticated || !pessoa || (etapaId && etapaId !== pessoa.etapaId)) return null;
+
+  // Desmonta o painel e qualquer detalhe aberto ao mudar de conta ou vínculo.
+  return <PainelAvisosDaConta key={`${pessoa.id}:${pessoa.etapaId}:${token}`} etapaId={etapaId} />;
+}
+
+function PainelAvisosDaConta({ etapaId }: { etapaId?: string | null }) {
+  const consulta = useAvisos(etapaId);
+  const avisos = consulta.isError ? undefined : consulta.data;
   const marcarLido = useMarcarAvisoLido();
   const marcarTodos = useMarcarTodosLidos();
   const [aberto, setAberto] = useState(false);
@@ -63,7 +73,7 @@ export function PainelAvisos({ etapaId }: { etapaId?: string | null }) {
 
             {total === 0 && (
               <div className="px-4 py-8 text-center text-sm text-neutral-500">
-                Nenhum aviso novo.
+                {consulta.isError ? 'Não foi possível carregar os avisos.' : 'Nenhum aviso novo.'}
               </div>
             )}
 
@@ -120,7 +130,7 @@ export function PainelAvisos({ etapaId }: { etapaId?: string | null }) {
         </>
       )}
 
-      {detalhe && (
+      {detalhe && !consulta.isError && (
         <AvisoDetalheModal
           aviso={detalhe}
           onClose={() => setDetalhe(null)}
