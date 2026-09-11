@@ -10,7 +10,7 @@ export const api = axios.create({
 // Interceptor: anexa token automaticamente
 api.interceptors.request.use((config) => {
   const token = localStorage.getItem('forja_token');
-  if (token) {
+  if (token && !config.headers.Authorization) {
     config.headers.Authorization = `Bearer ${token}`;
   }
   return config;
@@ -20,7 +20,10 @@ api.interceptors.request.use((config) => {
 api.interceptors.response.use(
   (res) => res,
   (err) => {
-    if (err.response?.status === 401) {
+    // Uma resposta atrasada da sessão anterior não deve desconectar a nova conta.
+    const currentToken = localStorage.getItem('forja_token');
+    const requestAuthorization = err.config?.headers?.Authorization;
+    if (err.response?.status === 401 && (!currentToken || requestAuthorization === `Bearer ${currentToken}`)) {
       localStorage.removeItem('forja_token');
       localStorage.removeItem('forja-auth');
       localStorage.removeItem('forja_pessoa');

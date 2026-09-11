@@ -31,6 +31,7 @@ import { dashboardRoutes } from './routes/dashboard.js';
 import { garantirBuckets } from './lib/storage.js';
 
 import { prisma } from './db/prisma.js';
+import { mensagensRoutes } from './routes/mensagens.js';
 
 async function bootstrap() {
   const app = Fastify({
@@ -93,6 +94,7 @@ async function bootstrap() {
   await app.register(motivosParadaRoutes, { prefix: '/api' });
   await app.register(roteirosPadraoRoutes, { prefix: '/api' });
   await app.register(avisosRoutes, { prefix: '/api' });
+  await app.register(mensagensRoutes, { prefix: '/api' });
   await app.register(toleranciasGeraisRoutes, { prefix: '/api' });
   await app.register(artigosRoutes, { prefix: '/api' });
   await app.register(desenhosRoutes, { prefix: '/api' });

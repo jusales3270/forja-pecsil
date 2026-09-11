@@ -15,7 +15,7 @@ function fixture(records = {}) {
 
 test('preserva tabelas vazias, reconhece nomes físicos e ordena pelas FKs', () => {
   const result = inspectDump(fixture(), schema);
-  assert.equal(result.blocks.length, 25);
+  assert.equal(result.blocks.length, 26);
   assert.equal(result.report.counts.desenhos, 0);
   assert.ok(result.blocks.findIndex((t) => t.name === 'etapas') < result.blocks.findIndex((t) => t.name === 'pessoas'));
   assert.ok(result.blocks.findIndex((t) => t.name === 'pessoas') < result.blocks.findIndex((t) => t.name === 'artigos'));
@@ -64,4 +64,29 @@ test('destino é banco novo explícito; mantém senha e parâmetros sem shell', 
   assert.throws(() => targetUrl(original, 'forja'), /banco novo/);
   assert.throws(() => targetUrl(original, 'forja_recuperado_x;DROP'), /banco novo/);
   assert.throws(() => targetUrl(next.toString(), 'forja_recuperado_20260910'), /banco atual/);
+});
+
+
+test('backup anterior ao chat exige opção explícita; demais tabelas continuam obrigatórias', () => {
+  const antigo = fixture().replace(/COPY public.mensagens_internas[^]*?\\\.\n/, '');
+  assert.throws(() => inspectDump(antigo, schema), /falta mensagens_internas/);
+  const result = inspectDump(antigo, schema, { allowMissingMessages: true });
+  assert.equal(result.report.counts.mensagens_internas, 0);
+  assert.equal(result.report.warnings.length, 1);
+  assert.throws(() => inspectDump(antigo.replace(/COPY public.clientes[^]*?\\\.\n/, ''), schema,
+    { allowMissingMessages: true }), /falta clientes/);
+});
+
+test('preserva mensagens e respostas com FK própria, recusando resposta órfã', () => {
+  const records = {
+    etapas: [{ id: 'eng' }, { id: 'desb' }],
+    pessoas: [{ id: 'autor', etapa_id: 'eng' }, { id: 'destino', etapa_id: 'desb' }],
+    mensagens_internas: [
+      { id: 'resposta', remetente_id: 'destino', destinatario_id: 'autor', etapa_origem_id: 'desb', etapa_destino_id: 'eng', resposta_a_id: 'original' },
+      { id: 'original', remetente_id: 'autor', destinatario_id: 'destino', etapa_origem_id: 'eng', etapa_destino_id: 'desb' },
+    ],
+  };
+  assert.equal(inspectDump(fixture(records), schema).report.counts.mensagens_internas, 2);
+  records.mensagens_internas[0].resposta_a_id = 'inexistente';
+  assert.throws(() => inspectDump(fixture(records), schema), /mensagens_internas.resposta_a_id/);
 });
