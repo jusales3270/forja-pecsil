@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useAuth } from '../lib/auth-store';
 import { Modal } from './Modal';
 import { AvisoDetalheModal } from './AvisoDetalheModal';
-import { useAvisos, useMarcarAvisoLido, type Aviso } from '../hooks/useAvisos';
+import { useAvisos, useMarcarAvisoLido, useMarcarTodosLidos, type Aviso } from '../hooks/useAvisos';
 import { useMensagens, useContatos, useLerMensagem, type Mensagem } from '../hooks/useMensagens';
 import { EditorMensagem } from './EditorMensagem';
 
@@ -32,11 +32,12 @@ function PainelDaConta() {
   const contatos = useContatos(aberto);
   const avisos = useAvisos();
   const marcarAviso = useMarcarAvisoLido();
+  const marcarTodosAvisos = useMarcarTodosLidos();
   const ler = useLerMensagem();
   const mensagens = consulta.isError ? undefined : consulta.data;
   const alertas = avisos.isError ? [] : avisos.data ?? [];
   const total = (recebidas.isError ? 0 : recebidas.data?.meta.naoLidas ?? 0) + alertas.length;
-  const erroLeitura = ler.error || marcarAviso.error;
+  const erroLeitura = ler.error || marcarAviso.error || marcarTodosAvisos.error;
   const trocarCaixa = (valor: typeof caixa) => { setCaixa(valor); setPagina(1); setFeedback(''); };
   return <>
     <button type="button" title="Mensagens e avisos" aria-label={`Mensagens e avisos${total ? `, ${total} não lidos` : ''}`}
@@ -84,6 +85,7 @@ function PainelDaConta() {
           </>}
         {caixa === 'recebidas' && <section className="border-t border-neutral-700 pt-4 space-y-3" aria-label="Avisos automáticos da estação">
           <h3 className="font-semibold">Avisos automáticos da estação</h3>
+          {alertas.length > 0 && <button className={botao} disabled={marcarTodosAvisos.isPending} onClick={() => marcarTodosAvisos.mutate(undefined)}>Marcar avisos da estação como lidos</button>}
           {avisos.isError ? <p role="alert">Não foi possível carregar os avisos.</p> : avisos.isPending ? <p>Carregando avisos…</p> : alertas.length === 0 ? <p className="text-sm text-neutral-400">Nenhum aviso novo.</p> : alertas.map(a => <article key={a.id} className="border border-neutral-700 rounded-xl p-4 space-y-2">
             <p className="text-sm whitespace-pre-wrap break-words">{a.mensagem}</p>
             <p className="text-xs text-neutral-400">Sistema · {dataHora(a.criadoEm)}</p>
