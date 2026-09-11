@@ -124,6 +124,27 @@ test('ID da mensagem funciona sem crypto.randomUUID na intranet HTTP', () => {
   assert.match(novoIdMensagem(), /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/);
 });
 
+test('avisos automáticos fixam a credencial da consulta mesmo se o storage já mudou', async () => {
+  const { useAvisos } = await import('../src/hooks/useAvisos');
+  const originalAdapter = api.defaults.adapter;
+  const qc = new QueryClient({ defaultOptions: { queries: { retry: false, gcTime: 0 } } });
+  let authorization: unknown; let ui: ReactTestRenderer | undefined;
+  api.defaults.adapter = async config => {
+    authorization = config.headers.Authorization;
+    return { data: { data: [] }, status: 200, statusText: 'OK', headers: {}, config };
+  };
+  function Avisos() { useAvisos(); return null; }
+  try {
+    useAuth.setState({ pessoa: { id: 'gui', nome: 'Gui', papel: 'programador', ativo: true, etapaId: 'eng' }, token: 'sessao-anterior', isAuthenticated: true });
+    storage.set('forja_token', 'sessao-nova');
+    await act(async () => { ui = create(<QueryClientProvider client={qc}><Avisos /></QueryClientProvider>); await flush(); });
+    assert.equal(authorization, 'Bearer sessao-anterior');
+  } finally {
+    await act(async () => ui?.unmount()); qc.clear(); api.defaults.adapter = originalAdapter; storage.clear();
+    useAuth.setState({ pessoa: null, token: null, isAuthenticated: false });
+  }
+});
+
 
 test('resposta 401 atrasada e autenticação explícita não atingem a nova sessão', async () => {
   const originalAdapter = api.defaults.adapter;

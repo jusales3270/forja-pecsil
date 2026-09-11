@@ -86,8 +86,10 @@ export function useAvisos(etapaId?: string | null) {
   return useQuery({
     queryKey: [...QUERY_KEY, pessoa?.id, pessoa?.etapaId ?? null, token, etapaId ?? null],
     enabled: isAuthenticated && !!pessoa && (!etapaId || etapaId === pessoa.etapaId),
-    queryFn: async () => {
+    queryFn: async ({ signal }) => {
       const { data } = await api.get<{ data: Aviso[] }>('/avisos', {
+        signal,
+        headers: { Authorization: `Bearer ${token}` },
         params: etapaId ? { etapaId } : undefined,
       });
       return data.data;
@@ -97,22 +99,24 @@ export function useAvisos(etapaId?: string | null) {
 }
 
 export function useMarcarAvisoLido() {
+  const { pessoa, token } = useAuth();
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (id: string) => {
-      await api.patch(`/avisos/${id}/lido`);
+      await api.patch(`/avisos/${id}/lido`, {}, { headers: { Authorization: `Bearer ${token}` } });
     },
-    onSuccess: () => qc.invalidateQueries({ queryKey: QUERY_KEY }),
+    onSuccess: () => qc.invalidateQueries({ queryKey: [...QUERY_KEY, pessoa?.id, pessoa?.etapaId ?? null, token] }),
   });
 }
 
 export function useMarcarTodosLidos() {
+  const { pessoa, token } = useAuth();
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (etapaId?: string | null) => {
-      await api.post('/avisos/marcar-lidos', etapaId ? { etapaId } : {});
+      await api.post('/avisos/marcar-lidos', etapaId ? { etapaId } : {}, { headers: { Authorization: `Bearer ${token}` } });
     },
-    onSuccess: () => qc.invalidateQueries({ queryKey: QUERY_KEY }),
+    onSuccess: () => qc.invalidateQueries({ queryKey: [...QUERY_KEY, pessoa?.id, pessoa?.etapaId ?? null, token] }),
   });
 }
 
