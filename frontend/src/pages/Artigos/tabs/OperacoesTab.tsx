@@ -351,8 +351,8 @@ function OperacaoModal({
       setErro('Tipo de serviço é obrigatório');
       return;
     }
-    const tempo = parseInt(tempoUnitMin, 10);
-    if (isNaN(tempo) || tempo < 0) {
+    const tempo = Number(tempoUnitMin);
+    if (!tempoUnitMin.trim() || !Number.isFinite(tempo) || tempo < 0) {
       setErro('Tempo unitário deve ser um número >= 0');
       return;
     }
@@ -494,6 +494,7 @@ function OperacaoModal({
             <input
               type="number"
               min="0"
+              step="any"
               value={tempoUnitMin}
               onChange={(e) => setTempoUnitMin(e.target.value)}
               className="input"

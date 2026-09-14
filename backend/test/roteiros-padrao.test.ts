@@ -223,4 +223,49 @@ describe('Roteiros Padrão — Catálogo e Aplicação', () => {
     assert.equal(opFinal.etapa.nome, 'Qualidade Final');
     assert.equal(opFinal.exigeInspecao, true);
   });
+
+  test('Bronze preserva tempos de 30 segundos ao listar, aplicar e editar o artigo', async () => {
+    const headers = { authorization: `Bearer ${token}` };
+    const catalogo = await app.inject({ method: 'GET', url: '/api/roteiros-padrao', headers });
+    assert.equal(catalogo.statusCode, 200);
+    const roteiro = catalogo.json().data.find((r: any) => r.id === 'coroa-forminha-bronze');
+    assert.ok(roteiro);
+    assert.equal(roteiro.nome, 'Coroa / Forminha em Bronze');
+    assert.equal(roteiro.temPendencia, false);
+    assert.equal(roteiro.totalOperacoes, 12);
+    assert.equal(roteiro.tempoTotalUnitMin, 109.5);
+    assert.deepEqual(roteiro.operacoes.map((o: any) => o.codigoTipoServico),
+      [36, 37, 25, 10, 26, 26, 31, 21, 28, 28, 13, 18]);
+
+    const aplicada = await app.inject({
+      method: 'POST',
+      url: `/api/artigos/${artigoId}/operacoes/aplicar-roteiro`,
+      headers,
+      payload: { roteiroId: 'coroa-forminha-bronze', substituir: true },
+    });
+    assert.equal(aplicada.statusCode, 201);
+    const leitura = await app.inject({
+      method: 'GET', url: `/api/artigos/${artigoId}/operacoes`, headers,
+    });
+    assert.equal(leitura.statusCode, 200);
+    const ops = leitura.json().data;
+    assert.deepEqual(ops.map((o: any) => o.tempoUnitMin),
+      [1, 1, 4.5, 40, 10, 10, 7, 7, 10, 10, 4.5, 4.5]);
+    assert.deepEqual(ops.map((o: any) => o.codigoOp),
+      ['10', '20', '30', '40', '50', '60', '70', '80', '90', '100', '110', '120']);
+    assert.match(ops[7].observacoes, /FERRAMENTA Nº 13/);
+    assert.ok(ops.every((o: any) => o.tempoSetupMin === 0));
+    assert.equal(ops[11].exigeInspecao, true);
+
+    const editada = await app.inject({
+      method: 'PATCH',
+      url: `/api/artigos/${artigoId}/operacoes/${ops[2].id}`,
+      headers,
+      payload: { tempoUnitMin: 4.5, observacoes: 'DESBASTE PARA METALIZAÇÃO' },
+    });
+    assert.equal(editada.statusCode, 200);
+    const persistida = await prisma.operacaoArtigo.findUniqueOrThrow({ where: { id: ops[2].id } });
+    assert.equal(persistida.tempoUnitMin, 4.5);
+  });
+
 });

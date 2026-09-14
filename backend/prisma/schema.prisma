@@ -411,7 +411,7 @@ model OperacaoArtigo {
   codigoOp        String  @map("codigo_op")
   ordem           Int
   tipoServico     String  @map("tipo_servico")
-  tempoUnitMin    Int     @map("tempo_unit_min")
+  tempoUnitMin    Float     @map("tempo_unit_min")
   tempoSetupMin   Int     @default(0) @map("tempo_setup_min")
   exigeInspecao   Boolean @default(false) @map("exige_inspecao")
   /// Avisa quando esta operação atingir N peças, sem esperar o lote fechar.
@@ -575,8 +575,8 @@ model OPLote {
   ordem               Int
   status              StatusOPLote @default(na_fila)
   quantidadeConcluida Int          @default(0) @map("quantidade_concluida")
-  tempoUnitPlanejado  Int          @map("tempo_unit_planejado")
-  tempoTotalPlanejado Int          @map("tempo_total_planejado")
+  tempoUnitPlanejado  Float          @map("tempo_unit_planejado")
+  tempoTotalPlanejado Float          @map("tempo_total_planejado")
   codigoOp            String       @map("codigo_op")
   tipoServico         String       @map("tipo_servico")
   exigeInspecao       Boolean      @default(false) @map("exige_inspecao")
