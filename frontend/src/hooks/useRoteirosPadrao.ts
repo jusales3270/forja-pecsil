@@ -64,10 +64,15 @@ export function useAplicarRoteiro(artigoId: string) {
   });
 }
 
-/** 212 -> "3h32" / 45 -> "45min" */
+/** 212 -> "3h32" / 45 -> "45min" / 4.5 -> "4min30s" */
 export function formatarMinutos(min: number): string {
-  if (min < 60) return `${min}min`;
-  const h = Math.floor(min / 60);
-  const m = min % 60;
+  const totalSegundos = Math.round(min * 60);
+  const h = Math.floor(totalSegundos / 3600);
+  const m = Math.floor((totalSegundos % 3600) / 60);
+  const s = totalSegundos % 60;
+  if (s > 0) {
+    return h > 0 ? `${h}h${m}min${s}s` : `${m}min${s}s`;
+  }
+  if (h === 0) return `${m}min`;
   return m === 0 ? `${h}h` : `${h}h${String(m).padStart(2, '0')}`;
 }

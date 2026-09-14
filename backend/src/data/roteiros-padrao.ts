@@ -533,6 +533,102 @@ export const ROTEIROS_PADRAO: RoteiroPadrao[] = [
     ],
   },
 
+  // Coroa / Forminha em Bronze — sequência e tempos do PDF fornecido pelo PCP.
+  {
+    id: 'coroa-forminha-bronze',
+    nome: 'Coroa / Forminha em Bronze',
+    descricao:
+      'Programação CNC Centro/Torno, Desbaste para Metalização, Metalização, Encaixe, Arredondamento, Torneamento Traseiro, Integrex (Dianteiro / Rosca), Chaveta / Rebaixos, Furação / Aletas / Gravação, Polimento / Rebarbação / Embalagem e Inspeção Final.',
+    origem: 'COROA-FORMINHA-EM-BRONZE.pdf — GRV, processos 192900–192911',
+    revisaoPendente: false,
+    operacoes: [
+      {
+        codigoTipoServico: 36,
+        observacoes: 'PROGRAMAR CENTRO',
+        tempoUnitMin: 1,
+        tempoSetupMin: 0,
+        exigeInspecao: false,
+      },
+      {
+        codigoTipoServico: 37,
+        observacoes: 'PROGRAMAR TORNO',
+        tempoUnitMin: 1,
+        tempoSetupMin: 0,
+        exigeInspecao: false,
+      },
+      {
+        codigoTipoServico: 25,
+        observacoes: 'DESBASTE PARA METALIZAÇÃO',
+        tempoUnitMin: 4.5,
+        tempoSetupMin: 0,
+        exigeInspecao: false,
+      },
+      {
+        codigoTipoServico: 10,
+        observacoes: 'DESCRIÇÃO DE PÓ ___________\n\nQUANTIDADE POR PEÇA __________',
+        tempoUnitMin: 40,
+        tempoSetupMin: 0,
+        exigeInspecao: false,
+      },
+      {
+        codigoTipoServico: 26,
+        observacoes: 'ENCAIXE',
+        tempoUnitMin: 10,
+        tempoSetupMin: 0,
+        exigeInspecao: false,
+      },
+      {
+        codigoTipoServico: 26,
+        observacoes: 'ARREDONDAMENTO',
+        tempoUnitMin: 10,
+        tempoSetupMin: 0,
+        exigeInspecao: false,
+      },
+      {
+        codigoTipoServico: 31,
+        observacoes: 'LADO TRASEIRO',
+        tempoUnitMin: 7,
+        tempoSetupMin: 0,
+        exigeInspecao: false,
+      },
+      {
+        codigoTipoServico: 21,
+        observacoes: 'LADO DIANTEIRO\nROSCA\nFERRAMENTA Nº 13',
+        tempoUnitMin: 7,
+        tempoSetupMin: 0,
+        exigeInspecao: false,
+      },
+      {
+        codigoTipoServico: 28,
+        observacoes: 'CHAVETA / REBAIXOS',
+        tempoUnitMin: 10,
+        tempoSetupMin: 0,
+        exigeInspecao: false,
+      },
+      {
+        codigoTipoServico: 28,
+        observacoes: 'FURAÇÃO / ALETAS / GRAVAÇÃO',
+        tempoUnitMin: 10,
+        tempoSetupMin: 0,
+        exigeInspecao: false,
+      },
+      {
+        codigoTipoServico: 13,
+        observacoes: 'POLIMENTO / REBARBAÇÃO / EMBALAGEM',
+        tempoUnitMin: 4.5,
+        tempoSetupMin: 0,
+        exigeInspecao: false,
+      },
+      {
+        codigoTipoServico: 18,
+        observacoes: 'INSPEÇÃO FINAL / VOLUME / RELATÓRIOS',
+        tempoUnitMin: 4.5,
+        tempoSetupMin: 0,
+        exigeInspecao: true,
+      },
+    ],
+  },
+
   // ==========================================================
   // MODELOS EXPANDIDOS DE CHÃO DE FÁBRICA / REUNIÕES PCP
   // ==========================================================

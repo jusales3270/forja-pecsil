@@ -22,7 +22,7 @@ const criarOperacaoSchema = z.object({
   codigoOp: z.string().min(1, 'codigoOp é obrigatório').max(20),
   ordem: z.number().int().nonnegative('ordem deve ser >= 0'),
   tipoServico: z.string().min(1, 'tipoServico é obrigatório').max(200),
-  tempoUnitMin: z.number().int().nonnegative('tempoUnitMin deve ser >= 0'),
+  tempoUnitMin: z.number().finite().nonnegative('tempoUnitMin deve ser >= 0'),
   tempoSetupMin: z.number().int().nonnegative().default(0),
   exigeInspecao: z.boolean().default(false),
   gatilhoAlertaPecas: z.number().int().positive().nullable().optional(),
