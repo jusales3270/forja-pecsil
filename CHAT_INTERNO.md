@@ -12,15 +12,21 @@ ao autor original, mantendo o vínculo com a mensagem anterior. A leitura é uma
 ação explícita e preserva o horário da primeira confirmação.
 
 Somente o remetente e o destinatário têm acesso ao recado. Para recebê-lo, marcar
-como lido ou responder, o destinatário precisa continuar ativo e vinculado à
-estação de destino. Outros usuários da mesma estação e administradores não têm
-exceção. A API consulta o vínculo atual, mesmo com JWT antigo. O histórico de
-envios continua pertencendo ao remetente. Se o autor mudou de estação, uma
-resposta é recusada; crie uma nova mensagem escolhendo seu destino atual.
+como lido ou responder, o destinatário precisa continuar ativo e ter vínculo com
+a estação de destino ou o papel atual de administrador. Esse papel permite
+atuar em todas as estações ativas, mas nunca acessar recados de terceiros.
+A API consulta o vínculo e papel atuais, mesmo com JWT antigo. O histórico de
+envios continua pertencendo ao remetente. Se um autor comum mudou de estação,
+a resposta é recusada; crie uma nova mensagem escolhendo seu destino atual.
 
 Cada pessoa precisa entrar com sua própria conta. Uma credencial de estação
-compartilhada representa um único destinatário para o sistema. Contas sem vínculo
-mantêm o sino, mas precisam de uma estação ativa para enviar e receber recados.
+compartilhada representa um único destinatário para o sistema. Contas comuns
+sem vínculo mantêm o sino, mas precisam de uma estação ativa para enviar e
+receber recados. Administradores podem enviar sem estação fixa e aparecem como
+destinatários em todas as estações ativas. Quando não têm estação ativa vinculada,
+a estação escolhida no envio registra o contexto da mensagem, sem alterar o
+cadastro. Respostas voltam à conta do administrador e continuam privadas.
+Essa correção de permissões não exige migration adicional.
 Os avisos automáticos continuam compartilhados apenas com as contas da estação.
 
 ## Ativar no Coolify local

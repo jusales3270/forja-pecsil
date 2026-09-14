@@ -48,7 +48,7 @@ test('recados pessoais: envio, resposta, assinatura e autorização por conta e 
       assert.equal(r.json().data.conta.nome, 'Guilherme');
       assert.deepEqual(Object.keys(r.json().data.estacoes[1].pessoas[0]).sort(), ['codigoPessoal', 'id', 'nome']);
       assert.ok(!r.body.includes('pinHash'));
-      assert.equal((await req(admin, 'GET', '/api/mensagens/contatos')).json().data.podeEnviar, false);
+      assert.equal((await req(admin, 'GET', '/api/mensagens/contatos')).json().data.podeEnviar, true);
     });
     await t.test('servidor valida destinatário e rejeita falsificação de assinatura', async () => {
       assert.equal((await req(guilherme, 'POST', '/api/mensagens', { ...input, remetenteNome: 'Domingo' })).statusCode, 400);
@@ -57,7 +57,6 @@ test('recados pessoais: envio, resposta, assinatura e autorização por conta e 
       assert.equal((await req(guilherme, 'POST', '/api/mensagens', { ...input, etapaDestinoId: eng.id })).statusCode, 400);
       assert.equal((await req(guilherme, 'POST', '/api/mensagens', { ...input, corpo: '  ' })).statusCode, 400);
       assert.equal((await req(guilherme, 'POST', '/api/mensagens', { ...input, corpo: 'a'.repeat(4001) })).statusCode, 400);
-      assert.equal((await req(admin, 'POST', '/api/mensagens', input)).statusCode, 403);
       const r = await req(guilherme, 'POST', '/api/mensagens', input);
       assert.equal(r.statusCode, 201, r.body); mensagem = r.json().data;
       assert.equal(mensagem.remetenteNome, 'Guilherme');
@@ -109,6 +108,63 @@ test('recados pessoais: envio, resposta, assinatura e autorização por conta e 
       assert.equal(primeira.data.length, 30); assert.equal(segunda.data.length, 2);
       assert.equal(new Set([...primeira.data, ...segunda.data].map((m: any) => m.id)).size, 32);
       assert.equal((await req(colega, 'GET', '/api/mensagens')).json().meta.naoLidas, 0);
+    });
+    await t.test('admin sem estação envia, recebe e responde somente aos próprios recados', async () => {
+      const outroAdmin = await conta('OutroAdmin', eng.id, 'admin');
+      const semEstacao = await conta('SemEstacao', null);
+      tokens.set(outroAdmin.id, token(outroAdmin));
+      tokens.set(semEstacao.id, token(semEstacao));
+      const contatos = (await req(pedro, 'GET', '/api/mensagens/contatos')).json().data;
+      for (const e of contatos.estacoes) {
+        assert.equal(e.pessoas.filter((p: any) => p.id === admin.id).length, 1);
+        assert.equal(e.pessoas.filter((p: any) => p.id === outroAdmin.id).length, 1);
+        assert.ok(!e.pessoas.some((p: any) => p.id === semEstacao.id));
+      }
+      assert.equal((await req(semEstacao, 'GET', '/api/mensagens/contatos')).json().data.podeEnviar, false);
+      assert.equal((await req(semEstacao, 'POST', '/api/mensagens', { ...input, id: randomUUID() })).statusCode, 403);
+      const envio = { ...input, id: randomUUID(), corpo: 'Urgência solicitada pela administração.' };
+      const r = await req(admin, 'POST', '/api/mensagens', envio);
+      assert.equal(r.statusCode, 201, r.body);
+      const m = r.json().data;
+      assert.equal(m.remetenteNome, 'Admin');
+      assert.equal(m.etapaOrigem.id, desb.id, 'Estação escolhida é o contexto do administrador sem estação fixa');
+      assert.equal((await req(admin, 'POST', '/api/mensagens', envio)).json().data.id, m.id);
+      assert.equal((await req(pedro, 'GET', `/api/mensagens/${m.id}`)).statusCode, 200);
+      const resposta = await req(pedro, 'POST', `/api/mensagens/${m.id}/responder`, { id: randomUUID(), corpo: 'Recebido.' });
+      assert.equal(resposta.statusCode, 201, resposta.body);
+      const reply = resposta.json().data;
+      assert.equal(reply.destinatarioId, admin.id);
+      assert.ok((await req(admin, 'GET', '/api/mensagens')).json().data.some((x: any) => x.id === reply.id));
+      assert.equal((await req(admin, 'GET', '/api/mensagens')).json().meta.naoLidas, 1);
+      assert.equal((await req(admin, 'PATCH', `/api/mensagens/${reply.id}/lida`)).statusCode, 200);
+      assert.equal((await req(admin, 'POST', `/api/mensagens/${reply.id}/responder`, { id: randomUUID(), corpo: 'Obrigado.' })).statusCode, 201);
+      for (const intruso of [colega, outroAdmin]) {
+        for (const id of [m.id, reply.id]) {
+          assert.equal((await req(intruso, 'GET', `/api/mensagens/${id}`)).statusCode, 404);
+          assert.equal((await req(intruso, 'PATCH', `/api/mensagens/${id}/lida`)).statusCode, 404);
+          assert.equal((await req(intruso, 'POST', `/api/mensagens/${id}/responder`, { id: randomUUID(), corpo: 'Intruso' })).statusCode, 404);
+        }
+        assert.ok(!(await req(intruso, 'GET', '/api/mensagens')).json().data.some((x: any) => x.id === reply.id));
+      }
+      // Um administrador com estação fixa também recebe nas demais estações.
+      const direto = await req(pedro, 'POST', '/api/mensagens', { ...input, id: randomUUID(), destinatarioId: outroAdmin.id });
+      assert.equal(direto.statusCode, 201, direto.body);
+      assert.equal((await req(outroAdmin, 'GET', `/api/mensagens/${direto.json().data.id}`)).statusCode, 200);
+      await db.pessoa.update({ where: { id: admin.id }, data: { papel: 'programador' } });
+      assert.equal((await req(admin, 'GET', '/api/mensagens/contatos')).json().data.podeEnviar, false);
+      assert.equal((await req(admin, 'POST', '/api/mensagens', { ...envio, id: randomUUID() })).statusCode, 403);
+      assert.equal((await req(admin, 'GET', `/api/mensagens/${reply.id}`)).statusCode, 404);
+      assert.equal((await req(admin, 'PATCH', `/api/mensagens/${reply.id}/lida`)).statusCode, 404);
+      assert.equal((await req(admin, 'POST', `/api/mensagens/${reply.id}/responder`, { id: randomUUID(), corpo: 'Papel antigo' })).statusCode, 404);
+      assert.equal((await req(pedro, 'POST', `/api/mensagens/${m.id}/responder`, { id: randomUUID(), corpo: 'Papel revogado' })).statusCode, 409);
+      await db.pessoa.update({ where: { id: admin.id }, data: { papel: 'admin', ativo: false } });
+      assert.equal((await req(admin, 'GET', '/api/mensagens')).statusCode, 401);
+      assert.equal((await req(pedro, 'POST', '/api/mensagens', { ...envio, id: randomUUID(), destinatarioId: admin.id })).statusCode, 400);
+      await db.pessoa.update({ where: { id: admin.id }, data: { ativo: true } });
+      await db.etapa.update({ where: { id: desb.id }, data: { ativa: false } });
+      assert.equal((await req(admin, 'GET', `/api/mensagens/${reply.id}`)).statusCode, 404);
+      assert.equal((await req(admin, 'POST', '/api/mensagens', { ...envio, id: randomUUID() })).statusCode, 400);
+      await db.etapa.update({ where: { id: desb.id }, data: { ativa: true } });
     });
     await t.test('mudança de estação, inativação e JWT antigo não contornam a regra', async () => {
       await db.pessoa.update({ where: { id: pedro.id }, data: { etapaId: eng.id } });

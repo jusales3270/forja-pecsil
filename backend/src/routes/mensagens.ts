@@ -6,7 +6,7 @@ import { prisma } from '../db/prisma.js';
 const fail = (statusCode: number, message: string): never => {
   throw Object.assign(new Error(message), { statusCode });
 };
-const contaSelect = { id: true, nome: true, ativo: true, etapaId: true,
+const contaSelect = { id: true, nome: true, ativo: true, papel: true, etapaId: true,
   etapa: { select: { id: true, nome: true, ativa: true } } } as const;
 async function contaAtual(id: string) {
   const conta = await prisma.pessoa.findUnique({ where: { id }, select: contaSelect });
@@ -14,10 +14,16 @@ async function contaAtual(id: string) {
   return conta;
 }
 type Conta = Awaited<ReturnType<typeof contaAtual>>;
+const podeEnviar = (p: Conta) => p.papel === 'admin' || !!p.etapa?.ativa;
 const recebidas = (p: Conta): Prisma.MensagemInternaWhereInput => ({
   destinatarioId: p.id,
-  // Uma conta sem estação nunca ganha acesso por omissão do filtro.
-  etapaDestinoId: p.etapa?.ativa ? p.etapa.id : { in: [] },
+  // Administradores atuam em todas as estações, mas só recebem recados próprios.
+  ...(p.papel === 'admin' ? { etapaDestino: { ativa: true } }
+    : { etapaDestinoId: p.etapa?.ativa ? p.etapa.id : { in: [] } }),
+});
+const destinatarioNaEstacao = (id: string, etapaId: string): Prisma.PessoaWhereInput => ({
+  id, ativo: true,
+  OR: [{ papel: 'admin' }, { etapaId, etapa: { ativa: true } }],
 });
 const include = {
   etapaOrigem: { select: { id: true, nome: true } },
@@ -34,13 +40,19 @@ export async function mensagensRoutes(app: FastifyInstance) {
     const conta = await contaAtual(req.user.pessoaId);
     const estacoes = await prisma.etapa.findMany({
       where: { ativa: true }, orderBy: { ordemPadrao: 'asc' },
-      select: { id: true, nome: true, pessoas: {
-        where: { ativo: true, id: { not: conta.id } }, orderBy: [{ nome: 'asc' }, { id: 'asc' }],
-        select: { id: true, nome: true, codigoPessoal: true },
-      } },
+      select: { id: true, nome: true },
+    });
+    const pessoas = await prisma.pessoa.findMany({
+      where: { ativo: true, id: { not: conta.id },
+        OR: [{ papel: 'admin' }, { etapa: { ativa: true } }] },
+      orderBy: [{ nome: 'asc' }, { id: 'asc' }],
+      select: { id: true, nome: true, codigoPessoal: true, papel: true, etapaId: true },
     });
     return { data: { conta: { id: conta.id, nome: conta.nome, etapa: conta.etapa },
-      podeEnviar: !!conta.etapa?.ativa, estacoes } };
+      podeEnviar: podeEnviar(conta), estacoes: estacoes.map(e => ({ ...e,
+        pessoas: pessoas.filter(p => p.papel === 'admin' || p.etapaId === e.id)
+          .map(({ id, nome, codigoPessoal }) => ({ id, nome, codigoPessoal })),
+      })) } };
   });
 
   app.get('/mensagens', auth, async (req, reply) => {
@@ -72,21 +84,25 @@ export async function mensagensRoutes(app: FastifyInstance) {
 
   // ID gerado no formulário permite repetir uma tentativa sem duplicar o recado.
   async function enviar(p: Conta, input: z.infer<typeof nova>, respostaAId: string | null = null) {
-    if (!p.etapa?.ativa) return fail(403, 'Vincule sua conta a uma estação ativa para enviar mensagens.');
+    if (!podeEnviar(p)) return fail(403, 'Vincule sua conta a uma estação ativa para enviar mensagens.');
+    const destino = await prisma.etapa.findFirst({ where: { id: input.etapaDestinoId, ativa: true } });
+    if (!destino) return fail(400, 'Selecione uma estação ativa.');
     const destinatario = await prisma.pessoa.findFirst({
-      where: { id: input.destinatarioId, ativo: true, etapaId: input.etapaDestinoId, etapa: { ativa: true } },
+      where: destinatarioNaEstacao(input.destinatarioId, input.etapaDestinoId),
       select: { id: true, nome: true },
     });
     if (!destinatario || destinatario.id === p.id) return fail(400, 'Selecione outro usuário ativo da estação de destino.');
+    // Sem estação fixa, o administrador atua no contexto da estação escolhida.
+    const etapaOrigemId = p.etapa?.ativa ? p.etapa.id : destino.id;
     try {
       return await prisma.mensagemInterna.create({ data: {
         ...input, remetenteId: p.id, remetenteNome: p.nome, destinatarioNome: destinatario.nome,
-        etapaOrigemId: p.etapa.id, respostaAId,
+        etapaOrigemId, respostaAId,
       }, include });
     } catch (err) {
       if (!(err instanceof Prisma.PrismaClientKnownRequestError) || err.code !== 'P2002') throw err;
       const existing = await prisma.mensagemInterna.findFirst({ where: {
-        ...input, remetenteId: p.id, etapaOrigemId: p.etapa.id, respostaAId,
+        ...input, remetenteId: p.id, etapaOrigemId, respostaAId,
       }, include });
       if (!existing) return fail(409, 'Identificador já utilizado. Abra uma nova mensagem.');
       return existing;
@@ -118,9 +134,9 @@ export async function mensagensRoutes(app: FastifyInstance) {
     const p = await contaAtual(req.user.pessoaId);
     const original = await prisma.mensagemInterna.findFirst({ where: { ...recebidas(p), id: params.data.id } });
     if (!original) return fail(404, 'Mensagem não encontrada.');
-    const autor = await prisma.pessoa.findFirst({ where: {
-      id: original.remetenteId, ativo: true, etapaId: original.etapaOrigemId, etapa: { ativa: true },
-    } });
+    const autor = await prisma.pessoa.findFirst({
+      where: destinatarioNaEstacao(original.remetenteId, original.etapaOrigemId),
+    });
     if (!autor) return fail(409, 'O remetente mudou de estação ou está inativo. Crie uma nova mensagem escolhendo o destino atual.');
     const data = await enviar(p, { ...body.data, destinatarioId: autor.id, etapaDestinoId: original.etapaOrigemId }, original.id);
     return reply.code(201).send({ data });
