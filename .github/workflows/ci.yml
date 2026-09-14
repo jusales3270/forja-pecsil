@@ -78,6 +78,9 @@ jobs:
         working-directory: frontend
         run: pnpm build
 
+      - name: Validate PWA build and installation lifecycle
+        run: node frontend/scripts/check-pwa.mjs
+
       - name: Prepare synthetic test catalog
         working-directory: backend
         env:

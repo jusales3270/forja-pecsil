@@ -6,8 +6,12 @@ export default defineConfig({
   plugins: [
     react(),
     VitePWA({
-      registerType: 'autoUpdate',
+      registerType: 'prompt',
       manifest: {
+        id: '/',
+        scope: '/',
+        lang: 'pt-BR',
+        prefer_related_applications: false,
         name: 'Forja - Controle de Produção',
         short_name: 'Forja',
         description: 'Sistema de Controle de Produção Pecsil',
@@ -16,11 +20,17 @@ export default defineConfig({
         display: 'standalone',
         orientation: 'any',
         start_url: '/',
-        icons: [],
+        icons: [
+          { src: '/icons/forja-192.svg', sizes: '192x192', type: 'image/svg+xml', purpose: 'any' },
+          { src: '/icons/forja-512.svg', sizes: '512x512', type: 'image/svg+xml', purpose: 'any' },
+          { src: '/icons/forja-512.svg', sizes: '512x512', type: 'image/svg+xml', purpose: 'maskable' },
+        ],
       },
       workbox: {
         globPatterns: ['**/*.{js,css,html,svg,png}'],
-        skipWaiting: true,
+        skipWaiting: false,
+        cleanupOutdatedCaches: true,
+        navigateFallbackDenylist: [/^\/api(?:\/|$)/, /^\/socket\.io(?:\/|$)/, /^\/storage(?:\/|$)/, /^\/health(?:\/|$)/],
         clientsClaim: true,
       },
     }),
