@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { PwaControls } from './components/PwaControls';
 import { LoginPage } from './pages/LoginPage';
 import { HomePage } from './pages/HomePage';
 import { TiposServicoPage } from './pages/TiposServicoPage';
@@ -57,6 +58,7 @@ export function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
+        <PwaControls />
         <ErrorBoundary fallbackTitle="Falha na aplicação" fallbackMessage="Ocorreu um erro ao renderizar esta página. Clique abaixo para voltar." voltarUrl="/">
           <Routes>
             <Route
