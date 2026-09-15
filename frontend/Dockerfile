@@ -18,9 +18,11 @@ ENV VITE_API_URL=$VITE_API_URL
 ENV VITE_WS_URL=$VITE_WS_URL
 COPY --from=deps /app/node_modules ./node_modules
 COPY --from=deps /app/frontend/node_modules ./frontend/node_modules
+COPY --from=deps /app/shared/node_modules ./shared/node_modules
 COPY pnpm-workspace.yaml package.json pnpm-lock.yaml ./
 COPY shared ./shared
 COPY frontend ./frontend
+RUN pnpm --filter @forja/shared build
 RUN pnpm --filter @forja/frontend build
 
 # ---- Runtime (nginx servindo o dist) ----

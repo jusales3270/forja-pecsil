@@ -10,7 +10,7 @@ jobs:
   build-and-test:
     name: Build & Test
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 15
 
     services:
       postgres:
@@ -95,3 +95,28 @@ jobs:
           JWT_SECRET: forja_test_secret_xxxxxxxx
           NODE_ENV: test
         run: pnpm test --if-present
+
+      # Testa as imagens reais, sem tsx e sem dist/node_modules do workspace.
+      # A compilação TS isolada não detecta imports de .ts em runtime Node 20.
+      - name: Build production Docker images
+        run: |
+          docker build -f backend/Dockerfile -t forja-backend-ci .
+          docker build -f frontend/Dockerfile -t forja-frontend-ci .
+
+      - name: Verify backend startup on Node 20
+        run: |
+          docker run -d --name forja-backend-runtime-ci --network host \
+            -e DATABASE_URL=postgresql://forja:forja_dev_2026@localhost:5432/forja_test \
+            -e JWT_SECRET=forja_test_secret_xxxxxxxx \
+            forja-backend-ci
+          trap 'docker logs forja-backend-runtime-ci; docker rm -f forja-backend-runtime-ci' EXIT
+          for attempt in $(seq 1 30); do
+            if curl --fail --silent http://localhost:3001/health; then
+              exit 0
+            fi
+            if [ "$(docker inspect -f '{{.State.Running}}' forja-backend-runtime-ci)" != "true" ]; then
+              exit 1
+            fi
+            sleep 1
+          done
+          exit 1
