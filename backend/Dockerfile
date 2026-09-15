@@ -15,9 +15,11 @@ RUN pnpm install --frozen-lockfile --filter @forja/backend... --filter @forja/sh
 FROM base AS build
 COPY --from=deps /app/node_modules ./node_modules
 COPY --from=deps /app/backend/node_modules ./backend/node_modules
+COPY --from=deps /app/shared/node_modules ./shared/node_modules
 COPY pnpm-workspace.yaml package.json pnpm-lock.yaml ./
 COPY shared ./shared
 COPY backend ./backend
+RUN pnpm --filter @forja/shared build
 RUN pnpm --filter @forja/backend exec prisma generate
 RUN pnpm --filter @forja/backend build
 
