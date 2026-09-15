@@ -6,15 +6,27 @@
 
 import { FastifyInstance } from 'fastify';
 import { prisma } from '../db/prisma.js';
+import { z } from 'zod';
+import { calcularFluxoDePecas } from '../lib/fluxo-pecas.js';
+import { diasAtePrazo, montarIndicadores } from '../lib/dashboard-kpis.js';
 import { montarPipelineEtapa, listarEtapasComFases } from '../lib/pipeline-etapa.js';
 
 export async function dashboardRoutes(app: FastifyInstance) {
   // GET /api/dashboard  -> visao macro pro chefe
-  app.get('/dashboard', { onRequest: [app.authenticate] }, async () => {
+  app.get('/dashboard', { onRequest: [app.authenticate] }, async (request, reply) => {
+    const parsed = z.object({
+      clienteId: z.string().uuid().optional(),
+      tipoProduto: z.enum(['forma', 'bloco', 'fundo_forma', 'fundo_bloco', 'molde']).optional(),
+      dias: z.coerce.number().refine(n => [30, 90, 180, 365].includes(n)).default(90),
+    }).safeParse(request.query);
+    if (!parsed.success) return reply.code(400).send({ message: 'Filtros inválidos.' });
+    const { clienteId, tipoProduto, dias } = parsed.data;
+    const filtro = { ...(clienteId ? { clienteId } : {}), ...(tipoProduto ? { artigo: { tipoProduto } } : {}) };
     const agora = new Date();
 
     // OS por status
     const todasOS = await prisma.oS.findMany({
+      where: filtro,
       select: {
         id: true,
         codigoGrv: true,
@@ -22,8 +34,9 @@ export async function dashboardRoutes(app: FastifyInstance) {
         prioridade: true,
         status: true,
         quantidadeTotal: true,
-        cliente: { select: { nome: true } },
-        artigo: { select: { codigo: true, descricao: true } },
+        cliente: { select: { id: true, nome: true } },
+        artigo: { select: { codigo: true, descricao: true, tipoProduto: true } },
+        eventos: { where: { tipo: 'os_finalizada' }, orderBy: { timestamp: 'desc' }, take: 1, select: { timestamp: true } },
       },
       orderBy: { prazoEntrega: 'asc' },
     });
@@ -35,23 +48,12 @@ export async function dashboardRoutes(app: FastifyInstance) {
     }
 
     // OS atrasadas: prazo vencido e nao finalizada/cancelada
-    const osAtrasadas = await prisma.oS.findMany({
-      where: {
-        prazoEntrega: { lt: agora },
-        status: { notIn: ['finalizada', 'cancelada'] },
-      },
-      select: {
-        id: true,
-        codigoGrv: true,
-        prazoEntrega: true,
-        prioridade: true,
-        status: true,
-        cliente: { select: { nome: true } },
-        artigo: { select: { codigo: true, descricao: true } },
-      },
-      orderBy: { prazoEntrega: 'asc' },
-      take: 50,
-    });
+    const osAtrasadas = todasOS.filter(os => !['finalizada', 'cancelada'].includes(os.status) && diasAtePrazo(os.prazoEntrega, agora) < 0);
+    // Atraso é calculado pelo prazo, não pelo status gravado na OS.
+    osPorStatus.atrasada = osAtrasadas.length;
+    osPorStatusLista.atrasada = osAtrasadas;
+    const indicadores = montarIndicadores(todasOS, agora, dias);
+    const clientes = await prisma.cliente.findMany({ where: { oses: { some: {} } }, select: { id: true, nome: true }, orderBy: { nome: 'asc' } });
 
     // OPs por etapa x status (Kanban)
     // Kanban: lotes reais por etapa (cada OP vira um card), exceto concluidas
@@ -61,11 +63,20 @@ export async function dashboardRoutes(app: FastifyInstance) {
     });
 
     const opsAtivas = await prisma.oPLote.findMany({
-      where: { status: { notIn: ['concluida'] } },
+      where: { status: { notIn: ['concluida'] }, lote: { os: { ...filtro, status: { notIn: ['finalizada', 'cancelada'] } } } },
       select: {
         id: true,
         codigoOp: true,
         etapaId: true,
+        loteId: true,
+        ordem: true,
+        tipoServico: true,
+        tempoUnitPlanejado: true,
+        exigeLoteCompleto: true,
+        envioExternoEm: true,
+        recebimentoExternoEm: true,
+        quantidadeEnvioExterno: true,
+        fornecedor: true,
         status: true,
         criadoEm: true,
         carimbos: {
@@ -74,6 +85,7 @@ export async function dashboardRoutes(app: FastifyInstance) {
           take: 1,
           select: {
             maquina: { select: { nome: true } },
+            timestampEntrada: true,
             operadorResponsavel: { select: { nome: true } },
             programador: { select: { nome: true } },
           },
@@ -81,13 +93,15 @@ export async function dashboardRoutes(app: FastifyInstance) {
         lote: {
           select: {
             numeroLote: true,
+            quantidadePecas: true,
             os: {
               select: {
+                id: true,
                 codigoGrv: true,
                 prazoEntrega: true,
                 prioridade: true,
                 cliente: { select: { nome: true } },
-                artigo: { select: { codigo: true } },
+                artigo: { select: { codigo: true, descricao: true, tipoProduto: true } },
               },
             },
           },
@@ -96,18 +110,51 @@ export async function dashboardRoutes(app: FastifyInstance) {
       orderBy: { criadoEm: 'asc' },
     });
 
+    const fluxo = await calcularFluxoDePecas([...new Set(opsAtivas.map(o => o.loteId))]);
+    const emExterno = (op: typeof opsAtivas[number]) => !!op.envioExternoEm && !op.recebimentoExternoEm;
+    const travas = new Map<string, number>();
+    for (const op of opsAtivas) if (op.exigeLoteCompleto) travas.set(op.loteId, Math.min(travas.get(op.loteId) ?? Infinity, op.ordem));
+    const opsVisiveis = opsAtivas.filter(op => {
+      if (op.status !== 'na_fila') return true;
+      const travada = (travas.get(op.loteId) ?? Infinity) < op.ordem;
+      return !travada && (fluxo.get(op.id)?.disponiveis ?? 0) > 0;
+    });
+    const enviosExternos = opsAtivas.filter(emExterno).map(op => ({
+      opLoteId: op.id, osId: op.lote.os.id, codigoGrv: op.lote.os.codigoGrv,
+      codigoOp: op.codigoOp, tipoServico: op.tipoServico, numeroLote: op.lote.numeroLote,
+      cliente: op.lote.os.cliente.nome, artigo: op.lote.os.artigo.codigo, descricao: op.lote.os.artigo.descricao,
+      tipoProduto: op.lote.os.artigo.tipoProduto, fornecedor: op.fornecedor,
+      quantidade: op.quantidadeEnvioExterno, enviadoEm: op.envioExternoEm,
+      diasFora: Math.floor((agora.getTime() - op.envioExternoEm!.getTime()) / 86_400_000),
+      prazoEntrega: op.lote.os.prazoEntrega, diasAtePrazo: diasAtePrazo(op.lote.os.prazoEntrega, agora),
+    })).sort((a, b) => b.diasFora - a.diasFora);
+
+    const gargalos = etapas.map(et => {
+      const ops = opsVisiveis.filter(op => op.etapaId === et.id && !emExterno(op));
+      const pecas = ops.reduce((sum, op) => sum + (fluxo.get(op.id)?.disponiveis ?? 0), 0);
+      const cargaMinutos = ops.reduce((sum, op) => sum + (fluxo.get(op.id)?.disponiveis ?? 0) * op.tempoUnitPlanejado, 0);
+      return { etapaId: et.id, nome: et.nome, operacoes: ops.length, pecas,
+        horasPlanejadas: Math.round(cargaMinutos / 60 * 10) / 10,
+        osAtrasadas: new Set(ops.filter(o => diasAtePrazo(o.lote.os.prazoEntrega, agora) < 0).map(o => o.lote.os.id)).size,
+        osIds: [...new Set(ops.map(o => o.lote.os.id))] };
+    }).sort((a, b) => b.horasPlanejadas - a.horasPlanejadas || b.operacoes - a.operacoes);
+
     const kanban = etapas.map((et) => {
-      const cards = opsAtivas
+      const cards = opsVisiveis
         .filter((op) => op.etapaId === et.id)
         .map((op) => {
           const prazo = op.lote.os.prazoEntrega;
-          const diasAtePrazo = Math.ceil((new Date(prazo).getTime() - Date.now()) / 86_400_000);
+          const dias = diasAtePrazo(prazo, agora);
           let semaforo: 'verde' | 'amarelo' | 'vermelho' = 'verde';
-          if (diasAtePrazo < 0 || diasAtePrazo < 3) semaforo = 'vermelho';
-          else if (diasAtePrazo < 7) semaforo = 'amarelo';
+          if (dias < 3) semaforo = 'vermelho';
+          else if (dias < 7) semaforo = 'amarelo';
           const carimbo = op.carimbos[0];
           return {
             opLoteId: op.id,
+            osId: op.lote.os.id,
+            externo: emExterno(op),
+            fornecedor: op.fornecedor,
+            quantidade: emExterno(op) ? op.quantidadeEnvioExterno ?? 0 : fluxo.get(op.id)?.disponiveis ?? 0,
             codigoOp: op.codigoOp,
             codigoGrv: op.lote.os.codigoGrv,
             numeroLote: op.lote.numeroLote,
@@ -115,7 +162,7 @@ export async function dashboardRoutes(app: FastifyInstance) {
             artigo: op.lote.os.artigo.codigo,
             status: op.status,
             prioridade: op.lote.os.prioridade,
-            diasAtePrazo,
+            diasAtePrazo: dias,
             semaforo,
             operador: carimbo?.operadorResponsavel?.nome ?? null,
             programador: carimbo?.programador?.nome ?? null,
@@ -128,7 +175,7 @@ export async function dashboardRoutes(app: FastifyInstance) {
     // Resumo de inspecao (ultimas concluidas)
     const inspecaoRaw = await prisma.inspecaoOP.groupBy({
       by: ['resultado'],
-      where: { resultado: { not: null } },
+      where: { resultado: { not: null }, opLote: { lote: { os: filtro } } },
       _count: { _all: true },
     });
     const inspecao: Record<string, number> = {};
@@ -140,7 +187,7 @@ export async function dashboardRoutes(app: FastifyInstance) {
       where: {
         timestampSaida: null,
         timestampEntrada: { lt: limite4h },
-        opLote: { status: 'em_processo' },
+        opLote: { status: 'em_processo', envioExternoEm: null, lote: { os: { ...filtro, status: { notIn: ['finalizada', 'cancelada'] } } } },
       },
       include: {
         opLote: { include: { lote: { include: { os: true } } } },
@@ -158,7 +205,7 @@ export async function dashboardRoutes(app: FastifyInstance) {
 
     // Paradas ativas agora — o que está parado, desde quando e por quê
     const paradasAtivasRaw = await prisma.paradaMaquina.findMany({
-      where: { fim: null },
+      where: { fim: null, carimbo: { opLote: { lote: { os: { ...filtro, status: { notIn: ['finalizada', 'cancelada'] } } } } } },
       include: {
         motivoParada: { select: { id: true, nome: true, planejado: true } },
         carimbo: {
@@ -202,7 +249,7 @@ export async function dashboardRoutes(app: FastifyInstance) {
     const inicioHoje = new Date(agora);
     inicioHoje.setHours(0, 0, 0, 0);
     const paradasHojeRaw = await prisma.paradaMaquina.findMany({
-      where: { inicio: { gte: inicioHoje } },
+      where: { inicio: { gte: inicioHoje }, carimbo: { opLote: { lote: { os: filtro } } } },
       select: {
         inicio: true,
         fim: true,
@@ -248,10 +295,26 @@ export async function dashboardRoutes(app: FastifyInstance) {
     const pipelines = (
       await Promise.all(idsComFases.map((id) => montarPipelineEtapa(id)))
     ).filter((p): p is NonNullable<typeof p> => p !== null && p.temFases);
+    const idsOS = new Set(todasOS.filter(o => !['finalizada', 'cancelada'].includes(o.status)).map(o => o.id));
+    for (const p of pipelines) {
+      p.semFase = p.semFase.filter(c => idsOS.has(c.osId));
+      for (const fase of p.fases) {
+        fase.cards = fase.cards.filter(c => idsOS.has(c.osId));
+        fase.total = fase.cards.length;
+        fase.naFila = fase.cards.filter(c => c.status === 'na_fila').length;
+        fase.emProcesso = fase.cards.filter(c => c.status === 'em_processo').length;
+        fase.parado = fase.cards.filter(c => c.paradaAtiva).length;
+      }
+    }
 
     return {
       data: {
         geradoEm: agora,
+        clientes,
+        indicadores,
+        gargalos,
+        enviosExternos,
+        totalOSExternas: new Set(enviosExternos.map(e => e.osId)).size,
         osPorStatus,
         osPorStatusLista,
         osAtrasadas,

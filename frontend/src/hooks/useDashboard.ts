@@ -17,6 +17,10 @@ export interface OSAtrasada {
 }
 
 export interface KanbanCard {
+  osId: string;
+  externo: boolean;
+  fornecedor: string | null;
+  quantidade: number;
   opLoteId: string;
   codigoOp: string;
   codigoGrv: string;
@@ -47,11 +51,40 @@ export interface OSResumo {
   prioridade: string;
   status: string;
   quantidadeTotal: number;
-  cliente: { nome: string };
-  artigo: { codigo: string; descricao: string };
+  cliente: { id: string; nome: string };
+  artigo: { codigo: string; descricao: string; tipoProduto: string };
 }
 
+export interface EnvioExternoResumo {
+  opLoteId: string; osId: string; codigoGrv: string; codigoOp: string; tipoServico: string;
+  numeroLote: number; cliente: string; artigo: string; descricao: string; tipoProduto: string;
+  fornecedor: string | null; quantidade: number; enviadoEm: string; diasFora: number;
+  prazoEntrega: string; diasAtePrazo: number;
+}
+export interface GrupoAtraso {
+  id: string; nome: string; total: number; atrasadas: number; mediaDiasAtraso: number; osIds: string[];
+}
+export interface Gargalo {
+  etapaId: string; nome: string; operacoes: number; pecas: number;
+  horasPlanejadas: number; osAtrasadas: number; osIds: string[];
+}
+export interface Indicadores {
+  carteira: { total: number; emDia: number; atrasadas: number; emDiaIds: string[]; atrasadasIds: string[] };
+  historico: { dias: number; inicio: string; fim: string; total: number; emDia: number; atrasadas: number;
+    pontualidade: number | null; semDataConclusao: number;
+    porCliente: GrupoAtraso[]; porTipo: GrupoAtraso[];
+    evolucao: { mes: string; emDia: number; atrasadas: number }[];
+    os: { id: string; concluidaEm: string; diasAtraso: number }[];
+  };
+}
+export interface DashboardFiltros { clienteId?: string; tipoProduto?: string; dias?: number }
+
 export interface DashboardData {
+  clientes: { id: string; nome: string }[];
+  indicadores: Indicadores;
+  gargalos: Gargalo[];
+  enviosExternos: EnvioExternoResumo[];
+  totalOSExternas: number;
   geradoEm: string;
   osPorStatus: Record<string, number>;
   osPorStatusLista: Record<string, OSResumo[]>;
@@ -81,11 +114,11 @@ export interface DashboardData {
   };
 }
 
-export function useDashboard() {
+export function useDashboard(filtros: DashboardFiltros = {}) {
   return useQuery<{ data: DashboardData }>({
-    queryKey: ['dashboard'],
+    queryKey: ['dashboard', filtros],
     queryFn: async () => {
-      const res = await api.get('/dashboard');
+      const res = await api.get('/dashboard', { params: filtros });
       return res.data;
     },
     refetchInterval: 30_000,

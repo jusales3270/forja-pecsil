@@ -1,478 +1,153 @@
-// ============================================================
-// Forja - Dashboard do Chefe (Sprint 6) - visao TV
-// ============================================================
-
-import { useState, useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useDashboard, type KanbanCard } from '../hooks/useDashboard';
+import { useDashboard, type KanbanCard, type DashboardData } from '../hooks/useDashboard';
 import { useTheme } from '../lib/theme-store';
+import { Modal } from '../components/Modal';
 import { PipelineEtapa } from '../components/PipelineEtapa';
-import { tempoNaFase, type PipelineEtapa as PipelineEtapaData } from '../hooks/usePipelineEtapa';
+import { DashboardCharts, TIPOS_PECA, numero } from './dashboard/DashboardCharts';
+import './dashboard/dashboard.css';
 
-const LABELS_STATUS_OS: Record<string, string> = {
-  aberta: 'Abertas',
-  em_producao: 'Em produção',
-  finalizada: 'Finalizadas',
-  atrasada: 'Atrasadas',
-  cancelada: 'Canceladas',
-};
-
-function corSemaforo(s: string): string {
-  if (s === 'vermelho') return '#E24B4A';
-  if (s === 'amarelo') return '#EF9F27';
-  return '#1D9E75';
-}
-
-function cardBate(c: KanbanCard, termo: string, etapaNome: string): boolean {
+type Selecao = { tipo: 'externos' } | { tipo: 'lista'; titulo: string; ids: string[] } | { tipo: 'op'; id: string };
+const STATUS: Record<string, string> = { na_fila: 'Na fila', em_processo: 'Em processo', aguardando_qualidade: 'Aguardando qualidade', bloqueada: 'Bloqueada', concluida: 'Concluída' };
+const dataCurta = (data: string) => new Date(data.slice(0, 10) + 'T12:00:00').toLocaleDateString('pt-BR');
+const prazoTexto = (dias: number) => dias < 0 ? `${Math.abs(dias)}d de atraso` : dias === 0 ? 'Vence hoje' : `Vence em ${dias}d`;
+function cardBate(c: KanbanCard, busca: string, etapa: string) {
+  const termo = busca.trim().toLocaleLowerCase();
   if (!termo) return true;
-  const t = termo.toLowerCase();
-  if ((t === 'atrasada' || t === 'atrasadas' || t === 'atrasado' || t === 'atrasados') && c.diasAtePrazo < 0) return true;
-  if ((t === 'urgente' || t === 'urgentes') && c.prioridade === 'urgente') return true;
-  const campos = [c.codigoGrv, c.codigoOp, c.cliente, c.artigo, c.status, c.operador || '', c.programador || '', c.maquina || '', etapaNome].join(' ').toLowerCase();
-  return campos.includes(t);
+  if (/^atrasad[ao]s?$/.test(termo)) return c.diasAtePrazo < 0;
+  if (/^extern[ao]s?$/.test(termo)) return c.externo;
+  return [c.codigoGrv, c.codigoOp, c.cliente, c.artigo, c.operador, c.programador, c.maquina, etapa, c.prioridade, c.fornecedor]
+    .some(v => v?.toLocaleLowerCase().includes(termo));
 }
 
 export default function DashboardPage() {
   const navigate = useNavigate();
-  const { data, isLoading, isError } = useDashboard();
-  const [busca, setBusca] = useState('');
   const { claro, toggleTema } = useTheme();
-  const [modal, setModal] = useState<{ titulo: string; tipo: 'lista' | 'os'; itens?: any[]; os?: any } | null>(null);
-  const kanbanFiltrado = useMemo(() => {
-    if (!data) return [];
-    return data.data.kanban.map((et) => ({ ...et, cards: et.cards.filter((c) => cardBate(c, busca.trim(), et.nome)) }));
-  }, [data, busca]);
+  const [clienteId, setClienteId] = useState('');
+  const [tipoProduto, setTipoProduto] = useState('');
+  const [dias, setDias] = useState(90);
+  const [busca, setBusca] = useState('');
+  const [selecao, setSelecao] = useState<Selecao | null>(null);
+  const { data, isLoading, isError, isFetching, refetch } = useDashboard({ clienteId: clienteId || undefined, tipoProduto: tipoProduto || undefined, dias });
+  const d = data?.data;
+  const kanban = useMemo(() => d?.kanban.map(et => ({ ...et, cards: et.cards.filter(c => cardBate(c, busca, et.nome)) })) ?? [], [d, busca]);
+  const abrirLista = (titulo: string, ids: string[]) => setSelecao({ tipo: 'lista', titulo, ids });
+  const todasOS = useMemo(() => new Map(Object.values(d?.osPorStatusLista ?? {}).flat().map(os => [os.id, os])), [d]);
+  const op = selecao?.tipo === 'op' ? d?.kanban.flatMap(e => e.cards).find(c => c.opLoteId === selecao.id) : null;
+  const h = d?.indicadores.historico;
+  const tituloModal = selecao?.tipo === 'externos' ? 'OS em envio externo' : selecao?.tipo === 'lista' ? selecao.titulo : op?.codigoGrv ?? 'Operação';
 
-  if (isLoading) return <div className="p-6 text-neutral-400">Carregando...</div>;
-  if (isError || !data) return <div className="p-6 error-message">Erro ao carregar o dashboard.</div>;
-
-  const d = data.data;
-
-  // paleta por tema
-  const T = claro
-    ? {
-        bg: 'bg-slate-100',
-        texto: 'text-slate-900',
-        sub: 'text-slate-500',
-        card: 'bg-white border border-slate-200 rounded-xl p-4',
-        coluna: 'bg-slate-200/50',
-        colTitulo: 'text-slate-700',
-        colBadge: 'bg-slate-300 text-slate-700',
-        cardK: 'bg-slate-50 border border-slate-200',
-        cardKHover: 'hover:bg-slate-100',
-        cardKTexto: 'text-slate-900',
-        cardKSub: 'text-slate-500',
-        divisor: 'border-slate-200',
-        input: 'w-full px-3 py-2 rounded-lg bg-white border border-slate-300 text-slate-900 placeholder-slate-400',
-        btn: 'text-slate-600 hover:text-slate-900 border border-slate-300',
-        modalBg: 'bg-white border border-slate-200',
-        modalTexto: 'text-slate-900',
-        modalSub: 'text-slate-500',
-      }
-    : {
-        bg: 'bg-neutral-950',
-        texto: 'text-neutral-100',
-        sub: 'text-neutral-500',
-        card: 'card',
-        coluna: 'bg-transparent',
-        colTitulo: 'text-neutral-100',
-        colBadge: 'bg-neutral-700/50 text-neutral-300',
-        cardK: 'bg-neutral-800/40',
-        cardKHover: 'hover:bg-neutral-800/70',
-        cardKTexto: 'text-neutral-100',
-        cardKSub: 'text-neutral-300',
-        divisor: 'border-neutral-800',
-        input: 'input w-full',
-        btn: 'text-neutral-400 hover:text-neutral-200 border border-neutral-800',
-        modalBg: 'bg-neutral-900 border border-neutral-700',
-        modalTexto: 'text-neutral-100',
-        modalSub: 'text-neutral-500',
-      };
-
-  return (
-    <div className={`min-h-screen p-6 space-y-6 ${T.bg} ${T.texto}`}>
-      <div className="flex items-start justify-between">
-        <div>
-          <h1 className={`text-3xl font-bold ${T.texto}`}>Painel de Produção</h1>
-          <p className={`text-sm ${T.sub} mt-1`}>
-            Atualiza sozinho a cada 30s · {new Date(d.geradoEm).toLocaleTimeString('pt-BR')}
-          </p>
-        </div>
-        <div className="flex gap-2">
-          <button
-            onClick={() => toggleTema()}
-            className={`px-3 py-2 text-sm rounded-lg ${T.btn}`}
-            title="Alternar tema"
-          >
-            {claro ? 'Escuro' : 'Claro'}
-          </button>
-          <button
-            onClick={() => navigate('/')}
-            className={`px-4 py-2 text-sm rounded-lg ${T.btn}`}
-          >
-            ← Voltar
-          </button>
-        </div>
+  return <main className="dash-page" data-theme={claro ? 'light' : 'dark'}>
+    <header className="flex flex-wrap justify-between items-start gap-4">
+      <div><p className="text-xs uppercase tracking-widest dash-muted mb-2">Forja · Gestão da fábrica</p>
+        <h1 className="text-3xl md:text-4xl font-bold tracking-tight">Painel de Produção</h1>
+        <p className="text-sm dash-muted mt-2">Atualiza a cada 30s{d && ` · ${new Date(d.geradoEm).toLocaleTimeString('pt-BR')}`}{isFetching && ' · Atualizando…'}</p>
       </div>
+      <div className="flex gap-2"><button className="dash-button" onClick={toggleTema}>{claro ? 'Escuro' : 'Claro'}</button><button className="dash-button" onClick={() => navigate('/')}>← Voltar</button></div>
+    </header>
 
-      <div>
-        <input
-          type="text"
-          value={busca}
-          onChange={(e) => setBusca(e.target.value)}
-          placeholder="Buscar: cliente, OS, etapa, operador, atrasadas..."
-          className={T.input}
-        />
-        {busca.trim() && (
-          <button className="text-xs text-forja-400 hover:underline mt-1" onClick={() => setBusca('')}>limpar busca</button>
-        )}
+    <section className="dash-panel flex flex-wrap items-end gap-4" aria-label="Filtros do painel">
+      <label className="flex-1 min-w-48 text-sm">Cliente<select className="dash-input mt-1" value={clienteId} onChange={e => setClienteId(e.target.value)}><option value="">Todos os clientes</option>{d?.clientes.map(c => <option key={c.id} value={c.id}>{c.nome}</option>)}</select></label>
+      <label className="flex-1 min-w-44 text-sm">Tipo de peça<select className="dash-input mt-1" value={tipoProduto} onChange={e => setTipoProduto(e.target.value)}><option value="">Todos os tipos</option>{Object.entries(TIPOS_PECA).map(([id, nome]) => <option key={id} value={id}>{nome}</option>)}</select></label>
+      <label className="flex-1 min-w-44 text-sm">Período do histórico<select className="dash-input mt-1" value={dias} onChange={e => setDias(Number(e.target.value))}>{[30, 90, 180, 365].map(n => <option key={n} value={n}>Últimos {n} dias</option>)}</select></label>
+      <button className="dash-button" onClick={() => { setClienteId(''); setTipoProduto(''); setDias(90); setBusca(''); }}>Limpar filtros</button>
+    </section>
+    {isLoading && <p role="status" className="dash-empty">Carregando indicadores…</p>}
+    {isError && <div role="alert" className="dash-panel text-rose-500">Não foi possível atualizar o painel. <button className="underline" onClick={() => refetch()}>Tentar novamente</button></div>}
+    {d && h && <>
+      <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-3">
+        <Resumo label="Abertas" valor={d.osPorStatus.aberta ?? 0} detalhe="Aguardando produção" onClick={() => abrirLista('OS abertas', (d.osPorStatusLista.aberta ?? []).map(o => o.id))} />
+        <Resumo label="Em produção" valor={d.osPorStatus.em_producao ?? 0} detalhe="Internas e externas" onClick={() => abrirLista('OS em produção', (d.osPorStatusLista.em_producao ?? []).map(o => o.id))} />
+        <Resumo label="Em dia" valor={d.indicadores.carteira.emDia} detalhe="OS ativas dentro do prazo" cor="emerald" onClick={() => abrirLista('OS em dia', d.indicadores.carteira.emDiaIds)} />
+        <Resumo label="Atrasadas" valor={d.indicadores.carteira.atrasadas} detalhe="OS ativas com prazo vencido" cor="rose" onClick={() => abrirLista('OS atrasadas', d.indicadores.carteira.atrasadasIds)} />
+        <Resumo label="Envio externo" valor={d.totalOSExternas} detalhe={`${d.enviosExternos.length} lotes · ${d.enviosExternos.reduce((s, e) => s + e.quantidade, 0)} peças fora`} cor="sky" onClick={() => setSelecao({ tipo: 'externos' })} />
+        <Resumo label="Concluídas" valor={h.total} detalhe={`Nos últimos ${dias} dias`} onClick={() => abrirLista('OS concluídas no período', h.os.map(o => o.id))} />
       </div>
+      <p className="dash-muted text-xs -mt-3">Envios externos e prazos detalham a mesma carteira; os quadros não devem ser somados.</p>
 
-      {/* Cards de status de OS */}
-      <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
-        {Object.entries(LABELS_STATUS_OS).map(([k, label]) => (
-          <button
-            key={k}
-            onClick={() => setModal({ titulo: label, tipo: 'lista', itens: d.osPorStatusLista[k] ?? [] })}
-            className={`${T.card} text-center hover:border-forja-500/50 transition-colors cursor-pointer`}
-          >
-            <div className={`text-3xl font-bold ${T.texto}`}>{d.osPorStatus[k] ?? 0}</div>
-            <div className={`text-xs ${T.sub} mt-1`}>{label}</div>
-          </button>
-        ))}
-      </div>
-
-      {/* Paradas de máquina */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-        <div className={`${T.card} ${d.paradas.ativas.length > 0 ? 'border-red-500/40' : ''}`}>
-          <div className="flex items-center justify-between mb-2">
-            <h2 className={`text-sm font-semibold ${T.texto}`}>Máquinas paradas agora</h2>
-            <span className="badge bg-red-500/15 text-red-500 border-red-500/30">{d.paradas.ativas.length}</span>
-          </div>
-          {d.paradas.ativas.length === 0 ? (
-            <p className={`text-xs ${T.sub}`}>Nenhuma parada em aberto.</p>
-          ) : (
-            <div className="space-y-1 text-xs">
-              {d.paradas.ativas.map((p) => (
-                <div key={p.id} className={`flex justify-between border-b ${T.divisor} py-1`}>
-                  <span className={T.cardKSub}>
-                    {p.maquina ?? '—'} · {p.codigoGrv} ({p.etapa}) — {p.motivo}
-                    {p.planejado ? ' · planejada' : ''}
-                  </span>
-                  <span className="text-red-500 font-semibold">{p.minutosParado}min</span>
-                </div>
-              ))}
-            </div>
-          )}
+      <section aria-label="Indicadores de produção"><DashboardCharts data={d} onAbrir={abrirLista} /></section>
+      <section className="min-w-0" aria-labelledby="kanban-titulo">
+        <div className="flex flex-wrap items-end justify-between gap-3 mb-4">
+          <div><h2 id="kanban-titulo" className="text-xl font-semibold">Onde está cada lote</h2><p className="text-sm dash-muted">Operações com peças disponíveis, em execução ou aguardando liberação.</p></div>
+          <label className="text-sm w-full sm:w-80">Buscar no kanban<input className="dash-input mt-1" value={busca} onChange={e => setBusca(e.target.value)} placeholder="OS, cliente, estação, externas…" /></label>
         </div>
-        <div className={T.card}>
-          <div className="flex items-center justify-between mb-2">
-            <h2 className={`text-sm font-semibold ${T.texto}`}>Tempo parado hoje, por motivo</h2>
-          </div>
-          {Object.keys(d.paradas.porMotivoHoje).length === 0 ? (
-            <p className={`text-xs ${T.sub}`}>Nenhuma parada registrada hoje.</p>
-          ) : (
-            <div className="space-y-1 text-xs">
-              {Object.entries(d.paradas.porMotivoHoje)
-                .sort(([, a], [, b]) => b.minutos - a.minutos)
-                .map(([motivo, info]) => (
-                  <div key={motivo} className={`flex justify-between border-b ${T.divisor} py-1`}>
-                    <span className={T.cardKSub}>
-                      {motivo}
-                      {info.planejado ? ' · planejada' : ''} ({info.ocorrencias}x)
-                    </span>
-                    <span className={`font-semibold ${info.planejado ? 'text-blue-500' : 'text-amber-500'}`}>
-                      {info.minutos}min
-                    </span>
-                  </div>
-                ))}
-            </div>
-          )}
-        </div>
-      </div>
-
-      {/* Lotes Fantasmas v2 */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-        <div className={`${T.card} ${d.fantasmas.opsParadas.length > 0 ? 'border-amber-500/40' : ''}`}>
-          <div className="flex items-center justify-between mb-2">
-            <h2 className={`text-sm font-semibold ${T.texto}`}>OPs paradas (4h+)</h2>
-            <span className="badge bg-amber-500/15 text-amber-500 border-amber-500/30">{d.fantasmas.opsParadas.length}</span>
-          </div>
-          {d.fantasmas.opsParadas.length === 0 ? (
-            <p className={`text-xs ${T.sub}`}>Nenhuma OP parada.</p>
-          ) : (
-            <div className="space-y-1 text-xs">
-              {d.fantasmas.opsParadas.map((op, i) => (
-                <div key={i} className={`flex justify-between border-b ${T.divisor} py-1`}>
-                  <span className={T.cardKSub}>{op.codigoGrv} · {op.codigoOp} ({op.etapa})</span>
-                  <span className="text-amber-500 font-semibold">{op.horasParado}h</span>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-        <div className={`${T.card} ${d.fantasmas.turnosNaoFechados.length > 0 ? 'border-blue-500/40' : ''}`}>
-          <div className="flex items-center justify-between mb-2">
-            <h2 className={`text-sm font-semibold ${T.texto}`}>Turnos não fechados (ontem)</h2>
-            <span className="badge bg-blue-500/15 text-blue-500 border-blue-500/30">{d.fantasmas.turnosNaoFechados.length}</span>
-          </div>
-          {d.fantasmas.turnosNaoFechados.length === 0 ? (
-            <p className={`text-xs ${T.sub}`}>Todos fecharam.</p>
-          ) : (
-            <div className={`space-y-1 text-xs ${T.cardKSub}`}>
-              {d.fantasmas.turnosNaoFechados.map((t, i) => (
-                <div key={i} className={`border-b ${T.divisor} py-1`}>{t.operador}</div>
-              ))}
-            </div>
-          )}
-        </div>
-      </div>
-
-      {/* Etapas com operações internas (fundição): o kanban geral mostra só
-          "está na fundição"; aqui o chefe vê em qual das 5 fases cada OS está. */}
-      {d.pipelines?.map((p) => (
-        <DetalheEtapaInterna key={p.etapaId} pipeline={p} claro={claro} T={T} />
-      ))}
-
-      {/* Kanban: mapa de lotes por etapa */}
-      <div>
-        <h2 className={`text-lg font-semibold ${T.texto} mb-3`}>Onde está cada lote</h2>
-        {kanbanFiltrado.every((et) => et.cards.length === 0) ? (
-          <div className={T.card}><p className={`text-sm ${T.sub}`}>Nenhum lote em produção.</p></div>
-        ) : (
-          <div className="flex gap-3 overflow-x-auto pb-2">
-            {kanbanFiltrado.map((et) => (
-              <div key={et.etapaId} className={`min-w-[260px] w-[260px] flex-shrink-0 rounded-lg p-2 ${T.coluna}`}>
-                <div className="flex items-center justify-between mb-2 px-1">
-                  <span className={`font-medium ${T.colTitulo}`}>{et.nome}</span>
-                  <span className={`badge ${T.colBadge}`}>{et.total}</span>
-                </div>
-                <div className="space-y-2">
-                  {et.cards.map((c) => (
-                    <div
-                      key={c.opLoteId}
-                      onClick={() => setModal({ titulo: c.codigoGrv, tipo: 'os', os: c })}
-                      className={`rounded-lg border-l-4 p-3 cursor-pointer ${T.cardK} ${T.cardKHover}`}
-                      style={{ borderLeftColor: corSemaforo(c.semaforo) }}
-                    >
-                      <div className="flex items-center justify-between">
-                        <span className={`font-mono font-semibold ${T.cardKTexto}`}>{c.codigoGrv}</span>
-                        {c.prioridade === 'urgente' && (
-                          <span className="text-[10px] uppercase text-red-500 font-bold">urgente</span>
-                        )}
-                      </div>
-                      <div className={`text-sm ${T.cardKSub} mt-0.5`}>{c.cliente} · {c.artigo}</div>
-                      <div className="flex items-center justify-between mt-1 text-xs">
-                        <span className={T.sub}>OP {c.codigoOp} · Lote {c.numeroLote}</span>
-                        <span className="font-semibold" style={{ color: corSemaforo(c.semaforo) }}>
-                          {c.diasAtePrazo < 0 ? Math.abs(c.diasAtePrazo) + 'd atrasado' : c.diasAtePrazo + 'd'}
-                        </span>
-                      </div>
-                    </div>
-                  ))}
-                </div>
+        <div className="dash-kanban" tabIndex={0} role="region" aria-label="Kanban de produção com rolagem horizontal e vertical">
+          <div className="flex gap-4 w-max min-w-full items-start p-4">
+            {kanban.map(et => <section key={et.etapaId} className="w-72 flex-shrink-0">
+              <header className="dash-column-title sticky top-0 z-10 flex items-center justify-between gap-3 rounded-lg px-3 py-3 mb-3"><h3 className="font-semibold">{et.nome}</h3><span className="dash-count">{et.cards.length}</span></header>
+              <div className="space-y-3">
+                {et.cards.length === 0 && <p className="text-sm dash-muted p-4">Nenhuma OP nesta estação.</p>}
+                {et.cards.map(c => <button key={c.opLoteId} className="dash-kanban-card" onClick={() => setSelecao({ tipo: 'op', id: c.opLoteId })} style={{ borderLeftColor: c.externo ? '#0ea5e9' : c.semaforo === 'vermelho' ? '#f43f5e' : c.semaforo === 'amarelo' ? '#f59e0b' : '#10b981' }}>
+                  <div className="flex items-start justify-between gap-2"><strong className="font-mono break-all">{c.codigoGrv}</strong>{c.prioridade === 'urgente' && <span className="text-xs font-bold text-rose-500">URGENTE</span>}</div>
+                  <p className="text-sm mt-2">{c.cliente}</p><p className="dash-muted text-sm">{c.artigo}</p>
+                  <p className="text-xs mt-3">OP {c.codigoOp} · Lote {c.numeroLote} · {c.quantidade} peças</p>
+                  {c.externo ? <p className="text-sky-500 text-xs font-semibold mt-2">ENVIO EXTERNO · aguardando retorno</p> : <p className="dash-muted text-xs mt-2">{STATUS[c.status] ?? c.status}</p>}
+                  <p className={`text-xs mt-2 ${c.diasAtePrazo < 0 ? 'text-rose-500 font-semibold' : 'dash-muted'}`}>{prazoTexto(c.diasAtePrazo)}</p>
+                </button>)}
               </div>
-            ))}
-          </div>
-        )}
-      </div>
-
-      {/* Inspecao */}
-      <div className={T.card}>
-        <h2 className={`text-lg font-semibold ${T.texto} mb-3`}>Inspeção</h2>
-        <div className="grid grid-cols-3 gap-3 text-center">
-          <div>
-            <div className="text-2xl font-bold text-emerald-500">{d.inspecao['aprovado'] ?? 0}</div>
-            <div className={`text-xs ${T.sub}`}>Aprovadas</div>
-          </div>
-          <div>
-            <div className="text-2xl font-bold text-amber-500">{d.inspecao['com_observacoes'] ?? 0}</div>
-            <div className={`text-xs ${T.sub}`}>Com observações</div>
-          </div>
-          <div>
-            <div className="text-2xl font-bold text-red-500">{d.inspecao['reprovado'] ?? 0}</div>
-            <div className={`text-xs ${T.sub}`}>Reprovadas</div>
+            </section>)}
           </div>
         </div>
+        <p className="dash-muted text-xs mt-2">Role dentro do quadro para percorrer as estações e os lotes. Clique em uma OP para abrir os detalhes.</p>
+      </section>
+      <details className="dash-panel">
+        <summary className="cursor-pointer text-lg font-semibold">Acompanhamento operacional <span className="dash-muted text-sm font-normal ml-2">Paradas, turnos, inspeções e fases da Fundição</span></summary>
+        <Operacional d={d} claro={claro} onAbrir={abrirLista} />
+      </details>
+    </>}
+    {selecao && d && <Modal open title={tituloModal} size="xl" onClose={() => setSelecao(null)}>
+      <div className="dash-dialog">
+        {selecao.tipo === 'externos' && <>
+          <p className="dash-muted text-sm mb-4">{d.totalOSExternas} OS · {d.enviosExternos.length} lotes aguardando retorno. A confirmação de recebimento é feita na Metalização.</p>
+          {!d.enviosExternos.length && <p className="dash-empty">Nenhuma OS em envio externo.</p>}
+          <div className="space-y-4">{d.enviosExternos.map(e => <article key={e.opLoteId} className="dash-panel">
+            <div className="flex flex-wrap justify-between gap-2"><h3 className="font-mono font-bold text-lg">{e.codigoGrv}</h3><span className="text-sky-500 font-semibold">Aguardando retorno · {e.diasFora}d fora</span></div>
+            <p className="text-sm mt-2">{e.cliente} · {e.artigo} — {e.descricao}</p>
+            <dl className="grid grid-cols-2 sm:grid-cols-3 gap-3 text-sm mt-4">
+              <Dado nome="Operação / lote" valor={`OP ${e.codigoOp} · Lote ${e.numeroLote}`} />
+              <Dado nome="Quantidade enviada" valor={`${e.quantidade} peças`} />
+              <Dado nome="Fornecedor" valor={e.fornecedor ?? 'Não informado'} />
+              <Dado nome="Enviado em" valor={new Date(e.enviadoEm).toLocaleString('pt-BR')} />
+              <Dado nome="Prazo da OS" valor={dataCurta(e.prazoEntrega)} />
+              <Dado nome="Situação do prazo" valor={prazoTexto(e.diasAtePrazo)} />
+            </dl>
+          </article>)}</div>
+        </>}
+        {selecao.tipo === 'lista' && <>
+          <div className="overflow-x-auto"><table className="w-full min-w-[580px] text-left text-sm"><thead className="dash-muted"><tr>{['OS', 'Cliente / artigo', 'Peças', 'Prazo', 'Conclusão / atraso'].map(t => <th key={t} className="py-3 pr-3 font-medium">{t}</th>)}</tr></thead>
+            <tbody>{selecao.ids.map(id => {
+              const os = todasOS.get(id); if (!os) return null;
+              const hist = h?.os.find(o => o.id === id);
+              return <tr key={id} className="dash-row"><td className="py-3 pr-3 font-mono">{os.codigoGrv}</td><td className="py-3 pr-3">{os.cliente.nome}<p className="dash-muted text-xs">{os.artigo.codigo} · {TIPOS_PECA[os.artigo.tipoProduto]}</p></td><td className="py-3 pr-3">{os.quantidadeTotal}</td><td className="py-3 pr-3 whitespace-nowrap">{dataCurta(os.prazoEntrega)}</td><td className="py-3 pr-3">{hist ? `${dataCurta(hist.concluidaEm)} · ${hist.diasAtraso ? `${hist.diasAtraso}d de atraso` : 'no prazo'}` : '—'}</td></tr>;
+            })}</tbody></table></div>
+          {!selecao.ids.length && <p className="dash-empty">Nenhuma OS neste recorte.</p>}
+        </>}
+        {selecao.tipo === 'op' && (op ? <dl className="grid grid-cols-2 gap-5 text-sm">
+          <Dado nome="Cliente" valor={op.cliente} /><Dado nome="Artigo" valor={op.artigo} /><Dado nome="OP / lote" valor={`${op.codigoOp} / ${op.numeroLote}`} /><Dado nome="Situação" valor={op.externo ? 'Envio externo — aguardando retorno' : STATUS[op.status] ?? op.status} />
+          <Dado nome="Quantidade" valor={`${op.quantidade} peças`} /><Dado nome="Prazo" valor={prazoTexto(op.diasAtePrazo)} />
+          <Dado nome="Máquina" valor={op.maquina ?? '—'} /><Dado nome="Operador" valor={op.operador ?? '—'} /><Dado nome="Programador" valor={op.programador ?? '—'} />{op.externo && <Dado nome="Fornecedor" valor={op.fornecedor ?? 'Não informado'} />}
+        </dl> : <p>Esta OP saiu da fila. O painel foi atualizado.</p>)}
       </div>
-
-      {modal && (
-        <div
-          className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4"
-          onClick={() => setModal(null)}
-        >
-          <div
-            className={`${T.modalBg} rounded-xl max-w-2xl w-full max-h-[80vh] overflow-y-auto p-5`}
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className="flex items-center justify-between mb-4">
-              <h2 className={`text-lg font-semibold ${T.modalTexto}`}>{modal.titulo}</h2>
-              <button onClick={() => setModal(null)} className={`${T.modalSub} hover:opacity-70 text-xl leading-none`}>x</button>
-            </div>
-
-            {modal.tipo === 'lista' && (
-              modal.itens && modal.itens.length > 0 ? (
-                <table className="w-full text-sm">
-                  <thead className={`${T.modalSub} text-left`}>
-                    <tr>
-                      <th className="py-1 pr-3">OS</th>
-                      <th className="py-1 pr-3">Cliente</th>
-                      <th className="py-1 pr-3">Artigo</th>
-                      <th className="py-1 pr-3">Qtd</th>
-                      <th className="py-1 pr-3">Prazo</th>
-                    </tr>
-                  </thead>
-                  <tbody className={T.modalTexto}>
-                    {modal.itens.map((os) => (
-                      <tr key={os.id} className={`border-t ${T.divisor}`}>
-                        <td className="py-1.5 pr-3 font-mono">{os.codigoGrv}</td>
-                        <td className="py-1.5 pr-3">{os.cliente.nome}</td>
-                        <td className="py-1.5 pr-3">{os.artigo.codigo}</td>
-                        <td className="py-1.5 pr-3">{os.quantidadeTotal}</td>
-                        <td className="py-1.5 pr-3">{new Date(os.prazoEntrega).toLocaleDateString('pt-BR')}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              ) : (
-                <p className={`text-sm ${T.modalSub}`}>Nenhuma OS neste status.</p>
-              )
-            )}
-
-            {modal.tipo === 'os' && modal.os && (
-              <div className="space-y-2 text-sm">
-                <div className={`flex justify-between border-b ${T.divisor} pb-2`}>
-                  <span className={T.modalSub}>Cliente</span>
-                  <span className={T.modalTexto}>{modal.os.cliente}</span>
-                </div>
-                <div className={`flex justify-between border-b ${T.divisor} pb-2`}>
-                  <span className={T.modalSub}>Artigo</span>
-                  <span className={T.modalTexto}>{modal.os.artigo}</span>
-                </div>
-                <div className={`flex justify-between border-b ${T.divisor} pb-2`}>
-                  <span className={T.modalSub}>Lote</span>
-                  <span className={T.modalTexto}>{modal.os.numeroLote}</span>
-                </div>
-                <div className={`flex justify-between border-b ${T.divisor} pb-2`}>
-                  <span className={T.modalSub}>OP</span>
-                  <span className={T.modalTexto}>{modal.os.codigoOp}</span>
-                </div>
-                <div className={`flex justify-between border-b ${T.divisor} pb-2`}>
-                  <span className={T.modalSub}>Status</span>
-                  <span className={T.modalTexto}>{modal.os.status}</span>
-                </div>
-                <div className={`flex justify-between border-b ${T.divisor} pb-2`}>
-                  <span className={T.modalSub}>Prazo</span>
-                  <span className={T.modalTexto}>{modal.os.diasAtePrazo < 0 ? Math.abs(modal.os.diasAtePrazo) + 'd atrasado' : modal.os.diasAtePrazo + 'd restantes'}</span>
-                </div>
-                {modal.os.operador && (
-                  <div className={`flex justify-between border-b ${T.divisor} pb-2`}>
-                    <span className={T.modalSub}>Operador</span>
-                    <span className={T.modalTexto}>{modal.os.operador}</span>
-                  </div>
-                )}
-                {modal.os.programador && (
-                  <div className={`flex justify-between border-b ${T.divisor} pb-2`}>
-                    <span className={T.modalSub}>Programador</span>
-                    <span className={T.modalTexto}>{modal.os.programador}</span>
-                  </div>
-                )}
-                {modal.os.maquina && (
-                  <div className="flex justify-between">
-                    <span className={T.modalSub}>Maquina</span>
-                    <span className={T.modalTexto}>{modal.os.maquina}</span>
-                  </div>
-                )}
-              </div>
-            )}
-          </div>
-        </div>
-      )}
-    </div>
-  );
+    </Modal>}
+  </main>;
 }
 
-// ============================================================
-// Detalhe de uma etapa com operações internas (fundição)
-// ============================================================
-// A faixa de fluxo é a mesma peça que o tótem usa, então o que o chefe vê no
-// painel é literalmente o que o pessoal vê no chão de fábrica.
-function DetalheEtapaInterna({
-  pipeline,
-  claro,
-  T,
-}: {
-  pipeline: PipelineEtapaData;
-  claro: boolean;
-  T: Record<string, string>;
-}) {
-  // Operações configuradas pra avisar outra etapa — na fundição, o tratamento
-  // térmico. É o ciclo longo que dá (ou tira) previsibilidade do desbaste.
-  const cicloLongo = pipeline.fases
-    .flatMap((f) => f.cards)
-    .filter((c) => c.etapaAvisada !== null);
-  const nomesDoCiclo = [...new Set(cicloLongo.map((c) => c.tipoServico))];
+function Resumo({ label, valor, detalhe, cor = 'normal', onClick }: { label: string; valor: number; detalhe: string; cor?: string; onClick: () => void }) {
+  return <button className="dash-summary" data-accent={cor} onClick={onClick}>
+    <span className="text-sm font-medium">{label}</span><strong className="block text-4xl my-3 tabular-nums">{valor}</strong><span className="dash-muted text-xs">{detalhe}</span><span className="block text-xs dash-muted mt-3">Ver OS ↗</span>
+  </button>;
+}
+function Dado({ nome, valor }: { nome: string; valor: string }) { return <div><dt className="dash-muted mb-1">{nome}</dt><dd>{valor}</dd></div>; }
 
-  return (
-    <div className={T.card}>
-      <h2 className={`text-lg font-semibold ${T.texto} mb-3`}>
-        {pipeline.etapaNome} em detalhe
-      </h2>
-
-      <PipelineEtapa pipeline={pipeline} variante="compacta" claro={claro} />
-
-      {cicloLongo.length > 0 && (
-        <div>
-          <h3 className={`text-sm font-semibold ${T.texto} mb-2`}>
-            Ciclo de {nomesDoCiclo.join(' / ')}
-          </h3>
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm min-w-[640px]">
-              <thead className={`${T.sub} text-left`}>
-                <tr>
-                  <th className="py-1 pr-3 font-medium">OS</th>
-                  <th className="py-1 pr-3 font-medium">Artigo</th>
-                  <th className="py-1 pr-3 font-medium">Cliente</th>
-                  <th className="py-1 pr-3 font-medium">No ciclo há</th>
-                  <th className="py-1 pr-3 font-medium">Avisou</th>
-                </tr>
-              </thead>
-              <tbody className={T.cardKTexto}>
-                {cicloLongo.map((c) => (
-                  <tr key={c.opLoteId} className={`border-t ${T.divisor}`}>
-                    <td className="py-1.5 pr-3 font-mono">
-                      {c.codigoGrv}
-                      {c.prioridade === 'urgente' && (
-                        <span className="ml-1 text-[10px] uppercase text-red-500 font-bold">
-                          urgente
-                        </span>
-                      )}
-                    </td>
-                    <td className="py-1.5 pr-3">{c.artigo}</td>
-                    <td className="py-1.5 pr-3">{c.cliente}</td>
-                    <td className="py-1.5 pr-3">
-                      {c.desdeQuando ? (
-                        tempoNaFase(c.desdeQuando)
-                      ) : (
-                        <span className={T.sub}>ainda na fila</span>
-                      )}
-                    </td>
-                    <td className="py-1.5 pr-3">
-                      {c.alertaInicioEm ? (
-                        <span className="text-emerald-500">
-                          {c.etapaAvisada} · há {tempoNaFase(c.alertaInicioEm)}
-                        </span>
-                      ) : (
-                        <span className={T.sub}>—</span>
-                      )}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
-      )}
+function Operacional({ d, claro, onAbrir }: { d: DashboardData; claro: boolean; onAbrir: (titulo: string, ids: string[]) => void }) {
+  return <div className="mt-5 space-y-4">
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <section className="dash-panel"><h3 className="font-semibold">Máquinas paradas agora · {d.paradas.ativas.length}</h3><div className="max-h-48 overflow-y-auto mt-3 text-sm space-y-2">{d.paradas.ativas.map(p => <p key={p.id}>{p.maquina ?? 'Sem máquina'} · {p.codigoGrv} · {p.motivo} <strong className="text-rose-500">{p.minutosParado}min</strong></p>)}{!d.paradas.ativas.length && <p className="dash-muted">Nenhuma parada em aberto.</p>}</div></section>
+      <section className="dash-panel"><h3 className="font-semibold">Tempo parado hoje por motivo</h3><div className="max-h-48 overflow-y-auto mt-3 text-sm space-y-2">{Object.entries(d.paradas.porMotivoHoje).map(([motivo, p]) => <p key={motivo}>{motivo} · {p.ocorrencias} ocorrências · <strong>{numero(p.minutos)}min</strong></p>)}{!Object.keys(d.paradas.porMotivoHoje).length && <p className="dash-muted">Nenhuma parada registrada hoje.</p>}</div></section>
+      <section className="dash-panel"><h3 className="font-semibold">Operações abertas há mais de 4h · {d.fantasmas.opsParadas.length}</h3><p className="dash-muted text-xs mt-1">Tempo de carimbo aberto; não significa máquina parada.</p><div className="max-h-48 overflow-y-auto mt-3 text-sm space-y-2">{d.fantasmas.opsParadas.map((op, i) => <p key={i}>{op.codigoGrv} · OP {op.codigoOp} · {op.etapa} · {op.horasParado}h</p>)}{!d.fantasmas.opsParadas.length && <p className="dash-muted">Nenhuma operação neste recorte.</p>}</div></section>
+      <section className="dash-panel"><h3 className="font-semibold">Turnos não fechados ontem · {d.fantasmas.turnosNaoFechados.length}</h3><p className="dash-muted text-xs mt-1">Equipe completa da fábrica, independente dos filtros de OS.</p><div className="max-h-48 overflow-y-auto mt-3 text-sm">{d.fantasmas.turnosNaoFechados.map((t, i) => <p key={i}>{t.operador}</p>)}{!d.fantasmas.turnosNaoFechados.length && <p className="dash-muted">Todos fecharam.</p>}</div></section>
     </div>
-  );
+    {d.pipelines.map(p => <section key={p.etapaId} className="dash-panel overflow-hidden"><h3 className="font-semibold mb-4">{p.etapaNome} em detalhe</h3><div className="max-h-96 overflow-auto"><PipelineEtapa pipeline={p} variante="compacta" claro={claro} /></div></section>)}
+    <div className="flex flex-wrap gap-5 text-sm"><span>Inspeções aprovadas: <strong>{d.inspecao.aprovado ?? 0}</strong></span><span>Com observações: <strong>{d.inspecao.com_observacoes ?? 0}</strong></span><span>Reprovadas: <strong>{d.inspecao.reprovado ?? 0}</strong></span><button className="underline" onClick={() => onAbrir('OS canceladas', (d.osPorStatusLista.cancelada ?? []).map(o => o.id))}>OS canceladas: {d.osPorStatus.cancelada ?? 0}</button></div>
+  </div>;
 }
