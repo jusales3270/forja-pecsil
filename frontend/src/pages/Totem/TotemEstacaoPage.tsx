@@ -1,3 +1,6 @@
+import { isMetalizacao } from '@forja/shared';
+import { EnviosExternos } from './EnviosExternos';
+import { useEnviosExternos } from '../../hooks/useOPLote';
 // ============================================================
 // Forja - Tótem: Tela da Estação
 // Lista OPs pendentes + em andamento, permite buscar e operar
@@ -48,9 +51,16 @@ export function TotemEstacaoPage() {
 
   const { data: etapas } = useEtapasList();
   const etapa = etapas?.find((e) => e.id === etapaId);
+  const [busca, setBusca] = useState('');
+  const metalizacao = isMetalizacao(etapa?.nome ?? '');
+  const [abaMetalizacao, setAbaMetalizacao] = useState<'interno' | 'externo'>('interno');
+  const externos = useEnviosExternos(metalizacao ? etapaId : undefined);
+  const envios = (externos.data?.data ?? []).filter(op =>
+    [op.lote.os.codigoGrv, op.lote.os.artigo.codigo, op.lote.os.artigo.descricao, op.lote.os.cliente.nome]
+      .some(valor => valor.toLocaleLowerCase().includes(busca.toLocaleLowerCase())));
   const gerarTestes = useGerarTestesFundicao();
 
-  const [busca, setBusca] = useState('');
+
   const faseSelecionada = searchParams.get('fase');
 
   const setFaseSelecionada = (novaFase: string | null) => {
@@ -155,6 +165,7 @@ export function TotemEstacaoPage() {
     joinEstacao(etapaId);
 
     const refetch = () => {
+      qc.invalidateQueries({ queryKey: ['op-lote-envios-externos'] });
       qc.invalidateQueries({ queryKey: ['op-lote-pendentes'] });
       qc.invalidateQueries({ queryKey: ['op-lote-em-andamento'] });
       qc.invalidateQueries({ queryKey: ['pipeline-etapa'] });
@@ -304,7 +315,11 @@ export function TotemEstacaoPage() {
           />
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {metalizacao && <div role="tablist" aria-label="Metalização" className="flex gap-3 mb-6">
+          <button role="tab" aria-selected={abaMetalizacao === 'interno'} onClick={() => setAbaMetalizacao('interno')} className={`px-5 py-3 rounded-lg ${abaMetalizacao === 'interno' ? 'bg-forja-500' : 'bg-neutral-800'}`}>Fila e produção interna</button>
+          <button role="tab" aria-selected={abaMetalizacao === 'externo'} onClick={() => setAbaMetalizacao('externo')} className={`px-5 py-3 rounded-lg ${abaMetalizacao === 'externo' ? 'bg-forja-500' : 'bg-neutral-800'}`}>ENVIO EXTERNO ({externos.data?.data.length ?? 0})</button>
+        </div>}
+        {metalizacao && abaMetalizacao === 'externo' ? <EnviosExternos ops={envios} podeOperar={podeOperar} carregando={externos.isLoading} erro={externos.isError} /> : <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Pendentes primeiro: é a fila que o operador ataca. O que já está
               rodando fica à direita, como consequência do que ele iniciou. */}
           <section>
@@ -384,7 +399,7 @@ export function TotemEstacaoPage() {
               ))}
             </div>
           </section>
-        </div>
+        </div>}
       </div>
 
       {opIniciar && etapaId && (
@@ -611,7 +626,7 @@ function CardPendente({
                 onClick={onIniciar}
                 className="px-5 py-2 bg-forja-500 hover:bg-forja-600 text-white text-sm font-medium rounded-lg transition"
               >
-                {op.terceirizada
+                {isMetalizacao(op.etapa.nome) ? 'Escolher metalização' : op.terceirizada
                   ? '🚚 Enviar'
                   : op.esperaHoras != null
                     ? `⏳ Iniciar espera (${op.esperaHoras}h)`

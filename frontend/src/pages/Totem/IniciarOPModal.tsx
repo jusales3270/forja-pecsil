@@ -7,6 +7,8 @@
 // ============================================================
 
 import { useEffect, useRef, useState } from 'react';
+import { isMetalizacao } from '@forja/shared';
+import { useMetalizacaoExterna } from '../../hooks/useOPLote';
 import { Modal } from '../../components/Modal';
 import { toast } from '../../components/Toast';
 import { useIniciarOP, type OPLotePendente } from '../../hooks/useOPLote';
@@ -24,7 +26,13 @@ interface Props {
 export function IniciarOPModal({ op, etapaId, onClose }: Props) {
   const isEng = isOperacaoEngenharia(op);
   const usuarioLogado = useAuth((s) => s.pessoa);
-  const semMaquina = op.terceirizada || op.esperaHoras != null;
+  const metalizacao = isMetalizacao(op.etapa.nome);
+  const [modo, setModo] = useState<'interno' | 'externo' | null>(null);
+  const [fornecedor, setFornecedor] = useState(op.fornecedor ?? '');
+  const externo = metalizacao && modo === 'externo';
+  const semMaquina = metalizacao ? externo : op.terceirizada || op.esperaHoras != null;
+  const envio = useMetalizacaoExterna();
+
   const [maquinaId, setMaquinaId] = useState('');
   const [operadorId, setOperadorId] = useState('');
   const [observacoes, setObservacoes] = useState('');
@@ -61,7 +69,9 @@ export function IniciarOPModal({ op, etapaId, onClose }: Props) {
   }, [semMaquina]);
 
   async function handleSubmit() {
+    if (iniciar.isPending || envio.isPending) return;
     setErro(null);
+    if (metalizacao && !modo) { setErro('Escolha metalização interna ou externa.'); return; }
     if (!semMaquina) {
       if (!maquinaId) {
         setErro('Selecione a máquina');
@@ -74,15 +84,22 @@ export function IniciarOPModal({ op, etapaId, onClose }: Props) {
     }
 
     try {
+      if (externo) {
+        await envio.mutateAsync({ id: op.id, acao: 'enviar-externo', fornecedor, observacoes });
+        toast.sucesso('Envio registrado. Aguardando recebimento em ENVIO EXTERNO.');
+        onClose();
+        return;
+      }
       await iniciar.mutateAsync({
         opLoteId: op.id,
         input: {
+          ...(metalizacao ? { modoMetalizacao: 'interno' as const } : {}),
           ...(semMaquina ? {} : { maquinaId, operadorId }),
           observacoes: observacoes.trim() || null,
         },
       });
       toast.sucesso(
-        op.terceirizada
+        !metalizacao && op.terceirizada
           ? 'Envio registrado.'
           : op.esperaHoras != null
             ? 'Espera iniciada.'
@@ -111,7 +128,7 @@ export function IniciarOPModal({ op, etapaId, onClose }: Props) {
       title={
         isEng
           ? `Iniciar Programação — OP ${op.codigoOp} · ${op.lote.os.codigoGrv}`
-          : op.terceirizada
+          : !metalizacao && op.terceirizada
             ? `Enviar OP ${op.codigoOp} — ${op.lote.os.codigoGrv}`
             : op.esperaHoras != null
               ? `Iniciar espera — OP ${op.codigoOp} · ${op.lote.os.codigoGrv}`
@@ -129,14 +146,14 @@ export function IniciarOPModal({ op, etapaId, onClose }: Props) {
           </button>
           <button
             onClick={handleSubmit}
-            disabled={iniciar.isPending}
+            disabled={iniciar.isPending || envio.isPending || (metalizacao && !modo)}
             className="px-5 py-2 bg-forja-500 hover:bg-forja-600 disabled:opacity-50 text-white rounded-lg font-medium transition"
           >
-            {iniciar.isPending
+            {(iniciar.isPending || envio.isPending)
               ? 'Registrando...'
-              : isEng
+              : externo ? 'Registrar envio externo' : isEng
                 ? 'Iniciar Programação (Enter)'
-                : op.terceirizada
+                : !metalizacao && op.terceirizada
                   ? 'Registrar envio (Enter)'
                   : op.esperaHoras != null
                     ? 'Iniciar espera (Enter)'
@@ -167,7 +184,25 @@ export function IniciarOPModal({ op, etapaId, onClose }: Props) {
           </div>
         </div>
 
-        {semMaquina && (
+        {metalizacao && (
+          <fieldset className="space-y-3">
+            <legend className="text-lg font-medium mb-3">Onde será feita a metalização?</legend>
+            {(['interno', 'externo'] as const).map(valor => (
+              <label key={valor} className="flex items-center gap-3 p-4 rounded-lg border border-neutral-700 cursor-pointer">
+                <input type="radio" name="modo-metalizacao" checked={modo === valor} onChange={() => setModo(valor)} />
+                {valor === 'interno' ? 'Internamente na Pecsil' : 'Enviar para metalização externa'}
+              </label>
+            ))}
+            {externo && <>
+              <p className="text-sm text-amber-300">Serão enviadas {op.lote.quantidadePecas} peças do lote. A OP ficará em ENVIO EXTERNO até a Metalização confirmar que todas retornaram.</p>
+              <label className="label-compact">Fornecedor (opcional)
+                <input className="input py-2" value={fornecedor} maxLength={200} onChange={e => setFornecedor(e.target.value)} />
+              </label>
+            </>}
+          </fieldset>
+        )}
+
+        {semMaquina && !metalizacao && (
           <div className="p-3 rounded-lg border border-sky-500/30 bg-sky-500/5 text-sm">
             {op.terceirizada ? (
               <>
@@ -199,7 +234,7 @@ export function IniciarOPModal({ op, etapaId, onClose }: Props) {
         )}
 
         {/* Máquina */}
-        <div className={semMaquina ? 'hidden' : undefined}>
+        <div className={semMaquina || (metalizacao && !modo) ? 'hidden' : undefined}>
           <label className="label-compact">
             {isEng ? 'Computador / Estação de Programação' : 'Máquina'}
           </label>
@@ -219,7 +254,7 @@ export function IniciarOPModal({ op, etapaId, onClose }: Props) {
         </div>
 
         {/* Operador */}
-        <div className={semMaquina ? 'hidden' : undefined}>
+        <div className={semMaquina || (metalizacao && !modo) ? 'hidden' : undefined}>
           <label className="label-compact">
             {isEng ? 'Programador responsável' : 'Operador responsável'}
           </label>

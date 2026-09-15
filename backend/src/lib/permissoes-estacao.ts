@@ -68,13 +68,19 @@ export async function checarEstacaoDaOP(
 ): Promise<{ error: string; message: string } | null> {
   const op = await prisma.oPLote.findUnique({
     where: { id: opLoteId },
-    select: { etapaId: true, etapa: { select: { nome: true } } },
+    select: { envioExternoEm: true, etapaId: true, etapa: { select: { nome: true } } },
   });
 
   // OP inexistente não é problema de permissão: deixa a rota devolver o 404.
   if (!op) return null;
 
-  if (podeOperarEtapa(user, op.etapaId)) return null;
+  if (podeOperarEtapa(user, op.etapaId)) {
+    if (op.envioExternoEm) return {
+      error: 'envio_externo',
+      message: 'Esta OP foi enviada para metalização externa. Use Confirmar recebimento na aba ENVIO EXTERNO.',
+    };
+    return null;
+  }
 
   return {
     error: 'estacao_incorreta',

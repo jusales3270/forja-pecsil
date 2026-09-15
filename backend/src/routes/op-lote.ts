@@ -8,6 +8,8 @@
 
 import { FastifyInstance } from 'fastify';
 import { z } from 'zod';
+import { isMetalizacao } from '@forja/shared';
+import { metalizacaoExternaRoutes } from './metalizacao-externa.js';
 import { Prisma } from '@prisma/client';
 import { prisma } from '../db/prisma.js';
 import { calcularFluxoDePecas } from '../lib/fluxo-pecas.js';
@@ -26,6 +28,7 @@ const filtroEstacaoSchema = z.object({
 // não ocupam máquina nem operador — por isso os dois campos são opcionais aqui
 // e a exigência é validada conforme o tipo da OP.
 const iniciarSchema = z.object({
+  modoMetalizacao: z.literal('interno').optional(),
   maquinaId: z.string().uuid('maquinaId inválido').optional(),
   operadorId: z.string().uuid('operadorId inválido').optional(),
   observacoes: z.string().max(1000).nullable().optional(),
@@ -86,6 +89,7 @@ function podeOperarTotem(papel: string): boolean {
 // ============================================================
 
 export async function opLoteRoutes(app: FastifyInstance) {
+  await metalizacaoExternaRoutes(app);
   // ---------------- LISTAR PENDENTES NA ESTAÇÃO ----------------
   // OPs com status na_fila na etapa, ordenadas por urgência (prioridade da OS + prazo)
   app.get(
@@ -426,6 +430,7 @@ export async function opLoteRoutes(app: FastifyInstance) {
       const opLote = await prisma.oPLote.findUnique({
         where: { id: opLoteId },
         include: {
+          etapa: { select: { nome: true } },
           lote: { include: { os: { select: { id: true, status: true } } } },
         },
       });
@@ -471,11 +476,24 @@ export async function opLoteRoutes(app: FastifyInstance) {
         });
       }
 
-      const semMaquina = opLote.terceirizada || opLote.esperaHoras != null;
+      const metalizacao = isMetalizacao(opLote.etapa.nome);
+      if (metalizacao && bodyParsed.data.modoMetalizacao !== 'interno') {
+        return reply.code(400).send({ error: 'escolha_metalizacao', message: 'Escolha metalização interna ou envio externo.' });
+      }
+      const fluxoInicio = await calcularFluxoDePecas([opLote.loteId]);
+      if ((fluxoInicio.get(opLote.id)?.disponiveis ?? 0) <= 0) {
+        return reply.code(409).send({ error: 'sem_pecas_disponiveis', message: 'Nenhuma peça foi liberada para esta operação.' });
+      }
+      const semMaquina = !metalizacao && (opLote.terceirizada || opLote.esperaHoras != null);
 
       // Terceirizada e espera não abrem máquina: o carimbo marca só o relógio.
       if (semMaquina) {
         const carimbo = await prisma.$transaction(async (tx) => {
+          const inicio = await tx.oPLote.updateMany({
+            where: { id: opLote.id, status: 'na_fila', envioExternoEm: null },
+            data: { status: 'em_processo', ...(metalizacao ? { terceirizada: false } : {}) },
+          });
+          if (inicio.count !== 1) throw Object.assign(new Error('OP já iniciada ou enviada para fora. Atualize a fila.'), { statusCode: 409 });
           const c = await tx.carimbo.create({
             data: {
               opLoteId: opLote.id,
@@ -604,6 +622,11 @@ export async function opLoteRoutes(app: FastifyInstance) {
       // Tudo certo — abre transação
       try {
         const resultado = await prisma.$transaction(async (tx) => {
+          const inicio = await tx.oPLote.updateMany({
+            where: { id: opLote.id, status: 'na_fila', envioExternoEm: null },
+            data: { status: 'em_processo', ...(metalizacao ? { terceirizada: false } : {}) },
+          });
+          if (inicio.count !== 1) throw Object.assign(new Error('OP já iniciada ou enviada para fora. Atualize a fila.'), { statusCode: 409 });
           // Cria carimbo de entrada
           const carimbo = await tx.carimbo.create({
             data: {
@@ -787,6 +810,7 @@ export async function opLoteRoutes(app: FastifyInstance) {
 
         return reply.code(201).send({ data: completo });
       } catch (err: any) {
+        if (err.statusCode === 409) return reply.code(409).send({ error: 'op_nao_disponivel', message: err.message });
         app.log.error({ err }, 'Erro ao iniciar OP');
         return reply.code(500).send({
           error: 'erro_interno',
@@ -1086,6 +1110,7 @@ export async function opLoteRoutes(app: FastifyInstance) {
           },
         };
       } catch (err: any) {
+        if (err.statusCode === 409) return reply.code(409).send({ error: 'op_nao_disponivel', message: err.message });
         app.log.error({ err }, 'Erro ao encerrar OP');
         return reply.code(500).send({
           error: 'erro_interno',

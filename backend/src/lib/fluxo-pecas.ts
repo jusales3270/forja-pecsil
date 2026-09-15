@@ -45,7 +45,7 @@ export async function calcularFluxoDePecas(
       quantidadePecas: true,
       opsLote: {
         orderBy: [{ ordem: 'asc' }, { codigoOp: 'asc' }, { id: 'asc' }],
-        select: { id: true, ordem: true, quantidadeConcluida: true },
+        select: { id: true, ordem: true, quantidadeConcluida: true, envioExternoEm: true, recebimentoExternoEm: true },
       },
     },
   });
@@ -58,7 +58,7 @@ export async function calcularFluxoDePecas(
         liberadasPelaAnterior: liberadas,
         totalDoLote: lote.quantidadePecas,
       });
-      liberadas = op.quantidadeConcluida;
+      liberadas = op.envioExternoEm && !op.recebimentoExternoEm ? 0 : op.quantidadeConcluida;
     }
   }
 
