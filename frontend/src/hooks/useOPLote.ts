@@ -55,6 +55,9 @@ export interface OPLoteResumo {
 }
 
 export interface OPLotePendente {
+  envioExternoEm?: string | null;
+  recebimentoExternoEm?: string | null;
+  quantidadeEnvioExterno?: number | null;
   id: string;
   loteId: string;
   etapaId: string;
@@ -152,6 +155,7 @@ export interface FiltroEmAndamento {
 }
 
 export interface IniciarOPInput {
+  modoMetalizacao?: 'interno';
   /** Opcional: operação terceirizada ou de espera não ocupa máquina. */
   maquinaId?: string;
   operadorId?: string;
@@ -328,4 +332,28 @@ export function corPrazoOS(prazoIso: string): string {
   if (dias < 3) return 'text-red-400';
   if (dias < 7) return 'text-amber-400';
   return 'text-neutral-200';
+}
+
+export function useEnviosExternos(etapaId?: string) {
+  return useQuery<{ data: OPLotePendente[] }>({
+    queryKey: ['op-lote-envios-externos', etapaId],
+    queryFn: async () => (await api.get(`/op-lote/envios-externos?etapaId=${etapaId}`)).data,
+    enabled: !!etapaId,
+    refetchInterval: 30_000,
+  });
+}
+
+export function useMetalizacaoExterna() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async ({ id, acao, fornecedor, observacoes }: {
+      id: string; acao: 'enviar-externo' | 'receber-externo'; fornecedor?: string; observacoes?: string;
+    }) => (await api.post(`/op-lote/${id}/${acao}`, acao === 'enviar-externo'
+      ? { fornecedor, observacoes } : { confirmarRecebimento: true })).data,
+    onSuccess: () => {
+      for (const key of ['op-lote-envios-externos', 'op-lote-pendentes', 'op-lote-em-andamento', 'op-lote-detail', 'pipeline-etapa', 'os-list', 'os-detail', 'os-timeline']) {
+        qc.invalidateQueries({ queryKey: [key] });
+      }
+    },
+  });
 }

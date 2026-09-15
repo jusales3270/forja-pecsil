@@ -387,3 +387,8 @@ export interface OPLote {
   tempoUnitPlanejado: number;
   tempoTotalPlanejado: number;
 }
+
+/** Estação que permite decidir a execução interna ou externa por lote. */
+export function isMetalizacao(nome: string): boolean {
+  return nome.normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim().toLowerCase() === 'metalizacao';
+}

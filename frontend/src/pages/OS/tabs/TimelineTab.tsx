@@ -233,6 +233,15 @@ function PayloadResumo({ tipo, payload, claro }: { tipo: string; payload: any; c
     );
   }
 
+  if (payload.acao === 'metalizacao_envio_externo' || payload.acao === 'metalizacao_recebimento_externo') {
+    return <div className="mt-2 text-sm space-y-1">
+      <p>{payload.acao === 'metalizacao_envio_externo' ? 'Enviado para metalização externa — aguardando retorno' : 'Recebimento da metalização externa confirmado'}</p>
+      <p>OP {payload.codigoOp} · {payload.quantidadeEnviada} peças</p>
+      {payload.fornecedor && <p>Fornecedor: {payload.fornecedor}</p>}
+      {payload.observacoes && <p>{payload.observacoes}</p>}
+    </div>;
+  }
+
   if (tipo === 'op_lote_iniciada') {
     return (
       <div className="mt-2 text-xs text-neutral-400 space-y-0.5">

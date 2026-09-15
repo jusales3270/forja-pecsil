@@ -64,6 +64,10 @@ export async function apontamentoPecaRoutes(app: FastifyInstance) {
       }
 
       const resultado = await prisma.$transaction(async (tx) => {
+        await tx.$queryRaw`SELECT id FROM ops_lote WHERE id = ${opLoteId} FOR UPDATE`;
+        const estado = await tx.oPLote.findUnique({ where: { id: opLoteId }, select: { envioExternoEm: true } });
+        if (estado?.envioExternoEm) throw Object.assign(new Error('OP com envio externo não permite contagem de peças.'), { statusCode: 409 });
+
         // numero da peca = quantas ja existem nessa OP + 1 (sequencia informativa)
         const total = await tx.apontamentoPeca.count({ where: { opLoteId } });
         const numeroPeca = total + 1;
@@ -194,6 +198,10 @@ export async function apontamentoPecaRoutes(app: FastifyInstance) {
       const opLote = await prisma.oPLote.findUnique({ where: { id: opLoteId } });
 
       await prisma.$transaction(async (tx) => {
+        await tx.$queryRaw`SELECT id FROM ops_lote WHERE id = ${opLoteId} FOR UPDATE`;
+        const estado = await tx.oPLote.findUnique({ where: { id: opLoteId }, select: { envioExternoEm: true } });
+        if (estado?.envioExternoEm) throw Object.assign(new Error('OP com envio externo não permite contagem de peças.'), { statusCode: 409 });
+
         await tx.apontamentoPeca.delete({ where: { id: ultimo.id } });
         const total = await tx.apontamentoPeca.count({ where: { opLoteId } });
         const carimbo = await tx.carimbo.findFirst({

@@ -588,6 +588,10 @@ model OPLote {
   avisaAoIniciar      Boolean      @default(false) @map("avisa_ao_iniciar")
   /// Feita fora da fábrica: registra envio e retorno, não abre máquina.
   terceirizada        Boolean      @default(false)
+  /// Envio externo decidido na Metalização para este lote, sem alterar o roteiro.
+  envioExternoEm      DateTime? @map("envio_externo_em")
+  recebimentoExternoEm DateTime? @map("recebimento_externo_em")
+  quantidadeEnvioExterno Int? @map("quantidade_envio_externo")
   fornecedor          String?
   prazoPrevistoDias   Int?         @map("prazo_previsto_dias")
   custoPrevisto       Decimal?     @map("custo_previsto") @db.Decimal(12, 2)
