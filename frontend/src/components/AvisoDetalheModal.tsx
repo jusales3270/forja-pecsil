@@ -55,13 +55,15 @@ export function AvisoDetalheModal({ aviso, onClose, onMarcarLido }: Props) {
   const p = prazo(os.prazoEntrega);
   const desenhos = artigo.desenhos ?? [];
   const comArquivo = desenhos.filter((d) => d.arquivoKey);
+  // Aviso de chegada é para a estação da própria OP; os demais avisam outra estação
+  const chegada = aviso.tipo === 'op_chegou';
 
   return (
     <>
       <Modal
         open
         onClose={onClose}
-        title={`${os.codigoGrv} — o que programar`}
+        title={chegada ? `${os.codigoGrv} — chegou em ${op.etapa.nome}` : `${os.codigoGrv} — o que programar`}
         size="lg"
         footer={
           <>
@@ -84,7 +86,7 @@ export function AvisoDetalheModal({ aviso, onClose, onMarcarLido }: Props) {
           {/* O que aconteceu */}
           <div className="p-3 rounded-lg border border-forja-500/30 bg-forja-500/5">
             <div className="text-[10px] uppercase tracking-wide text-forja-400 font-semibold mb-1">
-              {op.etapaAvisada ? `Para ${op.etapaAvisada.nome}` : 'Produção'} ·{' '}
+              {chegada ? `Para ${op.etapa.nome}` : op.etapaAvisada ? `Para ${op.etapaAvisada.nome}` : 'Produção'} ·{' '}
               {tempoRelativo(aviso.criadoEm)}
             </div>
             <p className="text-sm text-neutral-100 leading-snug">{aviso.mensagem}</p>
@@ -150,7 +152,7 @@ export function AvisoDetalheModal({ aviso, onClose, onMarcarLido }: Props) {
           {/* O programa a fazer */}
           <section>
             <h3 className="text-xs uppercase tracking-wide text-neutral-500 mb-2">
-              O que vem depois — o programa a montar
+              {chegada ? 'Para onde a OS vai depois' : 'O que vem depois — o programa a montar'}
             </h3>
             {op.proximasOperacoes.length === 0 ? (
               <div className="subcard p-3 text-sm text-neutral-400">

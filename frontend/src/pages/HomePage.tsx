@@ -116,6 +116,17 @@ export function HomePage() {
               </p>
             </button>
             )}
+            {pode('admin_configurar_sistema') && (
+            <button
+              onClick={() => navigate('/estacoes')}
+              className={`text-left p-4 rounded-lg border transition-colors ${T.itemBorder}`}
+            >
+              <p className={`font-medium ${T.itemTexto}`}>Estações e Máquinas</p>
+              <p className={`text-xs mt-1 ${T.itemSub}`}>
+                Onde cada operação do roteiro é feita, e as máquinas de cada estação
+              </p>
+            </button>
+            )}
             {pode('cadastros_pessoas') && (
             <button
               onClick={() => navigate('/pessoas')}

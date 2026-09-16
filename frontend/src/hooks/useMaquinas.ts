@@ -1,8 +1,8 @@
 // ============================================================
-// Forja - Hook de Máquinas (read-only)
+// Forja - Hooks de Máquinas
 // ============================================================
 
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { api } from '../lib/api';
 
 export interface Maquina {
@@ -20,6 +20,27 @@ export interface ListaMaquinasFiltros {
   ativa?: boolean;
 }
 
+export const TIPOS_MAQUINA: Record<string, string> = {
+  torno: 'Torno',
+  vertiflow: 'Vertiflow',
+  tres_eixos: '3 eixos',
+  quinto_eixo: '5º eixo',
+  fundicao: 'Fundição',
+  metalizacao: 'Metalização',
+  solda: 'Solda',
+  qualidade: 'Qualidade',
+  embalagem: 'Embalagem',
+  outros: 'Outros',
+};
+
+export interface SalvarMaquinaInput {
+  nome?: string;
+  codigoInterno?: string;
+  tipo?: string;
+  etapaId?: string;
+  ativa?: boolean;
+}
+
 export function useMaquinasList(filtros?: ListaMaquinasFiltros) {
   return useQuery<{ data: Maquina[] }>({
     queryKey: ['maquinas-list', filtros],
@@ -31,5 +52,18 @@ export function useMaquinasList(filtros?: ListaMaquinasFiltros) {
       const res = await api.get(`/maquinas${qs ? `?${qs}` : ''}`);
       return res.data;
     },
+  });
+}
+
+export function useSalvarMaquina() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async ({ id, input }: { id?: string; input: SalvarMaquinaInput }) => {
+      const { data } = id
+        ? await api.put<{ data: Maquina }>(`/maquinas/${id}`, input)
+        : await api.post<{ data: Maquina }>('/maquinas', input);
+      return data.data;
+    },
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['maquinas-list'] }),
   });
 }

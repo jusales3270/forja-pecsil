@@ -8,6 +8,7 @@ import { FastifyInstance } from 'fastify';
 import { z } from 'zod';
 import { Prisma } from '@prisma/client';
 import { prisma } from '../db/prisma.js';
+import { avisarChegada } from '../lib/aviso-chegada.js';
 
 // ============================================================
 // Schemas
@@ -312,6 +313,7 @@ export async function osRoutes(app: FastifyInstance) {
     );
 
     // Transação: cria OS, lotes, OPLotes e evento
+    const avisos: { etapaId: string; opLoteId: string; loteId: string }[] = [];
     try {
       const osCriada = await prisma.$transaction(async (tx) => {
         // Cria a OS
@@ -365,8 +367,9 @@ export async function osRoutes(app: FastifyInstance) {
           });
 
           // Cria OPLotes (snapshot das OPs do Artigo) pra esse lote
+          let primeiraOp: { id: string; ordem: number } | null = null;
           for (const op of artigo.operacoes) {
-            await tx.oPLote.create({
+            const criada = await tx.oPLote.create({
               data: {
                 loteId: lote.id,
                 operacaoArtigoId: op.id,
@@ -388,7 +391,15 @@ export async function osRoutes(app: FastifyInstance) {
                 exigeLoteCompleto: op.exigeLoteCompleto,
                 observacoes: op.observacoes ?? null,
               },
+              select: { id: true, ordem: true },
             });
+            if (!primeiraOp || criada.ordem < primeiraOp.ordem) primeiraOp = criada;
+          }
+
+          // A estação da 1ª operação do roteiro — seja ela qual for — fica sabendo
+          if (primeiraOp) {
+            const aviso = await avisarChegada(tx, { opLoteId: primeiraOp.id, quantidade: quantidadeLote });
+            if (aviso) avisos.push({ ...aviso, opLoteId: primeiraOp.id, loteId: lote.id });
           }
 
           await criarEvento(tx, {
@@ -407,6 +418,10 @@ export async function osRoutes(app: FastifyInstance) {
 
         return os;
       });
+
+      for (const a of avisos) {
+        app.io.to(`estacao:${a.etapaId}`).emit('op:nova-na-fila', a);
+      }
 
       // Re-fetch com tudo incluído (mais simples que fazer dentro da transação)
       const completo = await prisma.oS.findUnique({

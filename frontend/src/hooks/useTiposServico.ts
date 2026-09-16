@@ -37,6 +37,13 @@ export interface AtualizarTipoServicoInput {
   exigeInspecao?: boolean;
   ativo?: boolean;
   observacoes?: string | null;
+  /** Ao trocar a estação: leva junto operações dos artigos e OPs não iniciadas. */
+  propagarEtapa?: boolean;
+}
+
+export interface ResultadoAtualizacaoTipo {
+  data: TipoServico;
+  meta: { operacoesArtigoMovidas: number; opsLoteMovidas: number };
 }
 
 const QUERY_KEY = ['tipos-servico'] as const;
@@ -82,14 +89,18 @@ export function useUpdateTipoServico() {
       id: string;
       input: AtualizarTipoServicoInput;
     }) => {
-      const { data } = await api.put<{ data: TipoServico }>(
+      const { data } = await api.put<ResultadoAtualizacaoTipo>(
         `/tipos-servico/${id}`,
         input
       );
-      return data.data;
+      return data;
     },
-    onSuccess: () => {
+    onSuccess: (resultado) => {
       qc.invalidateQueries({ queryKey: QUERY_KEY });
+      if (resultado.meta?.opsLoteMovidas || resultado.meta?.operacoesArtigoMovidas) {
+        qc.invalidateQueries({ queryKey: ['artigos'] });
+        qc.invalidateQueries({ queryKey: ['operacoes'] });
+      }
     },
   });
 }

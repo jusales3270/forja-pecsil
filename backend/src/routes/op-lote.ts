@@ -14,6 +14,7 @@ import { Prisma } from '@prisma/client';
 import { prisma } from '../db/prisma.js';
 import { calcularFluxoDePecas } from '../lib/fluxo-pecas.js';
 import { checarEstacaoDaOP } from '../lib/permissoes-estacao.js';
+import { avisarProximaSeLoteCompleto } from '../lib/aviso-chegada.js';
 
 // ============================================================
 // Schemas
@@ -964,6 +965,10 @@ export async function opLoteRoutes(app: FastifyInstance) {
           let proximaOp: { id: string; ordem: number } | null = null;
           let loteConcluido = false;
 
+          // Lote inteiro saiu desta operação: a estação da próxima é avisada
+          // (só com o lote completo — regra do PCP, parciais não avisam).
+          const chegada = completou ? await avisarProximaSeLoteCompleto(tx, opLote.id) : null;
+
           if (novoStatusOp === 'concluida') {
             proximaOp = await tx.oPLote.findFirst({
               where: {
@@ -1041,7 +1046,7 @@ export async function opLoteRoutes(app: FastifyInstance) {
             }
           }
 
-          return { proximaOp, loteConcluido };
+          return { proximaOp, loteConcluido, chegada };
         });
 
         // Emite eventos em tempo real
@@ -1054,6 +1059,12 @@ export async function opLoteRoutes(app: FastifyInstance) {
             novoStatus: novoStatusOp,
             completou,
           });
+
+        if (resultado.chegada) {
+          app.io
+            .to(`estacao:${resultado.chegada.etapaId}`)
+            .emit('op:nova-na-fila', { opLoteId: resultado.chegada.opLoteId, loteId: opLote.loteId, etapaId: resultado.chegada.etapaId });
+        }
 
         if (novoStatusOp === 'concluida' && resultado.proximaOp) {
           // Notifica a estação da próxima OP que tem trabalho novo

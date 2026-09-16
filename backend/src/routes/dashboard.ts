@@ -10,6 +10,7 @@ import { z } from 'zod';
 import { calcularFluxoDePecas } from '../lib/fluxo-pecas.js';
 import { diasAtePrazo, montarIndicadores } from '../lib/dashboard-kpis.js';
 import { montarPipelineEtapa, listarEtapasComFases } from '../lib/pipeline-etapa.js';
+import { montarTrilha, vizinhosNaTrilha, type PassoTrilha } from '../lib/roteiro-os.js';
 
 export async function dashboardRoutes(app: FastifyInstance) {
   // GET /api/dashboard  -> visao macro pro chefe
@@ -110,7 +111,55 @@ export async function dashboardRoutes(app: FastifyInstance) {
       orderBy: { criadoEm: 'asc' },
     });
 
-    const fluxo = await calcularFluxoDePecas([...new Set(opsAtivas.map(o => o.loteId))]);
+    // Roteiro completo de cada lote ativo (inclui operações já concluídas):
+    // cada peça segue a ordem do PCP, e o chefe precisa ver o caminho inteiro.
+    const lotesAtivos = await prisma.lote.findMany({
+      where: { os: { ...filtro, status: { notIn: ['finalizada', 'cancelada'] } } },
+      select: {
+        id: true,
+        numeroLote: true,
+        quantidadePecas: true,
+        status: true,
+        os: {
+          select: {
+            id: true, codigoGrv: true, prazoEntrega: true, prioridade: true, status: true,
+            cliente: { select: { nome: true } },
+            artigo: { select: { codigo: true, descricao: true } },
+          },
+        },
+        opsLote: {
+          select: {
+            id: true, ordem: true, codigoOp: true, tipoServico: true, status: true, quantidadeConcluida: true,
+            exigeLoteCompleto: true, envioExternoEm: true, recebimentoExternoEm: true,
+            etapa: { select: { id: true, nome: true } },
+          },
+        },
+      },
+      orderBy: [{ os: { prazoEntrega: 'asc' } }, { numeroLote: 'asc' }],
+    });
+    const fluxo = await calcularFluxoDePecas([...new Set([...opsAtivas.map(o => o.loteId), ...lotesAtivos.map(l => l.id)])]);
+    const trilhaPorLote = new Map<string, PassoTrilha[]>(
+      lotesAtivos.map(l => [l.id, montarTrilha(l.opsLote, id => fluxo.get(id)?.disponiveis ?? 0)]),
+    );
+    const roteirosPorOS = new Map<string, {
+      osId: string; codigoGrv: string; cliente: string; artigo: string; descricao: string; prioridade: string;
+      prazoEntrega: Date; diasAtePrazo: number; semaforo: 'verde' | 'amarelo' | 'vermelho';
+      lotes: { loteId: string; numeroLote: number; quantidadePecas: number; passos: PassoTrilha[] }[];
+    }>();
+    for (const l of lotesAtivos) {
+      if (l.status === 'concluido') continue;
+      const dias = diasAtePrazo(l.os.prazoEntrega, agora);
+      const r = roteirosPorOS.get(l.os.id) ?? {
+        osId: l.os.id, codigoGrv: l.os.codigoGrv, cliente: l.os.cliente.nome, artigo: l.os.artigo.codigo,
+        descricao: l.os.artigo.descricao, prioridade: l.os.prioridade, prazoEntrega: l.os.prazoEntrega, diasAtePrazo: dias,
+        semaforo: dias < 3 ? 'vermelho' as const : dias < 7 ? 'amarelo' as const : 'verde' as const,
+        lotes: [],
+      };
+      r.lotes.push({ loteId: l.id, numeroLote: l.numeroLote, quantidadePecas: l.quantidadePecas, passos: trilhaPorLote.get(l.id)! });
+      roteirosPorOS.set(l.os.id, r);
+    }
+    const roteiros = [...roteirosPorOS.values()].sort((a, b) =>
+      Number(b.prioridade === 'urgente') - Number(a.prioridade === 'urgente') || a.diasAtePrazo - b.diasAtePrazo);
     const emExterno = (op: typeof opsAtivas[number]) => !!op.envioExternoEm && !op.recebimentoExternoEm;
     const travas = new Map<string, number>();
     for (const op of opsAtivas) if (op.exigeLoteCompleto) travas.set(op.loteId, Math.min(travas.get(op.loteId) ?? Infinity, op.ordem));
@@ -167,6 +216,8 @@ export async function dashboardRoutes(app: FastifyInstance) {
             operador: carimbo?.operadorResponsavel?.nome ?? null,
             programador: carimbo?.programador?.nome ?? null,
             maquina: carimbo?.maquina?.nome ?? null,
+            // De onde a OS veio e para onde vai: a ordem é a do roteiro do PCP
+            ...vizinhosNaTrilha(trilhaPorLote.get(op.loteId) ?? [], op.id),
           };
         });
       return { etapaId: et.id, nome: et.nome, ordemPadrao: et.ordemPadrao, total: cards.length, cards };
@@ -319,6 +370,7 @@ export async function dashboardRoutes(app: FastifyInstance) {
         osPorStatusLista,
         osAtrasadas,
         kanban,
+        roteiros,
         pipelines,
         inspecao,
         paradas: {

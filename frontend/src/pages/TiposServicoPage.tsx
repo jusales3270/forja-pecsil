@@ -17,6 +17,7 @@ import {
 } from '../hooks/useTiposServico';
 import { useEtapasList } from '../hooks/useEtapas';
 import { useAuth } from '../lib/auth-store';
+import { toast } from '../components/Toast';
 
 export function TiposServicoPage() {
   const { claro } = useTheme();
@@ -235,6 +236,7 @@ function TipoServicoModal({ open, tipo, onClose }: TipoServicoModalProps) {
   const [exigeInspecao, setExigeInspecao] = useState(false);
   const [ativo, setAtivo] = useState(true);
   const [observacoes, setObservacoes] = useState('');
+  const [propagarEtapa, setPropagarEtapa] = useState(true);
   const [erro, setErro] = useState<string | null>(null);
 
   const { data: etapas, isLoading: etapasLoading } = useEtapasList();
@@ -252,11 +254,13 @@ function TipoServicoModal({ open, tipo, onClose }: TipoServicoModalProps) {
       setExigeInspecao(tipo?.exigeInspecao ?? false);
       setAtivo(tipo?.ativo ?? true);
       setObservacoes(tipo?.observacoes ?? '');
+      setPropagarEtapa(true);
       setErro(null);
     }
   }, [open, tipo]);
 
   const loading = createMut.isPending || updateMut.isPending;
+  const mudouEtapa = ehEdicao && !!tipo && !!etapaId && etapaId !== tipo.etapaId;
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -289,7 +293,7 @@ function TipoServicoModal({ open, tipo, onClose }: TipoServicoModalProps) {
 
     try {
       if (ehEdicao && tipo) {
-        await updateMut.mutateAsync({
+        const resultado = await updateMut.mutateAsync({
           id: tipo.id,
           input: {
             codigo: codigoNum,
@@ -299,8 +303,16 @@ function TipoServicoModal({ open, tipo, onClose }: TipoServicoModalProps) {
             exigeInspecao,
             ativo,
             observacoes: observacoes.trim() || null,
+            ...(mudouEtapa ? { propagarEtapa } : {}),
           },
         });
+        if (mudouEtapa && propagarEtapa) {
+          const { operacoesArtigoMovidas, opsLoteMovidas } = resultado.meta;
+          toast.sucesso(
+            `Estação alterada. ${operacoesArtigoMovidas} operação(ões) de artigos e ${opsLoteMovidas} OP(s) não iniciadas foram para a nova estação. OPs já em andamento terminam onde estão.`,
+            8000,
+          );
+        }
       } else {
         await createMut.mutateAsync({
           codigo: codigoNum,
@@ -391,6 +403,21 @@ function TipoServicoModal({ open, tipo, onClose }: TipoServicoModalProps) {
             ))}
           </select>
         </div>
+
+        {mudouEtapa && (
+          <label className="flex items-start gap-3 p-3 rounded-lg border border-amber-500/40 bg-amber-500/10 text-sm">
+            <input
+              type="checkbox"
+              checked={propagarEtapa}
+              onChange={(e) => setPropagarEtapa(e.target.checked)}
+              className="w-4 h-4 mt-0.5 accent-forja-500"
+            />
+            <span>
+              Levar para a nova estação as operações dos artigos que usam este serviço e as OPs
+              que ainda não começaram. OPs em andamento terminam onde estão.
+            </span>
+          </label>
+        )}
 
         <div>
           <label className="label">Ordem dentro da etapa</label>

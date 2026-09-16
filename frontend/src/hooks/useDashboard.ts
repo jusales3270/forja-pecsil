@@ -34,6 +34,42 @@ export interface KanbanCard {
   operador: string | null;
   programador: string | null;
   maquina: string | null;
+  /** Operação anterior do roteiro do lote (null = primeira). */
+  veioDe: VizinhoRoteiro | null;
+  /** Operação seguinte do roteiro do lote (null = última). */
+  proxima: VizinhoRoteiro | null;
+}
+
+export interface VizinhoRoteiro {
+  estacao: string;
+  tipoServico: string;
+}
+
+export type EstadoPasso = 'concluido' | 'atual' | 'externo' | 'futuro';
+
+export interface PassoRoteiro {
+  opLoteId: string;
+  codigoOp: string;
+  tipoServico: string;
+  estacao: string;
+  etapaId: string;
+  status: string;
+  estado: EstadoPasso;
+  concluidas: number;
+  disponiveis: number;
+}
+
+export interface RoteiroOS {
+  osId: string;
+  codigoGrv: string;
+  cliente: string;
+  artigo: string;
+  descricao: string;
+  prioridade: string;
+  prazoEntrega: string;
+  diasAtePrazo: number;
+  semaforo: 'verde' | 'amarelo' | 'vermelho';
+  lotes: { loteId: string; numeroLote: number; quantidadePecas: number; passos: PassoRoteiro[] }[];
 }
 
 export interface KanbanEtapa {
@@ -90,6 +126,8 @@ export interface DashboardData {
   osPorStatusLista: Record<string, OSResumo[]>;
   osAtrasadas: OSAtrasada[];
   kanban: KanbanEtapa[];
+  /** Caminho de cada OS ativa, na ordem das operações do PCP. */
+  roteiros: RoteiroOS[];
   /** Etapas com operações internas (hoje só a fundição), fase a fase. */
   pipelines: PipelineEtapa[];
   inspecao: Record<string, number>;

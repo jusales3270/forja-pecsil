@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useDashboard, type KanbanCard, type DashboardData } from '../hooks/useDashboard';
+import { useDashboard, type KanbanCard, type DashboardData, type RoteiroOS } from '../hooks/useDashboard';
+import { TrilhaRoteiro } from '../components/TrilhaRoteiro';
 import { useTheme } from '../lib/theme-store';
 import { Modal } from '../components/Modal';
 import { PipelineEtapa } from '../components/PipelineEtapa';
@@ -20,6 +21,16 @@ function cardBate(c: KanbanCard, busca: string, etapa: string) {
     .some(v => v?.toLocaleLowerCase().includes(termo));
 }
 
+function roteiroBate(r: RoteiroOS, busca: string) {
+  const termo = busca.trim().toLocaleLowerCase();
+  if (!termo) return true;
+  if (/^atrasad[ao]s?$/.test(termo)) return r.diasAtePrazo < 0;
+  if (/^extern[ao]s?$/.test(termo)) return r.lotes.some(l => l.passos.some(p => p.estado === 'externo'));
+  return [r.codigoGrv, r.cliente, r.artigo, r.descricao, r.prioridade].some(v => v.toLocaleLowerCase().includes(termo))
+    || r.lotes.some(l => l.passos.some(p => p.estado !== 'concluido' && [p.estacao, p.tipoServico].some(v => v.toLocaleLowerCase().includes(termo))));
+}
+const vizinho = (v: KanbanCard['veioDe']) => v ? (v.tipoServico.toLocaleLowerCase() === v.estacao.toLocaleLowerCase() ? v.estacao : `${v.estacao} (${v.tipoServico})`) : null;
+
 export default function DashboardPage() {
   const navigate = useNavigate();
   const { claro, toggleTema } = useTheme();
@@ -27,13 +38,16 @@ export default function DashboardPage() {
   const [tipoProduto, setTipoProduto] = useState('');
   const [dias, setDias] = useState(90);
   const [busca, setBusca] = useState('');
+  const [buscaRoteiro, setBuscaRoteiro] = useState('');
   const [selecao, setSelecao] = useState<Selecao | null>(null);
   const { data, isLoading, isError, isFetching, refetch } = useDashboard({ clienteId: clienteId || undefined, tipoProduto: tipoProduto || undefined, dias });
   const d = data?.data;
   const kanban = useMemo(() => d?.kanban.map(et => ({ ...et, cards: et.cards.filter(c => cardBate(c, busca, et.nome)) })) ?? [], [d, busca]);
   const abrirLista = (titulo: string, ids: string[]) => setSelecao({ tipo: 'lista', titulo, ids });
   const todasOS = useMemo(() => new Map(Object.values(d?.osPorStatusLista ?? {}).flat().map(os => [os.id, os])), [d]);
+  const roteiros = useMemo(() => d?.roteiros.filter(r => roteiroBate(r, buscaRoteiro)) ?? [], [d, buscaRoteiro]);
   const op = selecao?.tipo === 'op' ? d?.kanban.flatMap(e => e.cards).find(c => c.opLoteId === selecao.id) : null;
+  const loteDaOp = op ? d?.roteiros.flatMap(r => r.lotes).find(l => l.passos.some(p => p.opLoteId === op.opLoteId)) : null;
   const h = d?.indicadores.historico;
   const tituloModal = selecao?.tipo === 'externos' ? 'OS em envio externo' : selecao?.tipo === 'lista' ? selecao.titulo : op?.codigoGrv ?? 'Operação';
 
@@ -50,7 +64,7 @@ export default function DashboardPage() {
       <label className="flex-1 min-w-48 text-sm">Cliente<select className="dash-input mt-1" value={clienteId} onChange={e => setClienteId(e.target.value)}><option value="">Todos os clientes</option>{d?.clientes.map(c => <option key={c.id} value={c.id}>{c.nome}</option>)}</select></label>
       <label className="flex-1 min-w-44 text-sm">Tipo de peça<select className="dash-input mt-1" value={tipoProduto} onChange={e => setTipoProduto(e.target.value)}><option value="">Todos os tipos</option>{Object.entries(TIPOS_PECA).map(([id, nome]) => <option key={id} value={id}>{nome}</option>)}</select></label>
       <label className="flex-1 min-w-44 text-sm">Período do histórico<select className="dash-input mt-1" value={dias} onChange={e => setDias(Number(e.target.value))}>{[30, 90, 180, 365].map(n => <option key={n} value={n}>Últimos {n} dias</option>)}</select></label>
-      <button className="dash-button" onClick={() => { setClienteId(''); setTipoProduto(''); setDias(90); setBusca(''); }}>Limpar filtros</button>
+      <button className="dash-button" onClick={() => { setClienteId(''); setTipoProduto(''); setDias(90); setBusca(''); setBuscaRoteiro(''); }}>Limpar filtros</button>
     </section>
     {isLoading && <p role="status" className="dash-empty">Carregando indicadores…</p>}
     {isError && <div role="alert" className="dash-panel text-rose-500">Não foi possível atualizar o painel. <button className="underline" onClick={() => refetch()}>Tentar novamente</button></div>}
@@ -66,6 +80,27 @@ export default function DashboardPage() {
       <p className="dash-muted text-xs -mt-3">Envios externos e prazos detalham a mesma carteira; os quadros não devem ser somados.</p>
 
       <section aria-label="Indicadores de produção"><DashboardCharts data={d} onAbrir={abrirLista} /></section>
+      <section className="min-w-0" aria-labelledby="roteiro-titulo">
+        <div className="flex flex-wrap items-end justify-between gap-3 mb-4">
+          <div><h2 id="roteiro-titulo" className="text-xl font-semibold">Roteiro das OS</h2><p className="text-sm dash-muted">Cada OS na ordem das operações do PCP: ✓ concluída · ● onde está agora · ⇄ envio externo · ○ próximas.</p></div>
+          <label className="text-sm w-full sm:w-80">Buscar no roteiro<input className="dash-input mt-1" value={buscaRoteiro} onChange={e => setBuscaRoteiro(e.target.value)} placeholder="OS, cliente, estação atual, atrasadas…" /></label>
+        </div>
+        <div className="dash-panel max-h-[520px] overflow-auto space-y-4">
+          {roteiros.length === 0 && <p className="dash-empty">{buscaRoteiro ? 'Nenhuma OS encontrada.' : 'Nenhuma OS em andamento.'}</p>}
+          {roteiros.map(r => <article key={r.osId} className="dash-row pt-4 first:border-0 first:pt-0" style={{ borderLeft: `4px solid ${r.semaforo === 'vermelho' ? '#f43f5e' : r.semaforo === 'amarelo' ? '#f59e0b' : '#10b981'}`, paddingLeft: 12 }}>
+            <div className="flex flex-wrap items-baseline justify-between gap-2">
+              <p><strong className="font-mono">{r.codigoGrv}</strong><span className="dash-muted text-sm"> · {r.cliente} · {r.artigo} — {r.descricao}</span>{r.prioridade === 'urgente' && <span className="text-xs font-bold text-rose-500 ml-2">URGENTE</span>}</p>
+              <span className={`text-xs ${r.diasAtePrazo < 0 ? 'text-rose-500 font-semibold' : 'dash-muted'}`}>{dataCurta(r.prazoEntrega)} · {prazoTexto(r.diasAtePrazo)}</span>
+            </div>
+            <div className="mt-2 space-y-1.5">
+              {r.lotes.map(l => <div key={l.loteId} className="flex gap-3 items-baseline">
+                {r.lotes.length > 1 && <span className="dash-muted text-xs whitespace-nowrap">Lote {l.numeroLote}</span>}
+                <TrilhaRoteiro passos={l.passos} quantidadePecas={l.quantidadePecas} />
+              </div>)}
+            </div>
+          </article>)}
+        </div>
+      </section>
       <section className="min-w-0" aria-labelledby="kanban-titulo">
         <div className="flex flex-wrap items-end justify-between gap-3 mb-4">
           <div><h2 id="kanban-titulo" className="text-xl font-semibold">Onde está cada lote</h2><p className="text-sm dash-muted">Operações com peças disponíveis, em execução ou aguardando liberação.</p></div>
@@ -81,6 +116,7 @@ export default function DashboardPage() {
                   <div className="flex items-start justify-between gap-2"><strong className="font-mono break-all">{c.codigoGrv}</strong>{c.prioridade === 'urgente' && <span className="text-xs font-bold text-rose-500">URGENTE</span>}</div>
                   <p className="text-sm mt-2">{c.cliente}</p><p className="dash-muted text-sm">{c.artigo}</p>
                   <p className="text-xs mt-3">OP {c.codigoOp} · Lote {c.numeroLote} · {c.quantidade} peças</p>
+                  <p className="dash-muted text-xs mt-1">{vizinho(c.veioDe) ? `de ${vizinho(c.veioDe)}` : 'início do roteiro'} · {vizinho(c.proxima) ? `próxima ${vizinho(c.proxima)}` : 'última operação'}</p>
                   {c.externo ? <p className="text-sky-500 text-xs font-semibold mt-2">ENVIO EXTERNO · aguardando retorno</p> : <p className="dash-muted text-xs mt-2">{STATUS[c.status] ?? c.status}</p>}
                   <p className={`text-xs mt-2 ${c.diasAtePrazo < 0 ? 'text-rose-500 font-semibold' : 'dash-muted'}`}>{prazoTexto(c.diasAtePrazo)}</p>
                 </button>)}
@@ -126,6 +162,7 @@ export default function DashboardPage() {
           <Dado nome="Cliente" valor={op.cliente} /><Dado nome="Artigo" valor={op.artigo} /><Dado nome="OP / lote" valor={`${op.codigoOp} / ${op.numeroLote}`} /><Dado nome="Situação" valor={op.externo ? 'Envio externo — aguardando retorno' : STATUS[op.status] ?? op.status} />
           <Dado nome="Quantidade" valor={`${op.quantidade} peças`} /><Dado nome="Prazo" valor={prazoTexto(op.diasAtePrazo)} />
           <Dado nome="Máquina" valor={op.maquina ?? '—'} /><Dado nome="Operador" valor={op.operador ?? '—'} /><Dado nome="Programador" valor={op.programador ?? '—'} />{op.externo && <Dado nome="Fornecedor" valor={op.fornecedor ?? 'Não informado'} />}
+          {loteDaOp && <div className="col-span-2"><dt className="dash-muted mb-2">Roteiro do lote</dt><dd><TrilhaRoteiro passos={loteDaOp.passos} quantidadePecas={loteDaOp.quantidadePecas} /></dd></div>}
         </dl> : <p>Esta OP saiu da fila. O painel foi atualizado.</p>)}
       </div>
     </Modal>}

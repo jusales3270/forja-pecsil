@@ -170,6 +170,9 @@ enum TipoAlerta {
   /// Operação de ciclo longo começou (tratamento térmico): a etapa avisada
   /// tem essa janela pra preparar o próximo programa.
   fase_iniciada
+  /// A OS chegou na estação (1ª operação do roteiro ou peças liberadas pela
+  /// operação anterior). Cada peça segue o roteiro do PCP, não uma ordem fixa.
+  op_chegou
   qualidade_reprovada
   cota_fora_tolerancia
   volume_correcao_alta
