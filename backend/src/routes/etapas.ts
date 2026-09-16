@@ -14,6 +14,7 @@
 
 import { FastifyInstance } from 'fastify';
 import { z } from 'zod';
+import { isPcp } from '@forja/shared';
 import { prisma } from '../db/prisma.js';
 import { montarPipelineEtapa } from '../lib/pipeline-etapa.js';
 
@@ -60,13 +61,15 @@ export async function etapasRoutes(app: FastifyInstance) {
         .catch({})
         .parse(request.query);
 
+      const cadastro = incluirInativas === 'true';
       const etapas = await prisma.etapa.findMany({
-        where: incluirInativas === 'true' ? {} : { ativa: true },
+        where: cadastro ? {} : { ativa: true },
         orderBy: { ordemPadrao: 'asc' },
         select: selectEtapa,
       });
 
-      return { data: etapas };
+      // A estação PCP só existe para mensagens: fora do tótem e dos roteiros.
+      return { data: cadastro ? etapas : etapas.filter((e) => !isPcp(e.nome)) };
     }
   );
 

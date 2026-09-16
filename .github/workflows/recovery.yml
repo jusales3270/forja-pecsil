@@ -48,4 +48,4 @@ jobs:
         working-directory: backend
         env:
           RUN_RECOVERY_INTEGRATION: '1'
-        run: node --import tsx --test test/recovery.integration.test.ts test/avisos.integration.test.ts test/mensagens.integration.test.ts test/roteiro-os.integration.test.ts
+        run: node --import tsx --test test/recovery.integration.test.ts test/avisos.integration.test.ts test/mensagens.integration.test.ts test/roteiro-os.integration.test.ts test/mensagens-pcp.integration.test.ts
