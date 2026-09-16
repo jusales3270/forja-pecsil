@@ -55,7 +55,7 @@ test('operários enviam mensagens ao PCP e o papel pcp responde pela estação',
       const contatos = (await req(operario, 'GET', '/api/mensagens/contatos')).json().data;
       assert.equal(contatos.estacoes[0].nome, 'PCP');
       assert.deepEqual(contatos.estacoes[0].pessoas.map((p: any) => p.nome), ['Rafael']);
-      assert.ok(!contatos.estacoes[1].pessoas.some((p: any) => p.id === rafael.id), 'O PCP não aparece como responsável de outras estações.');
+      assert.ok(contatos.estacoes[1].pessoas.some((p: any) => p.id === rafael.id), 'O PCP também é encontrado em qualquer estação.');
 
       const r = await req(operario, 'POST', '/api/mensagens', {
         id: randomUUID(), corpo: 'Rafael, faltou material para o lote 2.', etapaDestinoId: pcpEt.id, destinatarioId: rafael.id,
@@ -103,10 +103,20 @@ test('operários enviam mensagens ao PCP e o papel pcp responde pela estação',
       assert.ok(!d.kanban.some((k: any) => k.nome === 'PCP'));
     });
 
-    await t.test('estação PCP desativada suspende a caixa do papel pcp', async () => {
+    await t.test('sem estação PCP, o papel pcp ainda envia e recebe de qualquer estação', async () => {
       await db.etapa.update({ where: { id: pcpEt.id }, data: { ativa: false } });
-      assert.equal((await req(rafael, 'GET', '/api/mensagens')).json().data.length, 0);
-      assert.equal((await req(rafael, 'GET', '/api/mensagens/contatos')).json().data.podeEnviar, false);
+      assert.equal((await req(rafael, 'GET', '/api/mensagens/contatos')).json().data.podeEnviar, true);
+      let r = await req(rafael, 'POST', '/api/mensagens', {
+        id: randomUUID(), corpo: 'Priorizem o lote 3.', etapaDestinoId: desbaste.id, destinatarioId: colega.id,
+      });
+      assert.equal(r.statusCode, 201, r.body);
+      assert.equal(r.json().data.etapaOrigem.nome, 'Desbaste', 'Sem estação PCP, o contexto é a estação de destino.');
+      r = await req(operario, 'POST', '/api/mensagens', {
+        id: randomUUID(), corpo: 'Rafael, precisa de mais material.', etapaDestinoId: desbaste.id, destinatarioId: rafael.id,
+      });
+      assert.equal(r.statusCode, 201, r.body);
+      assert.ok((await req(rafael, 'GET', '/api/mensagens')).json().data.some((m: any) => m.id === r.json().data.id));
+      assert.equal((await req(chefe, 'GET', '/api/mensagens/contatos')).json().data.podeEnviar, false, 'Outros papéis sem estação continuam sem enviar.');
     });
   } finally {
     if (app) await app.close();
