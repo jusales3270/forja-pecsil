@@ -5,6 +5,7 @@
 // ============================================================
 
 import { type ReactNode, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { useTheme } from '../lib/theme-store';
 
 interface ModalProps {
@@ -87,7 +88,7 @@ export function Modal({
         footerBorder: 'border-neutral-800',
       };
 
-  return (
+  const conteudo = (
     <div
       className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm"
       onClick={onClose}
@@ -125,4 +126,15 @@ export function Modal({
       </div>
     </div>
   );
+
+  // Portal no body: um ancestral com backdrop-filter/transform (ex.: o cabeçalho
+  // do backoffice, onde fica o sino) prenderia o `fixed` a ele e cortaria o modal.
+  return comPortal(conteudo);
+}
+
+/** Renderiza no document.body quando há DOM real (fora dele, como em testes, fica no lugar). */
+export function comPortal(conteudo: ReactNode) {
+  return typeof document !== 'undefined' && typeof document.createElement === 'function'
+    ? createPortal(conteudo, document.body)
+    : conteudo;
 }

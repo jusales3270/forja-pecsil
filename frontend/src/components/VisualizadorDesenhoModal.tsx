@@ -6,6 +6,7 @@ import {
 import { api } from '../lib/api';
 import type { PaginaRenderizada } from '../lib/render-pdf';
 import { ZoomDesenhoPopup } from './ZoomDesenhoPopup';
+import { comPortal } from './Modal';
 
 interface VisualizadorDesenhoModalProps {
   open: boolean;
@@ -199,7 +200,7 @@ export function VisualizadorDesenhoModal({
   };
 
 
-  return (
+  return comPortal(
     <div
       className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-black/85 backdrop-blur-sm"
       role="dialog"

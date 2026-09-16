@@ -22,18 +22,22 @@ async function contaAtual(id: string) {
   return { ...conta, pcpEtapaIds };
 }
 type Conta = Awaited<ReturnType<typeof contaAtual>>;
-const podeEnviar = (p: Conta) => p.papel === 'admin' || !!p.etapa?.ativa || p.pcpEtapaIds.length > 0;
-/** Estações pelas quais a conta responde (vínculo ativo + PCP para o papel pcp). */
-const estacoesDaConta = (p: Conta) => [...new Set([...(p.etapa?.ativa ? [p.etapa.id] : []), ...p.pcpEtapaIds])];
+// Administrador e PCP falam com qualquer estação sem vínculo no cadastro.
+const PAPEIS_TODAS_ESTACOES = ['admin', 'pcp'] as const;
+const atuaEmTodas = (papel: string) => (PAPEIS_TODAS_ESTACOES as readonly string[]).includes(papel);
+const podeEnviar = (p: Conta) => atuaEmTodas(p.papel) || !!p.etapa?.ativa;
 const recebidas = (p: Conta): Prisma.MensagemInternaWhereInput => ({
   destinatarioId: p.id,
-  // Administradores atuam em todas as estações, mas só recebem recados próprios.
-  ...(p.papel === 'admin' ? { etapaDestino: { ativa: true } }
-    : { etapaDestinoId: { in: estacoesDaConta(p) } }),
+  // Administrador e PCP atuam em todas as estações, mas só recebem recados próprios.
+  ...(atuaEmTodas(p.papel) ? { etapaDestino: { ativa: true } }
+    : { etapaDestinoId: p.etapa?.ativa ? p.etapa.id : { in: [] } }),
 });
 const destinatarioNaEstacao = (id: string, etapaId: string, estacaoPcp: boolean): Prisma.PessoaWhereInput => ({
   id, ativo: true,
-  OR: [{ papel: 'admin' }, { etapaId, etapa: { ativa: true } }, ...(estacaoPcp ? [{ papel: 'pcp' as const }] : [])],
+  // Na estação PCP, só o papel pcp responde (além do administrador).
+  OR: estacaoPcp
+    ? [{ papel: 'admin' }, { papel: 'pcp' }]
+    : [{ papel: { in: [...PAPEIS_TODAS_ESTACOES] } }, { etapaId, etapa: { ativa: true } }],
 });
 async function ehEstacaoPcp(etapaId: string) {
   const etapa = await prisma.etapa.findUnique({ where: { id: etapaId }, select: { nome: true, ativa: true } });
@@ -66,7 +70,7 @@ export async function mensagensRoutes(app: FastifyInstance) {
     const ordenadas = [...estacoes.filter(e => isPcp(e.nome)), ...estacoes.filter(e => !isPcp(e.nome))];
     return { data: { conta: { id: conta.id, nome: conta.nome, etapa: conta.etapa },
       podeEnviar: podeEnviar(conta), estacoes: ordenadas.map(e => ({ ...e,
-        pessoas: pessoas.filter(p => p.papel === 'admin' || (p.etapaId === e.id && p.etapa?.ativa) || (p.papel === 'pcp' && isPcp(e.nome)))
+        pessoas: pessoas.filter(p => atuaEmTodas(p.papel) || (!isPcp(e.nome) && p.etapaId === e.id && p.etapa?.ativa))
           .map(({ id, nome, codigoPessoal }) => ({ id, nome, codigoPessoal })),
       })) } };
   });
