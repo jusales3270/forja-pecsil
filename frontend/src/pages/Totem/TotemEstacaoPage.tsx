@@ -22,7 +22,6 @@ import {
 } from '../../hooks/useOPLote';
 import { useEtapasList } from '../../hooks/useEtapas';
 import { usePipelineEtapa } from '../../hooks/usePipelineEtapa';
-import { useGerarTestesFundicao } from '../../hooks/useOS';
 import { PipelineEtapa } from '../../components/PipelineEtapa';
 import { useApontamentosPeca, useRegistrarPeca, useDesfazerPeca } from '../../hooks/useApontamentoPeca';
 import { useAbrirInspecao } from '../../hooks/useInspecao';
@@ -58,7 +57,6 @@ export function TotemEstacaoPage() {
   const envios = (externos.data?.data ?? []).filter(op =>
     [op.lote.os.codigoGrv, op.lote.os.artigo.codigo, op.lote.os.artigo.descricao, op.lote.os.cliente.nome]
       .some(valor => valor.toLocaleLowerCase().includes(busca.toLocaleLowerCase())));
-  const gerarTestes = useGerarTestesFundicao();
 
 
   const faseSelecionada = searchParams.get('fase');
@@ -232,32 +230,6 @@ export function TotemEstacaoPage() {
             </p>
           </div>
           <div className="flex items-center gap-2.5">
-            {etapa?.nome === 'Fundição' && (
-              <button
-                onClick={() => {
-                  if (
-                    window.confirm(
-                      'Deseja criar 3 OPs de teste (OS-TEST-FUND-02, 03, 04) com o fluxo completo de 13 operações (Modelação até Qualidade)?',
-                    )
-                  ) {
-                    gerarTestes.mutate(undefined, {
-                      onSuccess: (res) => toast.sucesso(res.data.mensagem),
-                      onError: (err: any) =>
-                        toast.erro(
-                          err?.response?.data?.message ||
-                            'Erro ao gerar OPs de teste',
-                        ),
-                    });
-                  }
-                }}
-                disabled={gerarTestes.isPending}
-                className="px-3 py-2 text-sm bg-purple-700/80 hover:bg-purple-700 disabled:opacity-50 text-purple-100 border border-purple-500/40 rounded-lg flex items-center gap-1.5 transition"
-                title="Gera 3 OPs de teste com todas as 13 etapas iniciando na Fundição"
-              >
-                <span>🧪</span>
-                {gerarTestes.isPending ? 'Gerando...' : '3 OPs Teste (13 Etapas)'}
-              </button>
-            )}
             <UserHeaderWidget />
             <PainelAvisos />
             <button

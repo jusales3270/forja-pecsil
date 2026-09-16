@@ -5,6 +5,7 @@
 // ============================================================
 
 import { FastifyInstance } from 'fastify';
+import { isPcp } from '@forja/shared';
 import { prisma } from '../db/prisma.js';
 import { z } from 'zod';
 import { calcularFluxoDePecas } from '../lib/fluxo-pecas.js';
@@ -58,10 +59,10 @@ export async function dashboardRoutes(app: FastifyInstance) {
 
     // OPs por etapa x status (Kanban)
     // Kanban: lotes reais por etapa (cada OP vira um card), exceto concluidas
-    const etapas = await prisma.etapa.findMany({
+    const etapas = (await prisma.etapa.findMany({
       select: { id: true, nome: true, ordemPadrao: true },
       orderBy: { ordemPadrao: 'asc' },
-    });
+    })).filter(et => !isPcp(et.nome)); // PCP é estação só de mensagens
 
     const opsAtivas = await prisma.oPLote.findMany({
       where: { status: { notIn: ['concluida'] }, lote: { os: { ...filtro, status: { notIn: ['finalizada', 'cancelada'] } } } },

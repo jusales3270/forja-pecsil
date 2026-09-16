@@ -4,6 +4,7 @@ import { useAuth } from '../lib/auth-store';
 import { useTheme } from '../lib/theme-store';
 import { PAPEL_LABEL } from '@forja/shared';
 import { UserHeaderWidget } from './UserHeaderWidget';
+import { PainelAvisos } from './PainelAvisos';
 
 export interface BreadcrumbItem {
   label: string;
@@ -154,6 +155,8 @@ export function AppLayout({
               {claro ? '🌙 Escuro' : '☀️ Claro'}
             </button>
             <UserHeaderWidget subtitulo={PAPEL_LABEL[pessoa?.papel ?? 'admin']} />
+            {/* Recados também no backoffice: o PCP recebe mensagens do chão de fábrica */}
+            <PainelAvisos />
             <button onClick={handleLogout} className={`btn-ghost px-3 py-2 text-sm ${claro ? 'text-slate-600 hover:bg-slate-100' : ''}`}>
               Sair
             </button>

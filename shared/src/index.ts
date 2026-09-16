@@ -392,3 +392,11 @@ export interface OPLote {
 export function isMetalizacao(nome: string): boolean {
   return nome.normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim().toLowerCase() === 'metalizacao';
 }
+
+/**
+ * Estação administrativa do PCP: existe para receber mensagens (o papel pcp é
+ * o responsável). Não recebe operações, não aparece no tótem nem no kanban.
+ */
+export function isPcp(nome: string): boolean {
+  return nome.normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim().toLowerCase() === 'pcp';
+}

@@ -55,7 +55,7 @@ export function EditorMensagem({ resposta, onVoltar, onEnviada }: { resposta?: M
           <span>{p.nome} <span className="text-neutral-400">({p.codigoPessoal})</span></span>
         </label>)}
       </div>}
-      {destinatario && <p className="text-xs text-forja-300">Somente {destinatario.nome}, vinculado(a) a {estacao?.nome}, poderá ler e responder este recado. Você terá uma cópia em Enviadas.</p>}
+      {destinatario && <p className="text-xs text-forja-300">Somente {destinatario.nome}, responsável por {estacao?.nome}, poderá ler e responder este recado. Você terá uma cópia em Enviadas.</p>}
     </>}
     <label className="block text-sm space-y-1"><span>Corpo da mensagem</span>
       <textarea className={`${campo} min-h-32`} required maxLength={4000} disabled={enviar.isPending} value={corpo} onChange={e => setCorpo(e.target.value)} placeholder="Escreva seu recado ou observação…" />

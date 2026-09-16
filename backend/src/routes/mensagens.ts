@@ -1,6 +1,7 @@
 import type { FastifyInstance } from 'fastify';
 import { Prisma } from '@prisma/client';
 import { z } from 'zod';
+import { isPcp } from '@forja/shared';
 import { prisma } from '../db/prisma.js';
 
 const fail = (statusCode: number, message: string): never => {
@@ -8,23 +9,36 @@ const fail = (statusCode: number, message: string): never => {
 };
 const contaSelect = { id: true, nome: true, ativo: true, papel: true, etapaId: true,
   etapa: { select: { id: true, nome: true, ativa: true } } } as const;
+// Estação PCP: administrativa, reconhecida pelo nome (como a Metalização).
+// Quem tem papel pcp responde por ela sem precisar de vínculo no cadastro.
+async function estacoesPcpAtivas(): Promise<string[]> {
+  const etapas = await prisma.etapa.findMany({ where: { ativa: true }, select: { id: true, nome: true } });
+  return etapas.filter(e => isPcp(e.nome)).map(e => e.id);
+}
 async function contaAtual(id: string) {
   const conta = await prisma.pessoa.findUnique({ where: { id }, select: contaSelect });
   if (!conta?.ativo) return fail(401, 'Conta indisponível. Entre novamente.');
-  return conta;
+  const pcpEtapaIds = conta.papel === 'pcp' ? await estacoesPcpAtivas() : [];
+  return { ...conta, pcpEtapaIds };
 }
 type Conta = Awaited<ReturnType<typeof contaAtual>>;
-const podeEnviar = (p: Conta) => p.papel === 'admin' || !!p.etapa?.ativa;
+const podeEnviar = (p: Conta) => p.papel === 'admin' || !!p.etapa?.ativa || p.pcpEtapaIds.length > 0;
+/** Estações pelas quais a conta responde (vínculo ativo + PCP para o papel pcp). */
+const estacoesDaConta = (p: Conta) => [...new Set([...(p.etapa?.ativa ? [p.etapa.id] : []), ...p.pcpEtapaIds])];
 const recebidas = (p: Conta): Prisma.MensagemInternaWhereInput => ({
   destinatarioId: p.id,
   // Administradores atuam em todas as estações, mas só recebem recados próprios.
   ...(p.papel === 'admin' ? { etapaDestino: { ativa: true } }
-    : { etapaDestinoId: p.etapa?.ativa ? p.etapa.id : { in: [] } }),
+    : { etapaDestinoId: { in: estacoesDaConta(p) } }),
 });
-const destinatarioNaEstacao = (id: string, etapaId: string): Prisma.PessoaWhereInput => ({
+const destinatarioNaEstacao = (id: string, etapaId: string, estacaoPcp: boolean): Prisma.PessoaWhereInput => ({
   id, ativo: true,
-  OR: [{ papel: 'admin' }, { etapaId, etapa: { ativa: true } }],
+  OR: [{ papel: 'admin' }, { etapaId, etapa: { ativa: true } }, ...(estacaoPcp ? [{ papel: 'pcp' as const }] : [])],
 });
+async function ehEstacaoPcp(etapaId: string) {
+  const etapa = await prisma.etapa.findUnique({ where: { id: etapaId }, select: { nome: true, ativa: true } });
+  return !!etapa?.ativa && isPcp(etapa.nome);
+}
 const include = {
   etapaOrigem: { select: { id: true, nome: true } },
   etapaDestino: { select: { id: true, nome: true } },
@@ -44,13 +58,15 @@ export async function mensagensRoutes(app: FastifyInstance) {
     });
     const pessoas = await prisma.pessoa.findMany({
       where: { ativo: true, id: { not: conta.id },
-        OR: [{ papel: 'admin' }, { etapa: { ativa: true } }] },
+        OR: [{ papel: 'admin' }, { papel: 'pcp' }, { etapa: { ativa: true } }] },
       orderBy: [{ nome: 'asc' }, { id: 'asc' }],
-      select: { id: true, nome: true, codigoPessoal: true, papel: true, etapaId: true },
+      select: { id: true, nome: true, codigoPessoal: true, papel: true, etapaId: true, etapa: { select: { ativa: true } } },
     });
+    // PCP primeiro: é para onde o chão de fábrica mais escreve.
+    const ordenadas = [...estacoes.filter(e => isPcp(e.nome)), ...estacoes.filter(e => !isPcp(e.nome))];
     return { data: { conta: { id: conta.id, nome: conta.nome, etapa: conta.etapa },
-      podeEnviar: podeEnviar(conta), estacoes: estacoes.map(e => ({ ...e,
-        pessoas: pessoas.filter(p => p.papel === 'admin' || p.etapaId === e.id)
+      podeEnviar: podeEnviar(conta), estacoes: ordenadas.map(e => ({ ...e,
+        pessoas: pessoas.filter(p => p.papel === 'admin' || (p.etapaId === e.id && p.etapa?.ativa) || (p.papel === 'pcp' && isPcp(e.nome)))
           .map(({ id, nome, codigoPessoal }) => ({ id, nome, codigoPessoal })),
       })) } };
   });
@@ -88,12 +104,13 @@ export async function mensagensRoutes(app: FastifyInstance) {
     const destino = await prisma.etapa.findFirst({ where: { id: input.etapaDestinoId, ativa: true } });
     if (!destino) return fail(400, 'Selecione uma estação ativa.');
     const destinatario = await prisma.pessoa.findFirst({
-      where: destinatarioNaEstacao(input.destinatarioId, input.etapaDestinoId),
+      where: destinatarioNaEstacao(input.destinatarioId, input.etapaDestinoId, isPcp(destino.nome)),
       select: { id: true, nome: true },
     });
     if (!destinatario || destinatario.id === p.id) return fail(400, 'Selecione outro usuário ativo da estação de destino.');
-    // Sem estação fixa, o administrador atua no contexto da estação escolhida.
-    const etapaOrigemId = p.etapa?.ativa ? p.etapa.id : destino.id;
+    // Sem estação fixa, o PCP escreve como PCP e o administrador atua no
+    // contexto da estação escolhida.
+    const etapaOrigemId = p.etapa?.ativa ? p.etapa.id : p.pcpEtapaIds[0] ?? destino.id;
     try {
       return await prisma.mensagemInterna.create({ data: {
         ...input, remetenteId: p.id, remetenteNome: p.nome, destinatarioNome: destinatario.nome,
@@ -135,7 +152,7 @@ export async function mensagensRoutes(app: FastifyInstance) {
     const original = await prisma.mensagemInterna.findFirst({ where: { ...recebidas(p), id: params.data.id } });
     if (!original) return fail(404, 'Mensagem não encontrada.');
     const autor = await prisma.pessoa.findFirst({
-      where: destinatarioNaEstacao(original.remetenteId, original.etapaOrigemId),
+      where: destinatarioNaEstacao(original.remetenteId, original.etapaOrigemId, await ehEstacaoPcp(original.etapaOrigemId)),
     });
     if (!autor) return fail(409, 'O remetente mudou de estação ou está inativo. Crie uma nova mensagem escolhendo o destino atual.');
     const data = await enviar(p, { ...body.data, destinatarioId: autor.id, etapaDestinoId: original.etapaOrigemId }, original.id);

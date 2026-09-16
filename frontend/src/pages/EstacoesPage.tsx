@@ -7,6 +7,7 @@
 // ============================================================
 
 import { useEffect, useMemo, useState, type FormEvent } from 'react';
+import { isPcp } from '@forja/shared';
 import { AppLayout } from '../components/AppLayout';
 import { Modal } from '../components/Modal';
 import { useTheme } from '../lib/theme-store';
@@ -58,20 +59,29 @@ export function EstacoesPage() {
                       <span className={`font-mono text-xs ${sub}`}>#{e.ordemPadrao}</span>
                       <h2 className={`text-lg font-semibold ${texto}`}>{e.nome}</h2>
                       {!e.ativa && <span className="badge-neutral">Inativa</span>}
+                      {isPcp(e.nome) && <span className="badge-neutral">Só mensagens</span>}
                     </div>
                     <p className={`text-xs mt-1 ${sub}`}>
                       SLA {e.slaHoras}h{e.exigeCheckpointQualidade ? ' · exige checkpoint de qualidade' : ''}
                     </p>
                   </div>
                   <div className="flex gap-2">
+                    {!isPcp(e.nome) && (
                     <button onClick={() => setEditandoMaquina({ maquina: null, etapaId: e.id })} className="btn-ghost px-3 py-1.5 text-xs">
                       + Máquina
                     </button>
+                    )}
                     <button onClick={() => setEditandoEtapa(e)} className="btn-ghost px-3 py-1.5 text-xs">
                       Editar
                     </button>
                   </div>
                 </div>
+                {isPcp(e.nome) ? (
+                  <p className={`text-xs mt-3 ${sub}`}>
+                    Estação administrativa: recebe mensagens do chão de fábrica. As contas com papel PCP são os responsáveis.
+                    Não recebe operações nem aparece no tótem.
+                  </p>
+                ) : (
                 <div className="flex flex-wrap gap-2 mt-3">
                   {maquinas.length === 0 && (
                     <p className="text-xs text-amber-400">Sem máquina cadastrada — o tótem desta estação não consegue iniciar OPs.</p>
@@ -90,6 +100,7 @@ export function EstacoesPage() {
                     </button>
                   ))}
                 </div>
+                )}
               </section>
             );
           })}
@@ -160,6 +171,7 @@ function EtapaModal({ etapa, onClose }: { etapa: Etapa | null; onClose: () => vo
         <div>
           <label className="label">Nome *</label>
           <input className="input" value={nome} onChange={(e) => setNome(e.target.value)} placeholder="Ex: Serra" autoFocus />
+          <p className="text-xs mt-1 text-neutral-500">Uma estação chamada "PCP" é administrativa: só recebe mensagens, com as contas de papel PCP como responsáveis.</p>
         </div>
         <div className="grid grid-cols-2 gap-3">
           <div>

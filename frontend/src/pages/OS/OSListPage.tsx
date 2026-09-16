@@ -17,7 +17,6 @@ import {
   formatarPrazo,
   corPrazo,
   diasAtePrazo,
-  useGerarTestesFundicao,
 } from '../../hooks/useOS';
 import { useClientesList as useClientes } from '../../hooks/useClientes';
 import { ObservacaoBadge } from '../../components/ObservacaoBadge';
@@ -47,7 +46,6 @@ export function OSListPage() {
   const [criando, setCriando] = useState(false);
   const [osParaExcluir, setOsParaExcluir] = useState<OS | null>(null);
 
-  const gerarTestes = useGerarTestesFundicao();
   const cancelarOS = useCancelarOS();
 
   const { data: clientesData } = useClientes();
@@ -137,29 +135,6 @@ export function OSListPage() {
             </p>
           </div>
           <div className="flex items-center gap-3">
-            <button
-              onClick={() => {
-                if (
-                  window.confirm(
-                    'Deseja criar 3 novas OPs de teste (OS-TEST-FUND-02, 03, 04) com a linha completa de 13 operações (Modelação até Qualidade)?',
-                  )
-                ) {
-                  gerarTestes.mutate(undefined, {
-                    onSuccess: (res) => alert(res.data.mensagem),
-                    onError: (err: any) =>
-                      alert(
-                        err?.response?.data?.message || 'Erro ao gerar OPs de teste',
-                      ),
-                  });
-                }
-              }}
-              disabled={gerarTestes.isPending}
-              className="px-3.5 py-2 bg-purple-700 hover:bg-purple-800 disabled:opacity-50 text-white rounded-lg font-medium transition flex items-center gap-2 text-sm shadow-sm"
-              title="Cria 3 novas OPs com fluxo completo (Modelação, Moldagem, Vazamento, Rebarbação, Tratamento Térmico, Engenharia Torno/Centro, Desbaste, Metalização, Encaixe, Torno, Acabamento, Qualidade)"
-            >
-              <span>🧪</span>
-              {gerarTestes.isPending ? 'Gerando 3 OPs...' : 'Gerar 3 OPs Teste (13 Etapas)'}
-            </button>
             <button
               onClick={() => setCriando(true)}
               className="px-4 py-2 bg-forja-500 hover:bg-forja-600 text-white rounded-lg font-medium transition flex items-center gap-2"
