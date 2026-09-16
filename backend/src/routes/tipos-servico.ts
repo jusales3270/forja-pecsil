@@ -31,7 +31,11 @@ const criarTipoServicoSchema = z.object({
 
 });
 
-const atualizarTipoServicoSchema = criarTipoServicoSchema.partial();
+const atualizarTipoServicoSchema = criarTipoServicoSchema.partial().extend({
+  // Ao trocar a estação do tipo, leva junto as operações dos artigos (OS
+  // futuras) e as OPs ainda não iniciadas (OS em andamento).
+  propagarEtapa: z.boolean().optional(),
+});
 
 // ============================================================
 // Rotas
@@ -283,13 +287,72 @@ export async function tiposServicoRoutes(app: FastifyInstance) {
         }
       }
 
-      const atualizado = await prisma.tipoServico.update({
-        where: { id: paramsParsed.data.id },
-        data: bodyParsed.data,
-        include: { etapa: true },
+      const { propagarEtapa, ...dados } = bodyParsed.data;
+      const etapaNova = dados.etapaId && dados.etapaId !== tipo.etapaId ? dados.etapaId : null;
+
+      const resultado = await prisma.$transaction(async (tx) => {
+        const atualizado = await tx.tipoServico.update({
+          where: { id: tipo.id },
+          data: dados,
+          include: { etapa: true },
+        });
+
+        if (!etapaNova || !propagarEtapa) {
+          return { atualizado, operacoesMovidas: 0, opsMovidas: [] as { id: string; etapaId: string }[] };
+        }
+
+        // Operações cadastradas na mão não têm a FK — casam pelo nome, que é único
+        const doTipo = {
+          OR: [
+            { tipoServicoId: tipo.id },
+            { tipoServicoId: null, tipoServico: { equals: tipo.nome, mode: 'insensitive' as const } },
+          ],
+        };
+
+        const { count: operacoesMovidas } = await tx.operacaoArtigo.updateMany({
+          where: doTipo,
+          data: { etapaId: etapaNova },
+        });
+
+        // Só OPs que ainda não começaram: sem peça feita, sem carimbo aberto,
+        // sem envio externo. As demais terminam onde estão.
+        const opsMovidas = await tx.oPLote.findMany({
+          where: {
+            operacaoArtigo: doTipo,
+            etapaId: { not: etapaNova },
+            status: 'na_fila',
+            quantidadeConcluida: 0,
+            envioExternoEm: null,
+            carimbos: { none: { timestampSaida: null } },
+          },
+          select: { id: true, etapaId: true },
+        });
+        if (opsMovidas.length > 0) {
+          await tx.oPLote.updateMany({
+            where: { id: { in: opsMovidas.map((o) => o.id) } },
+            data: { etapaId: etapaNova },
+          });
+        }
+
+        return { atualizado, operacoesMovidas, opsMovidas };
       });
 
-      return { data: atualizado };
+      if (etapaNova && resultado.opsMovidas.length > 0) {
+        for (const etapaAntiga of new Set(resultado.opsMovidas.map((o) => o.etapaId))) {
+          app.io.to(`estacao:${etapaAntiga}`).emit('op:encerrada', { etapaId: etapaAntiga });
+        }
+        for (const op of resultado.opsMovidas) {
+          app.io.to(`estacao:${etapaNova}`).emit('op:nova-na-fila', { opLoteId: op.id, etapaId: etapaNova });
+        }
+      }
+
+      return {
+        data: resultado.atualizado,
+        meta: {
+          operacoesArtigoMovidas: resultado.operacoesMovidas,
+          opsLoteMovidas: resultado.opsMovidas.length,
+        },
+      };
     }
   );
 

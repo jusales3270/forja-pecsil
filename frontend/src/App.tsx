@@ -4,6 +4,7 @@ import { PwaControls } from './components/PwaControls';
 import { LoginPage } from './pages/LoginPage';
 import { HomePage } from './pages/HomePage';
 import { TiposServicoPage } from './pages/TiposServicoPage';
+import { EstacoesPage } from './pages/EstacoesPage';
 import { MotivosParadaPage } from './pages/MotivosParadaPage';
 import { ToleranciasPage } from './pages/ToleranciasPage';
 import { ArtigosListPage } from './pages/Artigos/ArtigosListPage';
@@ -83,6 +84,14 @@ export function App() {
             element={
               <RoleRoute requireCapability="cadastros_tipos_servico">
                 <TiposServicoPage />
+              </RoleRoute>
+            }
+          />
+          <Route
+            path="/estacoes"
+            element={
+              <RoleRoute requireCapability="admin_configurar_sistema">
+                <EstacoesPage />
               </RoleRoute>
             }
           />

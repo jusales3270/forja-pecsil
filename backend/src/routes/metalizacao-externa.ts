@@ -3,6 +3,7 @@ import { z } from 'zod';
 import { isMetalizacao } from '@forja/shared';
 import { prisma } from '../db/prisma.js';
 import { podeOperarEtapa, type UsuarioToken } from '../lib/permissoes-estacao.js';
+import { avisarProximaSeLoteCompleto } from '../lib/aviso-chegada.js';
 
 const paramsSchema = z.object({ id: z.string().uuid() });
 const envioSchema = z.object({
@@ -87,6 +88,8 @@ export async function metalizacaoExternaRoutes(app: FastifyInstance) {
               status: atual.exigeInspecao ? 'aguardando_qualidade' : 'concluida',
             } });
             await tx.carimbo.updateMany({ where: { opLoteId: atual.id, timestampSaida: null }, data: { timestampSaida: agora, quantidadeConcluida: quantidade } });
+            // Lote voltou inteiro do fornecedor: avisa a estação da próxima operação
+            await avisarProximaSeLoteCompleto(tx, atual.id);
             const restantes = await tx.oPLote.count({ where: { loteId: atual.loteId, status: { not: 'concluida' } } });
             if (restantes === 0) {
               await tx.lote.update({ where: { id: atual.loteId }, data: { status: 'concluido' } });
