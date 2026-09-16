@@ -4,6 +4,8 @@ import {
   LABELS_TIPO_DESENHO,
 } from '../hooks/useDesenhos';
 import { api } from '../lib/api';
+import type { PaginaRenderizada } from '../lib/render-pdf';
+import { ZoomDesenhoPopup } from './ZoomDesenhoPopup';
 
 interface VisualizadorDesenhoModalProps {
   open: boolean;
@@ -28,8 +30,9 @@ export function VisualizadorDesenhoModal({
   const [blobUrl, setBlobUrl] = useState<string | null>(null);
   const [carregandoArquivo, setCarregandoArquivo] = useState(false);
   const [erroArquivo, setErroArquivo] = useState<string | null>(null);
-  const [zoom, setZoom] = useState(1);
-  const [rotacao, setRotacao] = useState(0);
+  const [paginas, setPaginas] = useState<PaginaRenderizada[]>([]);
+  const [paginaAtiva, setPaginaAtiva] = useState(0);
+  const [popupAberto, setPopupAberto] = useState(false);
   const [telaCheia, setTelaCheia] = useState(false);
 
   useEffect(() => {
@@ -46,8 +49,6 @@ export function VisualizadorDesenhoModal({
       } else {
         setDesenhoAtivoId(null);
       }
-      setZoom(1);
-      setRotacao(0);
     }
   }, [open, desenhoInicialId, desenhos]);
 
@@ -60,7 +61,11 @@ export function VisualizadorDesenhoModal({
   // Carrega o arquivo via API como Blob para evitar carregamento indevido do SPA
   useEffect(() => {
     let cancelado = false;
-    let urlCriada: string | null = null;
+    const urlsCriadas: string[] = [];
+
+    setPaginas([]);
+    setPaginaAtiva(0);
+    setPopupAberto(false);
 
     if (open && desenhoAtivo && desenhoAtivo.arquivoKey) {
       setCarregandoArquivo(true);
@@ -72,7 +77,7 @@ export function VisualizadorDesenhoModal({
           responseType: 'blob',
           timeout: 45000,
         })
-        .then((res) => {
+        .then(async (res) => {
           if (cancelado) return;
           const blob = res.data as Blob;
 
@@ -85,8 +90,35 @@ export function VisualizadorDesenhoModal({
           }
 
           const url = URL.createObjectURL(blob);
-          urlCriada = url;
+          urlsCriadas.push(url);
           setBlobUrl(url);
+
+          if (ehPdf || blob.type === 'application/pdf') {
+            try {
+              // pdf.js só é baixado quando um PDF é aberto
+              const { renderizarPdfComoImagens } = await import('../lib/render-pdf');
+              const renderizadas = await renderizarPdfComoImagens(blob);
+              urlsCriadas.push(...renderizadas.map((p) => p.url));
+              if (cancelado) return;
+              setPaginas(renderizadas);
+            } catch (err) {
+              if (cancelado) return;
+              console.error('Erro ao renderizar PDF:', err);
+              setErroArquivo(
+                'Não foi possível exibir o PDF neste navegador. Use "Nova aba" ou "Baixar" para abrir o arquivo.'
+              );
+            }
+            return;
+          }
+
+          const dimensoes = await new Promise<{ largura: number; altura: number }>((resolve, reject) => {
+            const img = new Image();
+            img.onload = () => resolve({ largura: img.naturalWidth, altura: img.naturalHeight });
+            img.onerror = () => reject(new Error('Imagem inválida'));
+            img.src = url;
+          });
+          if (cancelado) return;
+          setPaginas([{ url, ...dimensoes }]);
         })
         .catch((err) => {
           if (cancelado) return;
@@ -107,15 +139,14 @@ export function VisualizadorDesenhoModal({
 
     return () => {
       cancelado = true;
-      if (urlCriada) {
-        URL.revokeObjectURL(urlCriada);
-      }
+      urlsCriadas.forEach((u) => URL.revokeObjectURL(u));
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open, artigo.id, desenhoAtivo?.id, desenhoAtivo?.arquivoKey]);
 
   // ESC fecha
   useEffect(() => {
-    if (!open) return;
+    if (!open || popupAberto) return;
     const handler = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
         if (telaCheia) {
@@ -127,7 +158,7 @@ export function VisualizadorDesenhoModal({
     };
     window.addEventListener('keydown', handler);
     return () => window.removeEventListener('keydown', handler);
-  }, [open, telaCheia, onClose]);
+  }, [open, popupAberto, telaCheia, onClose]);
 
   // Lock scroll
   useEffect(() => {
@@ -176,7 +207,7 @@ export function VisualizadorDesenhoModal({
     >
       <div
         className={`w-full ${
-          telaCheia ? 'h-full max-h-screen rounded-none' : 'max-w-6xl h-[92vh] rounded-2xl'
+          telaCheia ? 'h-full max-h-screen rounded-none' : 'max-w-6xl h-[94vh] rounded-2xl'
         } bg-neutral-900 border border-neutral-800 shadow-2xl flex flex-col overflow-hidden transition-all duration-200`}
         onClick={(e) => e.stopPropagation()}
       >
@@ -250,11 +281,7 @@ export function VisualizadorDesenhoModal({
                 <button
                   key={d.id}
                   type="button"
-                  onClick={() => {
-                    setDesenhoAtivoId(d.id);
-                    setZoom(1);
-                    setRotacao(0);
-                  }}
+                  onClick={() => setDesenhoAtivoId(d.id)}
                   className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium transition whitespace-nowrap ${
                     ativo
                       ? 'bg-forja-500 text-white shadow-lg shadow-forja-500/20'
@@ -316,46 +343,39 @@ export function VisualizadorDesenhoModal({
               )}
             </div>
 
-            {/* Controles de Imagem (quando não for PDF) */}
-            {temArquivo && !ehPdf && (
-              <div className="flex items-center gap-1.5 bg-neutral-950 p-1 rounded-lg border border-neutral-800">
+            {paginas.length > 0 && (
+              <div className="flex items-center gap-1.5">
+                {paginas.length > 1 && (
+                  <div className="flex items-center gap-1 bg-neutral-950 p-1 rounded-lg border border-neutral-800">
+                    <button
+                      type="button"
+                      onClick={() => setPaginaAtiva((i) => Math.max(0, i - 1))}
+                      disabled={paginaAtiva === 0}
+                      className="px-2 py-1 hover:bg-neutral-800 disabled:opacity-40 rounded text-neutral-200"
+                      aria-label="Página anterior"
+                    >
+                      ‹
+                    </button>
+                    <span className="px-1 text-[11px] font-mono text-neutral-400">
+                      pág. {paginaAtiva + 1}/{paginas.length}
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => setPaginaAtiva((i) => Math.min(paginas.length - 1, i + 1))}
+                      disabled={paginaAtiva === paginas.length - 1}
+                      className="px-2 py-1 hover:bg-neutral-800 disabled:opacity-40 rounded text-neutral-200"
+                      aria-label="Próxima página"
+                    >
+                      ›
+                    </button>
+                  </div>
+                )}
                 <button
                   type="button"
-                  onClick={() => setZoom((z) => Math.max(0.5, z - 0.25))}
-                  className="px-2 py-1 hover:bg-neutral-800 rounded text-neutral-200 font-bold"
-                  title="Diminuir Zoom"
+                  onClick={() => setPopupAberto(true)}
+                  className="px-3 py-1.5 bg-forja-500 hover:bg-forja-600 text-white font-semibold rounded-lg transition"
                 >
-                  −
-                </button>
-                <span className="px-1 text-[11px] font-mono text-neutral-400">
-                  {Math.round(zoom * 100)}%
-                </span>
-                <button
-                  type="button"
-                  onClick={() => setZoom((z) => Math.min(3, z + 0.25))}
-                  className="px-2 py-1 hover:bg-neutral-800 rounded text-neutral-200 font-bold"
-                  title="Aumentar Zoom"
-                >
-                  +
-                </button>
-                <button
-                  type="button"
-                  onClick={() => {
-                    setZoom(1);
-                    setRotacao(0);
-                  }}
-                  className="px-2 py-1 hover:bg-neutral-800 rounded text-neutral-400 text-[11px]"
-                  title="Resetar"
-                >
-                  100%
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setRotacao((r) => (r + 90) % 360)}
-                  className="px-2 py-1 hover:bg-neutral-800 rounded text-neutral-200 text-xs"
-                  title="Girar 90°"
-                >
-                  ↻ {rotacao}°
+                  🔍 Ampliar
                 </button>
               </div>
             )}
@@ -363,7 +383,7 @@ export function VisualizadorDesenhoModal({
         )}
 
         {/* Visualizador Principal */}
-        <div className="flex-1 bg-neutral-950/70 p-2 sm:p-4 overflow-auto flex items-center justify-center relative">
+        <div className="flex-1 min-h-0 bg-neutral-950/70 p-1 sm:p-2 overflow-hidden flex items-center justify-center relative">
           {desenhos.length === 0 ? (
             <div className="text-center p-8 max-w-md">
               <div className="text-5xl mb-3">📐</div>
@@ -401,46 +421,35 @@ export function VisualizadorDesenhoModal({
                 Se você fez deploy recente, lembre-se de reiniciar o container do backend.
               </p>
             </div>
-          ) : ehPdf && blobUrl ? (
-            <div className="w-full h-full rounded-xl overflow-hidden bg-neutral-900 border border-neutral-800 shadow-inner flex flex-col">
-              <iframe
-                src={blobUrl}
-                title={`Desenho ${desenhoAtivo.codigoDesenho}`}
-                className="w-full h-full border-0 rounded-xl bg-neutral-900"
-              />
-            </div>
-          ) : blobUrl ? (
-            <div className="w-full h-full flex items-center justify-center overflow-auto p-4">
+          ) : paginas.length > 0 ? (
+            <button
+              type="button"
+              onClick={() => setPopupAberto(true)}
+              className="group relative w-full h-full flex items-center justify-center cursor-zoom-in rounded-xl"
+              title="Clique para ampliar"
+            >
               <img
-                src={blobUrl}
+                src={(paginas[paginaAtiva] ?? paginas[0]).url}
                 alt={`Desenho ${desenhoAtivo.codigoDesenho}`}
-                style={{
-                  transform: `scale(${zoom}) rotate(${rotacao}deg)`,
-                  transition: 'transform 0.15s ease-out',
-                  maxWidth: zoom <= 1 ? '100%' : 'none',
-                  maxHeight: zoom <= 1 ? '100%' : 'none',
-                }}
-                className="object-contain rounded-lg shadow-2xl select-none"
+                draggable={false}
+                className="max-w-full max-h-full object-contain rounded-lg shadow-2xl select-none bg-white"
               />
-            </div>
+              <span className="pointer-events-none absolute bottom-3 left-1/2 -translate-x-1/2 px-3 py-1.5 rounded-full bg-black/75 text-xs text-neutral-100 opacity-90 group-hover:opacity-100 transition">
+                🔍 Clique no desenho para ampliar
+              </span>
+            </button>
           ) : null}
         </div>
-
-
-        {/* Rodapé */}
-        <footer className="flex items-center justify-between px-5 py-3 bg-neutral-950 border-t border-neutral-800 shrink-0">
-          <div className="text-xs text-neutral-500">
-            Pecsil Forja · Sistema de Controle de Produção
-          </div>
-          <button
-            type="button"
-            onClick={onClose}
-            className="px-5 py-2 bg-neutral-800 hover:bg-neutral-700 text-neutral-200 font-medium text-sm rounded-xl transition"
-          >
-            Fechar
-          </button>
-        </footer>
       </div>
+
+      {popupAberto && paginas.length > 0 && desenhoAtivo && (
+        <ZoomDesenhoPopup
+          paginas={paginas}
+          paginaInicial={paginaAtiva}
+          titulo={`${artigo.codigo} · ${desenhoAtivo.codigoDesenho} · Rev. ${desenhoAtivo.revisao}`}
+          onClose={() => setPopupAberto(false)}
+        />
+      )}
     </div>
   );
 }
