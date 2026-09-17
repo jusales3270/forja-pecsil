@@ -198,6 +198,49 @@ export interface PessoaPublica {
   /** Estação vinculada à conta. Nulo = sem vínculo com estação. */
   etapaId?: string | null;
   etapa?: { id: string; nome: string } | null;
+  /** Módulos liberados para esta pessoa. Nulo/ausente = padrão do papel. */
+  acessos?: ModuloAcesso[] | null;
+}
+
+// ===========================
+// ACESSOS POR USUÁRIO (área administrativa)
+// ===========================
+// O papel dá o padrão; o admin pode liberar ou retirar módulos de cada
+// pessoa da área administrativa (ex.: um PCP com acesso ao Painel do Chefe).
+
+export const MODULOS_ACESSO = [
+  { id: 'tipos_servico', rotulo: 'Tipos de Serviço', grupo: 'Cadastros' },
+  { id: 'motivos_parada', rotulo: 'Motivos de Parada', grupo: 'Cadastros' },
+  { id: 'tolerancias', rotulo: 'Tolerâncias Gerais', grupo: 'Cadastros' },
+  { id: 'artigos', rotulo: 'Artigos', grupo: 'Cadastros' },
+  { id: 'estacoes', rotulo: 'Estações e Máquinas', grupo: 'Cadastros' },
+  { id: 'usuarios', rotulo: 'Usuários e Estações', grupo: 'Cadastros' },
+  { id: 'ordens_servico', rotulo: 'Ordens de Serviço', grupo: 'Fluxo de PCP' },
+  { id: 'totem', rotulo: 'Tótem', grupo: 'Fluxo de PCP' },
+  { id: 'painel_producao', rotulo: 'Painel de Produção (chefe)', grupo: 'Fluxo de PCP' },
+  { id: 'lotes_fantasmas', rotulo: 'Lotes Fantasmas', grupo: 'Fluxo de PCP' },
+] as const;
+
+export type ModuloAcesso = (typeof MODULOS_ACESSO)[number]['id'];
+
+export const IDS_MODULOS_ACESSO = MODULOS_ACESSO.map((m) => m.id) as ModuloAcesso[];
+
+/** Papéis da área administrativa, cujos acessos o admin pode personalizar. */
+export const PAPEIS_ACESSO_CONFIGURAVEL: Papel[] = ['admin', 'chefe', 'pcp'];
+
+/** O que cada papel acessa quando não há personalização. */
+export const MODULOS_PADRAO_POR_PAPEL: Partial<Record<Papel, ModuloAcesso[]>> = {
+  admin: [...IDS_MODULOS_ACESSO],
+  chefe: ['tipos_servico', 'motivos_parada', 'tolerancias', 'artigos', 'ordens_servico', 'totem', 'painel_producao', 'lotes_fantasmas'],
+  pcp: ['tipos_servico', 'motivos_parada', 'tolerancias', 'artigos', 'ordens_servico', 'totem', 'lotes_fantasmas'],
+};
+
+/** Módulos efetivos: a personalização quando existe, senão o padrão do papel. */
+export function modulosDaPessoa(pessoa: { papel: Papel; acessos?: readonly string[] | null }): ModuloAcesso[] {
+  if (pessoa.acessos && PAPEIS_ACESSO_CONFIGURAVEL.includes(pessoa.papel)) {
+    return IDS_MODULOS_ACESSO.filter((id) => pessoa.acessos!.includes(id));
+  }
+  return MODULOS_PADRAO_POR_PAPEL[pessoa.papel] ?? [];
 }
 
 // ===========================

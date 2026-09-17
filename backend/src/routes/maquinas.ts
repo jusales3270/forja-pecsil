@@ -11,6 +11,7 @@ import { FastifyInstance } from 'fastify';
 import { z } from 'zod';
 import { Prisma, TipoMaquina } from '@prisma/client';
 import { prisma } from '../db/prisma.js';
+import { exigirModulo } from '../lib/acessos.js';
 
 const listaQuerySchema = z.object({
   etapaId: z.string().uuid().optional(),
@@ -55,7 +56,7 @@ export async function maquinasRoutes(app: FastifyInstance) {
   });
 
   // ---------------- CRIAR ----------------
-  app.post('/maquinas', { onRequest: [app.requireAdmin] }, async (request, reply) => {
+  app.post('/maquinas', { onRequest: [exigirModulo('estacoes')] }, async (request, reply) => {
     const parsed = criarMaquinaSchema.safeParse(request.body);
     if (!parsed.success) {
       return reply.code(400).send({ error: 'invalid_input', message: 'Dados inválidos', details: parsed.error.flatten() });
@@ -77,7 +78,7 @@ export async function maquinasRoutes(app: FastifyInstance) {
   });
 
   // ---------------- EDITAR ----------------
-  app.put('/maquinas/:id', { onRequest: [app.requireAdmin] }, async (request, reply) => {
+  app.put('/maquinas/:id', { onRequest: [exigirModulo('estacoes')] }, async (request, reply) => {
     const params = z.object({ id: z.string().uuid() }).safeParse(request.params);
     if (!params.success) {
       return reply.code(400).send({ error: 'invalid_input', message: 'ID inválido' });

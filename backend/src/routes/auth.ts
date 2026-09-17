@@ -2,6 +2,7 @@ import { FastifyInstance } from 'fastify';
 import { z } from 'zod';
 import bcrypt from 'bcryptjs';
 import { prisma } from '../db/prisma.js';
+import { acessosPublicos } from '../lib/acessos.js';
 
 const loginSchema = z.object({
   codigo_pessoal: z.string().min(1, 'Código pessoal é obrigatório'),
@@ -64,6 +65,7 @@ export async function authRoutes(app: FastifyInstance) {
           ativo: pessoa.ativo,
           etapaId: pessoa.etapaId,
           etapa: pessoa.etapa,
+          acessos: acessosPublicos(pessoa),
         },
       },
     };
@@ -86,6 +88,8 @@ export async function authRoutes(app: FastifyInstance) {
           ativo: true,
           etapaId: true,
           etapa: { select: { id: true, nome: true } },
+          acessos: true,
+          acessosPersonalizados: true,
         },
       });
 
@@ -96,7 +100,8 @@ export async function authRoutes(app: FastifyInstance) {
         });
       }
 
-      return { data: pessoa };
+      const { acessos, acessosPersonalizados, ...resto } = pessoa;
+      return { data: { ...resto, acessos: acessosPublicos({ acessos, acessosPersonalizados }) } };
     }
   );
 
@@ -171,6 +176,8 @@ export async function authRoutes(app: FastifyInstance) {
           ativo: true,
           etapaId: true,
           etapa: { select: { id: true, nome: true } },
+          acessos: true,
+          acessosPersonalizados: true,
         },
       });
 
@@ -184,7 +191,9 @@ export async function authRoutes(app: FastifyInstance) {
       return {
         data: {
           token,
-          pessoa: pessoaAtualizada,
+          pessoa: (({ acessos, acessosPersonalizados, ...resto }) => ({
+            ...resto, acessos: acessosPublicos({ acessos, acessosPersonalizados }),
+          }))(pessoaAtualizada),
         },
       };
     }

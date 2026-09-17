@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { PwaControls } from './components/PwaControls';
@@ -46,10 +47,23 @@ function PublicRoute({ children }: { children: React.ReactNode }) {
   return <>{children}</>;
 }
 
+/** Mantém papel e acessos em dia: o admin pode alterar a conta durante a sessão. */
+function SincronizarConta() {
+  const isAuthenticated = useAuth((s) => s.isAuthenticated);
+  const sincronizar = useAuth((s) => s.sincronizar);
+  useEffect(() => {
+    if (!isAuthenticated) return;
+    const rodar = () => { sincronizar().catch(() => {}); };
+    rodar();
+    const timer = setInterval(rodar, 60_000);
+    return () => clearInterval(timer);
+  }, [isAuthenticated, sincronizar]);
+  return null;
+}
+
 function HomeRedirect() {
   const pessoa = useAuth((s) => s.pessoa);
-  const papel = pessoa?.papel as Papel | undefined;
-  const rota = rotaInicialPorPapel(papel);
+  const rota = rotaInicialPorPapel(pessoa);
   if (rota !== '/') return <Navigate to={rota} replace />;
   return <HomePage />;
 }
@@ -60,6 +74,7 @@ export function App() {
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
         <PwaControls />
+        <SincronizarConta />
         <ErrorBoundary fallbackTitle="Falha na aplicação" fallbackMessage="Ocorreu um erro ao renderizar esta página. Clique abaixo para voltar." voltarUrl="/">
           <Routes>
             <Route
@@ -90,7 +105,7 @@ export function App() {
           <Route
             path="/estacoes"
             element={
-              <RoleRoute requireCapability="admin_configurar_sistema">
+              <RoleRoute requireCapability="cadastros_estacoes">
                 <EstacoesPage />
               </RoleRoute>
             }

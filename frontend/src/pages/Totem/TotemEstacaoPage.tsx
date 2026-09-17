@@ -199,7 +199,7 @@ export function TotemEstacaoPage() {
   );
 
   const somenteObservando = Boolean(
-    etapaId && !podeOperar && temCapacidade(pessoa?.papel as Papel, 'totem_acessar'),
+    etapaId && !podeOperar && temCapacidade(pessoa, 'totem_acessar'),
   );
 
   if (!etapaId) {
@@ -1152,7 +1152,7 @@ function BotaoInspecionar({ opLoteId }: { opLoteId: string }) {
   const papel = pessoa?.papel as Papel | undefined;
   const abrir = useAbrirInspecao();
 
-  if (!temCapacidade(papel, 'inspecao_realizar')) return null;
+  if (!temCapacidade(pessoa, 'inspecao_realizar')) return null;
 
   async function handleInspecionar() {
     const res = await abrir.mutateAsync({ opLoteId, tipo: 'amostragem' });

@@ -3,7 +3,7 @@
 // ============================================================
 
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import type { Papel } from '@forja/shared';
+import type { ModuloAcesso, Papel } from '@forja/shared';
 import { api } from '../lib/api';
 
 export interface Pessoa {
@@ -15,6 +15,8 @@ export interface Pessoa {
   /** Estação que a conta opera. Nulo = sem vínculo. */
   etapaId: string | null;
   etapa?: { id: string; nome: string } | null;
+  /** Módulos liberados. Nulo = padrão do papel. */
+  acessos: ModuloAcesso[] | null;
 }
 
 export interface CriarPessoaInput {
@@ -24,6 +26,8 @@ export interface CriarPessoaInput {
   papel: Papel;
   etapaId?: string | null;
   ativo?: boolean;
+  /** Nulo = padrão do papel. Só o admin altera. */
+  acessos?: ModuloAcesso[] | null;
 }
 
 export interface AtualizarPessoaInput {
@@ -34,6 +38,8 @@ export interface AtualizarPessoaInput {
   papel?: Papel;
   etapaId?: string | null;
   ativo?: boolean;
+  /** Nulo = padrão do papel. Só o admin altera. */
+  acessos?: ModuloAcesso[] | null;
 }
 
 export interface ListaPessoasFiltros {

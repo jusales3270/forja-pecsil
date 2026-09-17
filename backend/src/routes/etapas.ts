@@ -16,6 +16,7 @@ import { FastifyInstance } from 'fastify';
 import { z } from 'zod';
 import { isPcp } from '@forja/shared';
 import { prisma } from '../db/prisma.js';
+import { exigirModulo } from '../lib/acessos.js';
 import { montarPipelineEtapa } from '../lib/pipeline-etapa.js';
 
 const selectEtapa = {
@@ -74,7 +75,7 @@ export async function etapasRoutes(app: FastifyInstance) {
   );
 
   // ---------------- CRIAR ESTAÇÃO ----------------
-  app.post('/etapas', { onRequest: [app.requireAdmin] }, async (request, reply) => {
+  app.post('/etapas', { onRequest: [exigirModulo('estacoes')] }, async (request, reply) => {
     const parsed = criarEtapaSchema.safeParse(request.body);
     if (!parsed.success) {
       return reply.code(400).send({ error: 'invalid_input', message: 'Dados inválidos', details: parsed.error.flatten() });
@@ -110,7 +111,7 @@ export async function etapasRoutes(app: FastifyInstance) {
   });
 
   // ---------------- EDITAR ESTAÇÃO ----------------
-  app.put('/etapas/:id', { onRequest: [app.requireAdmin] }, async (request, reply) => {
+  app.put('/etapas/:id', { onRequest: [exigirModulo('estacoes')] }, async (request, reply) => {
     const params = z.object({ id: z.string().uuid() }).safeParse(request.params);
     if (!params.success) {
       return reply.code(400).send({ error: 'invalid_input', message: 'ID inválido' });

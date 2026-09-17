@@ -31,10 +31,8 @@ export function RoleRoute({ children, requireCapability }: RoleRouteProps) {
     return <Navigate to="/login" replace />;
   }
 
-  const papel = pessoa?.papel as Papel | undefined;
-
-  if (!temCapacidade(papel, requireCapability)) {
-    return <Navigate to={rotaInicialPorPapel(papel)} replace />;
+  if (!temCapacidade(pessoa, requireCapability)) {
+    return <Navigate to={rotaInicialPorPapel(pessoa)} replace />;
   }
 
   return <>{children}</>;

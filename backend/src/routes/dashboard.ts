@@ -9,13 +9,14 @@ import { isPcp } from '@forja/shared';
 import { prisma } from '../db/prisma.js';
 import { z } from 'zod';
 import { calcularFluxoDePecas } from '../lib/fluxo-pecas.js';
+import { exigirModulo } from '../lib/acessos.js';
 import { diasAtePrazo, montarIndicadores } from '../lib/dashboard-kpis.js';
 import { montarPipelineEtapa, listarEtapasComFases } from '../lib/pipeline-etapa.js';
 import { montarTrilha, vizinhosNaTrilha, type PassoTrilha } from '../lib/roteiro-os.js';
 
 export async function dashboardRoutes(app: FastifyInstance) {
   // GET /api/dashboard  -> visao macro pro chefe
-  app.get('/dashboard', { onRequest: [app.authenticate] }, async (request, reply) => {
+  app.get('/dashboard', { onRequest: [exigirModulo('painel_producao')] }, async (request, reply) => {
     const parsed = z.object({
       clienteId: z.string().uuid().optional(),
       tipoProduto: z.enum(['forma', 'bloco', 'fundo_forma', 'fundo_bloco', 'molde']).optional(),
