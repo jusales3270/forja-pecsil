@@ -65,7 +65,7 @@ function diasAtePrazo(prazoIso: string): { texto: string; cor: string } {
 export function DetalhesOPModal({ op, onClose, onAbrirDesenhos }: Props) {
   const navigate = useNavigate();
   const pessoa = useAuth((s) => s.pessoa);
-  const podeVerOSCompleta = temCapacidade(pessoa?.papel as Papel, 'os_listar');
+  const podeVerOSCompleta = temCapacidade(pessoa, 'os_listar');
 
   const os = op.lote.os;
   const artigo = os.artigo;

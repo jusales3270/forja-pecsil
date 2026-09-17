@@ -18,7 +18,9 @@ import { FastifyInstance } from 'fastify';
 import { z } from 'zod';
 import { Prisma, Papel } from '@prisma/client';
 import bcrypt from 'bcryptjs';
+import { IDS_MODULOS_ACESSO, PAPEIS_ACESSO_CONFIGURAVEL, type Papel as PapelShared } from '@forja/shared';
 import { prisma } from '../db/prisma.js';
+import { acessosPublicos, pessoaTemModulo } from '../lib/acessos.js';
 
 const PAPEIS = [
   'admin',
@@ -52,6 +54,8 @@ const criarPessoaSchema = z.object({
   /** Estação que a conta opera. Obrigatória quando o papel é `estacao`. */
   etapaId: z.string().uuid('etapaId inválido').nullable().optional(),
   ativo: z.boolean().optional(),
+  /** Módulos liberados (área administrativa). Nulo = padrão do papel. Só o admin altera. */
+  acessos: z.array(z.enum(IDS_MODULOS_ACESSO as [string, ...string[]])).nullable().optional(),
 });
 
 const atualizarPessoaSchema = criarPessoaSchema
@@ -67,10 +71,37 @@ const SELECT_PESSOA = {
   ativo: true,
   etapaId: true,
   etapa: { select: { id: true, nome: true } },
+  acessos: true,
+  acessosPersonalizados: true,
 } satisfies Prisma.PessoaSelect;
+
+type PessoaSelecionada = Prisma.PessoaGetPayload<{ select: typeof SELECT_PESSOA }>;
+function publica({ acessos, acessosPersonalizados, ...resto }: PessoaSelecionada) {
+  return { ...resto, acessos: acessosPublicos({ acessos, acessosPersonalizados }) };
+}
 
 function ehAdmin(request: any): boolean {
   return (request.user as any)?.papel === 'admin';
+}
+
+/**
+ * Admin sempre gerencia usuários. Quem recebeu o módulo "Usuários" também,
+ * mas sem criar/editar administradores nem alterar acessos (evita que alguém
+ * se dê mais permissões do que o admin liberou).
+ */
+async function podeGerenciarUsuarios(request: any): Promise<boolean> {
+  return ehAdmin(request) || (await pessoaTemModulo(request.user.pessoaId, 'usuarios'));
+}
+
+/** Traduz o campo `acessos` da API para as colunas do banco. */
+function dadosAcessos(papel: string, acessos: string[] | null | undefined) {
+  if (acessos === undefined) return {};
+  if (acessos === null || !PAPEIS_ACESSO_CONFIGURAVEL.includes(papel as PapelShared)) {
+    return { acessos: [], acessosPersonalizados: false };
+  }
+  // Admin nunca perde o cadastro de usuários: evita trancar o sistema.
+  const lista = papel === 'admin' && !acessos.includes('usuarios') ? [...acessos, 'usuarios'] : acessos;
+  return { acessos: [...new Set(lista)], acessosPersonalizados: true };
 }
 
 export async function pessoasRoutes(app: FastifyInstance) {
@@ -95,12 +126,12 @@ export async function pessoasRoutes(app: FastifyInstance) {
       select: SELECT_PESSOA,
     });
 
-    return { data: pessoas };
+    return { data: pessoas.map(publica) };
   });
 
   // ---------------- CRIAR ----------------
   app.post('/pessoas', { onRequest: [app.authenticate] }, async (request, reply) => {
-    if (!ehAdmin(request)) {
+    if (!(await podeGerenciarUsuarios(request))) {
       return reply.code(403).send({
         error: 'forbidden',
         message: 'Apenas o admin cadastra usuários e contas de estação',
@@ -113,6 +144,13 @@ export async function pessoasRoutes(app: FastifyInstance) {
         error: 'invalid_input',
         message: 'Dados inválidos',
         details: parsed.error.flatten(),
+      });
+    }
+
+    if (!ehAdmin(request) && (parsed.data.papel === 'admin' || parsed.data.acessos != null)) {
+      return reply.code(403).send({
+        error: 'forbidden',
+        message: 'Somente o administrador cria administradores e define acessos',
       });
     }
 
@@ -137,16 +175,17 @@ export async function pessoasRoutes(app: FastifyInstance) {
         papel: parsed.data.papel as Papel,
         etapaId: parsed.data.etapaId ?? null,
         ativo: parsed.data.ativo ?? true,
+        ...dadosAcessos(parsed.data.papel, parsed.data.acessos),
       },
       select: SELECT_PESSOA,
     });
 
-    return reply.code(201).send({ data: pessoa });
+    return reply.code(201).send({ data: publica(pessoa) });
   });
 
   // ---------------- ATUALIZAR ----------------
   app.put('/pessoas/:id', { onRequest: [app.authenticate] }, async (request, reply) => {
-    if (!ehAdmin(request)) {
+    if (!(await podeGerenciarUsuarios(request))) {
       return reply.code(403).send({
         error: 'forbidden',
         message: 'Apenas o admin edita usuários e contas de estação',
@@ -170,6 +209,13 @@ export async function pessoasRoutes(app: FastifyInstance) {
     const atual = await prisma.pessoa.findUnique({ where: { id: params.data.id } });
     if (!atual) {
       return reply.code(404).send({ error: 'not_found', message: 'Usuário não encontrado' });
+    }
+
+    if (!ehAdmin(request) && (atual.papel === 'admin' || parsed.data.papel === 'admin' || parsed.data.acessos !== undefined)) {
+      return reply.code(403).send({
+        error: 'forbidden',
+        message: 'Somente o administrador edita administradores e define acessos',
+      });
     }
 
     const papelFinal = parsed.data.papel ?? atual.papel;
@@ -202,11 +248,15 @@ export async function pessoasRoutes(app: FastifyInstance) {
         ...(parsed.data.ativo !== undefined ? { ativo: parsed.data.ativo } : {}),
         // PIN em branco = mantém o atual. Trocar senha é ação deliberada.
         ...(parsed.data.pin ? { pinHash: await bcrypt.hash(parsed.data.pin, 10) } : {}),
+        // Mudou para um papel sem acesso configurável: volta ao padrão
+        ...(parsed.data.acessos === undefined && parsed.data.papel && !PAPEIS_ACESSO_CONFIGURAVEL.includes(papelFinal as PapelShared)
+          ? { acessos: [], acessosPersonalizados: false }
+          : dadosAcessos(papelFinal, parsed.data.acessos)),
       },
       select: SELECT_PESSOA,
     });
 
-    return { data: pessoa };
+    return { data: publica(pessoa) };
   });
 
   // ---------------- DESATIVAR OU EXCLUIR ----------------
@@ -255,7 +305,7 @@ export async function pessoasRoutes(app: FastifyInstance) {
           select: SELECT_PESSOA,
         });
         return reply.code(200).send({
-          data: pessoa,
+          data: publica(pessoa),
           message: 'Usuário possui histórico de produção vinculado e foi desativado para preservar os registros.',
         });
       }
@@ -267,7 +317,7 @@ export async function pessoasRoutes(app: FastifyInstance) {
       select: SELECT_PESSOA,
     });
 
-    return { data: pessoa };
+    return { data: publica(pessoa) };
   });
 }
 

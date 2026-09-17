@@ -4,7 +4,8 @@
 
 import { useEffect, useState, useMemo, type FormEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { PAPEL_LABEL, type Papel } from '@forja/shared';
+import { PAPEL_LABEL, PAPEIS_ACESSO_CONFIGURAVEL, type ModuloAcesso, type Papel } from '@forja/shared';
+import { SeletorAcessos } from '../components/SeletorAcessos';
 import {
   usePessoasList,
   useCriarPessoa,
@@ -281,6 +282,11 @@ export default function PessoasPage() {
                           >
                             {PAPEL_LABEL[p.papel]}
                           </span>
+                          {p.acessos && (
+                            <span className="block text-[10px] uppercase tracking-wide text-amber-400 mt-1" title="Acessos definidos pelo administrador">
+                              acessos personalizados
+                            </span>
+                          )}
                         </td>
 
                         {/* Estação Pertencente */}
@@ -398,7 +404,9 @@ function PessoaModal({ pessoa, onClose }: { pessoa: Pessoa | null; onClose: () =
   const [papel, setPapel] = useState<Papel>('estacao');
   const [etapaId, setEtapaId] = useState('');
   const [ativo, setAtivo] = useState(true);
+  const [acessos, setAcessos] = useState<ModuloAcesso[] | null>(null);
   const [erro, setErro] = useState<string | null>(null);
+  const souAdmin = useAuth((s) => s.pessoa?.papel === 'admin');
 
   useEffect(() => {
     setNome(pessoa?.nome ?? '');
@@ -407,8 +415,11 @@ function PessoaModal({ pessoa, onClose }: { pessoa: Pessoa | null; onClose: () =
     setPapel(pessoa?.papel ?? 'estacao');
     setEtapaId(pessoa?.etapaId ?? '');
     setAtivo(pessoa?.ativo ?? true);
+    setAcessos(pessoa?.acessos ?? null);
     setErro(null);
   }, [pessoa]);
+
+  const acessoConfiguravel = souAdmin && PAPEIS_ACESSO_CONFIGURAVEL.includes(papel);
 
   const pedeEstacao = ACEITA_ESTACAO.includes(papel);
   const loading = criar.isPending || atualizar.isPending;
@@ -478,6 +489,7 @@ function PessoaModal({ pessoa, onClose }: { pessoa: Pessoa | null; onClose: () =
             etapaId: pedeEstacao ? etapaId || null : null,
             ativo,
             ...(pinFormatado ? { pin: pinFormatado } : {}),
+            ...(souAdmin ? { acessos: acessoConfiguravel ? acessos : null } : {}),
           },
         });
         toast.sucesso('Usuário atualizado com sucesso!');
@@ -489,6 +501,7 @@ function PessoaModal({ pessoa, onClose }: { pessoa: Pessoa | null; onClose: () =
           papel,
           etapaId: pedeEstacao ? etapaId || null : null,
           ativo,
+          ...(acessoConfiguravel && acessos ? { acessos } : {}),
         });
         toast.sucesso('Novo usuário cadastrado com sucesso!');
       }
@@ -560,7 +573,11 @@ function PessoaModal({ pessoa, onClose }: { pessoa: Pessoa | null; onClose: () =
           <label className="label">Função / Onde Pertence *</label>
           <select
             value={papel}
-            onChange={(e) => setPapel(e.target.value as Papel)}
+            onChange={(e) => {
+              setPapel(e.target.value as Papel);
+              // Acessos personalizados valem para o papel escolhido: ao trocar, volta ao padrão
+              setAcessos(null);
+            }}
             className="input"
           >
             {OPCOES_PAPEL.map((op) => (
@@ -573,6 +590,11 @@ function PessoaModal({ pessoa, onClose }: { pessoa: Pessoa | null; onClose: () =
             {OPCOES_PAPEL.find((o) => o.papel === papel)?.descricao}
           </p>
         </div>
+
+        {/* Acessos por usuário (área administrativa) */}
+        {acessoConfiguravel && (
+          <SeletorAcessos papel={papel} valor={acessos} onChange={setAcessos} claro={claro} />
+        )}
 
         {/* Estação Pertencente */}
         {pedeEstacao && (

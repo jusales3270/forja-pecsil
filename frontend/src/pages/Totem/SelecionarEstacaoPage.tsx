@@ -62,7 +62,7 @@ export function SelecionarEstacaoPage() {
   return (
     <div className="min-h-screen bg-neutral-950 text-neutral-100">
       <div className="max-w-3xl mx-auto px-6 py-12">
-        {temCapacidade(pessoa?.papel as Papel | undefined, 'backoffice_acessar') && (
+        {temCapacidade(pessoa, 'backoffice_acessar') && (
           <button
             onClick={() => navigate('/')}
             className="text-sm text-neutral-400 hover:text-neutral-100 transition-colors mb-3 flex items-center gap-1"

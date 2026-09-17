@@ -10,7 +10,7 @@ export function HomePage() {
   const { claro } = useTheme();
   const navigate = useNavigate();
   const papel = pessoa?.papel as Papel | undefined;
-  const pode = (cap: Parameters<typeof temCapacidade>[1]) => temCapacidade(papel, cap);
+  const pode = (cap: Parameters<typeof temCapacidade>[1]) => temCapacidade(pessoa, cap);
 
   // Classes por tema
   const T = claro
@@ -76,7 +76,7 @@ export function HomePage() {
         </div>
 
         {/* Cadastros — base do roteiro de produção (1. o que existe antes de qualquer OS) */}
-        {(pode('cadastros_tipos_servico') || pode('cadastros_motivos_parada') || pode('cadastros_artigos') || pode('cadastros_pessoas')) && (
+        {(pode('cadastros_tipos_servico') || pode('cadastros_motivos_parada') || pode('cadastros_tolerancias') || pode('cadastros_artigos') || pode('cadastros_estacoes') || pode('cadastros_pessoas')) && (
         <div className="card">
           <h3 className={`text-lg font-semibold mb-1 ${T.cardTexto}`}>Cadastros</h3>
           <p className={`text-xs mb-4 ${T.cardSub}`}>Base do roteiro de produção — mantida à parte, não é uma etapa do fluxo</p>
@@ -116,7 +116,18 @@ export function HomePage() {
               </p>
             </button>
             )}
-            {pode('admin_configurar_sistema') && (
+            {pode('cadastros_tolerancias') && (
+            <button
+              onClick={() => navigate('/tolerancias')}
+              className={`text-left p-4 rounded-lg border transition-colors ${T.itemBorder}`}
+            >
+              <p className={`font-medium ${T.itemTexto}`}>Tolerâncias Gerais</p>
+              <p className={`text-xs mt-1 ${T.itemSub}`}>
+                Tolerâncias padrão por cliente usadas nos planos de inspeção
+              </p>
+            </button>
+            )}
+            {pode('cadastros_estacoes') && (
             <button
               onClick={() => navigate('/estacoes')}
               className={`text-left p-4 rounded-lg border transition-colors ${T.itemBorder}`}

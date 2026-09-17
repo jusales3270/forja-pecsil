@@ -206,6 +206,10 @@ model Pessoa {
   /// comportamento é o de sempre (papel manda sozinho).
   etapaId       String?  @map("etapa_id")
   ativo         Boolean  @default(true)
+  /// Módulos liberados pelo admin (área administrativa). Só vale quando
+  /// acessosPersonalizados = true; senão manda o padrão do papel.
+  acessos                String[] @default([])
+  acessosPersonalizados  Boolean  @default(false) @map("acessos_personalizados")
   criadoEm      DateTime @default(now()) @map("criado_em")
   atualizadoEm  DateTime @updatedAt @map("atualizado_em")
 

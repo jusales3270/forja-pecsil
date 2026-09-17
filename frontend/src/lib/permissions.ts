@@ -4,6 +4,8 @@
 // Backend tem sua própria validação (ver auth checks nas rotas).
 // ============================================================
 
+import { modulosDaPessoa, PAPEIS_ACESSO_CONFIGURAVEL, type ModuloAcesso } from '@forja/shared';
+
 export type Papel =
   | 'admin'
   | 'chefe'
@@ -28,6 +30,7 @@ export type Capacidade =
   | 'cadastros_tolerancias'
   | 'cadastros_artigos'
   | 'cadastros_clientes'
+  | 'cadastros_estacoes'
   // OS
   | 'os_listar'
   | 'os_criar'
@@ -56,6 +59,7 @@ export type Capacidade =
 const MAPA: Record<Papel, Capacidade[]> = {
   admin: [
     'backoffice_acessar',
+    'cadastros_estacoes',
     'cadastros_tipos_servico',
     'cadastros_motivos_parada',
     'cadastros_tolerancias',
@@ -154,19 +158,51 @@ const MAPA: Record<Papel, Capacidade[]> = {
 // API pública
 // ============================================================
 
-export function temCapacidade(
-  papel: Papel | undefined | null,
-  capacidade: Capacidade,
-): boolean {
-  if (!papel) return false;
-  return MAPA[papel]?.includes(capacidade) ?? false;
+// ============================================================
+// Acessos por usuário (área administrativa)
+// ============================================================
+// O admin libera ou retira módulos de cada pessoa (PessoasPage). Cada módulo
+// corresponde a um conjunto de capacidades; o que não é módulo continua
+// decidido só pelo papel (ex.: excluir dados, inspeção).
+
+const CAPACIDADES_DO_MODULO: Record<ModuloAcesso, Capacidade[]> = {
+  tipos_servico: ['cadastros_tipos_servico'],
+  motivos_parada: ['cadastros_motivos_parada'],
+  tolerancias: ['cadastros_tolerancias'],
+  artigos: ['cadastros_artigos', 'cadastros_clientes'],
+  estacoes: ['cadastros_estacoes'],
+  usuarios: ['cadastros_pessoas'],
+  ordens_servico: ['os_listar', 'os_criar', 'os_editar'],
+  totem: ['totem_acessar', 'totem_iniciar_op', 'totem_encerrar_op'],
+  painel_producao: ['dashboard_chefe'],
+  lotes_fantasmas: ['fantasmas_ver'],
+};
+const CAPACIDADES_DE_MODULO = new Set(Object.values(CAPACIDADES_DO_MODULO).flat());
+
+/** Papel sozinho (padrão) ou a pessoa logada, com os acessos personalizados. */
+export type SujeitoPermissao =
+  | Papel
+  | { papel?: Papel | string | null; acessos?: readonly string[] | null }
+  | undefined
+  | null;
+
+export function capacidadesDe(sujeito: SujeitoPermissao): Set<Capacidade> {
+  const pessoa = typeof sujeito === 'string' ? { papel: sujeito } : sujeito;
+  const papel = pessoa?.papel as Papel | undefined;
+  if (!papel) return new Set();
+  const doPapel = MAPA[papel] ?? [];
+  if (!pessoa?.acessos || !PAPEIS_ACESSO_CONFIGURAVEL.includes(papel)) return new Set(doPapel);
+  const liberadas = modulosDaPessoa({ papel, acessos: pessoa.acessos }).flatMap((m) => CAPACIDADES_DO_MODULO[m]);
+  return new Set([...doPapel.filter((c) => !CAPACIDADES_DE_MODULO.has(c)), ...liberadas]);
 }
 
-export function temAlgumaCapacidade(
-  papel: Papel | undefined | null,
-  capacidades: Capacidade[],
-): boolean {
-  return capacidades.some((c) => temCapacidade(papel, c));
+export function temCapacidade(sujeito: SujeitoPermissao, capacidade: Capacidade): boolean {
+  return capacidadesDe(sujeito).has(capacidade);
+}
+
+export function temAlgumaCapacidade(sujeito: SujeitoPermissao, capacidades: Capacidade[]): boolean {
+  const caps = capacidadesDe(sujeito);
+  return capacidades.some((c) => caps.has(c));
 }
 
 /**
@@ -174,10 +210,10 @@ export function temAlgumaCapacidade(
  * Papéis "de chão de fábrica" vão direto pro tótem;
  * papéis de gestão vão pra HomePage.
  */
-export function rotaInicialPorPapel(papel: Papel | undefined | null): string {
-  if (!papel) return '/login';
-  if (temCapacidade(papel, 'backoffice_acessar')) return '/';
-  if (temCapacidade(papel, 'totem_acessar')) return '/totem';
+export function rotaInicialPorPapel(sujeito: SujeitoPermissao): string {
+  if (!sujeito || (typeof sujeito === 'object' && !sujeito.papel)) return '/login';
+  if (temCapacidade(sujeito, 'backoffice_acessar')) return '/';
+  if (temCapacidade(sujeito, 'totem_acessar')) return '/totem';
   return '/';
 }
 

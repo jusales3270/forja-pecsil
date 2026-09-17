@@ -10,6 +10,8 @@ interface AuthState {
   login: (codigoPessoal: string, pin: string) => Promise<void>;
   logout: () => void;
   updatePerfil: (dados: { nome?: string; codigoPessoal?: string; pin?: string }) => Promise<void>;
+  /** Recarrega a conta (papel, estação e acessos) sem novo login. */
+  sincronizar: () => Promise<void>;
 }
 
 export const useAuth = create<AuthState>()(
@@ -55,6 +57,15 @@ export const useAuth = create<AuthState>()(
           token,
           pessoa,
         });
+      },
+
+      sincronizar: async () => {
+        const token = localStorage.getItem('forja_token');
+        if (!token) return;
+        const res = await api.get('/auth/me', { headers: { Authorization: `Bearer ${token}` } });
+        // Resposta de uma sessão anterior não sobrescreve a conta atual
+        if (localStorage.getItem('forja_token') !== token) return;
+        set({ pessoa: res.data.data });
       },
     }),
     {
