@@ -22,6 +22,7 @@ import { DadosBasicosTab } from './tabs/DadosBasicosTab';
 import { DesenhosTab } from './tabs/DesenhosTab';
 import { OperacoesTab } from './tabs/OperacoesTab';
 import { PlanoInspecaoTab } from './tabs/PlanoInspecaoTab';
+import { temCapacidade } from '../../lib/permissions';
 
 type AbaAtiva = 'dados' | 'desenhos' | 'operacoes' | 'plano';
 
@@ -48,7 +49,7 @@ export function ArtigoEditPage() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const pessoa = useAuth((s) => s.pessoa);
-  const ehAdmin = pessoa?.papel === 'admin';
+  const ehAdmin = temCapacidade(pessoa, 'excluir_dados');
 
   const [aba, setAba] = useState<AbaAtiva>('dados');
   const [erroStatus, setErroStatus] = useState<string | null>(null);

@@ -18,6 +18,7 @@ import { useTheme } from '../../lib/theme-store';
 import { DadosOSTab } from './tabs/DadosOSTab';
 import { LotesOpsTab } from './tabs/LotesOpsTab';
 import { TimelineTab } from './tabs/TimelineTab';
+import { temCapacidade } from '../../lib/permissions';
 
 type Aba = 'dados' | 'lotes' | 'timeline';
 
@@ -124,7 +125,7 @@ function OSDetailContent() {
   }
 
   const podeEditar = os.status !== 'finalizada' && os.status !== 'cancelada';
-  const podeCancelar = pessoa?.papel === 'admin';
+  const podeCancelar = temCapacidade(pessoa, 'excluir_dados');
 
   const statusCor = CORES_STATUS_OS[os.status] ?? 'bg-neutral-500/15 text-neutral-400 border-neutral-500/30';
   const statusLabel = (LABELS_STATUS_OS as Record<string, string>)[os.status] ?? os.status ?? '—';

@@ -18,11 +18,12 @@ import {
 import { useEtapasList } from '../hooks/useEtapas';
 import { useAuth } from '../lib/auth-store';
 import { toast } from '../components/Toast';
+import { temCapacidade } from '../lib/permissions';
 
 export function TiposServicoPage() {
   const { claro } = useTheme();
   const pessoa = useAuth((s) => s.pessoa);
-  const ehAdmin = pessoa?.papel === 'admin';
+  const ehAdmin = temCapacidade(pessoa, 'excluir_dados');
   const [busca, setBusca] = useState('');
   const [editando, setEditando] = useState<TipoServico | null>(null);
   const [criando, setCriando] = useState(false);

@@ -345,7 +345,7 @@ export async function cotasInspecaoRoutes(app: FastifyInstance) {
   // ---------------- DELETAR ----------------
   app.delete(
     '/artigos/:artigoId/operacoes/:opId/plano/cotas/:cotaId',
-    { onRequest: [app.requireAdmin] },
+    { onRequest: [app.requireExcluir] },
     async (request, reply) => {
       const { artigoId, opId, cotaId } = request.params as {
         artigoId: string;

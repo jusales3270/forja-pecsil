@@ -111,6 +111,8 @@ const MAPA: Record<Papel, Capacidade[]> = {
     'totem_iniciar_op',
     'totem_encerrar_op',
     'fantasmas_ver',
+    // Exclui dados como o admin (usuários continuam só com o admin)
+    'excluir_dados',
   ],
 
   engenharia: [

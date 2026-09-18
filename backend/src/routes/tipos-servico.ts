@@ -359,7 +359,7 @@ export async function tiposServicoRoutes(app: FastifyInstance) {
   // ---------------- DESATIVAR (soft delete) ----------------
   app.delete(
     '/tipos-servico/:id',
-    { onRequest: [app.requireAdmin] },
+    { onRequest: [app.requireExcluir] },
     async (request, reply) => {
       const paramsSchema = z.object({ id: z.string().uuid() });
       const parsed = paramsSchema.safeParse(request.params);

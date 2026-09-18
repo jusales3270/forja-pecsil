@@ -23,6 +23,7 @@ import {
 } from '../../../hooks/useCotasInspecao';
 import { CotaInspecaoModal } from './CotaInspecaoModal';
 import { useAuth } from '../../../lib/auth-store';
+import { temCapacidade } from '../../../lib/permissions';
 
 interface PlanoInspecaoTabProps {
   artigoId: string;
@@ -30,7 +31,7 @@ interface PlanoInspecaoTabProps {
 
 export function PlanoInspecaoTab({ artigoId }: PlanoInspecaoTabProps) {
   const pessoa = useAuth((s) => s.pessoa);
-  const ehAdmin = pessoa?.papel === 'admin';
+  const ehAdmin = temCapacidade(pessoa, 'excluir_dados');
 
   const { data: operacoes, isLoading: opsLoading } =
     useOperacoesArtigoList(artigoId);
@@ -122,7 +123,7 @@ interface PlanoDeOperacaoProps {
 
 function PlanoDeOperacao({ artigoId, opId, opLabel }: PlanoDeOperacaoProps) {
   const pessoa = useAuth((s) => s.pessoa);
-  const ehAdmin = pessoa?.papel === 'admin';
+  const ehAdmin = temCapacidade(pessoa, 'excluir_dados');
 
   const { data: plano, isLoading: planoLoading } = usePlanoInspecao(
     artigoId,

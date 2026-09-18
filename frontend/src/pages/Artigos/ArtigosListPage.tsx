@@ -18,6 +18,7 @@ import {
   type Artigo,
   type TipoProduto,
 } from '../../hooks/useArtigos';
+import { temCapacidade } from '../../lib/permissions';
 
 const TIPOS_PRODUTO: { value: TipoProduto; label: string }[] = [
   { value: 'arruela', label: 'Arruela' },
@@ -54,7 +55,7 @@ const LABELS_STATUS: Record<string, string> = {
 export function ArtigosListPage() {
   const navigate = useNavigate();
   const pessoa = useAuth((s) => s.pessoa);
-  const ehAdmin = pessoa?.papel === 'admin';
+  const ehAdmin = temCapacidade(pessoa, 'excluir_dados');
 
   const [busca, setBusca] = useState('');
   const [clienteFiltro, setClienteFiltro] = useState('');

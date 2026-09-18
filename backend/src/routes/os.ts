@@ -571,7 +571,7 @@ export async function osRoutes(app: FastifyInstance) {
   // ---------------- CANCELAR (soft) / EXCLUIR (force) ----------------
   app.delete(
     '/os/:id',
-    { onRequest: [app.requireAdmin] },
+    { onRequest: [app.requireExcluir] },
     async (request, reply) => {
       const paramsSchema = z.object({ id: z.string().uuid() });
       const querySchema = z.object({ force: z.string().optional() });

@@ -11,6 +11,7 @@ import {
 } from '../../../hooks/useDesenhos';
 import { DesenhoModal } from './DesenhoModal';
 import { useAuth } from '../../../lib/auth-store';
+import { temCapacidade } from '../../../lib/permissions';
 
 interface DesenhosTabProps {
   artigoId: string;
@@ -23,7 +24,7 @@ interface DesenhosTabProps {
 
 export function DesenhosTab({ artigoId, artigo }: DesenhosTabProps) {
   const pessoa = useAuth((s) => s.pessoa);
-  const ehAdmin = pessoa?.papel === 'admin';
+  const ehAdmin = temCapacidade(pessoa, 'excluir_dados');
 
   const { data: desenhos, isLoading, isError } = useDesenhosList(artigoId);
   const deleteMut = useDeleteDesenho(artigoId);

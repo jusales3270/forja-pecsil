@@ -20,6 +20,7 @@ import {
 import { AplicarRoteiroModal } from './AplicarRoteiroModal';
 import { useTheme } from '../../../lib/theme-store';
 import { useAuth } from '../../../lib/auth-store';
+import { temCapacidade } from '../../../lib/permissions';
 
 interface OperacoesTabProps {
   artigoId: string;
@@ -28,7 +29,7 @@ interface OperacoesTabProps {
 export function OperacoesTab({ artigoId }: OperacoesTabProps) {
   const { claro } = useTheme();
   const pessoa = useAuth((s) => s.pessoa);
-  const ehAdmin = pessoa?.papel === 'admin';
+  const ehAdmin = temCapacidade(pessoa, 'excluir_dados');
 
   const { data: operacoes, isLoading, isError } =
     useOperacoesArtigoList(artigoId);
