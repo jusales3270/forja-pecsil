@@ -598,17 +598,6 @@ export async function opLoteRoutes(app: FastifyInstance) {
         });
       }
 
-      // Verifica se a máquina já tem outro processamento rodando
-      const ocupada = await prisma.processamentoMaquina.findFirst({
-        where: { maquinaId, status: 'rodando' },
-      });
-      if (ocupada) {
-        return reply.code(409).send({
-          error: 'maquina_ocupada',
-          message: 'Máquina já está rodando outra OP. Encerre antes de iniciar nova.',
-        });
-      }
-
       // Valida operador: existe, ativo
       const operador = await prisma.pessoa.findUnique({
         where: { id: operadorId },

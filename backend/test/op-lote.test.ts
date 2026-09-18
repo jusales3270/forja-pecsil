@@ -330,7 +330,7 @@ describe('POST /op-lote/:id/iniciar', () => {
     assert.equal(proc!.status, 'rodando');
   });
 
-  test('máquina ocupada retorna 409', async () => {
+  test('máquina permite iniciar múltiplas OPs em conjunto', async () => {
     const maquinaId = await criarMaquinaDedicada();
     const { opLoteIds: ops1 } = await criarOSDeTeste(2);
     const { opLoteIds: ops2 } = await criarOSDeTeste(2);
@@ -349,8 +349,7 @@ describe('POST /op-lote/:id/iniciar', () => {
       headers: { authorization: `Bearer ${tokenProgramador}` },
       payload: { maquinaId, operadorId },
     });
-    assert.equal(r2.statusCode, 409);
-    assert.equal(r2.json().error, 'maquina_ocupada');
+    assert.equal(r2.statusCode, 201);
   });
 
   test('máquina de outra etapa retorna 400', async () => {
