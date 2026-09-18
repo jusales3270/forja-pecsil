@@ -35,10 +35,12 @@ import { IniciarOPModal } from './IniciarOPModal';
 import { EncerrarOPModal } from './EncerrarOPModal';
 import { PausarOPModal } from './PausarOPModal';
 import { DetalhesOPModal } from './DetalhesOPModal';
+import { OSsFaseModal } from './OSsFaseModal';
 import { PainelAvisos } from '../../components/PainelAvisos';
 import { VisualizadorDesenhoModal } from '../../components/VisualizadorDesenhoModal';
 import { UserHeaderWidget } from '../../components/UserHeaderWidget';
 import type { Desenho } from '../../hooks/useDesenhos';
+import type { FasePipeline, CardPipeline } from '../../hooks/usePipelineEtapa';
 
 export function TotemEstacaoPage() {
   const navigate = useNavigate();
@@ -79,6 +81,7 @@ export function TotemEstacaoPage() {
   const [opEncerrar, setOpEncerrar] = useState<OPLoteEmAndamento | null>(null);
   const [opPausar, setOpPausar] = useState<OPLoteEmAndamento | null>(null);
   const [opDetalhes, setOpDetalhes] = useState<OPLotePendente | OPLoteEmAndamento | null>(null);
+  const [faseModal, setFaseModal] = useState<FasePipeline | null>(null);
   const [modalDesenhos, setModalDesenhos] = useState<{
     artigo: { id: string; codigo: string; descricao?: string };
     desenhos: Desenho[];
@@ -272,6 +275,7 @@ export function TotemEstacaoPage() {
             variante="interativa"
             faseSelecionada={faseSelecionada}
             onSelecionarFase={setFaseSelecionada}
+            onVerOSsFase={setFaseModal}
           />
         )}
 
@@ -398,6 +402,22 @@ export function TotemEstacaoPage() {
           onAbrirDesenhos={(artigo, desenhos) =>
             setModalDesenhos({ artigo, desenhos })
           }
+        />
+      )}
+      {faseModal && (
+        <OSsFaseModal
+          fase={faseModal}
+          onClose={() => setFaseModal(null)}
+          onSelecionarOS={(card: CardPipeline) => {
+            // Procura a OP correspondente nas listas de pendentes e em andamento
+            const op =
+              pendentesTodos.find((p) => p.id === card.opLoteId) ??
+              emAndamentoTodos.find((a) => a.id === card.opLoteId);
+            if (op) {
+              setFaseModal(null);
+              setOpDetalhes(op);
+            }
+          }}
         />
       )}
       {modalDesenhos && (

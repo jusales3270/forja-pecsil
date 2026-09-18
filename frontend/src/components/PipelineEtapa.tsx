@@ -20,6 +20,8 @@ interface Props {
   /** Fase selecionada (só na variante interativa). */
   faseSelecionada?: string | null;
   onSelecionarFase?: (tipoServicoId: string | null) => void;
+  /** Callback ao clicar na lista de OSs de uma fase (abre popup). */
+  onVerOSsFase?: (fase: FasePipeline) => void;
   /** Painel do chefe alterna tema; o tótem é sempre escuro. */
   claro?: boolean;
 }
@@ -61,6 +63,7 @@ export function PipelineEtapa({
   variante = 'interativa',
   faseSelecionada = null,
   onSelecionarFase,
+  onVerOSsFase,
   claro = false,
 }: Props) {
   if (!pipeline.temFases) return null;
@@ -107,6 +110,7 @@ export function PipelineEtapa({
                   faseSelecionada === fase.tipoServicoId ? null : fase.tipoServicoId,
                 )
               }
+              onVerOSs={interativa && onVerOSsFase ? () => onVerOSsFase(fase) : undefined}
             />
             {i < pipeline.fases.length - 1 && (
               <div className={`flex items-center ${T.seta} text-sm select-none px-0.5`}>→</div>
@@ -132,6 +136,7 @@ function CaixaFase({
   interativa,
   selecionada,
   onClick,
+  onVerOSs,
 }: {
   fase: FasePipeline;
   T: ReturnType<typeof classes>;
@@ -139,6 +144,7 @@ function CaixaFase({
   interativa: boolean;
   selecionada: boolean;
   onClick: () => void;
+  onVerOSs?: () => void;
 }) {
   const vazia = fase.total === 0;
   // Só o que já rodou tem tempo: a mais antiga em processo mostra há quanto
@@ -205,7 +211,10 @@ function CaixaFase({
       ) : null}
 
       {fase.cards.length > 0 && (
-        <div className={`mt-2 pt-2 border-t ${T.divisor}`}>
+        <div
+          className={`mt-2 pt-2 border-t ${T.divisor} ${onVerOSs ? 'cursor-pointer hover:bg-white/5 -mx-1 px-1 rounded transition-colors' : ''}`}
+          onClick={onVerOSs ? (e) => { e.stopPropagation(); onVerOSs(); } : undefined}
+        >
           <div
             className="space-y-0.5 overflow-y-auto pr-0.5"
             style={{ maxHeight: '60px' }}
@@ -232,6 +241,9 @@ function CaixaFase({
               </div>
             ))}
           </div>
+          {onVerOSs && (
+            <div className={`text-[9px] mt-1 text-center ${T.sub} opacity-60`}>toque para ver todas</div>
+          )}
         </div>
       )}
 
