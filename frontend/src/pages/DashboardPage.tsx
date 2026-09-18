@@ -5,7 +5,11 @@ import { TrilhaRoteiro } from '../components/TrilhaRoteiro';
 import { useTheme } from '../lib/theme-store';
 import { Modal } from '../components/Modal';
 import { PipelineEtapa } from '../components/PipelineEtapa';
+import { DetalhesOPModal } from './Totem/DetalhesOPModal';
 import { OSsFaseModal } from './Totem/OSsFaseModal';
+import { VisualizadorDesenhoModal } from '../components/VisualizadorDesenhoModal';
+import { useOPLoteDetail } from '../hooks/useOPLote';
+import type { Desenho } from '../hooks/useDesenhos';
 import { DashboardCharts, TIPOS_PECA, numero } from './dashboard/DashboardCharts';
 import type { FasePipeline } from '../hooks/usePipelineEtapa';
 import './dashboard/dashboard.css';
@@ -43,16 +47,18 @@ export default function DashboardPage() {
   const [buscaRoteiro, setBuscaRoteiro] = useState('');
   const [selecao, setSelecao] = useState<Selecao | null>(null);
   const [faseModal, setFaseModal] = useState<FasePipeline | null>(null);
+  const [modalDesenhos, setModalDesenhos] = useState<{
+    artigo: { id: string; codigo: string; descricao?: string };
+    desenhos: Desenho[];
+  } | null>(null);
   const { data, isLoading, isError, isFetching, refetch } = useDashboard({ clienteId: clienteId || undefined, tipoProduto: tipoProduto || undefined, dias });
   const d = data?.data;
   const kanban = useMemo(() => d?.kanban.map(et => ({ ...et, cards: et.cards.filter(c => cardBate(c, busca, et.nome)) })) ?? [], [d, busca]);
   const abrirLista = (titulo: string, ids: string[]) => setSelecao({ tipo: 'lista', titulo, ids });
   const todasOS = useMemo(() => new Map(Object.values(d?.osPorStatusLista ?? {}).flat().map(os => [os.id, os])), [d]);
   const roteiros = useMemo(() => d?.roteiros.filter(r => roteiroBate(r, buscaRoteiro)) ?? [], [d, buscaRoteiro]);
-  const op = selecao?.tipo === 'op' ? d?.kanban.flatMap(e => e.cards).find(c => c.opLoteId === selecao.id) : null;
-  const loteDaOp = op ? d?.roteiros.flatMap(r => r.lotes).find(l => l.passos.some(p => p.opLoteId === op.opLoteId)) : null;
   const h = d?.indicadores.historico;
-  const tituloModal = selecao?.tipo === 'externos' ? 'OS em envio externo' : selecao?.tipo === 'lista' ? selecao.titulo : op?.codigoGrv ?? 'Operação';
+  const tituloModal = selecao?.tipo === 'externos' ? 'OS em envio externo' : selecao?.tipo === 'lista' ? selecao.titulo : '';
 
   return <main className="dash-page" data-theme={claro ? 'light' : 'dark'}>
     <header className="flex flex-wrap justify-between items-start gap-4">
@@ -134,7 +140,7 @@ export default function DashboardPage() {
         <Operacional d={d} claro={claro} onAbrir={abrirLista} onVerOSsFase={setFaseModal} onAbrirOP={(opLoteId) => setSelecao({ tipo: 'op', id: opLoteId })} />
       </details>
     </>}
-    {selecao && d && <Modal open title={tituloModal} size="xl" onClose={() => setSelecao(null)}>
+    {selecao && selecao.tipo !== 'op' && d && <Modal open title={tituloModal} size="xl" onClose={() => setSelecao(null)}>
       <div className="dash-dialog">
         {selecao.tipo === 'externos' && <>
           <p className="dash-muted text-sm mb-4">{d.totalOSExternas} OS · {d.enviosExternos.length} lotes aguardando retorno. A confirmação de recebimento é feita na Metalização.</p>
@@ -161,14 +167,17 @@ export default function DashboardPage() {
             })}</tbody></table></div>
           {!selecao.ids.length && <p className="dash-empty">Nenhuma OS neste recorte.</p>}
         </>}
-        {selecao.tipo === 'op' && (op ? <dl className="grid grid-cols-2 gap-5 text-sm">
-          <Dado nome="Cliente" valor={op.cliente} /><Dado nome="Artigo" valor={op.artigo} /><Dado nome="OP / lote" valor={`${op.codigoOp} / ${op.numeroLote}`} /><Dado nome="Situação" valor={op.externo ? 'Envio externo — aguardando retorno' : STATUS[op.status] ?? op.status} />
-          <Dado nome="Quantidade" valor={`${op.quantidade} peças`} /><Dado nome="Prazo" valor={prazoTexto(op.diasAtePrazo)} />
-          <Dado nome="Máquina" valor={op.maquina ?? '—'} /><Dado nome="Operador" valor={op.operador ?? '—'} /><Dado nome="Programador" valor={op.programador ?? '—'} />{op.externo && <Dado nome="Fornecedor" valor={op.fornecedor ?? 'Não informado'} />}
-          {loteDaOp && <div className="col-span-2"><dt className="dash-muted mb-2">Roteiro do lote</dt><dd><TrilhaRoteiro passos={loteDaOp.passos} quantidadePecas={loteDaOp.quantidadePecas} /></dd></div>}
-        </dl> : <p>Esta OP saiu da fila. O painel foi atualizado.</p>)}
       </div>
     </Modal>}
+    {selecao?.tipo === 'op' && (
+      <DetalhesOPDashboardModal
+        opLoteId={selecao.id}
+        onClose={() => setSelecao(null)}
+        onAbrirDesenhos={(artigo, desenhos) =>
+          setModalDesenhos({ artigo, desenhos })
+        }
+      />
+    )}
     {faseModal && (
       <OSsFaseModal
         fase={faseModal}
@@ -177,6 +186,14 @@ export default function DashboardPage() {
           setFaseModal(null);
           setSelecao({ tipo: 'op', id: card.opLoteId });
         }}
+      />
+    )}
+    {modalDesenhos && (
+      <VisualizadorDesenhoModal
+        open
+        artigo={modalDesenhos.artigo}
+        desenhos={modalDesenhos.desenhos}
+        onClose={() => setModalDesenhos(null)}
       />
     )}
   </main>;
@@ -201,3 +218,55 @@ function Operacional({ d, claro, onAbrir, onVerOSsFase, onAbrirOP }: { d: Dashbo
     <div className="flex flex-wrap gap-5 text-sm"><span>Inspeções aprovadas: <strong>{d.inspecao.aprovado ?? 0}</strong></span><span>Com observações: <strong>{d.inspecao.com_observacoes ?? 0}</strong></span><span>Reprovadas: <strong>{d.inspecao.reprovado ?? 0}</strong></span><button className="underline" onClick={() => onAbrir('OS canceladas', (d.osPorStatusLista.cancelada ?? []).map(o => o.id))}>OS canceladas: {d.osPorStatus.cancelada ?? 0}</button></div>
   </div>;
 }
+
+function DetalhesOPDashboardModal({
+  opLoteId,
+  onClose,
+  onAbrirDesenhos,
+}: {
+  opLoteId: string;
+  onClose: () => void;
+  onAbrirDesenhos?: (
+    artigo: { id: string; codigo: string; descricao?: string },
+    desenhos: Desenho[],
+  ) => void;
+}) {
+  const { data: op, isLoading, isError } = useOPLoteDetail(opLoteId);
+
+  if (isLoading) {
+    return (
+      <Modal open onClose={onClose} title="Detalhes da OP" size="md" forcarEscuro>
+        <div className="p-8 text-center text-neutral-400">
+          <div className="inline-block w-8 h-8 border-2 border-neutral-600 border-t-forja-500 rounded-full animate-spin mb-3" />
+          <p className="text-sm">Buscando informações da OP…</p>
+        </div>
+      </Modal>
+    );
+  }
+
+  if (isError || !op) {
+    return (
+      <Modal open onClose={onClose} title="Detalhes da OP" size="sm" forcarEscuro>
+        <div className="p-6 text-center text-neutral-400 space-y-4">
+          <p className="text-sm">Não foi possível carregar os detalhes desta OP.</p>
+          <button
+            type="button"
+            onClick={onClose}
+            className="px-4 py-2 bg-neutral-800 hover:bg-neutral-700 text-neutral-200 rounded-lg text-sm transition"
+          >
+            Fechar
+          </button>
+        </div>
+      </Modal>
+    );
+  }
+
+  return (
+    <DetalhesOPModal
+      op={op}
+      onClose={onClose}
+      onAbrirDesenhos={onAbrirDesenhos}
+    />
+  );
+}
+

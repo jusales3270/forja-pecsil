@@ -1465,7 +1465,16 @@ export async function opLoteRoutes(app: FastifyInstance) {
           .send({ error: 'not_found', message: 'OP não encontrada' });
       }
 
-      return { data: op };
+      const fluxo = await calcularFluxoDePecas([op.loteId]);
+      const pecas = fluxo.get(op.id);
+
+      return {
+        data: {
+          ...op,
+          pecasDisponiveis: pecas?.disponiveis ?? op.lote.quantidadePecas,
+          liberadasPelaAnterior: pecas?.liberadasPelaAnterior ?? op.lote.quantidadePecas,
+        },
+      };
     },
   );
 }

@@ -188,7 +188,7 @@ export function DetalhesOPModal({ op, onClose, onAbrirDesenhos }: Props) {
             <div className="text-right shrink-0">
               <span className="text-xs text-neutral-500 block">Lote {op.lote.numeroLote}</span>
               <span className="text-lg font-bold text-neutral-100">
-                {op.pecasDisponiveis} <span className="text-sm text-neutral-500">de {op.lote.quantidadePecas} pçs</span>
+                {op.pecasDisponiveis ?? op.lote.quantidadePecas} <span className="text-sm text-neutral-500">de {op.lote.quantidadePecas} pçs</span>
               </span>
             </div>
           </div>
