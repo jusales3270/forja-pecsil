@@ -441,10 +441,26 @@ describe('PATCH /os/:id', () => {
 });
 
 // ============================================================
-// DELETE /os/:id (cancelamento soft - somente admin)
+// DELETE /os/:id (cancelamento soft - admin e PCP)
 // ============================================================
 describe('DELETE /os/:id', () => {
-  test('bloqueia não-admin (PCP) com 403', async () => {
+  test('bloqueia quem não é admin nem PCP (chefe) com 403', async () => {
+    const criada = await criarOS();
+    const osId = criada.json().data.id;
+    await ensurePessoa({ codigoPessoal: 'TEST-CHEFE-OS', pin: '1234', nome: 'Chefe Teste OS', papel: 'chefe' });
+    const tokenChefe = await loginAs(app, 'TEST-CHEFE-OS', '1234');
+
+    const res = await app.inject({
+      method: 'DELETE',
+      url: `/api/os/${osId}`,
+      headers: { authorization: `Bearer ${tokenChefe}` },
+    });
+    assert.equal(res.statusCode, 403);
+    assert.equal(res.json().error, 'forbidden');
+    await prisma.pessoa.deleteMany({ where: { codigoPessoal: 'TEST-CHEFE-OS' } });
+  });
+
+  test('PCP cancela OS como o admin', async () => {
     const criada = await criarOS();
     const osId = criada.json().data.id;
 
@@ -453,8 +469,8 @@ describe('DELETE /os/:id', () => {
       url: `/api/os/${osId}`,
       headers: { authorization: `Bearer ${tokenPcp}` },
     });
-    assert.equal(res.statusCode, 403);
-    assert.equal(res.json().error, 'forbidden');
+    assert.equal(res.statusCode, 200, res.body);
+    assert.equal(res.json().data.cancelada, true);
   });
 
   test('cancela OS quando admin retorna cancelada: true', async () => {
