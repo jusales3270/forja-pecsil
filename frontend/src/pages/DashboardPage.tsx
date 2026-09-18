@@ -5,7 +5,9 @@ import { TrilhaRoteiro } from '../components/TrilhaRoteiro';
 import { useTheme } from '../lib/theme-store';
 import { Modal } from '../components/Modal';
 import { PipelineEtapa } from '../components/PipelineEtapa';
+import { OSsFaseModal } from './Totem/OSsFaseModal';
 import { DashboardCharts, TIPOS_PECA, numero } from './dashboard/DashboardCharts';
+import type { FasePipeline } from '../hooks/usePipelineEtapa';
 import './dashboard/dashboard.css';
 
 type Selecao = { tipo: 'externos' } | { tipo: 'lista'; titulo: string; ids: string[] } | { tipo: 'op'; id: string };
@@ -40,6 +42,7 @@ export default function DashboardPage() {
   const [busca, setBusca] = useState('');
   const [buscaRoteiro, setBuscaRoteiro] = useState('');
   const [selecao, setSelecao] = useState<Selecao | null>(null);
+  const [faseModal, setFaseModal] = useState<FasePipeline | null>(null);
   const { data, isLoading, isError, isFetching, refetch } = useDashboard({ clienteId: clienteId || undefined, tipoProduto: tipoProduto || undefined, dias });
   const d = data?.data;
   const kanban = useMemo(() => d?.kanban.map(et => ({ ...et, cards: et.cards.filter(c => cardBate(c, busca, et.nome)) })) ?? [], [d, busca]);
@@ -128,7 +131,7 @@ export default function DashboardPage() {
       </section>
       <details className="dash-panel">
         <summary className="cursor-pointer text-lg font-semibold">Acompanhamento operacional <span className="dash-muted text-sm font-normal ml-2">Paradas, turnos, inspeções e fases da Fundição</span></summary>
-        <Operacional d={d} claro={claro} onAbrir={abrirLista} />
+        <Operacional d={d} claro={claro} onAbrir={abrirLista} onVerOSsFase={setFaseModal} onAbrirOP={(opLoteId) => setSelecao({ tipo: 'op', id: opLoteId })} />
       </details>
     </>}
     {selecao && d && <Modal open title={tituloModal} size="xl" onClose={() => setSelecao(null)}>
@@ -166,6 +169,16 @@ export default function DashboardPage() {
         </dl> : <p>Esta OP saiu da fila. O painel foi atualizado.</p>)}
       </div>
     </Modal>}
+    {faseModal && (
+      <OSsFaseModal
+        fase={faseModal}
+        onClose={() => setFaseModal(null)}
+        onSelecionarOS={(card) => {
+          setFaseModal(null);
+          setSelecao({ tipo: 'op', id: card.opLoteId });
+        }}
+      />
+    )}
   </main>;
 }
 
@@ -176,7 +189,7 @@ function Resumo({ label, valor, detalhe, cor = 'normal', onClick }: { label: str
 }
 function Dado({ nome, valor }: { nome: string; valor: string }) { return <div><dt className="dash-muted mb-1">{nome}</dt><dd>{valor}</dd></div>; }
 
-function Operacional({ d, claro, onAbrir }: { d: DashboardData; claro: boolean; onAbrir: (titulo: string, ids: string[]) => void }) {
+function Operacional({ d, claro, onAbrir, onVerOSsFase, onAbrirOP }: { d: DashboardData; claro: boolean; onAbrir: (titulo: string, ids: string[]) => void; onVerOSsFase: (fase: FasePipeline) => void; onAbrirOP: (opLoteId: string) => void }) {
   return <div className="mt-5 space-y-4">
     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
       <section className="dash-panel"><h3 className="font-semibold">Máquinas paradas agora · {d.paradas.ativas.length}</h3><div className="max-h-48 overflow-y-auto mt-3 text-sm space-y-2">{d.paradas.ativas.map(p => <p key={p.id}>{p.maquina ?? 'Sem máquina'} · {p.codigoGrv} · {p.motivo} <strong className="text-rose-500">{p.minutosParado}min</strong></p>)}{!d.paradas.ativas.length && <p className="dash-muted">Nenhuma parada em aberto.</p>}</div></section>
@@ -184,7 +197,7 @@ function Operacional({ d, claro, onAbrir }: { d: DashboardData; claro: boolean; 
       <section className="dash-panel"><h3 className="font-semibold">Operações abertas há mais de 4h · {d.fantasmas.opsParadas.length}</h3><p className="dash-muted text-xs mt-1">Tempo de carimbo aberto; não significa máquina parada.</p><div className="max-h-48 overflow-y-auto mt-3 text-sm space-y-2">{d.fantasmas.opsParadas.map((op, i) => <p key={i}>{op.codigoGrv} · OP {op.codigoOp} · {op.etapa} · {op.horasParado}h</p>)}{!d.fantasmas.opsParadas.length && <p className="dash-muted">Nenhuma operação neste recorte.</p>}</div></section>
       <section className="dash-panel"><h3 className="font-semibold">Turnos não fechados ontem · {d.fantasmas.turnosNaoFechados.length}</h3><p className="dash-muted text-xs mt-1">Equipe completa da fábrica, independente dos filtros de OS.</p><div className="max-h-48 overflow-y-auto mt-3 text-sm">{d.fantasmas.turnosNaoFechados.map((t, i) => <p key={i}>{t.operador}</p>)}{!d.fantasmas.turnosNaoFechados.length && <p className="dash-muted">Todos fecharam.</p>}</div></section>
     </div>
-    {d.pipelines.map(p => <section key={p.etapaId} className="dash-panel overflow-hidden"><h3 className="font-semibold mb-4">{p.etapaNome} em detalhe</h3><div className="max-h-96 overflow-auto"><PipelineEtapa pipeline={p} variante="compacta" claro={claro} /></div></section>)}
+    {d.pipelines.map(p => <section key={p.etapaId} className="dash-panel overflow-hidden"><h3 className="font-semibold mb-4">{p.etapaNome} em detalhe</h3><div className="max-h-96 overflow-auto"><PipelineEtapa pipeline={p} variante="compacta" claro={claro} onVerOSsFase={onVerOSsFase} /></div></section>)}
     <div className="flex flex-wrap gap-5 text-sm"><span>Inspeções aprovadas: <strong>{d.inspecao.aprovado ?? 0}</strong></span><span>Com observações: <strong>{d.inspecao.com_observacoes ?? 0}</strong></span><span>Reprovadas: <strong>{d.inspecao.reprovado ?? 0}</strong></span><button className="underline" onClick={() => onAbrir('OS canceladas', (d.osPorStatusLista.cancelada ?? []).map(o => o.id))}>OS canceladas: {d.osPorStatus.cancelada ?? 0}</button></div>
   </div>;
 }

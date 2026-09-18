@@ -110,7 +110,7 @@ export function PipelineEtapa({
                   faseSelecionada === fase.tipoServicoId ? null : fase.tipoServicoId,
                 )
               }
-              onVerOSs={interativa && onVerOSsFase ? () => onVerOSsFase(fase) : undefined}
+              onVerOSs={onVerOSsFase ? () => onVerOSsFase(fase) : undefined}
             />
             {i < pipeline.fases.length - 1 && (
               <div className={`flex items-center ${T.seta} text-sm select-none px-0.5`}>→</div>
