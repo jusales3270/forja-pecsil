@@ -289,7 +289,13 @@ export function VisualizadorDesenhoModal({
                       : 'bg-neutral-800/80 text-neutral-300 hover:bg-neutral-700/80'
                   }`}
                 >
-                  <span>{LABELS_TIPO_DESENHO[d.tipo]}</span>
+                  {/* Vários desenhos do mesmo tipo: o código é o que diferencia as abas */}
+                  <span className="flex flex-col items-start leading-tight">
+                    <span className="font-mono">{d.codigoDesenho}</span>
+                    <span className={`text-[10px] font-normal ${ativo ? 'text-white/80' : 'text-neutral-500'}`}>
+                      {LABELS_TIPO_DESENHO[d.tipo]}
+                    </span>
+                  </span>
                   <span
                     className={`text-xs px-1.5 py-0.5 rounded font-mono ${
                       ativo ? 'bg-black/20 text-white' : 'bg-neutral-900 text-neutral-400'
