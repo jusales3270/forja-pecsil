@@ -88,28 +88,6 @@ export default function DashboardPage() {
       </div>
       <p className="dash-muted text-xs -mt-3">Envios externos e prazos detalham a mesma carteira; os quadros não devem ser somados.</p>
 
-      <section aria-label="Indicadores de produção"><DashboardCharts data={d} onAbrir={abrirLista} /></section>
-      <section className="min-w-0" aria-labelledby="roteiro-titulo">
-        <div className="flex flex-wrap items-end justify-between gap-3 mb-4">
-          <div><h2 id="roteiro-titulo" className="text-xl font-semibold">Roteiro das OS</h2><p className="text-sm dash-muted">Cada OS na ordem das operações do PCP: ✓ concluída · ● onde está agora · ⇄ envio externo · ○ próximas.</p></div>
-          <label className="text-sm w-full sm:w-80">Buscar no roteiro<input className="dash-input mt-1" value={buscaRoteiro} onChange={e => setBuscaRoteiro(e.target.value)} placeholder="OS, cliente, estação atual, atrasadas…" /></label>
-        </div>
-        <div className="dash-panel max-h-[520px] overflow-auto space-y-4">
-          {roteiros.length === 0 && <p className="dash-empty">{buscaRoteiro ? 'Nenhuma OS encontrada.' : 'Nenhuma OS em andamento.'}</p>}
-          {roteiros.map(r => <article key={r.osId} className="dash-row pt-4 first:border-0 first:pt-0" style={{ borderLeft: `4px solid ${r.semaforo === 'vermelho' ? '#f43f5e' : r.semaforo === 'amarelo' ? '#f59e0b' : '#10b981'}`, paddingLeft: 12 }}>
-            <div className="flex flex-wrap items-baseline justify-between gap-2">
-              <p><strong className="font-mono">{r.codigoGrv}</strong><span className="dash-muted text-sm"> · {r.cliente} · {r.artigo} — {r.descricao}</span>{r.prioridade === 'urgente' && <span className="text-xs font-bold text-rose-500 ml-2">URGENTE</span>}</p>
-              <span className={`text-xs ${r.diasAtePrazo < 0 ? 'text-rose-500 font-semibold' : 'dash-muted'}`}>{dataCurta(r.prazoEntrega)} · {prazoTexto(r.diasAtePrazo)}</span>
-            </div>
-            <div className="mt-2 space-y-1.5">
-              {r.lotes.map(l => <div key={l.loteId} className="flex gap-3 items-baseline">
-                {r.lotes.length > 1 && <span className="dash-muted text-xs whitespace-nowrap">Lote {l.numeroLote}</span>}
-                <TrilhaRoteiro passos={l.passos} quantidadePecas={l.quantidadePecas} />
-              </div>)}
-            </div>
-          </article>)}
-        </div>
-      </section>
       <section className="min-w-0" aria-labelledby="kanban-titulo">
         <div className="flex flex-wrap items-end justify-between gap-3 mb-4">
           <div><h2 id="kanban-titulo" className="text-xl font-semibold">Onde está cada lote</h2><p className="text-sm dash-muted">Operações com peças disponíveis, em execução ou aguardando liberação.</p></div>
@@ -139,6 +117,28 @@ export default function DashboardPage() {
         <summary className="cursor-pointer text-lg font-semibold">Acompanhamento operacional <span className="dash-muted text-sm font-normal ml-2">Paradas, turnos, inspeções e fases da Fundição</span></summary>
         <Operacional d={d} claro={claro} onAbrir={abrirLista} onVerOSsFase={setFaseModal} onAbrirOP={(opLoteId) => setSelecao({ tipo: 'op', id: opLoteId })} />
       </details>
+      <section aria-label="Indicadores de produção"><DashboardCharts data={d} onAbrir={abrirLista} /></section>
+      <section className="min-w-0" aria-labelledby="roteiro-titulo">
+        <div className="flex flex-wrap items-end justify-between gap-3 mb-4">
+          <div><h2 id="roteiro-titulo" className="text-xl font-semibold">Roteiro das OS</h2><p className="text-sm dash-muted">Cada OS na ordem das operações do PCP: ✓ concluída · ● onde está agora · ⇄ envio externo · ○ próximas.</p></div>
+          <label className="text-sm w-full sm:w-80">Buscar no roteiro<input className="dash-input mt-1" value={buscaRoteiro} onChange={e => setBuscaRoteiro(e.target.value)} placeholder="OS, cliente, estação atual, atrasadas…" /></label>
+        </div>
+        <div className="dash-panel max-h-[520px] overflow-auto space-y-4">
+          {roteiros.length === 0 && <p className="dash-empty">{buscaRoteiro ? 'Nenhuma OS encontrada.' : 'Nenhuma OS em andamento.'}</p>}
+          {roteiros.map(r => <article key={r.osId} className="dash-row pt-4 first:border-0 first:pt-0" style={{ borderLeft: `4px solid ${r.semaforo === 'vermelho' ? '#f43f5e' : r.semaforo === 'amarelo' ? '#f59e0b' : '#10b981'}`, paddingLeft: 12 }}>
+            <div className="flex flex-wrap items-baseline justify-between gap-2">
+              <p><strong className="font-mono">{r.codigoGrv}</strong><span className="dash-muted text-sm"> · {r.cliente} · {r.artigo} — {r.descricao}</span>{r.prioridade === 'urgente' && <span className="text-xs font-bold text-rose-500 ml-2">URGENTE</span>}</p>
+              <span className={`text-xs ${r.diasAtePrazo < 0 ? 'text-rose-500 font-semibold' : 'dash-muted'}`}>{dataCurta(r.prazoEntrega)} · {prazoTexto(r.diasAtePrazo)}</span>
+            </div>
+            <div className="mt-2 space-y-1.5">
+              {r.lotes.map(l => <div key={l.loteId} className="flex gap-3 items-baseline">
+                {r.lotes.length > 1 && <span className="dash-muted text-xs whitespace-nowrap">Lote {l.numeroLote}</span>}
+                <TrilhaRoteiro passos={l.passos} quantidadePecas={l.quantidadePecas} />
+              </div>)}
+            </div>
+          </article>)}
+        </div>
+      </section>
     </>}
     {selecao && selecao.tipo !== 'op' && d && <Modal open title={tituloModal} size="xl" onClose={() => setSelecao(null)}>
       <div className="dash-dialog">
