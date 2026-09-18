@@ -43,7 +43,7 @@ jobs:
         run: node --test backend/test/recovery.unit.test.mjs
       - name: Station notice panel visibility
         working-directory: frontend
-        run: node --import ../backend/node_modules/tsx/dist/loader.mjs --test test/avisos.test.tsx test/mensagens.test.tsx test/trilha-roteiro.test.tsx test/zoom-desenho.test.ts test/acessos.test.ts
+        run: node --import ../backend/node_modules/tsx/dist/loader.mjs --test test/avisos.test.tsx test/mensagens.test.tsx test/trilha-roteiro.test.tsx test/zoom-desenho.test.ts test/acessos.test.ts test/desenhos.test.ts
       - name: Restore, login and foundry alerts on PostgreSQL
         working-directory: backend
         env:
