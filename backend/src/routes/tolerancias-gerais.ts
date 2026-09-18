@@ -258,7 +258,7 @@ export async function toleranciasGeraisRoutes(app: FastifyInstance) {
   // ---------------- DELETAR ----------------
   app.delete(
     '/tolerancias-gerais/:id',
-    { onRequest: [app.requireAdmin] },
+    { onRequest: [app.requireExcluir] },
     async (request, reply) => {
       const paramsSchema = z.object({ id: z.string().uuid() });
       const parsed = paramsSchema.safeParse(request.params);

@@ -16,11 +16,12 @@ import {
   type MotivoParada,
 } from '../hooks/useMotivosParada';
 import { useAuth } from '../lib/auth-store';
+import { temCapacidade } from '../lib/permissions';
 
 export function MotivosParadaPage() {
   const { claro } = useTheme();
   const pessoa = useAuth((s) => s.pessoa);
-  const ehAdmin = pessoa?.papel === 'admin';
+  const ehAdmin = temCapacidade(pessoa, 'excluir_dados');
   const [busca, setBusca] = useState('');
   const [editando, setEditando] = useState<MotivoParada | null>(null);
   const [criando, setCriando] = useState(false);

@@ -94,6 +94,21 @@ test('acessos por usuário na área administrativa', {
       r = await req(adm, 'PUT', `/api/pessoas/${pcp.id}`, { papel: 'operador' });
       assert.equal(r.json().data.acessos, null, 'Trocar para papel sem acesso configurável limpa a personalização.');
     });
+    await t.test('PCP exclui dados como o admin; chefe não; papel é lido do banco', async () => {
+      const chefe = await conta('chefe1', 'chefe');
+      const pcpNovo = await conta('pcp3', 'pcp');
+      const etapa = await db.etapa.create({ data: { nome: 'Desbaste', ordemPadrao: 2, slaHoras: 24, aplicaParaTipos: [] } });
+      const tipo = () => db.tipoServico.create({ data: { nome: `SERV ${Math.random()}`, etapaId: etapa.id } });
+      const t1 = await tipo();
+      assert.equal((await req(chefe, 'DELETE', `/api/tipos-servico/${t1.id}`)).statusCode, 403);
+      assert.equal((await req(pcpNovo, 'DELETE', `/api/tipos-servico/${t1.id}`)).statusCode, 200);
+      assert.equal((await db.tipoServico.findUnique({ where: { id: t1.id } })).ativo, false);
+
+      const t2 = await tipo();
+      await db.pessoa.update({ where: { id: pcpNovo.id }, data: { papel: 'chefe' } });
+      assert.equal((await req({ ...pcpNovo, papel: 'pcp' }, 'DELETE', `/api/tipos-servico/${t2.id}`)).statusCode, 403, 'JWT antigo de PCP não exclui.');
+      assert.equal((await req(pcpNovo, 'DELETE', `/api/pessoas/${chefe.id}`)).statusCode, 403, 'Usuários continuam só com o admin.');
+    });
   } finally {
     if (app) await app.close();
     if (db) await db.$disconnect();

@@ -204,7 +204,7 @@ export async function motivosParadaRoutes(app: FastifyInstance) {
   // ---------------- DESATIVAR (soft delete) ----------------
   app.delete(
     '/motivos-parada/:id',
-    { onRequest: [app.requireAdmin] },
+    { onRequest: [app.requireExcluir] },
     async (request, reply) => {
       const paramsSchema = z.object({ id: z.string().uuid() });
       const parsed = paramsSchema.safeParse(request.params);

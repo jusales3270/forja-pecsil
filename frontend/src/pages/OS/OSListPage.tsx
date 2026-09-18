@@ -21,6 +21,7 @@ import {
 import { useClientesList as useClientes } from '../../hooks/useClientes';
 import { ObservacaoBadge } from '../../components/ObservacaoBadge';
 import { NovaOSModal } from './NovaOSModal';
+import { temCapacidade } from '../../lib/permissions';
 
 function formatarMoeda(valor: string | number | null | undefined): string {
   if (valor === null || valor === undefined || valor === '') return '—';
@@ -38,7 +39,7 @@ export function OSListPage() {
   const navigate = useNavigate();
   const { claro } = useTheme();
   const pessoa = useAuth((s) => s.pessoa);
-  const ehAdmin = pessoa?.papel === 'admin';
+  const ehAdmin = temCapacidade(pessoa, 'excluir_dados');
 
   const [busca, setBusca] = useState('');
   const [clienteFiltro, setClienteFiltro] = useState('');

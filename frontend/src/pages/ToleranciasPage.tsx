@@ -17,11 +17,12 @@ import {
   type ToleranciaGeral,
 } from '../hooks/useToleranciasGerais';
 import { useAuth } from '../lib/auth-store';
+import { temCapacidade } from '../lib/permissions';
 
 export function ToleranciasPage() {
   const { claro } = useTheme();
   const pessoa = useAuth((s) => s.pessoa);
-  const ehAdmin = pessoa?.papel === 'admin';
+  const ehAdmin = temCapacidade(pessoa, 'excluir_dados');
   const [clienteId, setClienteId] = useState<string>('');
   const [criando, setCriando] = useState(false);
   const [editando, setEditando] = useState<ToleranciaGeral | null>(null);

@@ -32,3 +32,11 @@ test('admin pode ter módulos retirados, mas mantém capacidades que não são m
   assert.ok(!caps.has('dashboard_chefe'));
   assert.ok(caps.has('excluir_dados'));
 });
+
+test('PCP exclui dados como o admin; chefe não', () => {
+  assert.equal(temCapacidade('pcp', 'excluir_dados'), true);
+  assert.equal(temCapacidade({ papel: 'pcp', acessos: ['ordens_servico'] }, 'excluir_dados'), true, 'Não é módulo: vale mesmo com acessos personalizados.');
+  assert.equal(temCapacidade('admin', 'excluir_dados'), true);
+  assert.equal(temCapacidade('chefe', 'excluir_dados'), false);
+  assert.equal(temCapacidade('estacao', 'excluir_dados'), false);
+});

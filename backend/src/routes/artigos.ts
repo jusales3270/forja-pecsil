@@ -327,7 +327,7 @@ export async function artigosRoutes(app: FastifyInstance) {
   // ---------------- DELETAR (soft delete) ----------------
   app.delete(
     '/artigos/:id',
-    { onRequest: [app.requireAdmin] },
+    { onRequest: [app.requireExcluir] },
     async (request, reply) => {
       const paramsSchema = z.object({ id: z.string().uuid() });
       const parsed = paramsSchema.safeParse(request.params);
