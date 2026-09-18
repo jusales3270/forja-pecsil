@@ -158,20 +158,20 @@ export function ToleranciasPage() {
                     <td className="px-4 py-3 text-right">
                       <button
                         onClick={() => setEditando(t)}
-                        className="btn-ghost px-3 py-1.5 text-xs mr-1"
+                        className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg bg-forja-500/15 hover:bg-forja-500 text-forja-300 hover:text-white border border-forja-500/40 transition shadow-sm mr-1"
                       >
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" aria-hidden="true">
+                          <path d="M12 20h9" />
+                          <path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z" />
+                        </svg>
                         Editar
                       </button>
                       {ehAdmin && (
                         <button
                           onClick={() => setDeletando(t)}
-                          className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg bg-red-600/15 hover:bg-red-600 text-red-400 hover:text-white border border-red-500/30 transition shadow-sm ml-1"
+                          className="btn-ghost px-3 py-1.5 text-xs text-red-400 hover:text-red-300 ml-1"
                           title="Excluir Tolerância"
                         >
-                          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                            <polyline points="3 6 5 6 21 6" />
-                            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
-                          </svg>
                           Excluir
                         </button>
                       )}
