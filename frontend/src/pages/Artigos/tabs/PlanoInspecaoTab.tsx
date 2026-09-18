@@ -343,16 +343,20 @@ function PlanoDeOperacao({ artigoId, opId, opLabel }: PlanoDeOperacaoProps) {
                   <td className="px-3 py-3 text-right">
                     <button
                       onClick={() => setEditandoCota(c)}
-                      className="btn-ghost px-3 py-1.5 text-xs mr-1"
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg bg-forja-500/15 hover:bg-forja-500 text-forja-300 hover:text-white border border-forja-500/40 transition shadow-sm mr-1"
                     >
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" aria-hidden="true">
+                        <path d="M12 20h9" />
+                        <path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z" />
+                      </svg>
                       Editar
                     </button>
                     {ehAdmin && (
                       <button
                         onClick={() => setDeletandoCota(c)}
-                        className="btn px-3 py-1.5 text-xs bg-red-900/40 hover:bg-red-900/60 text-red-200"
+                        className="btn-ghost px-3 py-1.5 text-xs text-red-400 hover:text-red-300 ml-1"
                       >
-                        Deletar
+                        Excluir
                       </button>
                     )}
                   </td>

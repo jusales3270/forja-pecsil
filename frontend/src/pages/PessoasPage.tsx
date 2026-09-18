@@ -321,9 +321,13 @@ export default function PessoasPage() {
                           <div className="flex items-center justify-end gap-1.5">
                             <button
                               onClick={() => setModal({ aberto: true, pessoa: p })}
-                              className="px-2.5 py-1 text-xs font-medium rounded-lg border border-neutral-700 hover:border-neutral-500 text-neutral-200 hover:bg-neutral-800 transition"
+                              className="inline-flex items-center gap-1.5 px-2.5 py-1 text-xs font-semibold rounded-lg bg-forja-500/15 hover:bg-forja-500 text-forja-300 hover:text-white border border-forja-500/40 transition shadow-sm"
                               title="Editar usuário"
                             >
+                              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" aria-hidden="true">
+                                <path d="M12 20h9" />
+                                <path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z" />
+                              </svg>
                               Editar
                             </button>
 
@@ -342,14 +346,10 @@ export default function PessoasPage() {
                             {ehAdmin && (
                               <button
                                 onClick={() => setConfirmarExclusao({ aberto: true, pessoa: p })}
-                                className="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-semibold rounded-lg border border-red-500/40 text-red-400 bg-red-600/15 hover:bg-red-600 hover:text-white transition shadow-sm"
+                                className="px-2.5 py-1 text-xs font-medium rounded-lg text-red-400 hover:text-red-300 hover:bg-red-500/10 transition"
                                 title="Excluir usuário permanentemente"
                               >
-                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                                  <polyline points="3 6 5 6 21 6" />
-                                  <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
-                                </svg>
-                                <span>Excluir</span>
+                                Excluir
                               </button>
                             )}
                           </div>
