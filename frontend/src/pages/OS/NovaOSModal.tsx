@@ -6,6 +6,7 @@ import { useState, useMemo, useEffect, type FormEvent } from 'react';
 import { Modal } from '../../components/Modal';
 import { useArtigosList } from '../../hooks/useArtigos';
 import { useClientesList as useClientes } from '../../hooks/useClientes';
+import { SeletorCliente } from '../../components/SeletorCliente';
 import { useCreateOS, type CreateOSInput, type DivisaoLotes } from '../../hooks/useOS';
 
 interface NovaOSModalProps {
@@ -282,23 +283,7 @@ export function NovaOSModal({ onClose, onCreated }: NovaOSModalProps) {
             />
           </div>
 
-          <div>
-            <label className="label-compact">
-              Cliente *
-            </label>
-            <select
-              value={clienteId}
-              onChange={(e) => setClienteId(e.target.value)}
-              className="input py-2 text-sm"
-            >
-              <option value="">Selecione...</option>
-              {clientes.map((c) => (
-                <option key={c.id} value={c.id}>
-                  {c.nome}
-                </option>
-              ))}
-            </select>
-          </div>
+          <SeletorCliente clientes={clientes} value={clienteId} onChange={setClienteId} />
 
           <div>
             <label className="label-compact">
