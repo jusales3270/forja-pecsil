@@ -205,31 +205,33 @@ function CaixaFase({
       ) : null}
 
       {fase.cards.length > 0 && (
-        <div className={`mt-2 pt-2 border-t ${T.divisor} space-y-0.5`}>
-          {fase.cards.slice(0, 4).map((c) => (
-            <div
-              key={c.opLoteId}
-              className={`text-[11px] font-mono flex items-center gap-1 ${T.grv}`}
-            >
-              <span
-                className="inline-block w-1.5 h-1.5 rounded-full shrink-0"
-                style={{
-                  backgroundColor: c.paradaAtiva
-                    ? '#E24B4A'
-                    : c.status === 'em_processo'
-                      ? '#EF9F27'
-                      : '#6b7280',
-                }}
-              />
-              <span className="truncate">{c.codigoGrv}</span>
-              {c.prioridade === 'urgente' && (
-                <span className="text-red-500 font-bold shrink-0">!</span>
-              )}
-            </div>
-          ))}
-          {fase.cards.length > 4 && (
-            <div className={`text-[10px] ${T.sub}`}>+{fase.cards.length - 4} outras</div>
-          )}
+        <div className={`mt-2 pt-2 border-t ${T.divisor}`}>
+          <div
+            className="space-y-0.5 overflow-y-auto pr-0.5"
+            style={{ maxHeight: '60px' }}
+          >
+            {fase.cards.map((c) => (
+              <div
+                key={c.opLoteId}
+                className={`text-[11px] font-mono flex items-center gap-1 ${T.grv}`}
+              >
+                <span
+                  className="inline-block w-1.5 h-1.5 rounded-full shrink-0"
+                  style={{
+                    backgroundColor: c.paradaAtiva
+                      ? '#E24B4A'
+                      : c.status === 'em_processo'
+                        ? '#EF9F27'
+                        : '#6b7280',
+                  }}
+                />
+                <span className="truncate">{c.codigoGrv}</span>
+                {c.prioridade === 'urgente' && (
+                  <span className="text-red-500 font-bold shrink-0">!</span>
+                )}
+              </div>
+            ))}
+          </div>
         </div>
       )}
 

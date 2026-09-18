@@ -301,7 +301,7 @@ export function TotemEstacaoPage() {
               </h2>
               <span className="text-sm text-neutral-500">{pendentes.length}</span>
             </div>
-            <div className="space-y-3">
+            <div className="space-y-3 overflow-y-auto pr-1" style={{ maxHeight: 'calc(100vh - 340px)' }}>
               {loadingPend && (
                 <div className="p-6 text-center text-neutral-500 bg-neutral-900 rounded-xl">
                   Carregando...
@@ -341,7 +341,7 @@ export function TotemEstacaoPage() {
                 {emAndamento.length}
               </span>
             </div>
-            <div className="space-y-3">
+            <div className="space-y-3 overflow-y-auto pr-1" style={{ maxHeight: 'calc(100vh - 340px)' }}>
               {loadingAnd && (
                 <div className="p-6 text-center text-neutral-500 bg-neutral-900 rounded-xl">
                   Carregando...
