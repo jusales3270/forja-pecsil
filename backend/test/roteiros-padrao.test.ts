@@ -70,7 +70,7 @@ describe('Roteiros Padrão — Catálogo e Aplicação', () => {
     assert.ok(ids.includes('fundicao-grv'), 'deve conter fundicao-grv');
     assert.ok(ids.includes('arruela-grv'), 'deve conter arruela-grv');
     assert.ok(ids.includes('fundo-completo-grv'), 'deve conter fundo-completo-grv');
-    assert.ok(ids.includes('fundo-centros-verticais-grv'), 'deve conter fundo-centros-verticais-grv');
+    assert.ok(ids.includes('fundo-de-bloco-grv'), 'deve conter fundo-de-bloco-grv');
     assert.ok(ids.includes('forma-bloco-grv'), 'deve conter forma-bloco-grv');
 
     // Nenhum roteiro deve ter código não cadastrado (temPendencia deve ser false)

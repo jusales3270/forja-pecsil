@@ -374,13 +374,13 @@ export const ROTEIROS_PADRAO: RoteiroPadrao[] = [
     ],
   },
 
-  // 4. Doc 13326 — PROCESSO PADRÃO FUNDO COM CENTROS VERTICAIS
+  // 4. Doc 13326 — PROCESSO PADRÃO FUNDO DE BLOCO
   {
-    id: 'fundo-centros-verticais-grv',
-    nome: 'Fundo com Centros Verticais (Padrão GRV 13326)',
+    id: 'fundo-de-bloco-grv',
+    nome: 'Fundo de Bloco (Padrão GRV 13326)',
     descricao:
       'Usinagem de fundo pré-fundido: Programação CNC Centro/Torno, Torno CNC Dianteiro/Traseiro, Centros Verticais (Gravação), Acabamento/Polimento/Embalagem e Inspeção Final.',
-    origem: 'Processo Padrão GRV Doc 13326 (Fundo com Centros Verticais)',
+    origem: 'Processo Padrão GRV Doc 13326 (Fundo de Bloco)',
     revisaoPendente: false,
     operacoes: [
       {
