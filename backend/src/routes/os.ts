@@ -607,22 +607,40 @@ export async function osRoutes(app: FastifyInstance) {
         const opIds = os.lotes.flatMap((l) => l.opsLote.map((o) => o.id));
         const loteIds = os.lotes.map((l) => l.id);
 
-        await prisma.apontamentoPeca.deleteMany({ where: { opLoteId: { in: opIds } } });
-        await prisma.paradaMaquina.deleteMany({ where: { carimbo: { opLoteId: { in: opIds } } } });
-        await prisma.processamentoMaquina.deleteMany({ where: { carimbo: { opLoteId: { in: opIds } } } });
-        await prisma.carimbo.deleteMany({ where: { opLoteId: { in: opIds } } });
-        await prisma.alerta.deleteMany({
-          where: {
-            OR: [
-              { entidadeTipo: 'OPLote', entidadeId: { in: opIds } },
-              { entidadeTipo: 'OS', entidadeId: os.id },
-            ],
-          },
+        // Tudo o que aponta para a OS, os lotes e as OPs, dos filhos para os
+        // pais, numa transação: ou apaga tudo, ou nada (antes, uma falha no
+        // meio deixava a OS pela metade). Inclui inspeções de qualidade (as
+        // medições vão junto, em cascata), controle de volume do lote e
+        // carimbos/processamentos ligados só ao lote — sem eles o banco
+        // recusava a exclusão (inspecoes_op_op_lote_id_fkey).
+        const carimbos = await prisma.carimbo.findMany({
+          where: { OR: [{ opLoteId: { in: opIds } }, { loteId: { in: loteIds } }] },
+          select: { id: true },
         });
-        await prisma.oPLote.deleteMany({ where: { id: { in: opIds } } });
-        await prisma.eventoOS.deleteMany({ where: { osId: os.id } });
-        await prisma.lote.deleteMany({ where: { id: { in: loteIds } } });
-        await prisma.oS.delete({ where: { id: os.id } });
+        const carimboIds = carimbos.map((c) => c.id);
+
+        await prisma.$transaction([
+          prisma.apontamentoPeca.deleteMany({ where: { opLoteId: { in: opIds } } }),
+          prisma.paradaMaquina.deleteMany({ where: { carimboId: { in: carimboIds } } }),
+          prisma.processamentoMaquina.deleteMany({
+            where: { OR: [{ opLoteId: { in: opIds } }, { carimboId: { in: carimboIds } }] },
+          }),
+          prisma.inspecaoOP.deleteMany({ where: { opLoteId: { in: opIds } } }),
+          prisma.carimbo.deleteMany({ where: { id: { in: carimboIds } } }),
+          prisma.controleVolume.deleteMany({ where: { loteId: { in: loteIds } } }),
+          prisma.alerta.deleteMany({
+            where: {
+              OR: [
+                { entidadeTipo: 'OPLote', entidadeId: { in: opIds } },
+                { entidadeTipo: 'OS', entidadeId: os.id },
+              ],
+            },
+          }),
+          prisma.eventoOS.deleteMany({ where: { OR: [{ osId: os.id }, { loteId: { in: loteIds } }] } }),
+          prisma.oPLote.deleteMany({ where: { id: { in: opIds } } }),
+          prisma.lote.deleteMany({ where: { id: { in: loteIds } } }),
+          prisma.oS.delete({ where: { id: os.id } }),
+        ]);
 
         return { data: { id: os.id, excluida: true } };
       }
