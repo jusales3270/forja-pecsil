@@ -38,6 +38,10 @@ services:
 
   minio:
     image: quay.io/minio/minio:RELEASE.2025-09-07T16-13-09Z
+    # O quay.io passou a recusar o download anônimo desta imagem (401) e o
+    # Docker Hub não tem esta versão. A imagem já está no servidor: usar a
+    # local em vez de baixar, para o deploy não abortar. Mesma versão.
+    pull_policy: if_not_present
     restart: unless-stopped
     environment:
       MINIO_ROOT_USER: ${MINIO_ACCESS_KEY:-forja_admin}
