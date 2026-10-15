@@ -16,6 +16,7 @@ import {
   criarEvento,
   ehCodigoProvisorio,
   gerarLotesEOps,
+  ORIGEM_TREINO,
 } from '../lib/os-producao.js';
 
 // ============================================================
@@ -502,6 +503,9 @@ export async function osRoutes(app: FastifyInstance) {
       if (!os) return reply.code(404).send({ error: 'not_found', message: 'OS não encontrada' });
       if (os.status !== 'rascunho') {
         return reply.code(409).send({ error: 'nao_e_rascunho', message: `A OS já está "${os.status}": só rascunho é liberado.` });
+      }
+      if (os.origem === ORIGEM_TREINO) {
+        return reply.code(409).send({ error: 'treino', message: 'Rascunho de TREINO: serve para praticar e não vai para produção.' });
       }
 
       const codigoGrv = data.codigoGrv.trim();

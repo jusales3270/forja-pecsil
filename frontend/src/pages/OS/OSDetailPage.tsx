@@ -130,7 +130,7 @@ function OSDetailContent() {
   const podeCancelar = temCapacidade(pessoa, 'excluir_dados');
 
   const statusCor = CORES_STATUS_OS[os.status] ?? 'bg-neutral-500/15 text-neutral-400 border-neutral-500/30';
-  const statusLabel = (LABELS_STATUS_OS as Record<string, string>)[os.status] ?? os.status ?? '—';
+  const statusLabel = os.status === 'rascunho' && os.origem === 'business_os_treino' ? 'Rascunho (TREINO)' : (LABELS_STATUS_OS as Record<string, string>)[os.status] ?? os.status ?? '—';
 
   return (
     <div className={`min-h-screen ${T.bg} ${T.texto} ${claro ? 'theme-light' : ''}`}>
