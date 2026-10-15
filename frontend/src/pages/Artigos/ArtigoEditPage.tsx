@@ -22,14 +22,16 @@ import { DadosBasicosTab } from './tabs/DadosBasicosTab';
 import { DesenhosTab } from './tabs/DesenhosTab';
 import { OperacoesTab } from './tabs/OperacoesTab';
 import { PlanoInspecaoTab } from './tabs/PlanoInspecaoTab';
+import { MateriaisTab } from './tabs/MateriaisTab';
 import { temCapacidade } from '../../lib/permissions';
 
-type AbaAtiva = 'dados' | 'desenhos' | 'operacoes' | 'plano';
+type AbaAtiva = 'dados' | 'desenhos' | 'operacoes' | 'materiais' | 'plano';
 
 const ABAS: { id: AbaAtiva; label: string }[] = [
   { id: 'dados', label: 'Dados Básicos' },
   { id: 'desenhos', label: 'Desenhos' },
   { id: 'operacoes', label: 'Operações' },
+  { id: 'materiais', label: 'Materiais' },
   { id: 'plano', label: 'Plano de Inspeção' },
 ];
 
@@ -222,6 +224,7 @@ export function ArtigoEditPage() {
           {aba === 'dados' && <DadosBasicosTab artigo={artigo} />}
           {aba === 'desenhos' && <DesenhosTab artigoId={artigo.id} artigo={artigo} />}
           {aba === 'operacoes' && <OperacoesTab artigoId={artigo.id} />}
+          {aba === 'materiais' && <MateriaisTab artigoId={artigo.id} />}
           {aba === 'plano' && <PlanoInspecaoTab artigoId={artigo.id} />}
         </div>
 

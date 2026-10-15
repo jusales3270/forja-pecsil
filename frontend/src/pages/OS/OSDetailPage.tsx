@@ -18,9 +18,11 @@ import { useTheme } from '../../lib/theme-store';
 import { DadosOSTab } from './tabs/DadosOSTab';
 import { LotesOpsTab } from './tabs/LotesOpsTab';
 import { TimelineTab } from './tabs/TimelineTab';
+import { MateriaisOSTab } from './tabs/MateriaisOSTab';
+import { RascunhoPainel } from './RascunhoPainel';
 import { temCapacidade } from '../../lib/permissions';
 
-type Aba = 'dados' | 'lotes' | 'timeline';
+type Aba = 'dados' | 'lotes' | 'materiais' | 'timeline';
 
 export function OSDetailPage() {
   return (
@@ -169,7 +171,7 @@ function OSDetailContent() {
               <p className={`text-sm mt-1 ${T.sub}`}>
                 Cliente: <span className={T.descricao}>{os.cliente?.nome ?? '—'}</span> ·{' '}
                 Quantidade: <span className="font-mono font-medium">{os.quantidadeTotal ?? 0}</span> peças ·{' '}
-                Aberta em <span className={T.descricao}>{formatarDataSegura(os.dataAbertura)}</span>
+                {os.status === 'rascunho' ? 'Chegou do orçamento em' : 'Aberta em'} <span className={T.descricao}>{formatarDataSegura(os.status === 'rascunho' ? os.criadoEm : os.dataAbertura)}</span>
               </p>
             </div>
 
@@ -189,6 +191,8 @@ function OSDetailContent() {
             )}
           </div>
         </div>
+
+        {os.status === 'rascunho' && <RascunhoPainel os={os} />}
 
         {/* Tabs */}
         <div className={`border-b ${T.bordaTabs} mb-6`}>
@@ -213,6 +217,17 @@ function OSDetailContent() {
               </span>
             </TabButton>
             <TabButton
+              ativo={aba === 'materiais'}
+              onClick={() => setAba('materiais')}
+              classeAtiva={T.tabAtiva}
+              classeInativa={T.tabInativa}
+            >
+              Materiais
+              <span className={`ml-2 px-1.5 py-0.5 text-xs rounded font-mono ${T.badgeTab}`}>
+                {os.status === 'rascunho' ? (os.artigo?._count?.materiais ?? 0) : (os.materiais?.length ?? 0)}
+              </span>
+            </TabButton>
+            <TabButton
               ativo={aba === 'timeline'}
               onClick={() => setAba('timeline')}
               classeAtiva={T.tabAtiva}
@@ -227,6 +242,7 @@ function OSDetailContent() {
         <div>
           {aba === 'dados' && <DadosOSTab os={os} podeEditar={podeEditar} />}
           {aba === 'lotes' && <LotesOpsTab os={os} />}
+          {aba === 'materiais' && <MateriaisOSTab os={os} />}
           {aba === 'timeline' && <TimelineTab osId={os.id} />}
         </div>
       </div>

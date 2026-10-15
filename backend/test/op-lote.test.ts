@@ -159,10 +159,12 @@ async function criarOSDeTeste(quantidade = 5): Promise<{
   opLoteIds: string[];
 }> {
   const prazo = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString();
+  // Abrir OS é do PCP/admin (módulo Ordens de Serviço, conferido no backend);
+  // o programador só opera as OPs.
   const res = await app.inject({
     method: 'POST',
     url: '/api/os',
-    headers: { authorization: `Bearer ${tokenProgramador}` },
+    headers: { authorization: `Bearer ${tokenAdmin}` },
     payload: {
       codigoGrv: `TEST-OS-OPL-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
       clienteId,

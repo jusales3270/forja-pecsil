@@ -20,6 +20,8 @@ import { cotasInspecaoRoutes } from '../src/routes/cotas-inspecao.js';
 import { etapasRoutes } from '../src/routes/etapas.js';
 import { clientesRoutes } from '../src/routes/clientes.js';
 import { osRoutes } from '../src/routes/os.js';
+import { materiaisRoutes } from '../src/routes/materiais.js';
+import { integracaoRoutes } from '../src/routes/integracao.js';
 import { opLoteRoutes } from '../src/routes/op-lote.js';
 import { roteirosPadraoRoutes } from '../src/routes/roteiros-padrao.js';
 import { prisma } from '../src/db/prisma.js';
@@ -58,6 +60,8 @@ export async function buildTestApp(): Promise<FastifyInstance> {
   await app.register(etapasRoutes, { prefix: '/api' });
   await app.register(clientesRoutes, { prefix: '/api' });
   await app.register(osRoutes, { prefix: '/api' });
+  await app.register(materiaisRoutes, { prefix: '/api' });
+  await app.register(integracaoRoutes, { prefix: '/api' });
   await app.register(opLoteRoutes, { prefix: '/api' });
 
   return app;

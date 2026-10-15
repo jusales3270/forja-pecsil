@@ -39,6 +39,8 @@ export type TipoMaquina =
   | 'outros';
 
 export type StatusOS =
+  /** Veio do orçamento ganho no Business OS: sem lotes nem OPs até o PCP liberar. */
+  | 'rascunho'
   | 'aberta'
   | 'em_producao'
   | 'finalizada'
@@ -104,7 +106,8 @@ export type TipoEventoOS =
   | 'alerta_disparado'
   | 'retrabalho_solicitado'
   | 'os_finalizada'
-  | 'os_cancelada';
+  | 'os_cancelada'
+  | 'os_liberada';
 
 export type TipoAlerta =
   | 'lote_parado'

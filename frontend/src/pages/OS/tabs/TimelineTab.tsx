@@ -11,6 +11,9 @@ interface TimelineTabProps {
 
 const LABELS_TIPO_EVENTO: Record<string, string> = {
   os_criada: 'OS criada',
+  os_liberada: 'Liberada para produção',
+  os_cancelada: 'OS cancelada',
+  os_finalizada: 'OS finalizada',
   os_alterada: 'OS alterada',
   prazo_alterado: 'Prazo alterado',
   prioridade_alterada: 'Prioridade alterada',
@@ -27,6 +30,8 @@ const LABELS_TIPO_EVENTO: Record<string, string> = {
 
 const CORES_TIPO_EVENTO: Record<string, string> = {
   os_criada: 'bg-emerald-500/15 text-emerald-400 border-emerald-500/30',
+  os_liberada: 'bg-violet-500/15 text-violet-400 border-violet-500/30',
+  os_cancelada: 'bg-neutral-500/15 text-neutral-400 border-neutral-500/30',
   os_alterada: 'bg-neutral-500/15 text-neutral-400 border-neutral-500/30',
   prazo_alterado: 'bg-amber-500/15 text-amber-400 border-amber-500/30',
   prioridade_alterada: 'bg-amber-500/15 text-amber-400 border-amber-500/30',
@@ -168,7 +173,16 @@ function PayloadResumo({ tipo, payload, claro }: { tipo: string; payload: any; c
   const textMuted = claro ? 'text-slate-500' : 'text-neutral-400';
   const textHighlight = claro ? 'text-slate-800 font-medium' : 'text-neutral-200';
 
-  if (tipo === 'os_criada') {
+  if (tipo === 'os_criada' && payload.rascunho) {
+    return (
+      <div className={`mt-2 text-xs space-y-0.5 ${textMuted}`}>
+        <div>Rascunho vindo do orçamento ganho (Business OS){payload.artigoNovo ? ' · artigo novo, em rascunho' : ''}</div>
+        <div>Quantidade: <span className="font-mono">{payload.quantidadeTotal}</span> peças</div>
+      </div>
+    );
+  }
+
+  if (tipo === 'os_criada' || tipo === 'os_liberada') {
     return (
       <div className={`mt-2 text-xs space-y-0.5 ${textMuted}`}>
         <div>

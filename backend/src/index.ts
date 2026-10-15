@@ -19,6 +19,8 @@ import { cotasInspecaoRoutes } from './routes/cotas-inspecao.js';
 import { etapasRoutes } from './routes/etapas.js';
 import { clientesRoutes } from './routes/clientes.js';
 import { osRoutes } from './routes/os.js';
+import { materiaisRoutes } from './routes/materiais.js';
+import { integracaoRoutes } from './routes/integracao.js';
 import { opLoteRoutes } from './routes/op-lote.js';
 import { maquinasRoutes } from './routes/maquinas.js';
 import { pessoasRoutes } from './routes/pessoas.js';
@@ -104,6 +106,8 @@ async function bootstrap() {
   await app.register(etapasRoutes, { prefix: '/api' });
   await app.register(clientesRoutes, { prefix: '/api' });
   await app.register(osRoutes, { prefix: '/api' });
+  await app.register(materiaisRoutes, { prefix: '/api' });
+  await app.register(integracaoRoutes, { prefix: '/api' });
   await app.register(opLoteRoutes, { prefix: '/api' });
   await app.register(maquinasRoutes, { prefix: '/api' });
   await app.register(pessoasRoutes, { prefix: '/api' });
