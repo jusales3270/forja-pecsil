@@ -8,7 +8,15 @@ import { FastifyInstance } from 'fastify';
 import { z } from 'zod';
 import { Prisma } from '@prisma/client';
 import { prisma } from '../db/prisma.js';
-import { avisarChegada } from '../lib/aviso-chegada.js';
+import { exigirModulo } from '../lib/acessos.js';
+import {
+  type AvisoChegada,
+  calcularDivisaoLotes,
+  copiarMateriais,
+  criarEvento,
+  ehCodigoProvisorio,
+  gerarLotesEOps,
+} from '../lib/os-producao.js';
 
 // ============================================================
 // Schemas
@@ -68,11 +76,23 @@ const atualizarOSSchema = z.object({
   dataPagamento: z.string().datetime({ offset: true }).nullable().optional(),
 });
 
+// Liberar o rascunho (orçamento ganho no Business OS) para produção.
+const liberarOSSchema = z.object({
+  codigoGrv: z.string().trim().min(1, 'Informe o número da OS').max(50, 'Número da OS muito longo'),
+  quantidadeTotal: z.number().int().min(1).optional(),
+  prazoEntrega: z.string().datetime({ offset: true }).optional(),
+  artigoId: z.string().uuid().optional(),
+  divisao: divisaoLotesSchema,
+  /** O PCP confirmou liberar sem desenho / sem lista de materiais. */
+  semDesenho: z.boolean().optional(),
+  semMateriais: z.boolean().optional(),
+});
+
 const listaQuerySchema = z.object({
   clienteId: z.string().uuid().optional(),
   artigoId: z.string().uuid().optional(),
   status: z
-    .enum(['aberta', 'em_producao', 'finalizada', 'atrasada', 'cancelada'])
+    .enum(['rascunho', 'aberta', 'em_producao', 'finalizada', 'atrasada', 'cancelada'])
     .optional(),
   prioridade: z.enum(['normal', 'urgente']).optional(),
   busca: z.string().optional(),
@@ -81,65 +101,6 @@ const listaQuerySchema = z.object({
 // ============================================================
 // Helpers
 // ============================================================
-
-// Calcula como dividir a quantidade total em lotes
-// Retorna array com a quantidade de cada lote
-function calcularDivisaoLotes(
-  total: number,
-  divisao: z.infer<typeof divisaoLotesSchema>
-): number[] {
-  if (!divisao || !divisao.tipoDivisao || divisao.tipoDivisao === 'unico') {
-    return [total];
-  }
-
-  if (divisao.tipoDivisao === 'quantidade_lotes') {
-    const n = divisao.quantidadeLotes;
-    if (n <= 0 || n > total) return [total];
-    const base = Math.floor(total / n);
-    const resto = total - base * n;
-    // Distribui o resto: primeiros lotes ganham +1 peça
-    return Array.from({ length: n }, (_, i) => base + (i < resto ? 1 : 0));
-  }
-
-  if (divisao.tipoDivisao === 'tamanho_lote') {
-    const x = divisao.tamanhoLote;
-    if (x <= 0 || x >= total) return [total];
-    const lotes: number[] = [];
-    let restante = total;
-    while (restante > 0) {
-      const q = Math.min(x, restante);
-      lotes.push(q);
-      restante -= q;
-    }
-    return lotes;
-  }
-
-  return [total];
-}
-
-// Cria evento de OS dentro de uma transação
-async function criarEvento(
-  tx: Prisma.TransactionClient,
-  data: {
-    osId: string;
-    loteId?: string;
-    tipo: any; // TipoEventoOS — string literal do enum Prisma
-    autorId?: string;
-    payload?: any;
-    visivelDashboard?: boolean;
-  }
-) {
-  return tx.eventoOS.create({
-    data: {
-      osId: data.osId,
-      loteId: data.loteId,
-      tipo: data.tipo,
-      autorId: data.autorId,
-      payload: data.payload ?? undefined,
-      visivelDashboard: data.visivelDashboard ?? true,
-    },
-  });
-}
 
 // ============================================================
 // Rotas
@@ -205,7 +166,14 @@ export async function osRoutes(app: FastifyInstance) {
         where: { id: parsed.data.id },
         include: {
           cliente: true,
-          artigo: { select: { id: true, codigo: true, descricao: true, tipoProduto: true } },
+          artigo: {
+            select: {
+              id: true, codigo: true, descricao: true, tipoProduto: true, status: true,
+              // O que o rascunho precisa para ser liberado (checklist na tela da OS)
+              _count: { select: { operacoes: true, desenhos: true, materiais: true } },
+            },
+          },
+          materiais: { orderBy: { ordem: 'asc' } },
           criadoPor: { select: { id: true, nome: true } },
           lotes: {
             orderBy: { numeroLote: 'asc' },
@@ -232,7 +200,9 @@ export async function osRoutes(app: FastifyInstance) {
   );
 
   // ---------------- CRIAR ----------------
-  app.post('/os', { onRequest: [app.authenticate] }, async (request, reply) => {
+  // Criar e editar OS exige o módulo Ordens de Serviço também no backend (antes
+  // só o frontend conferia): conta de estação ou de integração não abre OS.
+  app.post('/os', { onRequest: [exigirModulo('ordens_servico')] }, async (request, reply) => {
     const parsed = criarOSSchema.safeParse(request.body);
     if (!parsed.success) {
       return reply.code(400).send({
@@ -313,7 +283,7 @@ export async function osRoutes(app: FastifyInstance) {
     );
 
     // Transação: cria OS, lotes, OPLotes e evento
-    const avisos: { etapaId: string; opLoteId: string; loteId: string }[] = [];
+    const avisos: AvisoChegada[] = [];
     try {
       const osCriada = await prisma.$transaction(async (tx) => {
         // Cria a OS
@@ -355,66 +325,9 @@ export async function osRoutes(app: FastifyInstance) {
           },
         });
 
-        // Cria os lotes (e OPLotes para cada um)
-        for (let i = 0; i < divisaoLotes.length; i++) {
-          const quantidadeLote = divisaoLotes[i];
-          const lote = await tx.lote.create({
-            data: {
-              osId: os.id,
-              numeroLote: i + 1,
-              quantidadePecas: quantidadeLote,
-            },
-          });
-
-          // Cria OPLotes (snapshot das OPs do Artigo) pra esse lote
-          let primeiraOp: { id: string; ordem: number } | null = null;
-          for (const op of artigo.operacoes) {
-            const criada = await tx.oPLote.create({
-              data: {
-                loteId: lote.id,
-                operacaoArtigoId: op.id,
-                etapaId: op.etapaId,
-                ordem: op.ordem,
-                tempoUnitPlanejado: op.tempoUnitMin,
-                tempoTotalPlanejado: op.tempoUnitMin * quantidadeLote,
-                codigoOp: op.codigoOp,
-                tipoServico: op.tipoServico,
-                exigeInspecao: op.exigeInspecao,
-                gatilhoAlertaPecas: op.gatilhoAlertaPecas,
-                avisaAoIniciar: op.avisaAoIniciar,
-                etapaAvisadaId: op.etapaAvisadaId,
-                terceirizada: op.terceirizada,
-                fornecedor: op.fornecedor,
-                prazoPrevistoDias: op.prazoPrevistoDias,
-                custoPrevisto: op.custoPrevisto,
-                esperaHoras: op.esperaHoras,
-                exigeLoteCompleto: op.exigeLoteCompleto,
-                observacoes: op.observacoes ?? null,
-              },
-              select: { id: true, ordem: true },
-            });
-            if (!primeiraOp || criada.ordem < primeiraOp.ordem) primeiraOp = criada;
-          }
-
-          // A estação da 1ª operação do roteiro — seja ela qual for — fica sabendo
-          if (primeiraOp) {
-            const aviso = await avisarChegada(tx, { opLoteId: primeiraOp.id, quantidade: quantidadeLote });
-            if (aviso) avisos.push({ ...aviso, opLoteId: primeiraOp.id, loteId: lote.id });
-          }
-
-          await criarEvento(tx, {
-            osId: os.id,
-            loteId: lote.id,
-            tipo: 'lote_criado',
-            autorId,
-            payload: {
-              numeroLote: lote.numeroLote,
-              quantidadePecas: lote.quantidadePecas,
-              totalOps: artigo.operacoes.length,
-            },
-          });
-        }
-
+        // Lotes, OPs (cópia do roteiro), aviso à 1ª estação e materiais
+        avisos.push(...(await gerarLotesEOps(tx, { osId: os.id, operacoes: artigo.operacoes, divisaoLotes, autorId })));
+        await copiarMateriais(tx, { osId: os.id, artigoId: artigo.id, quantidadeTotal: os.quantidadeTotal });
 
         return os;
       });
@@ -454,7 +367,7 @@ export async function osRoutes(app: FastifyInstance) {
   // ---------------- ATUALIZAR ----------------
   app.patch(
     '/os/:id',
-    { onRequest: [app.authenticate] },
+    { onRequest: [exigirModulo('ordens_servico')] },
     async (request, reply) => {
       const paramsSchema = z.object({ id: z.string().uuid() });
       const paramsParsed = paramsSchema.safeParse(request.params);
@@ -565,6 +478,105 @@ export async function osRoutes(app: FastifyInstance) {
       });
 
       return { data: atualizada };
+    }
+  );
+
+  // ---------------- LIBERAR RASCUNHO ----------------
+  // O rascunho vem do orçamento ganho (sem lotes nem OPs, fora do Tótem). O PCP
+  // completa o Artigo (roteiro, desenhos, materiais), informa o número da OS e
+  // libera: aqui nascem os lotes e as OPs, e a 1ª estação é avisada.
+  app.post(
+    '/os/:id/liberar',
+    { onRequest: [exigirModulo('ordens_servico')] },
+    async (request, reply) => {
+      const paramsParsed = z.object({ id: z.string().uuid() }).safeParse(request.params);
+      if (!paramsParsed.success) return reply.code(400).send({ error: 'invalid_input', message: 'ID inválido' });
+      const parsed = liberarOSSchema.safeParse(request.body ?? {});
+      if (!parsed.success) {
+        return reply.code(400).send({ error: 'invalid_input', message: 'Dados inválidos', details: parsed.error.flatten() });
+      }
+      const data = parsed.data;
+      const autorId = (request.user as any).pessoaId;
+
+      const os = await prisma.oS.findUnique({ where: { id: paramsParsed.data.id } });
+      if (!os) return reply.code(404).send({ error: 'not_found', message: 'OS não encontrada' });
+      if (os.status !== 'rascunho') {
+        return reply.code(409).send({ error: 'nao_e_rascunho', message: `A OS já está "${os.status}": só rascunho é liberado.` });
+      }
+
+      const codigoGrv = data.codigoGrv.trim();
+      if (ehCodigoProvisorio(codigoGrv)) {
+        return reply.code(400).send({ error: 'codigo_provisorio', message: 'Troque o código provisório pelo número da OS.' });
+      }
+      const outra = await prisma.oS.findUnique({ where: { codigoGrv } });
+      if (outra && outra.id !== os.id) {
+        return reply.code(409).send({ error: 'duplicate_codigo_grv', message: `Já existe uma OS com o código GRV "${codigoGrv}"` });
+      }
+
+      const artigo = await prisma.artigo.findUnique({
+        where: { id: data.artigoId ?? os.artigoId },
+        include: { operacoes: { orderBy: { ordem: 'asc' } }, _count: { select: { desenhos: true, materiais: true } } },
+      });
+      if (!artigo || !artigo.ativo) return reply.code(404).send({ error: 'artigo_invalido', message: 'Artigo não encontrado ou inativo' });
+      if (artigo.status === 'arquivado') return reply.code(400).send({ error: 'artigo_nao_ativo', message: 'Artigo arquivado não abre OS.' });
+      if (artigo.operacoes.length === 0) {
+        return reply.code(400).send({ error: 'artigo_sem_operacoes', message: 'Complete o roteiro do artigo (operações) antes de liberar.' });
+      }
+      const faltam = {
+        semDesenho: artigo._count.desenhos === 0 && !data.semDesenho,
+        semMateriais: artigo._count.materiais === 0 && !data.semMateriais,
+      };
+      if (faltam.semDesenho || faltam.semMateriais) {
+        return reply.code(409).send({
+          error: 'confirmar_pendencias',
+          message: [faltam.semDesenho && 'o artigo não tem desenho', faltam.semMateriais && 'o artigo não tem lista de materiais'].filter(Boolean).join(' e ') + '. Confirme para liberar assim mesmo.',
+          details: faltam,
+        });
+      }
+
+      const prazo = data.prazoEntrega ? new Date(data.prazoEntrega) : os.prazoEntrega;
+      if (prazo.getTime() <= Date.now()) {
+        return reply.code(400).send({ error: 'prazo_invalido', message: 'Prazo de entrega deve ser futuro' });
+      }
+      const quantidadeTotal = data.quantidadeTotal ?? os.quantidadeTotal;
+      const divisaoLotes = calcularDivisaoLotes(quantidadeTotal, data.divisao);
+
+      const avisos: AvisoChegada[] = [];
+      try {
+        await prisma.$transaction(async (tx) => {
+          // Artigo novo do orçamento nasce em rascunho: com roteiro, vira ativo aqui.
+          if (artigo.status === 'rascunho') await tx.artigo.update({ where: { id: artigo.id }, data: { status: 'ativo' } });
+          // Guarda: dois cliques ao mesmo tempo não liberam duas vezes.
+          const virou = await tx.oS.updateMany({
+            where: { id: os.id, status: 'rascunho' },
+            data: {
+              codigoGrv, artigoId: artigo.id, quantidadeTotal, prazoEntrega: prazo,
+              status: 'aberta', liberadaEm: new Date(), dataAbertura: new Date(),
+            },
+          });
+          if (virou.count !== 1) throw Object.assign(new Error('já liberada'), { code: 'JA_LIBERADA' });
+          await criarEvento(tx, {
+            osId: os.id,
+            tipo: 'os_liberada',
+            autorId,
+            payload: { codigoGrv, codigoProvisorio: os.codigoGrv, artigoId: artigo.id, quantidadeTotal, quantidadeLotes: divisaoLotes.length, divisaoLotes },
+          });
+          avisos.push(...(await gerarLotesEOps(tx, { osId: os.id, operacoes: artigo.operacoes, divisaoLotes, autorId })));
+          await copiarMateriais(tx, { osId: os.id, artigoId: artigo.id, quantidadeTotal });
+        });
+      } catch (err: any) {
+        if (err?.code === 'JA_LIBERADA') return reply.code(409).send({ error: 'nao_e_rascunho', message: 'Esta OS acabou de ser liberada por outra pessoa.' });
+        if (err?.code === 'P2002') return reply.code(409).send({ error: 'duplicate_codigo_grv', message: `Já existe uma OS com o código GRV "${codigoGrv}"` });
+        app.log.error({ err }, 'Erro ao liberar OS');
+        return reply.code(500).send({ error: 'erro_interno', message: 'Erro ao liberar a OS. Tente novamente.' });
+      }
+
+      for (const a of avisos) app.io.to(`estacao:${a.etapaId}`).emit('op:nova-na-fila', a);
+      const completa = await prisma.oS.findUnique({
+        where: { id: os.id },
+        include: { lotes: { orderBy: { numeroLote: 'asc' }, include: { opsLote: { orderBy: { ordem: 'asc' } } } }, materiais: { orderBy: { ordem: 'asc' } } },
+      });
+      return { data: completa };
     }
   );
 

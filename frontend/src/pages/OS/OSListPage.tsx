@@ -203,6 +203,16 @@ export function OSListPage() {
           </div>
         </div>
 
+        {/* Rascunhos do orçamento esperando o PCP liberar */}
+        {!isLoading && !isError && statusFiltro !== 'rascunho' && (osData?.data ?? []).some((o) => o.status === 'rascunho') && (
+          <div className={`mb-4 rounded-xl border px-4 py-3 flex flex-wrap items-center justify-between gap-3 ${claro ? 'border-violet-300 bg-violet-50 text-violet-900' : 'border-violet-500/30 bg-violet-500/10 text-violet-200'}`}>
+            <span className="text-sm">
+              <b>{(osData?.data ?? []).filter((o) => o.status === 'rascunho').length}</b> OS em rascunho vindas do orçamento ganho: complete o artigo e libere para produção.
+            </span>
+            <button type="button" className="btn-secondary px-4 py-2 text-sm" onClick={() => setStatusFiltro('rascunho')}>Ver rascunhos</button>
+          </div>
+        )}
+
         {/* Resumo */}
         {!isLoading && !isError && filtradas.length > 0 && (
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
@@ -230,6 +240,7 @@ export function OSListPage() {
                     (o) =>
                       o.status !== 'finalizada' &&
                       o.status !== 'cancelada' &&
+                      o.status !== 'rascunho' &&
                       diasAtePrazo(o.prazoEntrega) < 0,
                   ).length
                 }

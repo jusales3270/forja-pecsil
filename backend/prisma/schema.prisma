@@ -64,6 +64,9 @@ enum TipoMaquina {
 }
 
 enum StatusOS {
+  /// Veio do orçamento ganho no Business OS: ainda sem lotes nem OPs, fora do
+  /// chão de fábrica. O PCP completa roteiro, desenhos e materiais e libera.
+  rascunho
   aberta
   em_producao
   finalizada
@@ -161,6 +164,8 @@ enum TipoEventoOS {
   retrabalho_solicitado
   os_finalizada
   os_cancelada
+  /// Rascunho liberado para produção (lotes e OPs criados nessa hora).
+  os_liberada
 }
 
 enum TipoAlerta {
@@ -197,21 +202,24 @@ enum CanalAlerta {
 // ============================================================
 
 model Pessoa {
-  id            String   @id @default(uuid())
-  nome          String
-  codigoPessoal String   @unique @map("codigo_pessoal")
-  pinHash       String   @map("pin_hash")
-  papel         Papel
+  id                    String   @id @default(uuid())
+  nome                  String
+  codigoPessoal         String   @unique @map("codigo_pessoal")
+  pinHash               String   @map("pin_hash")
+  papel                 Papel
   /// Estação que esta conta opera. Nulo = sem vínculo com estação, e o
   /// comportamento é o de sempre (papel manda sozinho).
-  etapaId       String?  @map("etapa_id")
-  ativo         Boolean  @default(true)
+  etapaId               String?  @map("etapa_id")
+  ativo                 Boolean  @default(true)
   /// Módulos liberados pelo admin (área administrativa). Só vale quando
   /// acessosPersonalizados = true; senão manda o padrão do papel.
-  acessos                String[] @default([])
-  acessosPersonalizados  Boolean  @default(false) @map("acessos_personalizados")
-  criadoEm      DateTime @default(now()) @map("criado_em")
-  atualizadoEm  DateTime @updatedAt @map("atualizado_em")
+  acessos               String[] @default([])
+  acessosPersonalizados Boolean  @default(false) @map("acessos_personalizados")
+  /// Conta de integração do Business OS: só ela usa /integracao/* (cria o
+  /// rascunho de OS do orçamento ganho e envia o catálogo de materiais).
+  integracao            Boolean  @default(false)
+  criadoEm              DateTime @default(now()) @map("criado_em")
+  atualizadoEm          DateTime @updatedAt @map("atualizado_em")
 
   etapa                         Etapa?                 @relation(fields: [etapaId], references: [id])
   carimbosComoProgramador       Carimbo[]              @relation("ProgramadorCarimbo")
@@ -228,8 +236,8 @@ model Pessoa {
   osCriadas                     OS[]                   @relation("OSCriadaPor")
   artigosCriados                Artigo[]               @relation("ArtigoCriadoPor")
   paradasRegistradas            ParadaMaquina[]
-  mensagensEnviadas             MensagemInterna[] @relation("MensagemRemetente")
-  mensagensRecebidas            MensagemInterna[] @relation("MensagemDestinatario")
+  mensagensEnviadas             MensagemInterna[]      @relation("MensagemRemetente")
+  mensagensRecebidas            MensagemInterna[]      @relation("MensagemDestinatario")
 
   @@map("pessoas")
 }
@@ -246,9 +254,9 @@ model Cliente {
   criadoEm     DateTime @default(now()) @map("criado_em")
   atualizadoEm DateTime @updatedAt @map("atualizado_em")
 
-  oses                 OS[]
-  artigos              Artigo[]
-  toleranciasGerais    ToleranciaGeralCliente[]
+  oses              OS[]
+  artigos           Artigo[]
+  toleranciasGerais ToleranciaGeralCliente[]
 
   @@map("clientes")
 }
@@ -268,19 +276,19 @@ model Etapa {
   criadoEm                 DateTime @default(now()) @map("criado_em")
   atualizadoEm             DateTime @updatedAt @map("atualizado_em")
 
-  maquinas      Maquina[]
-  carimbos      Carimbo[]
-  opsArtigo     OperacaoArtigo[]
-  opsLote       OPLote[]
-  tiposServico  TipoServico[]
+  maquinas         Maquina[]
+  carimbos         Carimbo[]
+  opsArtigo        OperacaoArtigo[]
+  opsLote          OPLote[]
+  tiposServico     TipoServico[]
   /// Operações que avisam esta estação ao atingir o gatilho parcial
-  avisosOperacao OperacaoArtigo[] @relation("EtapaAvisadaOperacao")
-  avisosOPLote   OPLote[]         @relation("EtapaAvisadaOPLote")
+  avisosOperacao   OperacaoArtigo[]  @relation("EtapaAvisadaOperacao")
+  avisosOPLote     OPLote[]          @relation("EtapaAvisadaOPLote")
   /// Avisos endereçados a esta estação (aparecem no tótem dela)
-  alertas        Alerta[]         @relation("EtapaDestinoAlerta")
+  alertas          Alerta[]          @relation("EtapaDestinoAlerta")
   /// Contas vinculadas a esta estação (a conta do posto e programadores presos a ela)
-  pessoas        Pessoa[]
-  mensagensOrigem MensagemInterna[] @relation("MensagemOrigem")
+  pessoas          Pessoa[]
+  mensagensOrigem  MensagemInterna[] @relation("MensagemOrigem")
   mensagensDestino MensagemInterna[] @relation("MensagemDestino")
 
   @@map("etapas")
@@ -300,9 +308,9 @@ model Maquina {
   criadoEm      DateTime    @default(now()) @map("criado_em")
   atualizadoEm  DateTime    @updatedAt @map("atualizado_em")
 
-  etapa          Etapa                  @relation(fields: [etapaId], references: [id])
-  carimbos       Carimbo[]
-  processamentos ProcessamentoMaquina[]
+  etapa            Etapa                  @relation(fields: [etapaId], references: [id])
+  carimbos         Carimbo[]
+  processamentos   ProcessamentoMaquina[]
   apontamentosPeca ApontamentoPeca[]
 
   @@map("maquinas")
@@ -337,15 +345,15 @@ model TipoServico {
 // ============================================================
 
 model ToleranciaGeralCliente {
-  id           String   @id @default(uuid())
-  clienteId    String   @map("cliente_id")
-  faixaMin     Float    @map("faixa_min")
-  faixaMax     Float    @map("faixa_max")
-  toleranciaMais  Float @map("tolerancia_mais")
-  toleranciaMenos Float @map("tolerancia_menos")
-  observacoes  String?
-  criadoEm     DateTime @default(now()) @map("criado_em")
-  atualizadoEm DateTime @updatedAt @map("atualizado_em")
+  id              String   @id @default(uuid())
+  clienteId       String   @map("cliente_id")
+  faixaMin        Float    @map("faixa_min")
+  faixaMax        Float    @map("faixa_max")
+  toleranciaMais  Float    @map("tolerancia_mais")
+  toleranciaMenos Float    @map("tolerancia_menos")
+  observacoes     String?
+  criadoEm        DateTime @default(now()) @map("criado_em")
+  atualizadoEm    DateTime @updatedAt @map("atualizado_em")
 
   cliente Cliente @relation(fields: [clienteId], references: [id], onDelete: Cascade)
 
@@ -357,24 +365,25 @@ model ToleranciaGeralCliente {
 // ============================================================
 
 model Artigo {
-  id                String       @id @default(uuid())
-  codigo            String
-  descricao         String
-  tipoProduto       TipoProduto  @map("tipo_produto")
-  clienteId         String       @map("cliente_id")
-  material          String?
-  poPadrao          String?      @map("po_padrao")
-  observacoes       String?
-  status            StatusArtigo @default(rascunho)
-  ativo             Boolean      @default(true)
-  criadoPorId       String       @map("criado_por_id")
-  criadoEm          DateTime     @default(now()) @map("criado_em")
-  atualizadoEm      DateTime     @updatedAt @map("atualizado_em")
+  id           String       @id @default(uuid())
+  codigo       String
+  descricao    String
+  tipoProduto  TipoProduto  @map("tipo_produto")
+  clienteId    String       @map("cliente_id")
+  material     String?
+  poPadrao     String?      @map("po_padrao")
+  observacoes  String?
+  status       StatusArtigo @default(rascunho)
+  ativo        Boolean      @default(true)
+  criadoPorId  String       @map("criado_por_id")
+  criadoEm     DateTime     @default(now()) @map("criado_em")
+  atualizadoEm DateTime     @updatedAt @map("atualizado_em")
 
   cliente   Cliente          @relation(fields: [clienteId], references: [id])
   criadoPor Pessoa           @relation("ArtigoCriadoPor", fields: [criadoPorId], references: [id])
   desenhos  Desenho[]
   operacoes OperacaoArtigo[]
+  materiais MaterialArtigo[]
   oses      OS[]
 
   @@unique([codigo, clienteId])
@@ -386,20 +395,20 @@ model Artigo {
 // ============================================================
 
 model Desenho {
-  id             String      @id @default(uuid())
-  artigoId       String      @map("artigo_id")
-  tipo           TipoDesenho
-  codigoDesenho  String      @map("codigo_desenho")
-  revisao        String
-  dataRevisao    DateTime?   @map("data_revisao")
-  arquivoBucket  String?     @map("arquivo_bucket")
-  arquivoKey     String?     @map("arquivo_key")
-  arquivoTipo    String?     @map("arquivo_tipo")
-  arquivoTamanho Int?        @map("arquivo_tamanho")
-  arquivoNomeOriginal String? @map("arquivo_nome_original")
-  observacoes    String?
-  criadoEm       DateTime    @default(now()) @map("criado_em")
-  atualizadoEm   DateTime    @updatedAt @map("atualizado_em")
+  id                  String      @id @default(uuid())
+  artigoId            String      @map("artigo_id")
+  tipo                TipoDesenho
+  codigoDesenho       String      @map("codigo_desenho")
+  revisao             String
+  dataRevisao         DateTime?   @map("data_revisao")
+  arquivoBucket       String?     @map("arquivo_bucket")
+  arquivoKey          String?     @map("arquivo_key")
+  arquivoTipo         String?     @map("arquivo_tipo")
+  arquivoTamanho      Int?        @map("arquivo_tamanho")
+  arquivoNomeOriginal String?     @map("arquivo_nome_original")
+  observacoes         String?
+  criadoEm            DateTime    @default(now()) @map("criado_em")
+  atualizadoEm        DateTime    @updatedAt @map("atualizado_em")
 
   artigo Artigo @relation(fields: [artigoId], references: [id], onDelete: Cascade)
 
@@ -411,55 +420,55 @@ model Desenho {
 // ============================================================
 
 model OperacaoArtigo {
-  id              String  @id @default(uuid())
-  artigoId        String  @map("artigo_id")
-  etapaId         String  @map("etapa_id")
-  tipoServicoId   String? @map("tipo_servico_id")
-  codigoOp        String  @map("codigo_op")
-  ordem           Int
-  tipoServico     String  @map("tipo_servico")
-  tempoUnitMin    Float     @map("tempo_unit_min")
-  tempoSetupMin   Int     @default(0) @map("tempo_setup_min")
-  exigeInspecao   Boolean @default(false) @map("exige_inspecao")
+  id                 String    @id @default(uuid())
+  artigoId           String    @map("artigo_id")
+  etapaId            String    @map("etapa_id")
+  tipoServicoId      String?   @map("tipo_servico_id")
+  codigoOp           String    @map("codigo_op")
+  ordem              Int
+  tipoServico        String    @map("tipo_servico")
+  tempoUnitMin       Float     @map("tempo_unit_min")
+  tempoSetupMin      Int       @default(0) @map("tempo_setup_min")
+  exigeInspecao      Boolean   @default(false) @map("exige_inspecao")
   /// Avisa quando esta operação atingir N peças, sem esperar o lote fechar.
   /// Padrão do roteiro; ajustável por lote em OPLote.gatilhoAlertaPecas.
-  gatilhoAlertaPecas Int? @map("gatilho_alerta_pecas")
+  gatilhoAlertaPecas Int?      @map("gatilho_alerta_pecas")
   /// Avisa a etapa de etapaAvisadaId assim que esta operação for INICIADA,
   /// sem esperar peça nenhuma. É o caso do tratamento térmico: o ciclo leva
   /// ~3 dias e a engenharia usa essa janela pra programar o desbaste.
-  avisaAoIniciar  Boolean @default(false) @map("avisa_ao_iniciar")
+  avisaAoIniciar     Boolean   @default(false) @map("avisa_ao_iniciar")
   /// Operação feita FORA da fábrica. A rebarbação da fundição é assim: a peça
   /// sai de caminhão e volta. Não abre máquina — registra envio e retorno.
-  terceirizada      Boolean  @default(false)
-  fornecedor        String?
-  prazoPrevistoDias Int?     @map("prazo_previsto_dias")
-  custoPrevisto     Decimal? @map("custo_previsto") @db.Decimal(12, 2)
+  terceirizada       Boolean   @default(false)
+  fornecedor         String?
+  prazoPrevistoDias  Int?      @map("prazo_previsto_dias")
+  custoPrevisto      Decimal?  @map("custo_previsto") @db.Decimal(12, 2)
   /// Operação que é só tempo: cura do molde (12h), resfriamento na areia (12h).
   /// Não ocupa máquina nem operador — conta o relógio e libera sozinha.
-  esperaHoras       Int?     @map("espera_horas")
+  esperaHoras        Int?      @map("espera_horas")
   /// A operação seguinte só começa quando esta fechar o lote INTEIRO.
   /// Regra do Rafael para o tratamento térmico: não libera pro desbaste com
   /// lote parcialmente tratado.
-  exigeLoteCompleto Boolean  @default(false) @map("exige_lote_completo")
+  exigeLoteCompleto  Boolean   @default(false) @map("exige_lote_completo")
   /// Estação que recebe o aviso (ex: metalização avisa a Engenharia para
   /// começar o próximo programa). Sem isso, o gatilho não avisa ninguém.
-  etapaAvisadaId  String? @map("etapa_avisada_id")
-  observacoes     String?
-  precoUnitario   Decimal?  @map("preco_unitario")     @db.Decimal(12, 2)
-  valorTotal      Decimal?  @map("valor_total")        @db.Decimal(14, 2)
-  numeroFiscal    String?   @map("numero_fiscal")
-  poCliente       String?   @map("po_cliente")
-  statusFiscal    String?   @map("status_fiscal")
-  valorRecebido   Decimal?  @map("valor_recebido")     @db.Decimal(14, 2)
-  dataNf          DateTime? @map("data_nf")
-  dataPagamento   DateTime? @map("data_pagamento")
-  criadoEm        DateTime @default(now()) @map("criado_em")
-  atualizadoEm    DateTime @updatedAt @map("atualizado_em")
+  etapaAvisadaId     String?   @map("etapa_avisada_id")
+  observacoes        String?
+  precoUnitario      Decimal?  @map("preco_unitario") @db.Decimal(12, 2)
+  valorTotal         Decimal?  @map("valor_total") @db.Decimal(14, 2)
+  numeroFiscal       String?   @map("numero_fiscal")
+  poCliente          String?   @map("po_cliente")
+  statusFiscal       String?   @map("status_fiscal")
+  valorRecebido      Decimal?  @map("valor_recebido") @db.Decimal(14, 2)
+  dataNf             DateTime? @map("data_nf")
+  dataPagamento      DateTime? @map("data_pagamento")
+  criadoEm           DateTime  @default(now()) @map("criado_em")
+  atualizadoEm       DateTime  @updatedAt @map("atualizado_em")
 
-  artigo         Artigo          @relation(fields: [artigoId], references: [id], onDelete: Cascade)
-  etapa          Etapa           @relation(fields: [etapaId], references: [id])
-  etapaAvisada   Etapa?          @relation("EtapaAvisadaOperacao", fields: [etapaAvisadaId], references: [id])
-  tipoServicoRel TipoServico?    @relation(fields: [tipoServicoId], references: [id])
+  artigo         Artigo         @relation(fields: [artigoId], references: [id], onDelete: Cascade)
+  etapa          Etapa          @relation(fields: [etapaId], references: [id])
+  etapaAvisada   Etapa?         @relation("EtapaAvisadaOperacao", fields: [etapaAvisadaId], references: [id])
+  tipoServicoRel TipoServico?   @relation(fields: [tipoServicoId], references: [id])
   planoInspecao  PlanoInspecao?
   opsLote        OPLote[]
 
@@ -478,7 +487,7 @@ model PlanoInspecao {
   criadoEm          DateTime @default(now()) @map("criado_em")
   atualizadoEm      DateTime @updatedAt @map("atualizado_em")
 
-  operacaoArtigo OperacaoArtigo  @relation(fields: [operacaoArtigoId], references: [id], onDelete: Cascade)
+  operacaoArtigo OperacaoArtigo @relation(fields: [operacaoArtigoId], references: [id], onDelete: Cascade)
   cotas          CotaInspecao[]
 
   @@map("planos_inspecao")
@@ -489,20 +498,20 @@ model PlanoInspecao {
 // ============================================================
 
 model CotaInspecao {
-  id                String              @id @default(uuid())
-  planoInspecaoId   String              @map("plano_inspecao_id")
-  codigoCota        String              @map("codigo_cota")
-  valorNominal      Float               @map("valor_nominal")
-  toleranciaMais    Float?              @map("tolerancia_mais")
-  toleranciaMenos   Float?              @map("tolerancia_menos")
-  caracteristica    CaracteristicaCota
-  frequenciaMonitorar  FrequenciaMedicao @map("frequencia_monitorar")
-  frequenciaRegistrar  FrequenciaMedicao @map("frequencia_registrar")
-  instrumento       InstrumentoMedicao
-  ordem             Int
-  observacoes       String?
-  criadoEm          DateTime            @default(now()) @map("criado_em")
-  atualizadoEm      DateTime            @updatedAt @map("atualizado_em")
+  id                  String             @id @default(uuid())
+  planoInspecaoId     String             @map("plano_inspecao_id")
+  codigoCota          String             @map("codigo_cota")
+  valorNominal        Float              @map("valor_nominal")
+  toleranciaMais      Float?             @map("tolerancia_mais")
+  toleranciaMenos     Float?             @map("tolerancia_menos")
+  caracteristica      CaracteristicaCota
+  frequenciaMonitorar FrequenciaMedicao  @map("frequencia_monitorar")
+  frequenciaRegistrar FrequenciaMedicao  @map("frequencia_registrar")
+  instrumento         InstrumentoMedicao
+  ordem               Int
+  observacoes         String?
+  criadoEm            DateTime           @default(now()) @map("criado_em")
+  atualizadoEm        DateTime           @updatedAt @map("atualizado_em")
 
   planoInspecao PlanoInspecao     @relation(fields: [planoInspecaoId], references: [id], onDelete: Cascade)
   medicoes      MedicaoInspecao[]
@@ -515,35 +524,106 @@ model CotaInspecao {
 // ============================================================
 
 model OS {
-  id              String      @id @default(uuid())
-  codigoGrv       String      @unique @map("codigo_grv")
-  clienteId       String      @map("cliente_id")
-  artigoId        String      @map("artigo_id")
-  quantidadeTotal Int         @map("quantidade_total")
-  prazoEntrega    DateTime    @map("prazo_entrega")
-  dataAbertura    DateTime    @default(now()) @map("data_abertura")
-  prioridade      String      @default("normal")
-  status          StatusOS    @default(aberta)
-  observacoes     String?
-  precoUnitario   Decimal?  @map("preco_unitario")     @db.Decimal(12, 2)
-  valorTotal      Decimal?  @map("valor_total")        @db.Decimal(14, 2)
-  numeroFiscal    String?   @map("numero_fiscal")
-  poCliente       String?   @map("po_cliente")
-  statusFiscal    String?   @map("status_fiscal")
-  valorRecebido   Decimal?  @map("valor_recebido")     @db.Decimal(14, 2)
-  dataNf          DateTime? @map("data_nf")
-  dataPagamento   DateTime? @map("data_pagamento")
-  criadoPorId     String      @map("criado_por_id")
-  criadoEm        DateTime    @default(now()) @map("criado_em")
-  atualizadoEm    DateTime    @updatedAt @map("atualizado_em")
+  id                String    @id @default(uuid())
+  codigoGrv         String    @unique @map("codigo_grv")
+  clienteId         String    @map("cliente_id")
+  artigoId          String    @map("artigo_id")
+  quantidadeTotal   Int       @map("quantidade_total")
+  prazoEntrega      DateTime  @map("prazo_entrega")
+  dataAbertura      DateTime  @default(now()) @map("data_abertura")
+  prioridade        String    @default("normal")
+  status            StatusOS  @default(aberta)
+  observacoes       String?
+  precoUnitario     Decimal?  @map("preco_unitario") @db.Decimal(12, 2)
+  valorTotal        Decimal?  @map("valor_total") @db.Decimal(14, 2)
+  numeroFiscal      String?   @map("numero_fiscal")
+  poCliente         String?   @map("po_cliente")
+  statusFiscal      String?   @map("status_fiscal")
+  valorRecebido     Decimal?  @map("valor_recebido") @db.Decimal(14, 2)
+  dataNf            DateTime? @map("data_nf")
+  dataPagamento     DateTime? @map("data_pagamento")
+  /// manual (aberta no Forja) ou business_os (rascunho do orçamento ganho).
+  origem            String    @default("manual")
+  /// Item do orçamento no Business OS: o rascunho nasce uma vez só por item.
+  refExterna        String?   @unique @map("ref_externa")
+  /// "Pedido 4502385803 · item 060", como veio do orçamento.
+  pedidoClienteItem String?   @map("pedido_cliente_item")
+  /// Desenho informado no orçamento (texto); o arquivo continua no Artigo.
+  desenhoInformado  String?   @map("desenho_informado")
+  liberadaEm        DateTime? @map("liberada_em")
+  criadoPorId       String    @map("criado_por_id")
+  criadoEm          DateTime  @default(now()) @map("criado_em")
+  atualizadoEm      DateTime  @updatedAt @map("atualizado_em")
 
-  cliente   Cliente    @relation(fields: [clienteId], references: [id])
-  artigo    Artigo     @relation(fields: [artigoId], references: [id])
-  criadoPor Pessoa     @relation("OSCriadaPor", fields: [criadoPorId], references: [id])
+  cliente   Cliente      @relation(fields: [clienteId], references: [id])
+  artigo    Artigo       @relation(fields: [artigoId], references: [id])
+  criadoPor Pessoa       @relation("OSCriadaPor", fields: [criadoPorId], references: [id])
   lotes     Lote[]
   eventos   EventoOS[]
+  materiais MaterialOS[]
 
   @@map("oses")
+}
+
+// ============================================================
+// MATERIAIS (Sprint 6c, Bloco A)
+// ============================================================
+// O catálogo vem do Almoxarifado do Business OS (código do GRV) e é só
+// leitura aqui. O Artigo tem a lista de materiais POR PEÇA; a OS guarda a
+// cópia na liberação (como OperacaoArtigo → OPLote), com o total da OS.
+
+model MaterialCatalogo {
+  codigo       String   @id
+  descricao    String
+  unidade      String
+  familia      String?
+  grupo        String?
+  ativo        Boolean  @default(true)
+  /// Código sem traço + descrição sem acento, em maiúsculas (busca do PCP).
+  busca        String   @default("")
+  atualizadoEm DateTime @updatedAt @map("atualizado_em")
+
+  @@index([ativo, descricao])
+  @@map("materiais_catalogo")
+}
+
+model MaterialArtigo {
+  id             String   @id @default(uuid())
+  artigoId       String   @map("artigo_id")
+  /// Código do catálogo; nulo = material descrito à mão (fora do catálogo).
+  materialCodigo String?  @map("material_codigo")
+  descricao      String
+  /// Quantidade por peça.
+  quantidade     Decimal  @db.Decimal(14, 4)
+  unidade        String
+  observacoes    String?
+  ordem          Int
+  criadoEm       DateTime @default(now()) @map("criado_em")
+  atualizadoEm   DateTime @updatedAt @map("atualizado_em")
+
+  artigo Artigo @relation(fields: [artigoId], references: [id], onDelete: Cascade)
+
+  @@index([artigoId, ordem])
+  @@map("materiais_artigo")
+}
+
+model MaterialOS {
+  id                String   @id @default(uuid())
+  osId              String   @map("os_id")
+  materialCodigo    String?  @map("material_codigo")
+  descricao         String
+  quantidadePorPeca Decimal  @map("quantidade_por_peca") @db.Decimal(14, 4)
+  /// Por peça × quantidade da OS, na liberação.
+  quantidadeTotal   Decimal  @map("quantidade_total") @db.Decimal(16, 4)
+  unidade           String
+  observacoes       String?
+  ordem             Int
+  criadoEm          DateTime @default(now()) @map("criado_em")
+
+  os OS @relation(fields: [osId], references: [id], onDelete: Cascade)
+
+  @@index([osId, ordem])
+  @@map("materiais_os")
 }
 
 // ============================================================
@@ -574,57 +654,57 @@ model Lote {
 // ============================================================
 
 model OPLote {
-  id                  String       @id @default(uuid())
-  loteId              String       @map("lote_id")
-  operacaoArtigoId    String       @map("operacao_artigo_id")
-  etapaId             String       @map("etapa_id")
-  codigoGrvOp         String?      @map("codigo_grv_op")
-  ordem               Int
-  status              StatusOPLote @default(na_fila)
-  quantidadeConcluida Int          @default(0) @map("quantidade_concluida")
-  tempoUnitPlanejado  Float          @map("tempo_unit_planejado")
-  tempoTotalPlanejado Float          @map("tempo_total_planejado")
-  codigoOp            String       @map("codigo_op")
-  tipoServico         String       @map("tipo_servico")
-  exigeInspecao       Boolean      @default(false) @map("exige_inspecao")
+  id                     String       @id @default(uuid())
+  loteId                 String       @map("lote_id")
+  operacaoArtigoId       String       @map("operacao_artigo_id")
+  etapaId                String       @map("etapa_id")
+  codigoGrvOp            String?      @map("codigo_grv_op")
+  ordem                  Int
+  status                 StatusOPLote @default(na_fila)
+  quantidadeConcluida    Int          @default(0) @map("quantidade_concluida")
+  tempoUnitPlanejado     Float        @map("tempo_unit_planejado")
+  tempoTotalPlanejado    Float        @map("tempo_total_planejado")
+  codigoOp               String       @map("codigo_op")
+  tipoServico            String       @map("tipo_servico")
+  exigeInspecao          Boolean      @default(false) @map("exige_inspecao")
   /// Avisa a próxima etapa ao atingir N peças, sem esperar o lote fechar.
   /// Herdado do roteiro na criação da OS; o PCP edita por lote.
-  gatilhoAlertaPecas  Int?         @map("gatilho_alerta_pecas")
+  gatilhoAlertaPecas     Int?         @map("gatilho_alerta_pecas")
   /// Avisa a etapa de etapaAvisadaId assim que esta OP for iniciada.
   /// Herdado do roteiro na criação da OS. Usado pelo tratamento térmico.
-  avisaAoIniciar      Boolean      @default(false) @map("avisa_ao_iniciar")
+  avisaAoIniciar         Boolean      @default(false) @map("avisa_ao_iniciar")
   /// Feita fora da fábrica: registra envio e retorno, não abre máquina.
-  terceirizada        Boolean      @default(false)
+  terceirizada           Boolean      @default(false)
   /// Envio externo decidido na Metalização para este lote, sem alterar o roteiro.
-  envioExternoEm      DateTime? @map("envio_externo_em")
-  recebimentoExternoEm DateTime? @map("recebimento_externo_em")
-  quantidadeEnvioExterno Int? @map("quantidade_envio_externo")
-  fornecedor          String?
-  prazoPrevistoDias   Int?         @map("prazo_previsto_dias")
-  custoPrevisto       Decimal?     @map("custo_previsto") @db.Decimal(12, 2)
+  envioExternoEm         DateTime?    @map("envio_externo_em")
+  recebimentoExternoEm   DateTime?    @map("recebimento_externo_em")
+  quantidadeEnvioExterno Int?         @map("quantidade_envio_externo")
+  fornecedor             String?
+  prazoPrevistoDias      Int?         @map("prazo_previsto_dias")
+  custoPrevisto          Decimal?     @map("custo_previsto") @db.Decimal(12, 2)
   /// Só tempo de espera (cura, resfriamento): libera sozinha depois de N horas.
-  esperaHoras         Int?         @map("espera_horas")
+  esperaHoras            Int?         @map("espera_horas")
   /// A próxima OP do lote só começa quando esta fechar o lote inteiro.
-  exigeLoteCompleto   Boolean      @default(false) @map("exige_lote_completo")
+  exigeLoteCompleto      Boolean      @default(false) @map("exige_lote_completo")
   /// Estação que recebe o aviso quando o gatilho dispara.
-  etapaAvisadaId      String?      @map("etapa_avisada_id")
+  etapaAvisadaId         String?      @map("etapa_avisada_id")
   /// Momento em que o gatilho disparou (evita alertar de novo a cada peça).
-  alertaParcialEm     DateTime?    @map("alerta_parcial_em")
+  alertaParcialEm        DateTime?    @map("alerta_parcial_em")
   /// Momento em que o aviso de início disparou (garante disparo único mesmo
   /// se a OP for reiniciada depois de um encerramento parcial).
-  alertaInicioEm      DateTime?    @map("alerta_inicio_em")
-  observacoes         String?
-  criadoEm            DateTime     @default(now()) @map("criado_em")
-  atualizadoEm        DateTime     @updatedAt @map("atualizado_em")
+  alertaInicioEm         DateTime?    @map("alerta_inicio_em")
+  observacoes            String?
+  criadoEm               DateTime     @default(now()) @map("criado_em")
+  atualizadoEm           DateTime     @updatedAt @map("atualizado_em")
 
-  lote           Lote                   @relation(fields: [loteId], references: [id])
-  operacaoArtigo OperacaoArtigo         @relation(fields: [operacaoArtigoId], references: [id])
-  etapa          Etapa                  @relation(fields: [etapaId], references: [id])
-  etapaAvisada   Etapa?                 @relation("EtapaAvisadaOPLote", fields: [etapaAvisadaId], references: [id])
-  carimbos       Carimbo[]
-  processamentos ProcessamentoMaquina[]
+  lote             Lote                   @relation(fields: [loteId], references: [id])
+  operacaoArtigo   OperacaoArtigo         @relation(fields: [operacaoArtigoId], references: [id])
+  etapa            Etapa                  @relation(fields: [etapaId], references: [id])
+  etapaAvisada     Etapa?                 @relation("EtapaAvisadaOPLote", fields: [etapaAvisadaId], references: [id])
+  carimbos         Carimbo[]
+  processamentos   ProcessamentoMaquina[]
   apontamentosPeca ApontamentoPeca[]
-  inspecoes      InspecaoOP[]
+  inspecoes        InspecaoOP[]
 
   @@map("ops_lote")
 }
@@ -842,25 +922,25 @@ model EventoOS {
 // ============================================================
 
 model MensagemInterna {
-  id String @id @default(uuid())
-  corpo String
-  remetenteId String @map("remetente_id")
-  destinatarioId String @map("destinatario_id")
-  etapaOrigemId String @map("etapa_origem_id")
-  etapaDestinoId String @map("etapa_destino_id")
+  id               String    @id @default(uuid())
+  corpo            String
+  remetenteId      String    @map("remetente_id")
+  destinatarioId   String    @map("destinatario_id")
+  etapaOrigemId    String    @map("etapa_origem_id")
+  etapaDestinoId   String    @map("etapa_destino_id")
   // Assinaturas preservadas como estavam no envio.
-  remetenteNome String @map("remetente_nome")
-  destinatarioNome String @map("destinatario_nome")
-  criadoEm DateTime @default(now()) @map("criado_em")
-  lidoEm DateTime? @map("lido_em")
-  respostaAId String? @map("resposta_a_id")
+  remetenteNome    String    @map("remetente_nome")
+  destinatarioNome String    @map("destinatario_nome")
+  criadoEm         DateTime  @default(now()) @map("criado_em")
+  lidoEm           DateTime? @map("lido_em")
+  respostaAId      String?   @map("resposta_a_id")
 
-  remetente Pessoa @relation("MensagemRemetente", fields: [remetenteId], references: [id])
-  destinatario Pessoa @relation("MensagemDestinatario", fields: [destinatarioId], references: [id])
-  etapaOrigem Etapa @relation("MensagemOrigem", fields: [etapaOrigemId], references: [id])
-  etapaDestino Etapa @relation("MensagemDestino", fields: [etapaDestinoId], references: [id])
-  respostaA MensagemInterna? @relation("MensagemResposta", fields: [respostaAId], references: [id], onDelete: Restrict, onUpdate: Restrict)
-  respostas MensagemInterna[] @relation("MensagemResposta")
+  remetente    Pessoa            @relation("MensagemRemetente", fields: [remetenteId], references: [id])
+  destinatario Pessoa            @relation("MensagemDestinatario", fields: [destinatarioId], references: [id])
+  etapaOrigem  Etapa             @relation("MensagemOrigem", fields: [etapaOrigemId], references: [id])
+  etapaDestino Etapa             @relation("MensagemDestino", fields: [etapaDestinoId], references: [id])
+  respostaA    MensagemInterna?  @relation("MensagemResposta", fields: [respostaAId], references: [id], onDelete: Restrict, onUpdate: Restrict)
+  respostas    MensagemInterna[] @relation("MensagemResposta")
 
   @@index([destinatarioId, etapaDestinoId, criadoEm])
   @@index([remetenteId, criadoEm])
@@ -898,13 +978,13 @@ model Alerta {
 // ============================================================
 
 model ApontamentoPeca {
-  id           String   @id @default(uuid())
-  opLoteId     String   @map("op_lote_id")
-  maquinaId    String   @map("maquina_id")
-  operadorId   String   @map("operador_id")
-  numeroPeca   Int      @map("numero_peca")
-  observacoes  String?
-  criadoEm     DateTime @default(now()) @map("criado_em")
+  id          String   @id @default(uuid())
+  opLoteId    String   @map("op_lote_id")
+  maquinaId   String   @map("maquina_id")
+  operadorId  String   @map("operador_id")
+  numeroPeca  Int      @map("numero_peca")
+  observacoes String?
+  criadoEm    DateTime @default(now()) @map("criado_em")
 
   opLote   OPLote  @relation(fields: [opLoteId], references: [id])
   maquina  Maquina @relation(fields: [maquinaId], references: [id])

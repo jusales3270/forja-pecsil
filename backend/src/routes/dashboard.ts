@@ -27,9 +27,10 @@ export async function dashboardRoutes(app: FastifyInstance) {
     const filtro = { ...(clienteId ? { clienteId } : {}), ...(tipoProduto ? { artigo: { tipoProduto } } : {}) };
     const agora = new Date();
 
-    // OS por status
+    // OS por status. Rascunho (orçamento ainda sem roteiro liberado) não é
+    // produção: fica fora dos indicadores do chão de fábrica.
     const todasOS = await prisma.oS.findMany({
-      where: filtro,
+      where: { ...filtro, status: { not: 'rascunho' } },
       select: {
         id: true,
         codigoGrv: true,

@@ -11,6 +11,7 @@ import type { Desenho } from './useDesenhos';
 // ============================================================
 
 export const STATUS_OS = [
+  'rascunho',
   'aberta',
   'em_producao',
   'finalizada',
@@ -20,6 +21,7 @@ export const STATUS_OS = [
 export type StatusOS = (typeof STATUS_OS)[number];
 
 export const LABELS_STATUS_OS: Record<StatusOS, string> = {
+  rascunho: 'Rascunho (orçamento)',
   aberta: 'Aberta',
   em_producao: 'Em produção',
   finalizada: 'Finalizada',
@@ -95,6 +97,12 @@ export interface OS {
   valorRecebido: string | null;
   dataNf: string | null;
   dataPagamento: string | null;
+  /** manual (aberta no Forja) ou business_os (rascunho do orçamento ganho). */
+  origem?: string;
+  refExterna?: string | null;
+  pedidoClienteItem?: string | null;
+  desenhoInformado?: string | null;
+  liberadaEm?: string | null;
   criadoPorId: string;
   criadoEm: string;
   atualizadoEm: string;
@@ -104,12 +112,36 @@ export interface OS {
     codigo: string;
     descricao: string;
     tipoProduto?: string;
+    status?: 'rascunho' | 'ativo' | 'arquivado';
     observacoes?: string | null;
     desenhos?: Desenho[];
+    _count?: { operacoes: number; desenhos: number; materiais: number };
   };
   criadoPor?: { id: string; nome: string };
   lotes?: Lote[];
+  materiais?: MaterialOS[];
   _count?: { lotes: number };
+}
+
+/** Cópia da lista de materiais do Artigo na liberação (por peça e total da OS). */
+export interface MaterialOS {
+  id: string;
+  materialCodigo: string | null;
+  descricao: string;
+  quantidadePorPeca: string;
+  quantidadeTotal: string;
+  unidade: string;
+  observacoes: string | null;
+  ordem: number;
+}
+
+export interface LiberarOSInput {
+  codigoGrv: string;
+  quantidadeTotal?: number;
+  prazoEntrega?: string;
+  divisao?: DivisaoLotes;
+  semDesenho?: boolean;
+  semMateriais?: boolean;
 }
 
 export interface EventoOS {
@@ -254,6 +286,22 @@ export function useUpdateOS(id: string) {
   });
 }
 
+/** Rascunho (orçamento ganho) → produção: cria lotes e OPs e avisa a 1ª estação. */
+export function useLiberarOS(id: string) {
+  const qc = useQueryClient();
+  return useMutation<{ data: OS }, any, LiberarOSInput>({
+    mutationFn: async (input) => {
+      const res = await api.post(`/os/${id}/liberar`, input);
+      return res.data;
+    },
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ['os-list'] });
+      qc.invalidateQueries({ queryKey: ['os-detail', id] });
+      qc.invalidateQueries({ queryKey: ['os-timeline', id] });
+    },
+  });
+}
+
 export function useCancelarOS() {
   const qc = useQueryClient();
   return useMutation<
@@ -281,6 +329,7 @@ export function useCancelarOS() {
 // ============================================================
 
 export const CORES_STATUS_OS: Record<string, string> = {
+  rascunho: 'bg-violet-500/15 text-violet-400 border-violet-500/30',
   aberta: 'bg-blue-500/15 text-blue-400 border-blue-500/30',
   em_producao: 'bg-amber-500/15 text-amber-400 border-amber-500/30',
   finalizada: 'bg-emerald-500/15 text-emerald-400 border-emerald-500/30',
@@ -312,7 +361,7 @@ export function diasAtePrazo(iso: string | null | undefined): number {
 }
 
 export function corPrazo(iso: string | null | undefined, status: StatusOS): string {
-  if (status === 'finalizada' || status === 'cancelada') return 'text-neutral-400';
+  if (status === 'finalizada' || status === 'cancelada' || status === 'rascunho') return 'text-neutral-400';
   const dias = diasAtePrazo(iso);
   if (dias < 0) return 'text-red-400 font-semibold';
   if (dias < 3) return 'text-red-400';
