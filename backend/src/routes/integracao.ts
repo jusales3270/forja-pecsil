@@ -16,13 +16,15 @@ import { FastifyInstance } from 'fastify';
 import { z } from 'zod';
 import { prisma } from '../db/prisma.js';
 import { buscaDoMaterial } from '../lib/materiais-busca.js';
-import { PREFIXO_PROVISORIO, criarEvento } from '../lib/os-producao.js';
+import { ORIGEM_TREINO, PREFIXO_PROVISORIO, PREFIXO_TREINO, criarEvento } from '../lib/os-producao.js';
 
 const TIPOS = ['forma', 'bloco', 'fundo_forma', 'fundo_bloco', 'molde', 'arruela', 'cabeca_sopro', 'forminha', 'puncao', 'funil'] as const;
 
 const rascunhoSchema = z.object({
   /** Id do item do orçamento no Business OS. */
   refExterna: z.string().trim().min(1).max(100),
+  /** Orçamento de treino: o rascunho serve para praticar e não pode ser liberado. */
+  treino: z.boolean().default(false),
   /** Código provisório até o PCP informar o número da OS (ex.: ORC-212/1). */
   codigoProvisorio: z.string().trim().min(1).max(40),
   cliente: z.object({ forjaId: z.string().uuid().nullable().optional(), nome: z.string().trim().min(1).max(200) }),
@@ -81,7 +83,8 @@ export async function integracaoRoutes(app: FastifyInstance) {
     const ja = await prisma.oS.findUnique({ where: { refExterna: d.refExterna } });
     if (ja) return { data: { ...resumo(ja), criado: false } };
 
-    const codigo = d.codigoProvisorio.toUpperCase().startsWith(PREFIXO_PROVISORIO) ? d.codigoProvisorio : `${PREFIXO_PROVISORIO}${d.codigoProvisorio}`;
+    const prefixo = d.treino ? PREFIXO_TREINO : PREFIXO_PROVISORIO;
+    const codigo = d.codigoProvisorio.toUpperCase().startsWith(prefixo) ? d.codigoProvisorio : `${prefixo}${d.codigoProvisorio}`;
     if (await prisma.oS.findUnique({ where: { codigoGrv: codigo } })) {
       return reply.code(409).send({ error: 'duplicate_codigo_grv', message: `Já existe uma OS com o código "${codigo}".` });
     }
@@ -112,7 +115,7 @@ export async function integracaoRoutes(app: FastifyInstance) {
       const criada = await tx.oS.create({
         data: {
           codigoGrv: codigo, clienteId: cli.id, artigoId: art.id, quantidadeTotal: d.quantidadeTotal, prazoEntrega: prazo,
-          prioridade: d.prioridade, status: 'rascunho', origem: 'business_os', refExterna: d.refExterna,
+          prioridade: d.prioridade, status: 'rascunho', origem: d.treino ? ORIGEM_TREINO : 'business_os', refExterna: d.refExterna,
           observacoes: d.observacoes || null, precoUnitario: d.precoUnitario ?? null, valorTotal: d.valorTotal ?? null,
           poCliente: d.poCliente || null, pedidoClienteItem: d.pedidoClienteItem || null, desenhoInformado: d.desenhoInformado || null,
           criadoPorId: autorId,
@@ -120,7 +123,7 @@ export async function integracaoRoutes(app: FastifyInstance) {
       });
       await criarEvento(tx, {
         osId: criada.id, tipo: 'os_criada', autorId, visivelDashboard: false,
-        payload: { origem: 'business_os', rascunho: true, codigoGrv: codigo, artigoId: art.id, artigoNovo: !artigo, quantidadeTotal: d.quantidadeTotal },
+        payload: { origem: 'business_os', rascunho: true, treino: d.treino, codigoGrv: codigo, artigoId: art.id, artigoNovo: !artigo, quantidadeTotal: d.quantidadeTotal },
       });
       return criada;
     });
@@ -136,6 +139,12 @@ export async function integracaoRoutes(app: FastifyInstance) {
       return reply.code(409).send({ error: 'os_liberada', message: `A OS ${os.codigoGrv} já foi liberada para produção: cancele na Forja primeiro.`, details: resumo(os) });
     }
     const autorId = (request.user as any).pessoaId;
+    // Treino: o rascunho some de vez (não tem lote nem OP; materiais e eventos vão junto).
+    if (os.origem === ORIGEM_TREINO) {
+      const apagada = await prisma.oS.deleteMany({ where: { id: os.id, status: 'rascunho' } });
+      if (apagada.count !== 1) return reply.code(409).send({ error: 'os_liberada', message: 'A OS mudou de situação: confira na Forja.' });
+      return { data: { ...resumo(os), status: 'cancelada', cancelado: true, excluido: true } };
+    }
     const cancelada = await prisma.$transaction(async (tx) => {
       const r = await tx.oS.updateMany({ where: { id: os.id, status: 'rascunho' }, data: { status: 'cancelada' } });
       if (r.count !== 1) return null;

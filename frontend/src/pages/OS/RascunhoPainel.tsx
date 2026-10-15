@@ -35,6 +35,7 @@ export function RascunhoPainel({ os }: { os: OS }) {
   const [erro, setErro] = useState<string | null>(null);
   const [confirmar, setConfirmar] = useState<{ mensagem: string; semDesenho: boolean; semMateriais: boolean } | null>(null);
 
+  const treino = os.origem === 'business_os_treino';
   const cont = os.artigo?._count ?? { operacoes: 0, desenhos: 0, materiais: 0 };
   const temRoteiro = cont.operacoes > 0;
   const itens = [
@@ -76,9 +77,11 @@ export function RascunhoPainel({ os }: { os: OS }) {
 
   return (
     <section className={`mb-6 rounded-xl border p-5 ${C.caixa}`} aria-labelledby="rascunho-titulo">
-      <h2 id="rascunho-titulo" className={`text-lg font-semibold ${C.titulo}`}>Rascunho vindo do orçamento ganho</h2>
+      <h2 id="rascunho-titulo" className={`text-lg font-semibold ${C.titulo}`}>{treino ? 'TREINO — rascunho do orçamento de treino' : 'Rascunho vindo do orçamento ganho'}</h2>
       <p className={`text-sm mt-1 ${C.texto}`}>
-        Ainda não está no chão de fábrica: sem lotes nem OPs, fora do Tótem e do Painel. Complete o artigo, informe o número da OS e libere.
+        {treino
+          ? 'Para praticar: complete o artigo (roteiro, desenhos, materiais) como se fosse de verdade. Este rascunho não pode ser liberado e nunca vai para o Tótem; some quando o treino for apagado.'
+          : 'Ainda não está no chão de fábrica: sem lotes nem OPs, fora do Tótem e do Painel. Complete o artigo, informe o número da OS e libere.'}
       </p>
       <p className={`text-xs mt-1 ${C.sub}`}>
         {[os.pedidoClienteItem, os.poCliente && !os.pedidoClienteItem ? `Pedido ${os.poCliente}` : null, `prazo pedido ${formatarDataSegura(os.prazoEntrega)}`].filter(Boolean).join(' · ')}
@@ -101,7 +104,7 @@ export function RascunhoPainel({ os }: { os: OS }) {
         </button>
       )}
 
-      {podeLiberar && (
+      {podeLiberar && !treino && (
         <form className="mt-5 grid gap-3 sm:grid-cols-4" onSubmit={(e) => { e.preventDefault(); void enviar(); }}>
           <div>
             <label className="label-compact" htmlFor="lib-codigo">Nº da OS (GRV)</label>

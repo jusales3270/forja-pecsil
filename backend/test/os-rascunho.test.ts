@@ -199,3 +199,22 @@ describe('integração: rascunho do orçamento ganho', () => {
     assert.equal(sit.json().data.materiais.length, 1);
   });
 });
+
+describe('integração: rascunho de TREINO', () => {
+  test('treino vira rascunho TREINO, não libera e some ao cancelar', async () => {
+    const r = await post('/api/integracao/os-rascunho', tokenIntegracao, rascunho('item-treino-1', { treino: true, codigoProvisorio: `TREINO-T-${SUFIXO}/1` }));
+    assert.equal(r.statusCode, 201, r.body);
+    const d = r.json().data;
+    osIds.add(d.id);
+    assert.match(d.codigoGrv, /^TREINO-/);
+    const os = await prisma.oS.findUnique({ where: { id: d.id } });
+    assert.equal(os?.origem, 'business_os_treino');
+    const lib = await post(`/api/os/${d.id}/liberar`, tokenPcp, { codigoGrv: `9-${SUFIXO}/001`, semDesenho: true, semMateriais: true });
+    assert.equal(lib.statusCode, 409);
+    assert.equal(lib.json().error, 'treino');
+    const c = await post('/api/integracao/os-rascunho/item-treino-1/cancelar', tokenIntegracao);
+    assert.equal(c.statusCode, 200, c.body);
+    assert.equal(c.json().data.excluido, true);
+    assert.equal(await prisma.oS.count({ where: { id: d.id } }), 0);
+  });
+});

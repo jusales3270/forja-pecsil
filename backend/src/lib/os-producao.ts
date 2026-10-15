@@ -141,4 +141,7 @@ export async function copiarMateriais(tx: Prisma.TransactionClient, args: { osId
 
 /** Código provisório do rascunho (o PCP troca pelo número da OS ao liberar). */
 export const PREFIXO_PROVISORIO = 'ORC-';
+/** Rascunho de orçamento de TREINO: serve para praticar e nunca é liberado. */
+export const PREFIXO_TREINO = 'TREINO-';
+export const ORIGEM_TREINO = 'business_os_treino';
 export const ehCodigoProvisorio = (codigo: string) => codigo.toUpperCase().startsWith(PREFIXO_PROVISORIO);
