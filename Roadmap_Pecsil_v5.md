@@ -1,5 +1,8 @@
 # Roadmap — Sistema de Controle de Produção Pecsil (Forja)
 
+> **16/10/2026 — a ordem de construção passou para o roadmap único** em `Pecsil-Business-OS/docs/ROADMAP.md` (raia P: P-01 a P-13). Este documento fica como detalhe técnico da Forja.
+> Entregue desde a v5.1: **6c Bloco A (lista de materiais por artigo e por OS)** e a **OS em rascunho vinda do orçamento ganho**, inclusive o rascunho TREINO (commits `4ab26b2` e `724b25c`, 16/10).
+
 **Projeto:** Forja — Controle de Produção Pecsil
 **Documento complementar ao:** PRD_Pecsil_v3.md (PRD v4/v5 pendente de publicação)
 **Versão:** 5.1 — Reconciliação com o código real (pós-verificação)

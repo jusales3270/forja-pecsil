@@ -442,6 +442,7 @@ model OperacaoArtigo {
   terceirizada       Boolean   @default(false)
   fornecedor         String?
   prazoPrevistoDias  Int?      @map("prazo_previsto_dias")
+  /// Custo previsto do serviço de terceiros, POR PEÇA.
   custoPrevisto      Decimal?  @map("custo_previsto") @db.Decimal(12, 2)
   /// Operação que é só tempo: cura do molde (12h), resfriamento na areia (12h).
   /// Não ocupa máquina nem operador — conta o relógio e libera sozinha.

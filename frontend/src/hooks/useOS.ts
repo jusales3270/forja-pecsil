@@ -59,6 +59,11 @@ export interface OPLote {
   codigoOp: string;
   tipoServico: string;
   exigeInspecao: boolean;
+  terceirizada?: boolean;
+  fornecedor?: string | null;
+  prazoPrevistoDias?: number | null;
+  esperaHoras?: number | null;
+  exigeLoteCompleto?: boolean;
   observacoes: string | null;
   criadoEm: string;
   atualizadoEm: string;
