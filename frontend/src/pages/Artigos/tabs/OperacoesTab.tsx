@@ -22,6 +22,16 @@ import { useTheme } from '../../../lib/theme-store';
 import { useAuth } from '../../../lib/auth-store';
 import { temCapacidade } from '../../../lib/permissions';
 
+const formatarReais = (v: string | number) =>
+  Number(v).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+
+/** "12,50", "1.234,50" ou "12.50" → número; vazio → null; inválido → NaN. */
+const lerDecimal = (s: string) => {
+  const v = s.trim();
+  if (!v) return null;
+  return Number(v.includes(',') ? v.replace(/\./g, '').replace(',', '.') : v);
+};
+
 interface OperacoesTabProps {
   artigoId: string;
 }
@@ -178,6 +188,13 @@ export function OperacoesTab({ artigoId }: OperacoesTabProps) {
                   </td>
                   <td className="px-3 py-3 text-neutral-300 text-xs">
                     {op.tipoServico}
+                    {op.terceirizada && (
+                      <div className={`mt-0.5 ${claro ? 'text-amber-700' : 'text-amber-400'}`}>
+                        🚚 Terceiros{op.fornecedor ? ` · ${op.fornecedor}` : ''}
+                        {op.prazoPrevistoDias ? ` · ${op.prazoPrevistoDias} dia(s)` : ''}
+                        {op.custoPrevisto != null ? ` · ${formatarReais(op.custoPrevisto)}/peça` : ''}
+                      </div>
+                    )}
                   </td>
                   <td className="px-3 py-3 text-right text-neutral-300 font-mono">
                     {op.tempoUnitMin}
@@ -295,6 +312,8 @@ function OperacaoModal({
   onClose,
 }: OperacaoModalProps) {
   const ehEdicao = operacao !== null;
+  const { claro } = useTheme();
+  const textoOpcao = claro ? 'text-slate-800' : 'text-neutral-200';
 
   const [codigoOp, setCodigoOp] = useState('');
   const [etapaId, setEtapaId] = useState('');
@@ -304,6 +323,10 @@ function OperacaoModal({
   const [tempoSetupMin, setTempoSetupMin] = useState('0');
   const [exigeInspecao, setExigeInspecao] = useState(false);
   const [observacoes, setObservacoes] = useState('');
+  const [terceirizada, setTerceirizada] = useState(false);
+  const [fornecedor, setFornecedor] = useState('');
+  const [prazoDias, setPrazoDias] = useState('');
+  const [custo, setCusto] = useState('');
   const [erro, setErro] = useState<string | null>(null);
 
   const { data: etapas } = useEtapasList();
@@ -321,6 +344,10 @@ function OperacaoModal({
       setTempoSetupMin(operacao?.tempoSetupMin?.toString() ?? '0');
       setExigeInspecao(operacao?.exigeInspecao ?? false);
       setObservacoes(operacao?.observacoes ?? '');
+      setTerceirizada(operacao?.terceirizada ?? false);
+      setFornecedor(operacao?.fornecedor ?? '');
+      setPrazoDias(operacao?.prazoPrevistoDias?.toString() ?? '');
+      setCusto(operacao?.custoPrevisto != null ? Number(operacao.custoPrevisto).toFixed(2).replace('.', ',') : '');
       setErro(null);
     }
   }, [open, operacao]);
@@ -367,6 +394,27 @@ function OperacaoModal({
       return;
     }
 
+    let prazo: number | null = null;
+    let custoNum: number | null = null;
+    if (terceirizada) {
+      if (!fornecedor.trim()) {
+        setErro('Informe o fornecedor do serviço de terceiros');
+        return;
+      }
+      if (prazoDias.trim()) {
+        prazo = Number(prazoDias);
+        if (!Number.isInteger(prazo) || prazo < 1) {
+          setErro('Prazo previsto deve ser um número inteiro de dias (1 ou mais)');
+          return;
+        }
+      }
+      custoNum = lerDecimal(custo);
+      if (custoNum != null && (!Number.isFinite(custoNum) || custoNum < 0)) {
+        setErro('Custo previsto inválido');
+        return;
+      }
+    }
+
     try {
       const payload = {
         codigoOp: codigoOp.trim(),
@@ -376,6 +424,10 @@ function OperacaoModal({
         tempoUnitMin: tempo,
         tempoSetupMin: setup,
         exigeInspecao,
+        terceirizada,
+        fornecedor: terceirizada ? fornecedor.trim() : null,
+        prazoPrevistoDias: terceirizada ? prazo : null,
+        custoPrevisto: terceirizada ? custoNum : null,
         observacoes: observacoes.trim() || null,
       };
 
@@ -520,7 +572,7 @@ function OperacaoModal({
         </div>
 
         {/* Exige inspeção */}
-        <label className="flex items-center gap-2 text-sm text-neutral-200 select-none cursor-pointer">
+        <label className={`flex items-center gap-2 text-sm ${textoOpcao} select-none cursor-pointer`}>
           <input
             type="checkbox"
             checked={exigeInspecao}
@@ -529,6 +581,63 @@ function OperacaoModal({
           />
           Exige inspeção dimensional após a execução
         </label>
+
+        {/* Serviço de terceiros */}
+        <div className="subcard p-3 space-y-3">
+          <label className={`flex items-center gap-2 text-sm ${textoOpcao} select-none cursor-pointer`}>
+            <input
+              type="checkbox"
+              checked={terceirizada}
+              onChange={(e) => setTerceirizada(e.target.checked)}
+              className="w-4 h-4 accent-forja-500"
+            />
+            Feita fora da fábrica (serviço de terceiros)
+          </label>
+          <p className={`text-xs -mt-2 ${claro ? 'text-slate-500' : 'text-neutral-500'}`}>
+            No tótem, a OP não abre máquina: registra o envio ao fornecedor e o retorno das peças.
+          </p>
+          {terceirizada && (
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+              <div>
+                <label className="label" htmlFor="op-fornecedor">Fornecedor *</label>
+                <input
+                  id="op-fornecedor"
+                  type="text"
+                  value={fornecedor}
+                  onChange={(e) => setFornecedor(e.target.value)}
+                  className="input"
+                  maxLength={200}
+                  placeholder="Ex: Rebarbação Silva"
+                />
+              </div>
+              <div>
+                <label className="label" htmlFor="op-prazo">Prazo previsto (dias)</label>
+                <input
+                  id="op-prazo"
+                  type="number"
+                  min="1"
+                  step="1"
+                  value={prazoDias}
+                  onChange={(e) => setPrazoDias(e.target.value)}
+                  className="input"
+                  placeholder="Ex: 5"
+                />
+              </div>
+              <div>
+                <label className="label" htmlFor="op-custo">Custo previsto (R$ por peça)</label>
+                <input
+                  id="op-custo"
+                  type="text"
+                  inputMode="decimal"
+                  value={custo}
+                  onChange={(e) => setCusto(e.target.value.replace(/[^\d.,]/g, ''))}
+                  className="input"
+                  placeholder="Ex: 12,50"
+                />
+              </div>
+            </div>
+          )}
+        </div>
 
         {/* Observações */}
         <div>

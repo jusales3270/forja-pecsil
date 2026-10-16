@@ -17,6 +17,12 @@ export interface OperacaoArtigo {
   tempoUnitMin: number;
   tempoSetupMin: number;
   exigeInspecao: boolean;
+  /** Feita fora da fábrica (terceiros): no tótem registra envio e retorno. */
+  terceirizada: boolean;
+  fornecedor: string | null;
+  prazoPrevistoDias: number | null;
+  /** Decimal do Prisma chega como texto. Por peça. */
+  custoPrevisto: string | number | null;
   observacoes: string | null;
   criadoEm: string;
   atualizadoEm: string;
@@ -33,6 +39,10 @@ export interface CriarOperacaoInput {
   tempoUnitMin: number;
   tempoSetupMin?: number;
   exigeInspecao?: boolean;
+  terceirizada?: boolean;
+  fornecedor?: string | null;
+  prazoPrevistoDias?: number | null;
+  custoPrevisto?: number | null;
   observacoes?: string | null;
 }
 
@@ -45,6 +55,10 @@ export interface AtualizarOperacaoInput {
   tempoUnitMin?: number;
   tempoSetupMin?: number;
   exigeInspecao?: boolean;
+  terceirizada?: boolean;
+  fornecedor?: string | null;
+  prazoPrevistoDias?: number | null;
+  custoPrevisto?: number | null;
   observacoes?: string | null;
 }
 

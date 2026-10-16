@@ -89,11 +89,11 @@ export function LotesOpsTab({ os }: LotesOpsTabProps) {
       tempoUnitPlanejado: op.tempoUnitPlanejado,
       tempoTotalPlanejado: op.tempoTotalPlanejado,
       exigeInspecao: op.exigeInspecao,
-      terceirizada: false,
-      fornecedor: null,
-      prazoPrevistoDias: null,
-      esperaHoras: null,
-      exigeLoteCompleto: false,
+      terceirizada: op.terceirizada ?? false,
+      fornecedor: op.fornecedor ?? null,
+      prazoPrevistoDias: op.prazoPrevistoDias ?? null,
+      esperaHoras: op.esperaHoras ?? null,
+      exigeLoteCompleto: op.exigeLoteCompleto ?? false,
       pecasDisponiveis: op.quantidadeConcluida,
       liberadasPelaAnterior: lote.quantidadePecas,
       bloqueadoPor: null,
@@ -315,6 +315,11 @@ function OPLoteRow({
           <span>{op.tipoServico}</span>
           <span className="text-xs text-neutral-500 opacity-0 group-hover:opacity-100 transition">↗</span>
         </div>
+        {op.terceirizada && (
+          <div className={`text-xs mt-0.5 ${claro ? 'text-amber-700' : 'text-amber-400'}`}>
+            🚚 Terceiros{op.fornecedor ? ` · ${op.fornecedor}` : ''}{op.prazoPrevistoDias ? ` · ${op.prazoPrevistoDias} dia(s)` : ''}
+          </div>
+        )}
         {op.observacoes && (
           <div className={`text-xs mt-0.5 ${claro ? 'text-slate-500' : 'text-neutral-500'}`}>{op.observacoes}</div>
         )}
