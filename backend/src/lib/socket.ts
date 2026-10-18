@@ -45,6 +45,19 @@ export function attachSocketIO(
     },
   });
 
+  // Só conecta quem está logado: sem isso, qualquer um na rede ouvia as
+  // estações e entrava na sala de qualquer uma.
+  io.use((socket, next) => {
+    const token = (socket.handshake.auth as { token?: unknown } | undefined)?.token;
+    if (typeof token !== 'string' || !token) return next(new Error('unauthorized'));
+    try {
+      app.jwt.verify(token);
+      return next();
+    } catch {
+      return next(new Error('unauthorized'));
+    }
+  });
+
   io.on('connection', (socket) => {
     app.log.info(`🔌 Socket conectado: ${socket.id}`);
 

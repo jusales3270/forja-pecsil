@@ -68,7 +68,10 @@ services:
       PORT: 3001
       DATABASE_URL: ${DATABASE_URL:-postgresql://forja:forja_dev_2026@postgres:5432/forja}
       REDIS_URL: ${REDIS_URL:-redis://redis:6379}
-      JWT_SECRET: ${JWT_SECRET:-forja_dev_secret_change_in_prod_seriously}
+      # Obrigatória: sem ela a Forja não sobe (a chave de dev está no código).
+      JWT_SECRET: ${JWT_SECRET:?JWT_SECRET obrigatório}
+      CORS_ORIGINS: ${CORS_ORIGINS:-}
+      TRUST_PROXY_HOPS: ${TRUST_PROXY_HOPS:-2}
       MINIO_ENDPOINT: minio
       MINIO_PORT: 9000
       MINIO_USE_SSL: "false"
@@ -77,6 +80,12 @@ services:
       MINIO_BUCKET_DESENHOS: ${MINIO_BUCKET_DESENHOS:-forja-desenhos}
       MINIO_BUCKET_FOTOS: ${MINIO_BUCKET_FOTOS:-forja-fotos}
       MINIO_PUBLIC_URL: ${MINIO_PUBLIC_URL:-http://localhost:9100}
+    # Logs com rotação: até 5 arquivos de 10 MB, para não encher o disco.
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "5"
     depends_on:
       - postgres
       - redis

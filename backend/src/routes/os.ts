@@ -9,6 +9,7 @@ import { z } from 'zod';
 import { Prisma } from '@prisma/client';
 import { prisma } from '../db/prisma.js';
 import { exigirModulo } from '../lib/acessos.js';
+import { compararPrevistoRealizado } from '../lib/previsto-realizado.js';
 import {
   type AvisoChegada,
   calcularDivisaoLotes,
@@ -728,4 +729,41 @@ export async function osRoutes(app: FastifyInstance) {
       return { data: eventos };
     }
   );
+
+  // ---------------- HORAS PREVISTAS × REALIZADAS ----------------
+  app.get('/os/:id/horas', { onRequest: [app.authenticate] }, async (request, reply) => {
+    const parsed = z.object({ id: z.string().uuid() }).safeParse(request.params);
+    if (!parsed.success) return reply.code(400).send({ error: 'invalid_input', message: 'ID inválido' });
+    const os = await prisma.oS.findUnique({
+      where: { id: parsed.data.id },
+      select: {
+        id: true,
+        lotes: {
+          select: {
+            numeroLote: true,
+            quantidadePecas: true,
+            opsLote: {
+              select: {
+                id: true, ordem: true, codigoOp: true, tipoServico: true, status: true, tempoTotalPlanejado: true,
+                terceirizada: true, esperaHoras: true,
+                etapa: { select: { nome: true } },
+                operacaoArtigo: { select: { tempoSetupMin: true } },
+                carimbos: { select: { timestampEntrada: true, timestampSaida: true } },
+              },
+            },
+          },
+        },
+      },
+    });
+    if (!os) return reply.code(404).send({ error: 'not_found', message: 'OS não encontrada' });
+    const ops = os.lotes.flatMap((l) =>
+      l.opsLote.map((op) => ({
+        id: op.id, loteNumero: l.numeroLote, quantidade: l.quantidadePecas, ordem: op.ordem, codigoOp: op.codigoOp,
+        tipoServico: op.tipoServico, etapa: op.etapa.nome, status: op.status, tempoTotalPlanejado: op.tempoTotalPlanejado,
+        tempoSetupMin: op.operacaoArtigo.tempoSetupMin, terceirizada: op.terceirizada, esperaHoras: op.esperaHoras,
+        carimbos: op.carimbos.map((c) => ({ entrada: c.timestampEntrada, saida: c.timestampSaida })),
+      })),
+    );
+    return { data: compararPrevistoRealizado(ops) };
+  });
 }

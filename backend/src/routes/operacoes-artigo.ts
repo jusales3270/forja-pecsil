@@ -14,7 +14,9 @@ import { FastifyInstance } from 'fastify';
 import { z } from 'zod';
 import { Prisma } from '@prisma/client';
 import { prisma } from '../db/prisma.js';
-import { buscarRoteiroPadrao, PASSO_SEQUENCIA } from '../data/roteiros-padrao.js';
+import { buscarRoteiroPadrao } from '../data/roteiros-padrao.js';
+import { operacoesDoRoteiro, resolverTipos } from '../lib/aplicar-roteiro.js';
+import { exigirModulo } from '../lib/acessos.js';
 
 const criarOperacaoSchema = z.object({
   etapaId: z.string().uuid('etapaId inválido'),
@@ -140,7 +142,7 @@ export async function operacoesArtigoRoutes(app: FastifyInstance) {
   // ---------------- CRIAR ----------------
   app.post(
     '/artigos/:artigoId/operacoes',
-    { onRequest: [app.authenticate] },
+    { onRequest: [exigirModulo('artigos')] },
     async (request, reply) => {
       const { artigoId } = request.params as { artigoId: string };
 
@@ -227,7 +229,7 @@ export async function operacoesArtigoRoutes(app: FastifyInstance) {
   // ---------------- ATUALIZAR ----------------
   app.patch(
     '/artigos/:artigoId/operacoes/:id',
-    { onRequest: [app.authenticate] },
+    { onRequest: [exigirModulo('artigos')] },
     async (request, reply) => {
       const { artigoId, id } = request.params as {
         artigoId: string;
@@ -349,7 +351,7 @@ export async function operacoesArtigoRoutes(app: FastifyInstance) {
   // ---------------- APLICAR ROTEIRO PADRÃO ----------------
   app.post(
     '/artigos/:artigoId/operacoes/aplicar-roteiro',
-    { onRequest: [app.authenticate] },
+    { onRequest: [exigirModulo('artigos')] },
     async (request, reply) => {
       const { artigoId } = request.params as { artigoId: string };
 
@@ -378,23 +380,7 @@ export async function operacoesArtigoRoutes(app: FastifyInstance) {
         });
       }
 
-      // Resolve os códigos do roteiro contra o catálogo de Tipos de Serviço.
-      // Cada tipo carrega a etapa — é dela que a OP herda o destino no tótem.
-      const codigos = [
-        ...new Set(
-          roteiro.operacoes.flatMap((o) =>
-            [o.codigoTipoServico, o.avisaEtapaDoCodigoTipoServico].filter(
-              (c): c is number => c != null,
-            ),
-          ),
-        ),
-      ];
-      const tipos = await prisma.tipoServico.findMany({
-        where: { codigo: { in: codigos }, ativo: true },
-      });
-      const porCodigo = new Map(tipos.map((t) => [t.codigo!, t]));
-
-      const faltando = codigos.filter((c) => !porCodigo.has(c));
+      const { porCodigo, faltando } = await resolverTipos(roteiro);
       if (faltando.length > 0) {
         return reply.code(409).send({
           error: 'tipos_servico_faltando',
@@ -436,34 +422,7 @@ export async function operacoesArtigoRoutes(app: FastifyInstance) {
           }
 
           return Promise.all(
-            roteiro.operacoes.map((op, idx) => {
-              const tipo = porCodigo.get(op.codigoTipoServico)!;
-              return tx.operacaoArtigo.create({
-                data: {
-                  artigoId,
-                  etapaId: tipo.etapaId,
-                  tipoServicoId: tipo.id,
-                  codigoOp: String((idx + 1) * PASSO_SEQUENCIA),
-                  ordem: idx,
-                  tipoServico: tipo.nome,
-                  tempoUnitMin: op.tempoUnitMin,
-                  tempoSetupMin: op.tempoSetupMin,
-                  exigeInspecao: op.exigeInspecao,
-                  gatilhoAlertaPecas: op.gatilhoAlertaPecas ?? null,
-                  avisaAoIniciar: op.avisaAoIniciar ?? false,
-                  terceirizada: op.terceirizada ?? false,
-                  fornecedor: op.fornecedor ?? null,
-                  prazoPrevistoDias: op.prazoPrevistoDias ?? null,
-                  esperaHoras: op.esperaHoras ?? null,
-                  exigeLoteCompleto: op.exigeLoteCompleto ?? false,
-                  etapaAvisadaId:
-                    op.avisaEtapaDoCodigoTipoServico != null
-                      ? (porCodigo.get(op.avisaEtapaDoCodigoTipoServico)?.etapaId ?? null)
-                      : null,
-                  observacoes: op.observacoes,
-                },
-              });
-            }),
+            operacoesDoRoteiro(artigoId, roteiro, porCodigo).map((data) => tx.operacaoArtigo.create({ data })),
           );
         });
 
@@ -488,7 +447,7 @@ export async function operacoesArtigoRoutes(app: FastifyInstance) {
   // ---------------- REORDENAR (bulk) ----------------
   app.post(
     '/artigos/:artigoId/operacoes/reordenar',
-    { onRequest: [app.authenticate] },
+    { onRequest: [exigirModulo('artigos')] },
     async (request, reply) => {
       const { artigoId } = request.params as { artigoId: string };
 

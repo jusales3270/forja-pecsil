@@ -23,7 +23,10 @@ api.interceptors.response.use(
     // Uma resposta atrasada da sessão anterior não deve desconectar a nova conta.
     const currentToken = localStorage.getItem('forja_token');
     const requestAuthorization = err.config?.headers?.Authorization;
-    if (err.response?.status === 401 && (!currentToken || requestAuthorization === `Bearer ${currentToken}`)) {
+    // PIN errado no próprio login também é 401: aí a tela tem de mostrar o erro,
+    // não recarregar (antes a mensagem sumia junto com o recarregamento).
+    const ehLogin = String(err.config?.url ?? '').endsWith('/auth/login');
+    if (err.response?.status === 401 && !ehLogin && (!currentToken || requestAuthorization === `Bearer ${currentToken}`)) {
       localStorage.removeItem('forja_token');
       localStorage.removeItem('forja-auth');
       localStorage.removeItem('forja_pessoa');

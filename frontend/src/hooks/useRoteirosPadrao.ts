@@ -64,6 +64,56 @@ export function useAplicarRoteiro(artigoId: string) {
   });
 }
 
+export interface SemRoteiroPorTipo {
+  tipoProduto: string;
+  total: number;
+  semRoteiro: number;
+}
+
+export function useArtigosSemRoteiro(ativo = true) {
+  return useQuery({
+    queryKey: ['roteiros-padrao', 'sem-roteiro'],
+    queryFn: async () => {
+      const { data } = await api.get<{ data: SemRoteiroPorTipo[] }>('/roteiros-padrao/sem-roteiro');
+      return data.data;
+    },
+    enabled: ativo,
+  });
+}
+
+export interface AplicarEmMassaInput {
+  roteiroId: string;
+  tipoProduto: string;
+  clienteId?: string | null;
+  simular: boolean;
+}
+
+export interface AplicarEmMassaResultado {
+  roteiro: string;
+  simulado: boolean;
+  total: number;
+  aplicados?: number;
+  operacoesPorArtigo?: number;
+  amostra?: { codigo: string; descricao: string }[];
+}
+
+/** Aplica o modelo em todos os artigos sem roteiro do tipo (simular = só conta). */
+export function useAplicarEmMassa() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async ({ roteiroId, ...corpo }: AplicarEmMassaInput) => {
+      const { data } = await api.post<{ data: AplicarEmMassaResultado }>(`/roteiros-padrao/${roteiroId}/aplicar-em-massa`, corpo);
+      return data.data;
+    },
+    onSuccess: (r) => {
+      if (r.simulado) return;
+      qc.invalidateQueries({ queryKey: ['roteiros-padrao', 'sem-roteiro'] });
+      qc.invalidateQueries({ queryKey: ['artigos'] });
+      qc.invalidateQueries({ queryKey: ['operacoes'] });
+    },
+  });
+}
+
 /** 212 -> "3h32" / 45 -> "45min" / 4.5 -> "4min30s" */
 export function formatarMinutos(min: number): string {
   const totalSegundos = Math.round(min * 60);

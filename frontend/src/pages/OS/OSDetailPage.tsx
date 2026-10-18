@@ -19,10 +19,11 @@ import { DadosOSTab } from './tabs/DadosOSTab';
 import { LotesOpsTab } from './tabs/LotesOpsTab';
 import { TimelineTab } from './tabs/TimelineTab';
 import { MateriaisOSTab } from './tabs/MateriaisOSTab';
+import { HorasTab } from './tabs/HorasTab';
 import { RascunhoPainel } from './RascunhoPainel';
 import { temCapacidade } from '../../lib/permissions';
 
-type Aba = 'dados' | 'lotes' | 'materiais' | 'timeline';
+type Aba = 'dados' | 'lotes' | 'materiais' | 'horas' | 'timeline';
 
 export function OSDetailPage() {
   return (
@@ -196,7 +197,7 @@ function OSDetailContent() {
 
         {/* Tabs */}
         <div className={`border-b ${T.bordaTabs} mb-6`}>
-          <nav className="flex gap-2">
+          <nav className="flex gap-2 overflow-x-auto">
             <TabButton
               ativo={aba === 'dados'}
               onClick={() => setAba('dados')}
@@ -227,6 +228,16 @@ function OSDetailContent() {
                 {os.status === 'rascunho' ? (os.artigo?._count?.materiais ?? 0) : (os.materiais?.length ?? 0)}
               </span>
             </TabButton>
+            {os.status !== 'rascunho' && (
+              <TabButton
+                ativo={aba === 'horas'}
+                onClick={() => setAba('horas')}
+                classeAtiva={T.tabAtiva}
+                classeInativa={T.tabInativa}
+              >
+                Previsto × realizado
+              </TabButton>
+            )}
             <TabButton
               ativo={aba === 'timeline'}
               onClick={() => setAba('timeline')}
@@ -243,6 +254,7 @@ function OSDetailContent() {
           {aba === 'dados' && <DadosOSTab os={os} podeEditar={podeEditar} />}
           {aba === 'lotes' && <LotesOpsTab os={os} />}
           {aba === 'materiais' && <MateriaisOSTab os={os} />}
+          {aba === 'horas' && <HorasTab osId={os.id} />}
           {aba === 'timeline' && <TimelineTab osId={os.id} />}
         </div>
       </div>
@@ -284,7 +296,7 @@ function TabButton({
     <button
       type="button"
       onClick={onClick}
-      className={`px-4 py-2.5 text-sm font-medium transition border-b-2 -mb-px flex items-center ${
+      className={`px-4 py-2.5 text-sm font-medium transition border-b-2 -mb-px flex items-center whitespace-nowrap shrink-0 ${
         ativo ? classeAtiva : classeInativa
       }`}
     >
