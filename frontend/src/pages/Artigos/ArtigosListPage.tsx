@@ -19,6 +19,7 @@ import {
   type TipoProduto,
 } from '../../hooks/useArtigos';
 import { temCapacidade } from '../../lib/permissions';
+import { AplicarEmMassaModal } from './AplicarEmMassaModal';
 
 const TIPOS_PRODUTO: { value: TipoProduto; label: string }[] = [
   { value: 'arruela', label: 'Arruela' },
@@ -62,6 +63,7 @@ export function ArtigosListPage() {
   const [criando, setCriando] = useState(false);
   const [mostrarInativos, setMostrarInativos] = useState(false);
   const [deletando, setDeletando] = useState<Artigo | null>(null);
+  const [emMassa, setEmMassa] = useState(false);
 
   const { data: clientes } = useClientesList();
   const { data: artigos, isLoading, isError } = useArtigosList({
@@ -128,7 +130,14 @@ export function ArtigosListPage() {
                 ))}
               </select>
             </div>
-            <div className="flex items-end">
+            <div className="flex items-end gap-2">
+              <button
+                onClick={() => setEmMassa(true)}
+                className="btn-secondary px-4 py-3 whitespace-nowrap"
+                title="Preencher o roteiro de todos os artigos sem roteiro de um tipo de peça"
+              >
+                Roteiro em massa
+              </button>
               <button
                 onClick={() => setCriando(true)}
                 className="btn-primary px-5 py-3 w-full"
@@ -177,7 +186,7 @@ export function ArtigosListPage() {
 
         {/* Tabela */}
         {artigosFiltrados.length > 0 && (
-          <div className="card p-0 overflow-hidden">
+          <div className="card p-0 overflow-x-auto">
             <table className="w-full text-sm">
               <thead className="bg-neutral-950 text-neutral-400 text-xs uppercase tracking-wide">
                 <tr>
@@ -276,6 +285,7 @@ export function ArtigosListPage() {
         onConfirm={handleConfirmarDelete}
         onCancel={() => setDeletando(null)}
       />
+      {emMassa && <AplicarEmMassaModal rotulosTipo={LABELS_TIPO} onClose={() => setEmMassa(false)} />}
     </AppLayout>
   );
 }

@@ -259,6 +259,50 @@ export function useOSTimeline(id: string | null) {
   });
 }
 
+export interface LinhaHorasOS {
+  id: string;
+  loteNumero: number;
+  quantidade: number;
+  codigoOp: string;
+  tipoServico: string;
+  etapa: string;
+  status: string;
+  previstoMin: number | null;
+  realizadoMin: number | null;
+  emAndamento: boolean;
+  desvioPct: number | null;
+  semMedicao: boolean;
+  foraDaComparacao: 'terceiros' | 'espera' | null;
+}
+
+export interface HorasOS {
+  linhas: LinhaHorasOS[];
+  totais: {
+    previstoMin: number;
+    realizadoMin: number;
+    concluidas: number;
+    previstoConcluidasMin: number;
+    realizadoConcluidasMin: number;
+    desvioConcluidasPct: number | null;
+    faltaPrevistoMin: number;
+    foraDaComparacao: number;
+    semMedicao: number;
+  };
+}
+
+/** Horas previstas × realizadas da OS (P-03). Atualiza a cada minuto: o carimbo aberto conta até agora. */
+export function useOSHoras(id: string | null) {
+  return useQuery<HorasOS>({
+    queryKey: ['os-horas', id],
+    queryFn: async () => {
+      const res = await api.get(`/os/${id}/horas`);
+      return res.data.data;
+    },
+    enabled: !!id,
+    refetchInterval: 60_000,
+  });
+}
+
 // ============================================================
 // Mutations
 // ============================================================

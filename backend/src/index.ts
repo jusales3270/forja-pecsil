@@ -1,7 +1,8 @@
 import Fastify from 'fastify';
 import cors from '@fastify/cors';
 import multipart from '@fastify/multipart';
-import { env } from './lib/env.js';
+import { env, proxiesConfiaveis } from './lib/env.js';
+import { origensPermitidas, registrarSeguranca } from './lib/seguranca.js';
 import { ZodError } from 'zod';
 import { registerAuth } from './lib/auth.js';
 import { decorateSocketPlaceholder, attachSocketIO } from './lib/socket.js';
@@ -37,6 +38,7 @@ import { mensagensRoutes } from './routes/mensagens.js';
 
 async function bootstrap() {
   const app = Fastify({
+    trustProxy: proxiesConfiaveis || false,
     logger:
       env.NODE_ENV === 'development'
         ? {
@@ -52,9 +54,12 @@ async function bootstrap() {
   // O Socket.IO real é instanciado depois do listen e atribuído em app.io.
   decorateSocketPlaceholder(app);
 
-  // CORS — liberado para desenvolvimento e rede local
+  // Cabeçalhos de segurança e limite de requisições (lib/seguranca.ts)
+  await registrarSeguranca(app);
+
+  // CORS — aberto em dev; em produção só as origens de CORS_ORIGINS
   await app.register(cors, {
-    origin: true,
+    origin: origensPermitidas(),
     credentials: true,
   });
 
@@ -127,7 +132,7 @@ async function bootstrap() {
     // Socket.IO acoplado ao mesmo servidor HTTP (atribuído em app.io)
     attachSocketIO(app, {
       httpServer: app.server,
-      corsOrigin: true,
+      corsOrigin: origensPermitidas(),
     });
 
     garantirBuckets().catch((e) => app.log.warn({ err: e }, 'Aviso: Falha ao garantir buckets no MinIO no arranque'));

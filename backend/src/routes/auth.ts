@@ -3,6 +3,7 @@ import { z } from 'zod';
 import bcrypt from 'bcryptjs';
 import { prisma } from '../db/prisma.js';
 import { acessosPublicos } from '../lib/acessos.js';
+import { chaveDoLogin, limparFalhasLogin, loginBloqueadoPor, registrarFalhaLogin } from '../lib/seguranca.js';
 
 const loginSchema = z.object({
   codigo_pessoal: z.string().min(1, 'Código pessoal é obrigatório'),
@@ -11,7 +12,16 @@ const loginSchema = z.object({
 
 export async function authRoutes(app: FastifyInstance) {
   // POST /auth/login
+  // Bloqueio por PIN errado (lib/seguranca.ts): o PIN é curto.
   app.post('/auth/login', async (request, reply) => {
+    const chave = chaveDoLogin(request);
+    const espera = loginBloqueadoPor(chave);
+    if (espera > 0) {
+      return reply.code(429).send({
+        error: 'muitas_tentativas',
+        message: `Muitas tentativas erradas. Tente de novo em ${Math.ceil(espera / 60_000)} min.`,
+      });
+    }
     const parsed = loginSchema.safeParse(request.body);
 
     if (!parsed.success) {
@@ -30,6 +40,7 @@ export async function authRoutes(app: FastifyInstance) {
     });
 
     if (!pessoa || !pessoa.ativo) {
+      registrarFalhaLogin(chave);
       return reply.code(401).send({
         error: 'invalid_credentials',
         message: 'Código ou senha inválidos',
@@ -39,11 +50,14 @@ export async function authRoutes(app: FastifyInstance) {
     const pinOk = await bcrypt.compare(pin, pessoa.pinHash);
 
     if (!pinOk) {
+      registrarFalhaLogin(chave);
       return reply.code(401).send({
         error: 'invalid_credentials',
         message: 'Código ou senha inválidos',
       });
     }
+
+    limparFalhasLogin(chave);
 
     // etapaId vai no token pra decidir permissão de estação sem ir ao banco
     // a cada apontamento de peça.

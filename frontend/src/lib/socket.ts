@@ -11,14 +11,15 @@ let socket: Socket | null = null;
 
 export function getSocket(): Socket {
   if (!socket) {
-    const token = localStorage.getItem('forja_token');
     socket = io(baseURL, {
       autoConnect: true,
       reconnection: true,
       reconnectionDelay: 1000,
       reconnectionDelayMax: 5000,
       transports: ['websocket', 'polling'],
-      auth: token ? { token } : undefined,
+      // O servidor só aceita quem está logado. Lido a cada (re)conexão: depois
+      // de trocar de usuário no tótem, vale o token novo, não o da primeira vez.
+      auth: (cb) => cb({ token: localStorage.getItem('forja_token') ?? '' }),
     });
   }
   return socket;
