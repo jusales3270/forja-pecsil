@@ -6,6 +6,8 @@
 //   POST /api/integracao/os-rascunho/:ref/cancelar — orçamento reaberto: cancela o rascunho
 //   GET  /api/integracao/os-rascunho/:ref          — situação da OS e materiais (espelho)
 //   PUT  /api/integracao/materiais                 — catálogo de materiais do Almoxarifado
+//   GET  /api/integracao/desenhos                  — todos os desenhos com arquivo (Biblioteca da Fundição)
+//   GET  /api/integracao/desenhos/:id/arquivo      — o arquivo do desenho (stream)
 //
 // O rascunho NÃO cria lote nem OP e não avisa estação: fica fora do Tótem e do
 // Painel até o PCP completar o Artigo e liberar (POST /os/:id/liberar).
@@ -16,6 +18,8 @@ import { FastifyInstance } from 'fastify';
 import { z } from 'zod';
 import { prisma } from '../db/prisma.js';
 import { buscaDoMaterial } from '../lib/materiais-busca.js';
+import { listarDesenhosParaBiblioteca } from '../lib/desenhos-integracao.js';
+import { obterArquivoStream } from '../lib/storage.js';
 import { ORIGEM_TREINO, PREFIXO_PROVISORIO, PREFIXO_TREINO, criarEvento } from '../lib/os-producao.js';
 
 const TIPOS = ['forma', 'bloco', 'fundo_forma', 'fundo_bloco', 'molde', 'arruela', 'cabeca_sopro', 'forminha', 'puncao', 'funil'] as const;
@@ -175,5 +179,28 @@ export async function integracaoRoutes(app: FastifyInstance) {
       return prisma.materialCatalogo.upsert({ where: { codigo: m.codigo.toUpperCase() }, create: { codigo: m.codigo.toUpperCase(), ...dados }, update: dados });
     }));
     return { data: { recebidos: itens.length } };
+  });
+
+  // ---------------- DESENHOS (BIBLIOTECA DA FUNDIÇÃO) ----------------
+  // A plataforma lê a lista inteira a cada sincronização e só baixa o arquivo
+  // quando o desenho é novo ou a chave do arquivo mudou (a Forja apaga o antigo).
+  app.get('/integracao/desenhos', { onRequest: [exigirIntegracao] }, async () => {
+    return { data: await listarDesenhosParaBiblioteca() };
+  });
+
+  app.get('/integracao/desenhos/:id/arquivo', { onRequest: [exigirIntegracao] }, async (request, reply) => {
+    const { id } = z.object({ id: z.string().uuid() }).parse(request.params);
+    const d = await prisma.desenho.findUnique({ where: { id }, select: { arquivoBucket: true, arquivoKey: true, arquivoTipo: true } });
+    if (!d?.arquivoBucket || !d.arquivoKey) return reply.code(404).send({ error: 'arquivo_nao_anexado', message: 'Desenho sem arquivo.' });
+    try {
+      const s3 = await obterArquivoStream(d.arquivoBucket, d.arquivoKey);
+      if (!s3.Body) return reply.code(404).send({ error: 'arquivo_nao_encontrado_storage', message: 'Arquivo não encontrado no armazenamento.' });
+      reply.header('Content-Type', d.arquivoTipo || 'application/octet-stream').header('X-Arquivo-Key', d.arquivoKey);
+      if (s3.ContentLength != null) reply.header('Content-Length', String(s3.ContentLength));
+      return reply.send(s3.Body);
+    } catch (err) {
+      app.log.error({ err, key: d.arquivoKey }, 'Erro ao ler o desenho no MinIO (integração)');
+      return reply.code(502).send({ error: 'storage_error', message: 'Erro ao buscar o arquivo no armazenamento.' });
+    }
   });
 }
