@@ -229,13 +229,9 @@ export function rotaInicialPorPapel(sujeito: SujeitoPermissao): string {
 // O backend valida de novo em toda ação. Aqui é só pra tela não oferecer
 // botão que vai tomar 403.
 
-const SEM_ACESSO_AO_TOTEM: Papel[] = [
-  'chefe',
-  'operador',
-  'inspetor',
-  'embalador',
-  'engenharia',
-];
+/** Papéis que operam só a estação vinculada no cadastro (Pessoas → Estação
+ *  Pertencente). Sem vínculo, só visualizam. */
+const OPERAM_A_PROPRIA_ESTACAO: Papel[] = ['estacao', 'operador', 'engenharia', 'inspetor', 'embalador'];
 
 export function podeOperarEstacao(
   pessoa: { papel?: Papel | null; etapaId?: string | null } | null | undefined,
@@ -245,14 +241,16 @@ export function podeOperarEstacao(
   if (!papel || !etapaId) return false;
 
   if (papel === 'admin' || papel === 'pcp') return true;
-  if (SEM_ACESSO_AO_TOTEM.includes(papel)) return false;
 
-  if (papel === 'estacao') return pessoa?.etapaId === etapaId;
+  if (OPERAM_A_PROPRIA_ESTACAO.includes(papel)) {
+    return pessoa?.etapaId != null && pessoa.etapaId === etapaId;
+  }
 
   if (papel === 'programador') {
     // Sem vínculo, opera tudo — é o comportamento de antes das contas de estação.
     return pessoa?.etapaId == null || pessoa?.etapaId === etapaId;
   }
 
+  // chefe: nunca opera
   return false;
 }
