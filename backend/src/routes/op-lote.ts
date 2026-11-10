@@ -608,9 +608,8 @@ export async function opLoteRoutes(app: FastifyInstance) {
           message: 'Operador não encontrado ou inativo',
         });
       }
-      // Responsável tem que estar vinculado à estação da OP (e ser uma pessoa,
-      // não a conta do posto)
-      if (operador.etapaId !== opLote.etapaId || operador.papel === 'estacao') {
+      // Responsável tem que estar vinculado à estação da OP
+      if (operador.etapaId !== opLote.etapaId) {
         return reply.code(400).send({
           error: 'operador_etapa_incorreta',
           message: 'Este responsável não está vinculado a esta estação',

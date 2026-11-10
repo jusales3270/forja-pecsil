@@ -669,6 +669,22 @@ describe('operador vinculado a uma estação', () => {
     assert.equal(res.statusCode, 201, res.body);
   });
 
+  test('conta de estação vinculada entra com a própria senha e é aceita como responsável', async () => {
+    const conta = await ensurePessoa({ codigoPessoal: 'TEST-EST-OPL', pin: '4444', papel: 'estacao' });
+    await prisma.pessoa.update({ where: { id: conta.id }, data: { etapaId } });
+    const tokenConta = await loginAs(app, 'TEST-EST-OPL', '4444');
+    const maquinaId = await criarMaquinaDedicada();
+    const { opLoteIds } = await criarOSDeTeste(2);
+
+    const res = await app.inject({
+      method: 'POST',
+      url: `/api/op-lote/${opLoteIds[0]}/iniciar`,
+      headers: { authorization: `Bearer ${tokenConta}` },
+      payload: { maquinaId, operadorId: conta.id },
+    });
+    assert.equal(res.statusCode, 201, res.body);
+  });
+
   test('troca de estação vale na hora, sem novo login', async () => {
     const tokenOperador = await loginAs(app, 'TEST-OPER-OPL', '2222');
     const maquinaId = await criarMaquinaDedicada();
