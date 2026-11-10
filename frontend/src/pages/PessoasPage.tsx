@@ -32,8 +32,9 @@ const OPCOES_PAPEL: { papel: Papel; label: string; descricao: string; categoria:
   { papel: 'admin', label: '👑 Administrador', descricao: 'Acesso total, incluindo configurações do sistema.', categoria: 'gestao' },
 ];
 
-/** Papéis em que a vinculação a uma estação específica é aplicável. */
-const ACEITA_ESTACAO: Papel[] = ['estacao', 'programador', 'operador'];
+/** Papéis em que a vinculação a uma estação específica é aplicável.
+ *  O vínculo define quem aparece como responsável nas OPs da estação. */
+const ACEITA_ESTACAO: Papel[] = ['estacao', 'programador', 'operador', 'engenharia', 'inspetor', 'embalador'];
 
 const BADGES_PAPEL: Record<Papel, { bg: string; text: string; border: string }> = {
   admin: { bg: 'bg-purple-500/10', text: 'text-purple-400', border: 'border-purple-500/30' },
@@ -609,7 +610,7 @@ function PessoaModal({ pessoa, onClose }: { pessoa: Pessoa | null; onClose: () =
               required={papel === 'estacao'}
             >
               <option value="">
-                {papel === 'estacao' ? 'Selecione a estação...' : 'Acesso a todas as estações'}
+                {papel === 'estacao' ? 'Selecione a estação...' : 'Sem estação'}
               </option>
               {etapas?.map((e) => (
                 <option key={e.id} value={e.id}>
@@ -620,7 +621,9 @@ function PessoaModal({ pessoa, onClose }: { pessoa: Pessoa | null; onClose: () =
             <p className={`text-xs mt-1 ${ajudaClass}`}>
               {papel === 'estacao'
                 ? 'Esta conta operará exclusivamente a estação selecionada acima.'
-                : 'Selecione se deseja restringir este profissional a uma estação específica.'}
+                : papel === 'programador'
+                  ? 'Aparece como responsável nas OPs desta estação e só opera o tótem dela. Sem estação, opera todas, mas não aparece como responsável.'
+                  : 'Aparece como responsável nas OPs desta estação. Sem estação, não aparece em nenhuma.'}
             </p>
           </div>
         )}
