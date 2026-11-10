@@ -12,6 +12,7 @@
 import { FastifyInstance } from 'fastify';
 import { z } from 'zod';
 import { prisma } from '../db/prisma.js';
+import { exigirModulo } from '../lib/acessos.js';
 import {
   CaracteristicaCota,
   FrequenciaMedicao,
@@ -180,7 +181,7 @@ export async function cotasInspecaoRoutes(app: FastifyInstance) {
   // ---------------- CRIAR ----------------
   app.post(
     '/artigos/:artigoId/operacoes/:opId/plano/cotas',
-    { onRequest: [app.authenticate] },
+    { onRequest: [exigirModulo('artigos')] },
     async (request, reply) => {
       const { artigoId, opId } = request.params as {
         artigoId: string;
@@ -246,7 +247,7 @@ export async function cotasInspecaoRoutes(app: FastifyInstance) {
   // ---------------- ATUALIZAR ----------------
   app.patch(
     '/artigos/:artigoId/operacoes/:opId/plano/cotas/:cotaId',
-    { onRequest: [app.authenticate] },
+    { onRequest: [exigirModulo('artigos')] },
     async (request, reply) => {
       const { artigoId, opId, cotaId } = request.params as {
         artigoId: string;
@@ -392,7 +393,7 @@ export async function cotasInspecaoRoutes(app: FastifyInstance) {
   // ---------------- REORDENAR (bulk) ----------------
   app.post(
     '/artigos/:artigoId/operacoes/:opId/plano/cotas/reordenar',
-    { onRequest: [app.authenticate] },
+    { onRequest: [exigirModulo('artigos')] },
     async (request, reply) => {
       const { artigoId, opId } = request.params as {
         artigoId: string;

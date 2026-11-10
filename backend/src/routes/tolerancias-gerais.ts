@@ -13,6 +13,7 @@
 import { FastifyInstance } from 'fastify';
 import { z } from 'zod';
 import { prisma } from '../db/prisma.js';
+import { exigirModulo } from '../lib/acessos.js';
 
 // ============================================================
 // Schemas de validação
@@ -139,7 +140,7 @@ export async function toleranciasGeraisRoutes(app: FastifyInstance) {
   // ---------------- CRIAR ----------------
   app.post(
     '/clientes/:clienteId/tolerancias-gerais',
-    { onRequest: [app.authenticate] },
+    { onRequest: [exigirModulo('tolerancias')] },
     async (request, reply) => {
       const paramsSchema = z.object({ clienteId: z.string().uuid() });
       const paramsParsed = paramsSchema.safeParse(request.params);
@@ -193,7 +194,7 @@ export async function toleranciasGeraisRoutes(app: FastifyInstance) {
   // ---------------- ATUALIZAR ----------------
   app.put(
     '/tolerancias-gerais/:id',
-    { onRequest: [app.authenticate] },
+    { onRequest: [exigirModulo('tolerancias')] },
     async (request, reply) => {
       const paramsSchema = z.object({ id: z.string().uuid() });
       const paramsParsed = paramsSchema.safeParse(request.params);

@@ -20,7 +20,7 @@ import { Prisma, Papel } from '@prisma/client';
 import bcrypt from 'bcryptjs';
 import { IDS_MODULOS_ACESSO, PAPEIS_ACESSO_CONFIGURAVEL, type Papel as PapelShared } from '@forja/shared';
 import { prisma } from '../db/prisma.js';
-import { acessosPublicos, pessoaTemModulo } from '../lib/acessos.js';
+import { acessosPublicos, pessoaTemModulo, exigirModulo } from '../lib/acessos.js';
 
 const PAPEIS = [
   'admin',
@@ -130,7 +130,7 @@ export async function pessoasRoutes(app: FastifyInstance) {
   });
 
   // ---------------- CRIAR ----------------
-  app.post('/pessoas', { onRequest: [app.authenticate] }, async (request, reply) => {
+  app.post('/pessoas', { onRequest: [exigirModulo('usuarios')] }, async (request, reply) => {
     if (!(await podeGerenciarUsuarios(request))) {
       return reply.code(403).send({
         error: 'forbidden',
@@ -184,7 +184,7 @@ export async function pessoasRoutes(app: FastifyInstance) {
   });
 
   // ---------------- ATUALIZAR ----------------
-  app.put('/pessoas/:id', { onRequest: [app.authenticate] }, async (request, reply) => {
+  app.put('/pessoas/:id', { onRequest: [exigirModulo('usuarios')] }, async (request, reply) => {
     if (!(await podeGerenciarUsuarios(request))) {
       return reply.code(403).send({
         error: 'forbidden',

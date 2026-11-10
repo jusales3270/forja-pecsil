@@ -11,6 +11,7 @@
 import { FastifyInstance } from 'fastify';
 import { z } from 'zod';
 import { prisma } from '../db/prisma.js';
+import { exigirModulo } from '../lib/acessos.js';
 
 const atualizarPlanoSchema = z.object({
   observacoesGerais: z.string().max(2000).optional().nullable(),
@@ -65,7 +66,7 @@ export async function planosInspecaoRoutes(app: FastifyInstance) {
   // ---------------- CRIAR (idempotente) ----------------
   app.post(
     '/artigos/:artigoId/operacoes/:opId/plano',
-    { onRequest: [app.authenticate] },
+    { onRequest: [exigirModulo('artigos')] },
     async (request, reply) => {
       const { artigoId, opId } = request.params as {
         artigoId: string;
@@ -113,7 +114,7 @@ export async function planosInspecaoRoutes(app: FastifyInstance) {
   // ---------------- ATUALIZAR observacoesGerais ----------------
   app.patch(
     '/artigos/:artigoId/operacoes/:opId/plano',
-    { onRequest: [app.authenticate] },
+    { onRequest: [exigirModulo('artigos')] },
     async (request, reply) => {
       const { artigoId, opId } = request.params as {
         artigoId: string;

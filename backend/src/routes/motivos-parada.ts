@@ -12,6 +12,7 @@
 import { FastifyInstance } from 'fastify';
 import { z } from 'zod';
 import { prisma } from '../db/prisma.js';
+import { exigirModulo } from '../lib/acessos.js';
 
 // ============================================================
 // Schemas de validação
@@ -91,7 +92,7 @@ export async function motivosParadaRoutes(app: FastifyInstance) {
   // ---------------- CRIAR ----------------
   app.post(
     '/motivos-parada',
-    { onRequest: [app.authenticate] },
+    { onRequest: [exigirModulo('motivos_parada')] },
     async (request, reply) => {
       const parsed = criarMotivoParadaSchema.safeParse(request.body);
 
@@ -137,7 +138,7 @@ export async function motivosParadaRoutes(app: FastifyInstance) {
   // ---------------- ATUALIZAR ----------------
   app.put(
     '/motivos-parada/:id',
-    { onRequest: [app.authenticate] },
+    { onRequest: [exigirModulo('motivos_parada')] },
     async (request, reply) => {
       const paramsSchema = z.object({ id: z.string().uuid() });
       const paramsParsed = paramsSchema.safeParse(request.params);
