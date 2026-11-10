@@ -406,7 +406,7 @@ describe('POST /op-lote/:id/iniciar', () => {
     assert.equal(res.json().error, 'op_nao_disponivel');
   });
 
-  test('inspetor (papel sem permissão) retorna 403', async () => {
+  test('inspetor sem estação vinculada retorna 403', async () => {
     const { opLoteIds } = await criarOSDeTeste(2);
 
     const res = await app.inject({
@@ -416,7 +416,7 @@ describe('POST /op-lote/:id/iniciar', () => {
       payload: { maquinaId: maquinaCompartilhadaId, operadorId },
     });
     assert.equal(res.statusCode, 403);
-    assert.equal(res.json().error, 'forbidden');
+    assert.equal(res.json().error, 'estacao_incorreta');
   });
 
   test('opLoteId inválido retorna 404', async () => {
@@ -642,9 +642,50 @@ describe('Metalização interna e envio externo', () => {
     assert.equal((await post(seguinteId, 'enviar-externo')).statusCode, 400);
     await prisma.oPLote.update({ where: { id: seguinteId }, data: { etapaId: metalId } });
     assert.equal((await post(seguinteId, 'enviar-externo')).statusCode, 409);
-    const tokenOutra = app.jwt.sign({ pessoaId: programadorId, papel: 'estacao', etapaId: etapaOutraId });
+    const contaOutra = await ensurePessoa({ codigoPessoal: 'TEST-EST-OUTRA-OPL', pin: '3333', papel: 'estacao' });
+    await prisma.pessoa.update({ where: { id: contaOutra.id }, data: { etapaId: etapaOutraId } });
+    const tokenOutra = await loginAs(app, 'TEST-EST-OUTRA-OPL', '3333');
     assert.equal((await post(id, 'enviar-externo', {}, tokenOutra)).statusCode, 403);
     await post(id, 'enviar-externo');
     assert.equal((await post(id, 'receber-externo', { confirmarRecebimento: true }, tokenOutra)).statusCode, 403);
+  });
+});
+
+// ============================================================
+// Operador entrando com a própria senha opera a estação vinculada
+// ============================================================
+describe('operador vinculado a uma estação', () => {
+  test('inicia OP da sua estação com o próprio login', async () => {
+    const tokenOperador = await loginAs(app, 'TEST-OPER-OPL', '2222');
+    const maquinaId = await criarMaquinaDedicada();
+    const { opLoteIds } = await criarOSDeTeste(2);
+
+    const res = await app.inject({
+      method: 'POST',
+      url: `/api/op-lote/${opLoteIds[0]}/iniciar`,
+      headers: { authorization: `Bearer ${tokenOperador}` },
+      payload: { maquinaId, operadorId },
+    });
+    assert.equal(res.statusCode, 201, res.body);
+  });
+
+  test('troca de estação vale na hora, sem novo login', async () => {
+    const tokenOperador = await loginAs(app, 'TEST-OPER-OPL', '2222');
+    const maquinaId = await criarMaquinaDedicada();
+    const { opLoteIds } = await criarOSDeTeste(2);
+
+    await prisma.pessoa.update({ where: { id: operadorId }, data: { etapaId: etapaOutraId } });
+    try {
+      const res = await app.inject({
+        method: 'POST',
+        url: `/api/op-lote/${opLoteIds[0]}/iniciar`,
+        headers: { authorization: `Bearer ${tokenOperador}` },
+        payload: { maquinaId, operadorId: programadorId },
+      });
+      assert.equal(res.statusCode, 403, res.body);
+      assert.equal(res.json().error, 'estacao_incorreta');
+    } finally {
+      await prisma.pessoa.update({ where: { id: operadorId }, data: { etapaId } });
+    }
   });
 });

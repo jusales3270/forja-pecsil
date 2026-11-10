@@ -228,7 +228,7 @@ export function TotemEstacaoPage() {
               {etapa?.nome ?? 'Estação'}
             </h1>
             <p className="text-neutral-400 mt-1">
-              {pessoa?.papel === 'estacao' ? 'Conta' : 'Programador'}:{' '}
+              {({ estacao: 'Conta', programador: 'Programador', operador: 'Operador', engenharia: 'Engenharia', inspetor: 'Inspetor', embalador: 'Embalador', pcp: 'PCP', admin: 'Admin', chefe: 'Chefe' } as Record<string, string>)[pessoa?.papel ?? ''] ?? 'Usuário'}:{' '}
               <span className="text-forja-400">{pessoa?.nome}</span>
             </p>
           </div>

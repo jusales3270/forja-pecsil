@@ -82,7 +82,7 @@ async function criarEvento(
 // ao banco. Qual estação cada um pode operar é decidido depois, por
 // checarEstacaoDaOP, que precisa saber de que etapa é a OP.
 function podeOperarTotem(papel: string): boolean {
-  return ['programador', 'pcp', 'admin', 'estacao'].includes(papel);
+  return ['programador', 'pcp', 'admin', 'estacao', 'operador', 'engenharia', 'inspetor', 'embalador'].includes(papel);
 }
 
 // ============================================================

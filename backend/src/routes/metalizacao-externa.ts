@@ -2,7 +2,7 @@ import type { FastifyInstance } from 'fastify';
 import { z } from 'zod';
 import { isMetalizacao } from '@forja/shared';
 import { prisma } from '../db/prisma.js';
-import { podeOperarEtapa, type UsuarioToken } from '../lib/permissoes-estacao.js';
+import { podeOperarEtapa, usuarioAtual, type UsuarioToken } from '../lib/permissoes-estacao.js';
 import { avisarProximaSeLoteCompleto } from '../lib/aviso-chegada.js';
 
 const paramsSchema = z.object({ id: z.string().uuid() });
@@ -37,7 +37,8 @@ export async function metalizacaoExternaRoutes(app: FastifyInstance) {
       if (!params.success || !body.success) {
         return reply.code(400).send({ error: 'invalid_input', message: 'Confirme os dados da operação.' });
       }
-      const user = request.user as UsuarioToken;
+      const user = await usuarioAtual(request.user as UsuarioToken);
+      if (!user) return reply.code(401).send({ error: 'conta_indisponivel', message: 'Conta indisponível. Entre novamente.' });
       try {
         const op = await prisma.$transaction(async (tx) => {
           // Serializa envio, recebimento e início interno sobre a mesma OP.
