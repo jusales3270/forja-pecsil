@@ -26,7 +26,14 @@ interface Props {
 export function IniciarOPModal({ op, etapaId, onClose }: Props) {
   const isEng = isOperacaoEngenharia(op);
   const usuarioLogado = useAuth((s) => s.pessoa);
-  const metalizacao = isMetalizacao(op.etapa.nome);
+  // Na Metalização só se escolhe para lote que passou do Desbaste antes da
+  // escolha ir para lá; os demais já chegam decididos.
+  const metalizacao = isMetalizacao(op.etapa.nome) && op.metalizacaoDefinida == null;
+  // Desbaste: decide a Metalização seguinte do lote
+  const metalDoLote = op.metalizacaoDoLote ?? null;
+  const escolheMetalizacao = !!metalDoLote?.podeAlterar;
+  const [modoLote, setModoLote] = useState<'interno' | 'externo' | null>(metalDoLote?.modo ?? null);
+  const [fornecedorLote, setFornecedorLote] = useState(metalDoLote?.fornecedor ?? '');
   const [modo, setModo] = useState<'interno' | 'externo' | null>(null);
   const [fornecedor, setFornecedor] = useState(op.fornecedor ?? '');
   const externo = metalizacao && modo === 'externo';
@@ -73,6 +80,7 @@ export function IniciarOPModal({ op, etapaId, onClose }: Props) {
     if (iniciar.isPending || envio.isPending) return;
     setErro(null);
     if (metalizacao && !modo) { setErro('Escolha metalização interna ou externa.'); return; }
+    if (escolheMetalizacao && !modoLote) { setErro('Indique se a metalização deste lote será interna ou externa.'); return; }
     if (!semMaquina) {
       if (!maquinaId) {
         setErro('Selecione a máquina');
@@ -87,14 +95,17 @@ export function IniciarOPModal({ op, etapaId, onClose }: Props) {
     try {
       if (externo) {
         await envio.mutateAsync({ id: op.id, acao: 'enviar-externo', fornecedor, observacoes });
-        toast.sucesso('Envio registrado. Aguardando recebimento em ENVIO EXTERNO.');
+        toast.sucesso('Envio registrado. O lote fica travado no Encaixe e Arredondamento até confirmarem o retorno.');
         onClose();
         return;
       }
       await iniciar.mutateAsync({
         opLoteId: op.id,
         input: {
-          ...(metalizacao ? { modoMetalizacao: 'interno' as const } : {}),
+          ...(isMetalizacao(op.etapa.nome) ? { modoMetalizacao: 'interno' as const } : {}),
+          ...(escolheMetalizacao && modoLote
+            ? { metalizacao: { modo: modoLote, ...(modoLote === 'externo' && fornecedorLote.trim() ? { fornecedor: fornecedorLote.trim() } : {}) } }
+            : {}),
           ...(semMaquina ? {} : { maquinaId, operadorId }),
           observacoes: observacoes.trim() || null,
         },
@@ -195,12 +206,40 @@ export function IniciarOPModal({ op, etapaId, onClose }: Props) {
               </label>
             ))}
             {externo && <>
-              <p className="text-sm text-amber-300">Serão enviadas {op.lote.quantidadePecas} peças do lote. A OP ficará em ENVIO EXTERNO até a Metalização confirmar que todas retornaram.</p>
+              <p className="text-sm text-amber-300">Serão enviadas {op.lote.quantidadePecas} peças do lote. O lote fica travado no Encaixe e Arredondamento até confirmarem que todas retornaram.</p>
               <label className="label-compact">Fornecedor (opcional)
                 <input className="input py-2" value={fornecedor} maxLength={200} onChange={e => setFornecedor(e.target.value)} />
               </label>
             </>}
           </fieldset>
+        )}
+
+        {escolheMetalizacao && (
+          <fieldset className="space-y-3">
+            <legend className="text-lg font-medium mb-3">Metalização deste lote</legend>
+            {(['interno', 'externo'] as const).map((valor) => (
+              <label key={valor} className="flex items-center gap-3 p-4 rounded-lg border border-neutral-700 cursor-pointer">
+                <input type="radio" name="metalizacao-lote" checked={modoLote === valor} onChange={() => setModoLote(valor)} />
+                {valor === 'interno' ? 'Interna — na Metalização da Pecsil' : 'Externa — vai para o fornecedor'}
+              </label>
+            ))}
+            {modoLote === 'externo' && (
+              <>
+                <p className="text-sm text-amber-300">
+                  O lote inteiro ({op.lote.quantidadePecas} peças) vai para metalização externa. Ele não entra na fila da
+                  Metalização: aparece travado no Encaixe e Arredondamento, que libera ao confirmar o retorno.
+                </p>
+                <label className="label-compact">Fornecedor (opcional)
+                  <input className="input py-2" value={fornecedorLote} maxLength={200} onChange={(e) => setFornecedorLote(e.target.value)} />
+                </label>
+              </>
+            )}
+          </fieldset>
+        )}
+        {metalDoLote && !metalDoLote.podeAlterar && metalDoLote.modo && (
+          <p className="text-sm text-neutral-400">
+            Metalização deste lote: <strong>{metalDoLote.modo === 'externo' ? 'externa' : 'interna'}</strong> (já começou, não dá mais para trocar).
+          </p>
         )}
 
         {semMaquina && !metalizacao && (

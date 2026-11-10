@@ -247,9 +247,19 @@ function PayloadResumo({ tipo, payload, claro }: { tipo: string; payload: any; c
     );
   }
 
+  if (payload.acao === 'metalizacao_externa_indicada' || payload.acao === 'metalizacao_interna_indicada') {
+    return <div className="mt-2 text-sm space-y-1">
+      <p>{payload.acao === 'metalizacao_externa_indicada'
+        ? `Desbaste indicou metalização EXTERNA${payload.trocou ? ' (trocou a escolha)' : ''}`
+        : `Desbaste indicou metalização interna${payload.trocou ? ' (trocou a escolha)' : ''}`}</p>
+      <p>OP {payload.codigoOp} · {payload.quantidade} peças</p>
+      {payload.fornecedor && <p>Fornecedor: {payload.fornecedor}</p>}
+    </div>;
+  }
+
   if (payload.acao === 'metalizacao_envio_externo' || payload.acao === 'metalizacao_recebimento_externo') {
     return <div className="mt-2 text-sm space-y-1">
-      <p>{payload.acao === 'metalizacao_envio_externo' ? 'Enviado para metalização externa — aguardando retorno' : 'Recebimento da metalização externa confirmado'}</p>
+      <p>{payload.acao === 'metalizacao_envio_externo' ? 'Lote saiu para metalização externa — aguardando retorno' : 'Retorno da metalização externa confirmado'}</p>
       <p>OP {payload.codigoOp} · {payload.quantidadeEnviada} peças</p>
       {payload.fornecedor && <p>Fornecedor: {payload.fornecedor}</p>}
       {payload.observacoes && <p>{payload.observacoes}</p>}

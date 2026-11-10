@@ -171,7 +171,10 @@ export async function dashboardRoutes(app: FastifyInstance) {
       const travada = (travas.get(op.loteId) ?? Infinity) < op.ordem;
       return !travada && (fluxo.get(op.id)?.disponiveis ?? 0) > 0;
     });
-    const enviosExternos = opsAtivas.filter(emExterno).map(op => ({
+    // Indicada no Desbaste mas o lote ainda não saiu: ainda está na fábrica.
+    const saiuParaExterno = (op: typeof opsAtivas[number]) =>
+      (fluxo.get(op.id)?.liberadasPelaAnterior ?? 0) >= op.lote.quantidadePecas;
+    const enviosExternos = opsAtivas.filter(op => emExterno(op) && saiuParaExterno(op)).map(op => ({
       opLoteId: op.id, osId: op.lote.os.id, codigoGrv: op.lote.os.codigoGrv,
       codigoOp: op.codigoOp, tipoServico: op.tipoServico, numeroLote: op.lote.numeroLote,
       cliente: op.lote.os.cliente.nome, artigo: op.lote.os.artigo.codigo, descricao: op.lote.os.artigo.descricao,
@@ -191,9 +194,17 @@ export async function dashboardRoutes(app: FastifyInstance) {
         osIds: [...new Set(ops.map(o => o.lote.os.id))] };
     }).sort((a, b) => b.horasPlanejadas - a.horasPlanejadas || b.operacoes - a.operacoes);
 
+    // Metalização externa fica travada na estação que recebe o lote de volta
+    // (o Encaixe), não na coluna da Metalização.
+    const colunaDoCard = (op: typeof opsAtivas[number]) => {
+      if (!emExterno(op)) return op.etapaId;
+      const trilha = trilhaPorLote.get(op.loteId) ?? [];
+      const i = trilha.findIndex((p) => p.opLoteId === op.id);
+      return (i >= 0 ? trilha[i + 1]?.etapaId : undefined) ?? op.etapaId;
+    };
     const kanban = etapas.map((et) => {
       const cards = opsVisiveis
-        .filter((op) => op.etapaId === et.id)
+        .filter((op) => colunaDoCard(op) === et.id)
         .map((op) => {
           const prazo = op.lote.os.prazoEntrega;
           const dias = diasAtePrazo(prazo, agora);
@@ -205,6 +216,8 @@ export async function dashboardRoutes(app: FastifyInstance) {
             opLoteId: op.id,
             osId: op.lote.os.id,
             externo: emExterno(op),
+            /** Externa indicada no Desbaste, mas o lote ainda não saiu da fábrica. */
+            externoAguardandoSaida: emExterno(op) && !saiuParaExterno(op),
             fornecedor: op.fornecedor,
             quantidade: emExterno(op) ? op.quantidadeEnvioExterno ?? 0 : fluxo.get(op.id)?.disponiveis ?? 0,
             codigoOp: op.codigoOp,

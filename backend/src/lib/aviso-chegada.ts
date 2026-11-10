@@ -102,9 +102,12 @@ export async function avisarProximaSeLoteCompleto(
   const proxima = await tx.oPLote.findFirst({
     where: { loteId: op.loteId, ordem: { gt: op.ordem } },
     orderBy: [{ ordem: 'asc' }, { codigoOp: 'asc' }],
-    select: { id: true },
+    select: { id: true, envioExternoEm: true, recebimentoExternoEm: true },
   });
   if (!proxima) return null;
+  // Próxima é metalização externa: as peças vão para o fornecedor, não para
+  // a estação. Quem recebe o lote de volta é avisado no retorno.
+  if (proxima.envioExternoEm && !proxima.recebimentoExternoEm) return null;
 
   const jaAvisada = await tx.alerta.count({
     where: { tipo: 'op_chegou', entidadeTipo: 'OPLote', entidadeId: proxima.id },

@@ -10,6 +10,16 @@ import { FastifyInstance } from 'fastify';
 import { z } from 'zod';
 import { isMetalizacao } from '@forja/shared';
 import { metalizacaoExternaRoutes } from './metalizacao-externa.js';
+import {
+  aplicarEscolha,
+  carregarOpsDoLote,
+  metalizacaoDecididaPor,
+  metalizacoesIndicadasInternas,
+  modoAtual,
+  operacaoSeguinte,
+  podeAlterar,
+  registrarSaidaExterna,
+} from '../lib/metalizacao-lote.js';
 import { Prisma } from '@prisma/client';
 import { prisma } from '../db/prisma.js';
 import { calcularFluxoDePecas } from '../lib/fluxo-pecas.js';
@@ -30,6 +40,13 @@ const filtroEstacaoSchema = z.object({
 // e a exigência é validada conforme o tipo da OP.
 const iniciarSchema = z.object({
   modoMetalizacao: z.literal('interno').optional(),
+  /** Escolha feita no Desbaste para a Metalização seguinte do lote. */
+  metalizacao: z
+    .object({
+      modo: z.enum(['interno', 'externo']),
+      fornecedor: z.string().trim().max(200).optional(),
+    })
+    .optional(),
   maquinaId: z.string().uuid('maquinaId inválido').optional(),
   operadorId: z.string().uuid('operadorId inválido').optional(),
   observacoes: z.string().max(1000).nullable().optional(),
@@ -187,6 +204,9 @@ export async function opLoteRoutes(app: FastifyInstance) {
                   ordem: true,
                   status: true,
                   quantidadeConcluida: true,
+                  envioExternoEm: true,
+                  recebimentoExternoEm: true,
+                  fornecedor: true,
                   etapa: { select: { id: true, nome: true } },
                 },
               },
@@ -220,9 +240,16 @@ export async function opLoteRoutes(app: FastifyInstance) {
         select: { loteId: true, ordem: true, tipoServico: true, quantidadeConcluida: true },
       });
 
+      const internasIndicadas = await metalizacoesIndicadasInternas(prisma, [...new Set(ops.map((o) => o.loteId))]);
+
       const opsComContexto = await Promise.all(
         ops.map(async (op) => {
           const pecas = fluxo.get(op.id);
+          // Desbaste: escolha da metalização do lote. Metalização: se já está
+          // decidida (nulo = lote antigo, decide aqui mesmo).
+          const opsDoLote = op.lote.opsLote.map((o) => ({ ...o, etapaId: o.etapa.id, etapaNome: o.etapa.nome }));
+          const metal = metalizacaoDecididaPor(opsDoLote, op.id);
+          const esta = opsDoLote.find((o) => o.id === op.id);
           const carimboAnterior = await prisma.carimbo.findFirst({
             where: {
               loteId: op.loteId,
@@ -247,6 +274,16 @@ export async function opLoteRoutes(app: FastifyInstance) {
           return {
             ...op,
             carimboAnterior,
+            metalizacaoDoLote: metal
+              ? {
+                  opLoteId: metal.id,
+                  modo: modoAtual(metal, internasIndicadas.has(metal.id)),
+                  podeAlterar: podeAlterar(metal),
+                  fornecedor: metal.fornecedor,
+                }
+              : null,
+            metalizacaoDefinida:
+              esta && isMetalizacao(op.etapa.nome) ? modoAtual(esta, internasIndicadas.has(esta.id)) : null,
             pecasDisponiveis: pecas?.disponiveis ?? 0,
             liberadasPelaAnterior: pecas?.liberadasPelaAnterior ?? op.lote.quantidadePecas,
             bloqueadoPor: trava
@@ -478,9 +515,54 @@ export async function opLoteRoutes(app: FastifyInstance) {
       }
 
       const metalizacao = isMetalizacao(opLote.etapa.nome);
-      if (metalizacao && bodyParsed.data.modoMetalizacao !== 'interno') {
-        return reply.code(400).send({ error: 'escolha_metalizacao', message: 'Escolha metalização interna ou envio externo.' });
+
+      // Interna ou externa: decidido no Desbaste (a estação logo antes da
+      // Metalização). Na própria Metalização só se pergunta para lote que
+      // passou do Desbaste antes desta regra existir.
+      const opsDoLote = await carregarOpsDoLote(prisma, opLote.loteId);
+      const internas = await metalizacoesIndicadasInternas(prisma, [opLote.loteId]);
+      const metalDoLote = metalizacaoDecididaPor(opsDoLote, opLote.id);
+      const escolha = bodyParsed.data.metalizacao;
+      if (metalDoLote) {
+        const modo = modoAtual(metalDoLote, internas.has(metalDoLote.id));
+        if (podeAlterar(metalDoLote) && modo === null && !escolha) {
+          return reply.code(400).send({
+            error: 'escolha_metalizacao_lote',
+            message: 'Indique se a metalização deste lote será interna ou externa.',
+          });
+        }
+        if (escolha && escolha.modo !== modo && !podeAlterar(metalDoLote)) {
+          return reply.code(409).send({
+            error: 'metalizacao_ja_iniciada',
+            message: 'A metalização deste lote já começou ou já voltou. Não dá mais para trocar entre interna e externa.',
+          });
+        }
       }
+      if (metalizacao) {
+        const esta = opsDoLote.find((o) => o.id === opLote.id)!;
+        if (modoAtual(esta, internas.has(esta.id)) === null && bodyParsed.data.modoMetalizacao !== 'interno') {
+          return reply.code(400).send({ error: 'escolha_metalizacao', message: 'Escolha metalização interna ou envio externo.' });
+        }
+      }
+      const gravarEscolha = async (tx: Prisma.TransactionClient) => {
+        if (!metalDoLote || !escolha) return;
+        await aplicarEscolha(tx, {
+          metalId: metalDoLote.id,
+          modo: escolha.modo,
+          fornecedor: escolha.fornecedor,
+          autorId: programadorId,
+          osId: opLote.lote.os.id,
+          loteId: opLote.loteId,
+          quantidadeLote: opLote.lote.quantidadePecas,
+        });
+      };
+      // A estação que recebe o lote de volta da metalização externa (Encaixe)
+      const avisarEstacaoDoRetorno = () => {
+        if (!metalDoLote || !escolha) return;
+        const seguinte = operacaoSeguinte(opsDoLote, metalDoLote.id);
+        if (seguinte) app.io.to(`estacao:${seguinte.etapaId}`).emit('op:nova-na-fila', { loteId: opLote.loteId, etapaId: seguinte.etapaId });
+        app.io.to(`estacao:${metalDoLote.etapaId}`).emit('op:nova-na-fila', { loteId: opLote.loteId, etapaId: metalDoLote.etapaId });
+      };
       const fluxoInicio = await calcularFluxoDePecas([opLote.loteId]);
       if ((fluxoInicio.get(opLote.id)?.disponiveis ?? 0) <= 0) {
         return reply.code(409).send({ error: 'sem_pecas_disponiveis', message: 'Nenhuma peça foi liberada para esta operação.' });
@@ -490,6 +572,7 @@ export async function opLoteRoutes(app: FastifyInstance) {
       // Terceirizada e espera não abrem máquina: o carimbo marca só o relógio.
       if (semMaquina) {
         const carimbo = await prisma.$transaction(async (tx) => {
+          await gravarEscolha(tx);
           const inicio = await tx.oPLote.updateMany({
             where: { id: opLote.id, status: 'na_fila', envioExternoEm: null },
             data: { status: 'em_processo', ...(metalizacao ? { terceirizada: false } : {}) },
@@ -553,6 +636,7 @@ export async function opLoteRoutes(app: FastifyInstance) {
           etapaId: opLote.etapaId,
           maquinaId: null,
         });
+        avisarEstacaoDoRetorno();
 
         const completo = await prisma.oPLote.findUnique({
           where: { id: opLote.id },
@@ -619,6 +703,7 @@ export async function opLoteRoutes(app: FastifyInstance) {
       // Tudo certo — abre transação
       try {
         const resultado = await prisma.$transaction(async (tx) => {
+          await gravarEscolha(tx);
           const inicio = await tx.oPLote.updateMany({
             where: { id: opLote.id, status: 'na_fila', envioExternoEm: null },
             data: { status: 'em_processo', ...(metalizacao ? { terceirizada: false } : {}) },
@@ -766,6 +851,8 @@ export async function opLoteRoutes(app: FastifyInstance) {
             etapaId: opLote.etapaId,
             maquinaId,
           });
+
+        avisarEstacaoDoRetorno();
 
         if (resultado.avisouInicio) {
           // Global: quem precisa saber está na etapa avisada, não nesta.
@@ -964,6 +1051,9 @@ export async function opLoteRoutes(app: FastifyInstance) {
           // Lote inteiro saiu desta operação: a estação da próxima é avisada
           // (só com o lote completo — regra do PCP, parciais não avisam).
           const chegada = completou ? await avisarProximaSeLoteCompleto(tx, opLote.id) : null;
+          // Lote inteiro saiu do Desbaste e a Metalização é externa: as peças
+          // vão agora para o fornecedor.
+          const saidaExterna = completou ? await registrarSaidaExterna(tx, opLote.id, autorId) : null;
 
           if (novoStatusOp === 'concluida') {
             proximaOp = await tx.oPLote.findFirst({
@@ -1042,7 +1132,7 @@ export async function opLoteRoutes(app: FastifyInstance) {
             }
           }
 
-          return { proximaOp, loteConcluido, chegada };
+          return { proximaOp, loteConcluido, chegada, saidaExterna };
         });
 
         // Emite eventos em tempo real
@@ -1055,6 +1145,12 @@ export async function opLoteRoutes(app: FastifyInstance) {
             novoStatus: novoStatusOp,
             completou,
           });
+
+        if (resultado.saidaExterna?.etapaRetornoId) {
+          app.io
+            .to(`estacao:${resultado.saidaExterna.etapaRetornoId}`)
+            .emit('op:nova-na-fila', { loteId: opLote.loteId, etapaId: resultado.saidaExterna.etapaRetornoId });
+        }
 
         if (resultado.chegada) {
           app.io

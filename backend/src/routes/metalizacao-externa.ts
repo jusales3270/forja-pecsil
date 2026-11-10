@@ -4,6 +4,7 @@ import { isMetalizacao } from '@forja/shared';
 import { prisma } from '../db/prisma.js';
 import { podeOperarEtapa, usuarioAtual, type UsuarioToken } from '../lib/permissoes-estacao.js';
 import { avisarProximaSeLoteCompleto } from '../lib/aviso-chegada.js';
+import { carregarOpsDoLote, loteSaiu, operacaoSeguinte, operacoesAnteriores } from '../lib/metalizacao-lote.js';
 
 const paramsSchema = z.object({ id: z.string().uuid() });
 const envioSchema = z.object({
@@ -16,16 +17,37 @@ const falhar = (statusCode: number, message: string): never => {
 };
 
 export async function metalizacaoExternaRoutes(app: FastifyInstance) {
+  // Lotes em metalização externa que voltam para a estação informada (a
+  // seguinte à Metalização no roteiro — o Encaixe e Arredondamento). Ficam
+  // congelados lá até o responsável confirmar o retorno.
   app.get('/op-lote/envios-externos', { onRequest: [app.authenticate] }, async (request) => {
     const { etapaId } = z.object({ etapaId: z.string().uuid() }).parse(request.query);
-    const data = await prisma.oPLote.findMany({
-      where: { etapaId, envioExternoEm: { not: null }, recebimentoExternoEm: null },
+    const externas = await prisma.oPLote.findMany({
+      where: {
+        envioExternoEm: { not: null },
+        recebimentoExternoEm: null,
+        lote: { os: { status: { in: ['aberta', 'em_producao'] } } },
+      },
       include: {
         etapa: { select: { id: true, nome: true } },
         lote: { include: { os: { include: { artigo: true, cliente: true } } } },
       },
       orderBy: { envioExternoEm: 'asc' },
     });
+    const data = [];
+    for (const op of externas) {
+      const ops = await carregarOpsDoLote(prisma, op.loteId);
+      if (operacaoSeguinte(ops, op.id)?.etapaId !== etapaId) continue;
+      const anterior = operacoesAnteriores(ops, op.id).at(-1) ?? null;
+      data.push({
+        ...op,
+        /** As peças já saíram para o fornecedor (o lote inteiro passou do Desbaste). */
+        saiuParaExterno: loteSaiu(ops, op.id, op.lote.quantidadePecas),
+        operacaoAnterior: anterior
+          ? { estacao: anterior.etapaNome, concluidas: Math.min(anterior.quantidadeConcluida, op.lote.quantidadePecas) }
+          : null,
+      });
+    }
     return { data };
   });
 
@@ -48,8 +70,17 @@ export async function metalizacaoExternaRoutes(app: FastifyInstance) {
             include: { etapa: true, lote: { include: { os: true } } },
           });
           if (!atual) return falhar(404, 'OP não encontrada.');
-          if (!podeOperarEtapa(user, atual.etapaId)) return falhar(403, 'Entre com a conta da Metalização para registrar envio ou recebimento.');
           if (!isMetalizacao(atual.etapa.nome)) return falhar(400, 'Envio externo disponível somente na Metalização.');
+          const opsDoLote = await carregarOpsDoLote(tx, atual.loteId);
+          // Envio (lote que passou do Desbaste antes desta regra): Metalização.
+          // Recebimento: a estação que recebe o lote de volta (Encaixe).
+          const seguinte = operacaoSeguinte(opsDoLote, atual.id);
+          const estacaoQueAge = envio ? atual.etapaId : seguinte?.etapaId ?? atual.etapaId;
+          if (!podeOperarEtapa(user, estacaoQueAge)) {
+            return falhar(403, envio
+              ? 'Entre com a conta da Metalização para registrar o envio.'
+              : `Só o responsável de ${seguinte ? (await tx.etapa.findUnique({ where: { id: seguinte.etapaId }, select: { nome: true } }))?.nome ?? 'estação seguinte' : 'Metalização'} confirma o retorno da metalização externa.`);
+          }
           if (!['aberta', 'em_producao'].includes(atual.lote.os.status)) return falhar(409, 'A OS não está ativa.');
           const agora = new Date();
           let quantidade: number;
@@ -83,12 +114,24 @@ export async function metalizacaoExternaRoutes(app: FastifyInstance) {
             if (atual.status !== 'bloqueada' || !atual.envioExternoEm || atual.recebimentoExternoEm || !atual.quantidadeEnvioExterno) {
               return falhar(409, 'Não há envio externo aguardando recebimento nesta OP.');
             }
+            if (!loteSaiu(opsDoLote, atual.id, atual.lote.quantidadePecas)) {
+              const anterior = operacoesAnteriores(opsDoLote, atual.id).at(-1);
+              return falhar(409, `O lote ainda não saiu do ${anterior?.etapaNome ?? 'processo anterior'} (${anterior?.quantidadeConcluida ?? 0} de ${atual.lote.quantidadePecas} peças). Confirme o retorno depois que as peças forem e voltarem do fornecedor.`);
+            }
             quantidade = atual.quantidadeEnvioExterno;
             await tx.oPLote.update({ where: { id: atual.id }, data: {
               recebimentoExternoEm: agora, quantidadeConcluida: quantidade,
               status: atual.exigeInspecao ? 'aguardando_qualidade' : 'concluida',
             } });
-            await tx.carimbo.updateMany({ where: { opLoteId: atual.id, timestampSaida: null }, data: { timestampSaida: agora, quantidadeConcluida: quantidade } });
+            const fechados = await tx.carimbo.updateMany({ where: { opLoteId: atual.id, timestampSaida: null }, data: { timestampSaida: agora, quantidadeConcluida: quantidade } });
+            // Escolha feita no Desbaste não abre carimbo: registra aqui o tempo
+            // que o lote passou no fornecedor.
+            if (fechados.count === 0) {
+              await tx.carimbo.create({ data: {
+                opLoteId: atual.id, loteId: atual.loteId, etapaId: atual.etapaId, programadorId: user.pessoaId,
+                timestampEntrada: atual.envioExternoEm, timestampSaida: agora, quantidadeConcluida: quantidade,
+              } });
+            }
             // Lote voltou inteiro do fornecedor: avisa a estação da próxima operação
             await avisarProximaSeLoteCompleto(tx, atual.id);
             const restantes = await tx.oPLote.count({ where: { loteId: atual.loteId, status: { not: 'concluida' } } });
@@ -114,6 +157,10 @@ export async function metalizacaoExternaRoutes(app: FastifyInstance) {
           return tx.oPLote.findUniqueOrThrow({ where: { id: atual.id } });
         });
         app.io.to(`estacao:${op.etapaId}`).emit(envio ? 'op:iniciada' : 'op:encerrada', { opLoteId: op.id, etapaId: op.etapaId, loteId: op.loteId });
+        if (envio) {
+          const seguinte = operacaoSeguinte(await carregarOpsDoLote(prisma, op.loteId), op.id);
+          if (seguinte) app.io.to(`estacao:${seguinte.etapaId}`).emit('op:nova-na-fila', { loteId: op.loteId, etapaId: seguinte.etapaId });
+        }
         if (!envio) {
           const proximas = await prisma.oPLote.findMany({ where: { loteId: op.loteId, ordem: { gt: op.ordem } }, select: { etapaId: true } });
           for (const etapaId of new Set(proximas.map(o => o.etapaId))) app.io.to(`estacao:${etapaId}`).emit('op:nova-na-fila', { loteId: op.loteId, etapaId });

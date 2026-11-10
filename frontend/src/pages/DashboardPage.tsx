@@ -104,7 +104,7 @@ export default function DashboardPage() {
                   <p className="text-sm mt-2">{c.cliente}</p><p className="dash-muted text-sm">{c.artigo}</p>
                   <p className="text-xs mt-3">OP {c.codigoOp} · Lote {c.numeroLote} · {c.quantidade} peças</p>
                   <p className="dash-muted text-xs mt-1">{vizinho(c.veioDe) ? `de ${vizinho(c.veioDe)}` : 'início do roteiro'} · {vizinho(c.proxima) ? `próxima ${vizinho(c.proxima)}` : 'última operação'}</p>
-                  {c.externo ? <p className="text-sky-500 text-xs font-semibold mt-2">ENVIO EXTERNO · aguardando retorno</p> : <p className="dash-muted text-xs mt-2">{STATUS[c.status] ?? c.status}</p>}
+                  {c.externo ? <p className="text-sky-500 text-xs font-semibold mt-2">🔒 METALIZAÇÃO EXTERNA · {c.externoAguardandoSaida ? 'lote ainda no desbaste' : 'aguardando retorno'}</p> : <p className="dash-muted text-xs mt-2">{STATUS[c.status] ?? c.status}</p>}
                   <p className={`text-xs mt-2 ${c.diasAtePrazo < 0 ? 'text-rose-500 font-semibold' : 'dash-muted'}`}>{prazoTexto(c.diasAtePrazo)}</p>
                 </button>)}
               </div>

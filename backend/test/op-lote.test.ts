@@ -589,7 +589,8 @@ describe('Metalização interna e envio externo', () => {
     assert.equal(op.quantidadeConcluida, 0);
     assert.equal(op.quantidadeEnvioExterno, 5);
     assert.equal((await calcularFluxoDePecas([loteId])).get(seguinteId)?.disponiveis, 0);
-    const lista = await app.inject({ method: 'GET', url: `/api/op-lote/envios-externos?etapaId=${metalId}`, headers: { authorization: `Bearer ${tokenAdmin}` } });
+    // Lista fica na estação que recebe o lote de volta (a da operação seguinte)
+    const lista = await app.inject({ method: 'GET', url: `/api/op-lote/envios-externos?etapaId=${etapaId}`, headers: { authorization: `Bearer ${tokenAdmin}` } });
     assert.ok(lista.json().data.some((o: any) => o.id === id));
     assert.equal((await post(id, 'encerrar', { quantidadeConcluida: 5 })).statusCode, 403);
     assert.equal((await post(id, 'iniciar', { modoMetalizacao: 'interno' })).statusCode, 403);
@@ -611,7 +612,7 @@ describe('Metalização interna e envio externo', () => {
     const eventos = await prisma.eventoOS.findMany({ where: { loteId } });
     assert.equal(eventos.filter(e => (e.payload as any)?.acao === 'metalizacao_recebimento_externo').length, 1);
     assert.ok(eventos.filter(e => (e.payload as any)?.acao?.startsWith('metalizacao_')).every(e => e.autorId));
-    const depois = await app.inject({ method: 'GET', url: `/api/op-lote/envios-externos?etapaId=${metalId}`, headers: { authorization: `Bearer ${tokenAdmin}` } });
+    const depois = await app.inject({ method: 'GET', url: `/api/op-lote/envios-externos?etapaId=${etapaId}`, headers: { authorization: `Bearer ${tokenAdmin}` } });
     assert.ok(!depois.json().data.some((o: any) => o.id === id));
   });
 
@@ -703,5 +704,126 @@ describe('operador vinculado a uma estação', () => {
     } finally {
       await prisma.pessoa.update({ where: { id: operadorId }, data: { etapaId } });
     }
+  });
+});
+
+
+// ============================================================
+// Metalização interna/externa escolhida no Desbaste
+// ============================================================
+// Lote: [Desbaste (etapaId)] → [Metalização] → [Encaixe (etapaOutraId)]
+describe('metalização decidida no desbaste', () => {
+  async function preparar() {
+    const os = await criarOSDeTeste(5);
+    const metal = await prisma.etapa.findFirstOrThrow({ where: { nome: 'Metalização' } });
+    const [desbasteId, metalOpId] = os.opLoteIds;
+    await prisma.oPLote.update({ where: { id: metalOpId }, data: { etapaId: metal.id, tipoServico: 'METALIZAÇÃO' } });
+    const { id: _id, criadoEm: _c, atualizadoEm: _a, ...base } = await prisma.oPLote.findUniqueOrThrow({ where: { id: metalOpId } });
+    const encaixe = await prisma.oPLote.create({
+      data: { ...base, etapaId: etapaOutraId, codigoOp: '30', ordem: base.ordem + 1, tipoServico: 'ENCAIXE E ARREDONDAMENTO' } as any,
+    });
+    const maquinaId = await criarMaquinaDedicada();
+    return { ...os, metalEtapaId: metal.id, desbasteId, metalOpId, encaixeId: encaixe.id, maquinaId };
+  }
+  const post = (id: string, acao: string, payload: object = {}, token = tokenAdmin) => app.inject({
+    method: 'POST', url: `/api/op-lote/${id}/${acao}`, headers: { authorization: `Bearer ${token}` }, payload,
+  });
+  const get = (url: string) => app.inject({ method: 'GET', url, headers: { authorization: `Bearer ${tokenAdmin}` } });
+  async function contaDaEstacao(codigo: string, etapa: string) {
+    const conta = await ensurePessoa({ codigoPessoal: codigo, pin: '6666', papel: 'estacao' });
+    await prisma.pessoa.update({ where: { id: conta.id }, data: { etapaId: etapa } });
+    return loginAs(app, codigo, '6666');
+  }
+
+  test('desbaste não inicia sem dizer se a metalização é interna ou externa', async () => {
+    const { desbasteId, maquinaId } = await preparar();
+    const r = await post(desbasteId, 'iniciar', { maquinaId, operadorId });
+    assert.equal(r.statusCode, 400, r.body);
+    assert.equal(r.json().error, 'escolha_metalizacao_lote');
+    const fila = await get(`/api/op-lote/pendentes?etapaId=${etapaId}`);
+    const op = fila.json().data.find((o: any) => o.id === desbasteId);
+    assert.ok(op.metalizacaoDoLote, 'o desbaste recebe a pergunta');
+    assert.equal(op.metalizacaoDoLote.modo, null);
+  });
+
+  test('externa: some da Metalização, aparece travada no Encaixe e só ele libera depois do retorno', async () => {
+    const { desbasteId, metalOpId, encaixeId, maquinaId, metalEtapaId, loteId } = await preparar();
+    let r = await post(desbasteId, 'iniciar', { maquinaId, operadorId, metalizacao: { modo: 'externo', fornecedor: 'Alemão' } });
+    assert.equal(r.statusCode, 201, r.body);
+
+    const metal = await prisma.oPLote.findUniqueOrThrow({ where: { id: metalOpId } });
+    assert.equal(metal.status, 'bloqueada');
+    assert.equal(metal.fornecedor, 'Alemão');
+    assert.equal(metal.quantidadeEnvioExterno, 5);
+
+    // Não entra na fila da Metalização
+    const filaMetal = await get(`/api/op-lote/pendentes?etapaId=${metalEtapaId}`);
+    assert.ok(!filaMetal.json().data.some((o: any) => o.id === metalOpId));
+
+    // Aparece congelada no Encaixe, ainda no desbaste
+    let lista = (await get(`/api/op-lote/envios-externos?etapaId=${etapaOutraId}`)).json().data;
+    let item = lista.find((o: any) => o.id === metalOpId);
+    assert.ok(item, 'aparece no Encaixe assim que indicada');
+    assert.equal(item.saiuParaExterno, false);
+    assert.ok(!(await get(`/api/op-lote/envios-externos?etapaId=${metalEtapaId}`)).json().data.some((o: any) => o.id === metalOpId));
+
+    // Não dá para confirmar retorno do que ainda não saiu
+    r = await post(metalOpId, 'receber-externo', { confirmarRecebimento: true });
+    assert.equal(r.statusCode, 409, r.body);
+
+    // Desbaste fecha o lote: vai para o fornecedor, a Metalização não é avisada
+    r = await post(desbasteId, 'encerrar', { quantidadeConcluida: 5 });
+    assert.equal(r.statusCode, 200, r.body);
+    assert.equal(await prisma.alerta.count({ where: { tipo: 'op_chegou', entidadeId: metalOpId } }), 0);
+    const eventos = await prisma.eventoOS.findMany({ where: { loteId } });
+    assert.equal(eventos.filter((e) => (e.payload as any)?.acao === 'metalizacao_externa_indicada').length, 1);
+    assert.equal(eventos.filter((e) => (e.payload as any)?.acao === 'metalizacao_envio_externo').length, 1);
+    lista = (await get(`/api/op-lote/envios-externos?etapaId=${etapaOutraId}`)).json().data;
+    item = lista.find((o: any) => o.id === metalOpId);
+    assert.equal(item.saiuParaExterno, true);
+    assert.equal((await calcularFluxoDePecas([loteId])).get(encaixeId)?.disponiveis, 0, 'Encaixe travado');
+
+    // Só o Encaixe confirma: a conta da Metalização é recusada
+    const tokenMetal = await contaDaEstacao('TEST-EST-METAL-OPL', metalEtapaId);
+    assert.equal((await post(metalOpId, 'receber-externo', { confirmarRecebimento: true }, tokenMetal)).statusCode, 403);
+    const tokenEncaixe = await contaDaEstacao('TEST-EST-ENCAIXE-OPL', etapaOutraId);
+    r = await post(metalOpId, 'receber-externo', { confirmarRecebimento: true }, tokenEncaixe);
+    assert.equal(r.statusCode, 200, r.body);
+
+    const recebida = await prisma.oPLote.findUniqueOrThrow({ where: { id: metalOpId } });
+    assert.equal(recebida.status, 'concluida');
+    assert.equal(recebida.quantidadeConcluida, 5);
+    assert.equal(await prisma.carimbo.count({ where: { opLoteId: metalOpId, timestampSaida: { not: null } } }), 1, 'tempo no fornecedor registrado');
+    assert.equal((await calcularFluxoDePecas([loteId])).get(encaixeId)?.disponiveis, 5, 'Encaixe liberado');
+    assert.equal(await prisma.alerta.count({ where: { tipo: 'op_chegou', entidadeId: encaixeId } }), 1, 'Encaixe avisado do retorno');
+  });
+
+  test('dá para trocar de externa para interna enquanto a metalização não começou', async () => {
+    const { desbasteId, metalOpId, maquinaId, metalEtapaId } = await preparar();
+    assert.equal((await post(desbasteId, 'iniciar', { maquinaId, operadorId, metalizacao: { modo: 'externo' } })).statusCode, 201);
+    assert.equal((await post(desbasteId, 'encerrar', { quantidadeConcluida: 2 })).statusCode, 200);
+    // Reinicia o parcial trocando para interna
+    const r = await post(desbasteId, 'iniciar', { maquinaId, operadorId, metalizacao: { modo: 'interno' } });
+    assert.equal(r.statusCode, 201, r.body);
+    const metal = await prisma.oPLote.findUniqueOrThrow({ where: { id: metalOpId } });
+    assert.equal(metal.status, 'na_fila');
+    assert.equal(metal.envioExternoEm, null);
+    // A Metalização recebe as 2 peças já decidida: não pergunta de novo
+    const filaMetal = (await get(`/api/op-lote/pendentes?etapaId=${metalEtapaId}`)).json().data;
+    const op = filaMetal.find((o: any) => o.id === metalOpId);
+    assert.ok(op, 'interna entra na fila da Metalização');
+    assert.equal(op.metalizacaoDefinida, 'interno');
+    const iniciarMetal = await post(metalOpId, 'iniciar', {});
+    assert.notEqual(iniciarMetal.json().error, 'escolha_metalizacao');
+  });
+
+  test('não troca depois que a metalização começou', async () => {
+    const { desbasteId, metalOpId, maquinaId } = await preparar();
+    assert.equal((await post(desbasteId, 'iniciar', { maquinaId, operadorId, metalizacao: { modo: 'interno' } })).statusCode, 201);
+    assert.equal((await post(desbasteId, 'encerrar', { quantidadeConcluida: 2 })).statusCode, 200);
+    await prisma.oPLote.update({ where: { id: metalOpId }, data: { quantidadeConcluida: 1 } });
+    const r = await post(desbasteId, 'iniciar', { maquinaId, operadorId, metalizacao: { modo: 'externo' } });
+    assert.equal(r.statusCode, 409, r.body);
+    assert.equal(r.json().error, 'metalizacao_ja_iniciada');
   });
 });
