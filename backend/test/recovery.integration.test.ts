@@ -61,7 +61,7 @@ test('recupera em Postgres real, preserva origem e entrega alertas à Engenharia
     const snapshot = (url: string) => {
       const inspection = inspectDump(dump, readFileSync(schemaPath, 'utf8'));
       return inspection.blocks.map((b: any) => psql(url,
-        `SELECT coalesce(json_agg(row_to_json(t) ORDER BY t.id)::text,'[]') FROM public."${b.name}" t;`));
+        `SELECT coalesce(json_agg(row_to_json(t) ORDER BY row_to_json(t)::text)::text,'[]') FROM public."${b.name}" t;`));
     };
     const original = snapshot(sourceUrl);
     const result = recoverDatabase({ source: dump, databaseUrl: sourceUrl, database: destName, log: () => {} });
