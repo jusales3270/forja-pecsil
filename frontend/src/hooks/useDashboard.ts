@@ -19,6 +19,8 @@ export interface OSAtrasada {
 export interface KanbanCard {
   osId: string;
   externo: boolean;
+  /** Externa indicada no Desbaste, lote ainda na fábrica. */
+  externoAguardandoSaida?: boolean;
   fornecedor: string | null;
   quantidade: number;
   opLoteId: string;

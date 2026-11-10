@@ -94,7 +94,7 @@ export async function checarEstacaoDaOP(
   if (atual && podeOperarEtapa(atual, op.etapaId)) {
     if (op.envioExternoEm) return {
       error: 'envio_externo',
-      message: 'Esta OP foi enviada para metalização externa. Use Confirmar recebimento na aba ENVIO EXTERNO.',
+      message: 'Esta OP é de metalização externa. O retorno é confirmado na estação seguinte (Encaixe e Arredondamento), na aba METALIZAÇÃO EXTERNA.',
     };
     return null;
   }

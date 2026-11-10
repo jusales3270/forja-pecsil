@@ -86,6 +86,19 @@ export interface OPLotePendente {
   observacoes: string | null;
   criadoEm: string;
   carimboAnterior?: CarimboAnterior | null;
+  /** Desbaste: a Metalização seguinte do lote, interna ou externa (nulo = ainda não escolhido). */
+  metalizacaoDoLote?: {
+    opLoteId: string;
+    modo: 'interno' | 'externo' | null;
+    podeAlterar: boolean;
+    fornecedor: string | null;
+  } | null;
+  /** Metalização: escolha já feita no Desbaste. Nulo = lote antigo, escolhe aqui. */
+  metalizacaoDefinida?: 'interno' | 'externo' | null;
+  /** Lista de metalização externa: o lote já saiu para o fornecedor. */
+  saiuParaExterno?: boolean;
+  /** Lista de metalização externa: como está a operação de antes (o Desbaste). */
+  operacaoAnterior?: { estacao: string; concluidas: number } | null;
   etapa: { id: string; nome: string };
   lote: {
     id: string;
@@ -156,6 +169,8 @@ export interface FiltroEmAndamento {
 
 export interface IniciarOPInput {
   modoMetalizacao?: 'interno';
+  /** Escolha feita no Desbaste para a Metalização seguinte do lote. */
+  metalizacao?: { modo: 'interno' | 'externo'; fornecedor?: string };
   /** Opcional: operação terceirizada ou de espera não ocupa máquina. */
   maquinaId?: string;
   operadorId?: string;
@@ -230,6 +245,7 @@ export function useIniciarOP() {
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ['op-lote-pendentes'] });
       qc.invalidateQueries({ queryKey: ['op-lote-em-andamento'] });
+      qc.invalidateQueries({ queryKey: ['op-lote-envios-externos'] });
       qc.invalidateQueries({ queryKey: ['os-list'] });
       qc.invalidateQueries({ queryKey: ['os-detail'] });
     },
@@ -250,6 +266,7 @@ export function useEncerrarOP() {
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ['op-lote-pendentes'] });
       qc.invalidateQueries({ queryKey: ['op-lote-em-andamento'] });
+      qc.invalidateQueries({ queryKey: ['op-lote-envios-externos'] });
       qc.invalidateQueries({ queryKey: ['os-list'] });
       qc.invalidateQueries({ queryKey: ['os-detail'] });
       qc.invalidateQueries({ queryKey: ['os-timeline'] });
