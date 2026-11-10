@@ -115,14 +115,12 @@ const MAPA: Record<Papel, Capacidade[]> = {
     'excluir_dados',
   ],
 
+  // Só o tótem: opera a estação vinculada (podeOperarEstacao), o resto só
+  // visualiza. Área administrativa é só de admin, PCP e chefe.
   engenharia: [
-    'backoffice_acessar',
-    'cadastros_tipos_servico',
-    'cadastros_motivos_parada',
-    'cadastros_tolerancias',
-    'cadastros_artigos',
-    'os_listar',
     'totem_acessar',
+    'totem_iniciar_op',
+    'totem_encerrar_op',
   ],
 
   programador: [

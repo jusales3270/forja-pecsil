@@ -13,6 +13,7 @@
 import { FastifyInstance } from 'fastify';
 import { z } from 'zod';
 import { prisma } from '../db/prisma.js';
+import { exigirModulo } from '../lib/acessos.js';
 
 // ============================================================
 // Schemas de validação
@@ -156,7 +157,7 @@ export async function tiposServicoRoutes(app: FastifyInstance) {
   // ---------------- CRIAR ----------------
   app.post(
     '/tipos-servico',
-    { onRequest: [app.authenticate] },
+    { onRequest: [exigirModulo('tipos_servico')] },
     async (request, reply) => {
       const parsed = criarTipoServicoSchema.safeParse(request.body);
 
@@ -217,7 +218,7 @@ export async function tiposServicoRoutes(app: FastifyInstance) {
   // ---------------- ATUALIZAR ----------------
   app.put(
     '/tipos-servico/:id',
-    { onRequest: [app.authenticate] },
+    { onRequest: [exigirModulo('tipos_servico')] },
     async (request, reply) => {
       const paramsSchema = z.object({ id: z.string().uuid() });
       const paramsParsed = paramsSchema.safeParse(request.params);

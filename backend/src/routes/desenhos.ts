@@ -17,6 +17,7 @@ import { z } from 'zod';
 import { prisma } from '../db/prisma.js';
 import { TipoDesenho } from '@prisma/client';
 import { uploadArquivo, gerarUrlAssinada, removerArquivo, obterArquivoStream } from '../lib/storage.js';
+import { exigirModulo } from '../lib/acessos.js';
 
 
 const TAMANHO_MAX_BYTES = 50 * 1024 * 1024; // 50 MB
@@ -101,7 +102,7 @@ export async function desenhosRoutes(app: FastifyInstance) {
   // ---------------- CRIAR ----------------
   app.post(
     '/artigos/:artigoId/desenhos',
-    { onRequest: [app.authenticate] },
+    { onRequest: [exigirModulo('artigos')] },
     async (request, reply) => {
       const { artigoId } = request.params as { artigoId: string };
 
@@ -158,7 +159,7 @@ export async function desenhosRoutes(app: FastifyInstance) {
   // ---------------- ATUALIZAR ----------------
   app.patch(
     '/artigos/:artigoId/desenhos/:id',
-    { onRequest: [app.authenticate] },
+    { onRequest: [exigirModulo('artigos')] },
     async (request, reply) => {
       const { artigoId, id } = request.params as { artigoId: string; id: string };
 
@@ -268,7 +269,7 @@ export async function desenhosRoutes(app: FastifyInstance) {
   // ---------------- ANEXAR / SUBSTITUIR ARQUIVO ----------------
   app.post(
     '/artigos/:artigoId/desenhos/:id/arquivo',
-    { onRequest: [app.authenticate] },
+    { onRequest: [exigirModulo('artigos')] },
     async (request, reply) => {
       const { artigoId, id } = request.params as { artigoId: string; id: string };
 

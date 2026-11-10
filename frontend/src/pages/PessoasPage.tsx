@@ -27,7 +27,7 @@ const OPCOES_PAPEL: { papel: Papel; label: string; descricao: string; categoria:
   { papel: 'inspetor', label: '🔍 Inspetor de Qualidade', descricao: 'Realiza inspeções dimensionais e de volumetria.', categoria: 'fabrica' },
   { papel: 'embalador', label: '📦 Embalador / Expedição', descricao: 'Conferência e fechamento de embalagem.', categoria: 'fabrica' },
   { papel: 'pcp', label: '📋 PCP (Planejamento e Controle)', descricao: 'Criação de OS, artigos e gerenciamento da linha.', categoria: 'gestao' },
-  { papel: 'engenharia', label: '📐 Engenharia', descricao: 'Acesso a desenhos técnicos, rotas e processos.', categoria: 'gestao' },
+  { papel: 'engenharia', label: '📐 Engenharia', descricao: 'Só o tótem: opera a estação vinculada, as demais só visualiza.', categoria: 'fabrica' },
   { papel: 'chefe', label: '📊 Chefe / Diretoria', descricao: 'Painel gerencial em tempo real e acompanhamento.', categoria: 'gestao' },
   { papel: 'admin', label: '👑 Administrador', descricao: 'Acesso total, incluindo configurações do sistema.', categoria: 'gestao' },
 ];
