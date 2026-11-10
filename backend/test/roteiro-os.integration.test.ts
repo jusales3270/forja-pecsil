@@ -50,6 +50,7 @@ test('OS segue o roteiro do PCP: estações, avisos de chegada e trilha no paine
     const pcp = await pessoa('PCP', 'pcp');
     const contaMetal = await pessoa('METAL', 'estacao', metalizacao.id);
     const contaDesb = await pessoa('DESB', 'estacao', desbaste.id);
+    const operadorMetal = await pessoa('OPER-METAL', 'operador', metalizacao.id);
     const tokens = new Map<string, string>([adm, pcp, contaMetal, contaDesb].map((p: any) =>
       [p.id, app.jwt.sign({ pessoaId: p.id, papel: p.papel, nome: p.nome, etapaId: p.etapaId })]));
     const req = (p: any, method: string, reqUrl: string, payload?: any) => app.inject({
@@ -159,7 +160,7 @@ test('OS segue o roteiro do PCP: estações, avisos de chegada e trilha no paine
       const maquina = await prisma.maquina.create({ data: { nome: 'Metal 1', codigoInterno: 'MET-1', tipo: 'metalizacao', etapaId: metalizacao.id } });
       const chegadas = () => prisma.alerta.findMany({ where: { tipo: 'op_chegou', entidadeId: desb.id } });
       const turno = async (quantidadeConcluida: number) => {
-        let x = await req(pcp, 'POST', `/api/op-lote/${metal.id}/iniciar`, { modoMetalizacao: 'interno', maquinaId: maquina.id, operadorId: pcp.id });
+        let x = await req(pcp, 'POST', `/api/op-lote/${metal.id}/iniciar`, { modoMetalizacao: 'interno', maquinaId: maquina.id, operadorId: operadorMetal.id });
         assert.equal(x.statusCode, 201, x.body);
         x = await req(pcp, 'POST', `/api/op-lote/${metal.id}/encerrar`, { quantidadeConcluida });
         assert.equal(x.statusCode, 200, x.body);

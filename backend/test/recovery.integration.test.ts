@@ -33,7 +33,8 @@ test('recupera em Postgres real, preserva origem e entrega alertas à Engenharia
         ('${id(1)}','Fundição',1,72,ARRAY['forma'],now()), ('${id(2)}','Engenharia / Programação',2,24,ARRAY['forma'],now());
       INSERT INTO pessoas (id,nome,codigo_pessoal,pin_hash,papel,etapa_id,atualizado_em) VALUES
         ('${id(3)}','Admin Teste','RECOVERY-ADMIN','${pinHash}','admin',null,now()),
-        ('${id(4)}','Estação Engenharia','RECOVERY-ENG','${pinHash}','estacao','${id(2)}',now());
+        ('${id(4)}','Estação Engenharia','RECOVERY-ENG','${pinHash}','estacao','${id(2)}',now()),
+        ('${id(40)}','Operador Fundição','RECOVERY-OPER','${pinHash}','operador','${id(1)}',now());
       INSERT INTO clientes (id,nome,atualizado_em) VALUES ('${id(5)}','Cliente sintético',now());
       INSERT INTO maquinas (id,nome,codigo_interno,tipo,etapa_id,atualizado_em) VALUES ('${id(6)}','Forno teste','FORNO-TEST','fundicao','${id(1)}',now());
       INSERT INTO artigos (id,codigo,descricao,tipo_produto,cliente_id,criado_por_id,status,atualizado_em) VALUES ('${id(7)}','ART-RECOVERY','Artigo teste','forma','${id(5)}','${id(3)}','ativo',now());
@@ -60,11 +61,11 @@ test('recupera em Postgres real, preserva origem e entrega alertas à Engenharia
     const snapshot = (url: string) => {
       const inspection = inspectDump(dump, readFileSync(schemaPath, 'utf8'));
       return inspection.blocks.map((b: any) => psql(url,
-        `SELECT coalesce(json_agg(row_to_json(t) ORDER BY t.id)::text,'[]') FROM public."${b.name}" t;`));
+        `SELECT coalesce(json_agg(row_to_json(t) ORDER BY row_to_json(t)::text)::text,'[]') FROM public."${b.name}" t;`));
     };
     const original = snapshot(sourceUrl);
     const result = recoverDatabase({ source: dump, databaseUrl: sourceUrl, database: destName, log: () => {} });
-    assert.equal(result.counts.pessoas, 2);
+    assert.equal(result.counts.pessoas, 3);
     assert.equal(result.counts.mensagens_internas, 2);
     assert.equal(result.automation.stationAccounts, 1);
     assert.deepEqual(snapshot(destUrl), original, 'Todos os dados e hashes devem ser iguais após o COPY.');
@@ -89,7 +90,7 @@ test('recupera em Postgres real, preserva origem e entrega alertas à Engenharia
     const engineering = await helpers.loginAs(app, 'RECOVERY-ENG', 'Recovery-1234');
     assert.ok(token && engineering, 'Os usuários recuperados devem conseguir entrar.');
     const request = (method: string, url: string, payload?: any) => app.inject({ method, url, payload, headers: { authorization: `Bearer ${token}` } });
-    let r = await request('POST', `/api/op-lote/${id(12)}/iniciar`, { maquinaId: id(6), operadorId: id(3) });
+    let r = await request('POST', `/api/op-lote/${id(12)}/iniciar`, { maquinaId: id(6), operadorId: id(40) });
     assert.equal(r.statusCode, 201, r.body);
     let alerts = await prisma.alerta.findMany({ where: { tipo: 'fase_iniciada', entidadeId: id(12) } });
     assert.equal(alerts.length, 1);
@@ -107,7 +108,7 @@ test('recupera em Postgres real, preserva origem e entrega alertas à Engenharia
     assert.match(r.body, /parcial_pronta/);
     r = await request('POST', `/api/op-lote/${id(12)}/encerrar`, { quantidadeConcluida: 3 });
     assert.equal(r.statusCode, 200, r.body);
-    r = await request('POST', `/api/op-lote/${id(12)}/iniciar`, { maquinaId: id(6), operadorId: id(3) });
+    r = await request('POST', `/api/op-lote/${id(12)}/iniciar`, { maquinaId: id(6), operadorId: id(40) });
     assert.equal(r.statusCode, 201, r.body);
     assert.equal(await prisma.alerta.count({ where: { tipo: 'fase_iniciada', entidadeId: id(12) } }), 1, 'Reiniciar a operação não duplica o aviso.');
     assert.deepEqual(snapshot(sourceUrl), original, 'Operar na base recuperada não altera a origem.');

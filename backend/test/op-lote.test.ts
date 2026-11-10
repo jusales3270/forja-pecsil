@@ -83,6 +83,8 @@ before(async () => {
   }
   etapaId = etapas[0].id;
   etapaOutraId = etapas[1].id;
+  // O responsável precisa estar vinculado à estação da OP
+  await prisma.pessoa.update({ where: { id: operadorId }, data: { etapaId } });
 
   // Máquina compartilhada pros testes que NÃO iniciam OP (só listagem etc)
   const mc = await ensureMaquina({
@@ -367,6 +369,20 @@ describe('POST /op-lote/:id/iniciar', () => {
     assert.equal(res.json().error, 'maquina_etapa_incorreta');
   });
 
+  test('responsável sem vínculo com a estação da OP retorna 400', async () => {
+    const maquinaId = await criarMaquinaDedicada();
+    const { opLoteIds } = await criarOSDeTeste(2);
+
+    const res = await app.inject({
+      method: 'POST',
+      url: `/api/op-lote/${opLoteIds[0]}/iniciar`,
+      headers: { authorization: `Bearer ${tokenProgramador}` },
+      payload: { maquinaId, operadorId: programadorId },
+    });
+    assert.equal(res.statusCode, 400);
+    assert.equal(res.json().error, 'operador_etapa_incorreta');
+  });
+
   test('OP que já está em_processo retorna 400', async () => {
     const maquinaId = await criarMaquinaDedicada();
     const { opLoteIds } = await criarOSDeTeste(2);
@@ -605,7 +621,12 @@ describe('Metalização interna e envio externo', () => {
     const maquina = await ensureMaquina({ codigoInterno, etapaId: metalId });
     maquinasCriadasCodigos.push(codigoInterno);
     assert.equal((await post(id, 'iniciar')).statusCode, 400);
-    assert.equal((await post(id, 'iniciar', { modoMetalizacao: 'interno', maquinaId: maquina.id, operadorId })).statusCode, 201);
+    await prisma.pessoa.update({ where: { id: operadorId }, data: { etapaId: metalId } });
+    try {
+      assert.equal((await post(id, 'iniciar', { modoMetalizacao: 'interno', maquinaId: maquina.id, operadorId })).statusCode, 201);
+    } finally {
+      await prisma.pessoa.update({ where: { id: operadorId }, data: { etapaId } });
+    }
     assert.equal((await post(id, 'enviar-externo')).statusCode, 409);
     for (let i = 0; i < 5; i++) {
       const contar = await app.inject({ method: 'POST', url: '/api/apontamento-peca', headers: { authorization: `Bearer ${tokenAdmin}` }, payload: { opLoteId: id, maquinaId: maquina.id } });

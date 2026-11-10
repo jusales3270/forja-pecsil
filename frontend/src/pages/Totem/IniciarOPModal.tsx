@@ -42,9 +42,12 @@ export function IniciarOPModal({ op, etapaId, onClose }: Props) {
   const { data: maquinasData } = useMaquinasList({ etapaId, ativa: true });
   const { data: pessoasData } = usePessoasList({ ativo: true });
   const maquinas = maquinasData?.data ?? [];
-  const operadores = (pessoasData?.data ?? []).filter((p) =>
-    ['operador', 'programador', 'engenharia', 'pcp', 'admin', 'chefe', 'estacao'].includes(p.papel),
+  // Só quem está vinculado a esta estação (Pessoas → Estação Pertencente).
+  // A conta do posto (papel 'estacao') é o login do tótem, não uma pessoa.
+  const operadores = (pessoasData?.data ?? []).filter(
+    (p) => p.etapaId === etapaId && p.papel !== 'estacao',
   );
+  const carregandoPessoas = !pessoasData;
 
   const iniciar = useIniciarOP();
 
@@ -270,6 +273,11 @@ export function IniciarOPModal({ op, etapaId, onClose }: Props) {
               </option>
             ))}
           </select>
+          {!carregandoPessoas && operadores.length === 0 && (
+            <p className="text-xs text-amber-400 mt-1">
+              Ninguém vinculado a esta estação. Vincule as pessoas em Pessoas → Estação Pertencente.
+            </p>
+          )}
         </div>
 
         {/* Observações */}
