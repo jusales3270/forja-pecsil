@@ -234,4 +234,21 @@ describe('conferência de chegada no Desbaste', () => {
     assert.ok(card, 'card continua no kanban do Desbaste');
     assert.equal(card.faltaChegada, 3);
   });
+
+  test('faixa vermelha: falta aberta aparece na Fundição e some quando o PCP aceita', async () => {
+    const { desbId } = await loteNoDesbaste();
+    const faltas = async (etapaId: string) =>
+      (await app.inject({ method: 'GET', url: `/api/op-lote/faltas-chegada?etapaId=${etapaId}`, headers: { authorization: `Bearer ${tokenAdmin}` } })).json().data;
+    assert.equal((await iniciarDesbaste(desbId, { conferenciaChegada: { quantidade: 3 } })).statusCode, 201);
+    const naFundicao = (await faltas(fundicao.id)).find((f: any) => f.opLoteId === desbId);
+    assert.ok(naFundicao, 'aparece na Fundição');
+    assert.equal(naFundicao.faltam, 2);
+    assert.equal(naFundicao.contado, 3);
+    assert.equal(naFundicao.esperado, 5);
+    assert.ok(!(await faltas(desbaste.id)).some((f: any) => f.opLoteId === desbId), 'só na estação de onde as peças saíram');
+    assert.equal((await post(`${desbId}/encerrar`, { quantidadeConcluida: 3 })).statusCode, 200);
+    assert.equal((await post(`${desbId}/conferencia/aceitar-falta`, { confirmar: true }, tokenPcp)).statusCode, 200);
+    assert.ok(!(await faltas(fundicao.id)).some((f: any) => f.opLoteId === desbId), 'some depois do aceite');
+  });
 });
+

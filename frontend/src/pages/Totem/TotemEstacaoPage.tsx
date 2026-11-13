@@ -33,6 +33,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { toast } from '../../components/Toast';
 import { IniciarOPModal } from './IniciarOPModal';
 import { FaltaNaChegada } from './FaltaNaChegada';
+import { FaixaFaltaChegada } from './FaixaFaltaChegada';
 import { EncerrarOPModal } from './EncerrarOPModal';
 import { PausarOPModal } from './PausarOPModal';
 import { DetalhesOPModal } from './DetalhesOPModal';
@@ -170,6 +171,7 @@ export function TotemEstacaoPage() {
 
     const refetch = () => {
       qc.invalidateQueries({ queryKey: ['op-lote-envios-externos'] });
+      qc.invalidateQueries({ queryKey: ['faltas-chegada'] });
       qc.invalidateQueries({ queryKey: ['op-lote-pendentes'] });
       qc.invalidateQueries({ queryKey: ['op-lote-em-andamento'] });
       qc.invalidateQueries({ queryKey: ['pipeline-etapa'] });
@@ -269,6 +271,9 @@ export function TotemEstacaoPage() {
             </div>
           </div>
         )}
+
+        {/* Falta de peças conferida no Desbaste, de lotes que saíram daqui */}
+        <FaixaFaltaChegada etapaId={etapaId} />
 
         {/* Fluxo interno da etapa — só aparece onde a etapa tem operações
             internas (hoje, a fundição). Nas demais a tela segue igual. */}

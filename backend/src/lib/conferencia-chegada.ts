@@ -247,3 +247,60 @@ export async function aceitarFalta(
   await concluirLoteEOsSeTerminou(tx, { loteId: op.loteId, osId: op.lote.osId, autorId: params.autorId });
   return { quantidadeAntes: antes, quantidadeDepois: depois, estacoes: [...estacoes] };
 }
+
+export interface FaltaAberta {
+  opLoteId: string;
+  osId: string;
+  codigoGrv: string;
+  artigo: string;
+  numeroLote: number;
+  esperado: number;
+  contado: number;
+  faltam: number;
+  conferidoPor: string | null;
+  conferidoEm: Date;
+  /** Estação de onde as peças saíram (a Fundição). */
+  etapaOrigemId: string | null;
+  estacaoOrigem: string | null;
+}
+
+/**
+ * Faltas de chegada ainda abertas em OS ativas. Com `etapaOrigemId`, só as
+ * que saíram daquela estação: é a faixa vermelha no tótem da Fundição.
+ */
+export async function listarFaltasAbertas(
+  tx: Prisma.TransactionClient,
+  filtro: { etapaOrigemId?: string } = {},
+): Promise<FaltaAberta[]> {
+  const conferidos = await tx.eventoOS.findMany({
+    where: {
+      payload: { path: ['acao'], equals: ACAO_CONFERENCIA },
+      os: { status: { in: ['aberta', 'em_producao'] } },
+    },
+    select: { loteId: true },
+  });
+  const loteIds = [...new Set(conferidos.map((e) => e.loteId).filter((id): id is string => !!id))];
+  const conferencias = await carregarConferencias(tx, loteIds);
+  const abertas = [...conferencias.values()].filter((c) => c.pendente > 0);
+  const lista: FaltaAberta[] = [];
+  for (const c of abertas) {
+    const op = await tx.oPLote.findUnique({
+      where: { id: c.opLoteId },
+      select: {
+        loteId: true,
+        lote: { select: { numeroLote: true, os: { select: { id: true, codigoGrv: true, artigo: { select: { codigo: true } } } } } },
+      },
+    });
+    if (!op) continue;
+    const ops = ordenar(await carregarOpsDoLote(tx, op.loteId));
+    const anterior = ops[ops.findIndex((o) => o.id === c.opLoteId) - 1] ?? null;
+    if (filtro.etapaOrigemId && anterior?.etapaId !== filtro.etapaOrigemId) continue;
+    lista.push({
+      opLoteId: c.opLoteId, osId: op.lote.os.id, codigoGrv: op.lote.os.codigoGrv, artigo: op.lote.os.artigo.codigo,
+      numeroLote: op.lote.numeroLote, esperado: c.esperado, contado: c.contado + c.complementos, faltam: c.pendente,
+      conferidoPor: c.conferidoPor, conferidoEm: c.conferidoEm,
+      etapaOrigemId: anterior?.etapaId ?? null, estacaoOrigem: anterior?.etapaNome ?? null,
+    });
+  }
+  return lista.sort((a, b) => a.conferidoEm.getTime() - b.conferidoEm.getTime());
+}

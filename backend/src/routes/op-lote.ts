@@ -24,6 +24,7 @@ import {
   aceitarFalta,
   carregarConferencias,
   conferenciaExigida,
+  listarFaltasAbertas,
   opDeChegada,
   registrarComplemento,
   registrarConferencia,
@@ -1282,6 +1283,15 @@ export async function opLoteRoutes(app: FastifyInstance) {
     },
   );
 
+  // ---------------- FALTAS DE CHEGADA ABERTAS (faixa vermelha no tótem) ----------------
+  // Com etapaId: só as faltas de peças que saíram daquela estação (Fundição).
+  app.get('/op-lote/faltas-chegada', { onRequest: [app.authenticate] }, async (request, reply) => {
+    const q = z.object({ etapaId: z.string().uuid().optional() }).safeParse(request.query);
+    if (!q.success) return reply.code(400).send({ error: 'invalid_input', message: 'Filtros inválidos' });
+    const data = await listarFaltasAbertas(prisma, { etapaOrigemId: q.data.etapaId });
+    return { data };
+  });
+
   // ---------------- CONFERÊNCIA DE CHEGADA: PEÇAS QUE FALTAVAM APARECERAM ----------------
   app.post(
     '/op-lote/:id/conferencia/complemento',
@@ -1309,7 +1319,9 @@ export async function opLoteRoutes(app: FastifyInstance) {
       try {
         const conf = await prisma.$transaction((tx) =>
           registrarComplemento(tx, { opLoteId: params.data.id, quantidade: body.data.quantidade, autorId: user.pessoaId }));
-        app.io.to(`estacao:${op.etapaId}`).emit('op:nova-na-fila', { opLoteId: params.data.id, loteId: op.loteId, etapaId: op.etapaId });
+        // Atualiza todas as estações do lote (a faixa da Fundição some quando não falta mais)
+        const estacoes = await prisma.oPLote.findMany({ where: { loteId: op.loteId }, select: { etapaId: true }, distinct: ['etapaId'] });
+        for (const { etapaId } of estacoes) app.io.to(`estacao:${etapaId}`).emit('op:nova-na-fila', { opLoteId: params.data.id, loteId: op.loteId, etapaId });
         return { data: { faltam: conf.pendente } };
       } catch (err: any) {
         if (err.statusCode) return reply.code(err.statusCode).send({ error: 'conferencia_invalida', message: err.message });

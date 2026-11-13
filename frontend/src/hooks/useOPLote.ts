@@ -252,6 +252,7 @@ export function useIniciarOP() {
       qc.invalidateQueries({ queryKey: ['op-lote-pendentes'] });
       qc.invalidateQueries({ queryKey: ['op-lote-em-andamento'] });
       qc.invalidateQueries({ queryKey: ['op-lote-envios-externos'] });
+      qc.invalidateQueries({ queryKey: ['faltas-chegada'] });
       qc.invalidateQueries({ queryKey: ['os-list'] });
       qc.invalidateQueries({ queryKey: ['os-detail'] });
     },
@@ -273,6 +274,7 @@ export function useEncerrarOP() {
       qc.invalidateQueries({ queryKey: ['op-lote-pendentes'] });
       qc.invalidateQueries({ queryKey: ['op-lote-em-andamento'] });
       qc.invalidateQueries({ queryKey: ['op-lote-envios-externos'] });
+      qc.invalidateQueries({ queryKey: ['faltas-chegada'] });
       qc.invalidateQueries({ queryKey: ['os-list'] });
       qc.invalidateQueries({ queryKey: ['os-detail'] });
       qc.invalidateQueries({ queryKey: ['os-timeline'] });
@@ -381,7 +383,7 @@ export function useMetalizacaoExterna() {
   });
 }
 
-const CHAVES_CONFERENCIA = ['op-lote-pendentes', 'op-lote-em-andamento', 'op-lote-envios-externos', 'op-lote-detail', 'pipeline-etapa', 'dashboard', 'avisos', 'os-list', 'os-detail', 'os-timeline'];
+const CHAVES_CONFERENCIA = ['faltas-chegada', 'op-lote-pendentes', 'op-lote-em-andamento', 'op-lote-envios-externos', 'op-lote-detail', 'pipeline-etapa', 'dashboard', 'avisos', 'os-list', 'os-detail', 'os-timeline'];
 
 /** Desbaste: chegaram peças que faltavam na conferência. */
 export function useComplementoChegada() {
@@ -400,5 +402,22 @@ export function useAceitarFalta() {
     mutationFn: async ({ id }: { id: string }) =>
       (await api.post<{ data: { quantidadeAntes: number; quantidadeDepois: number } }>(`/op-lote/${id}/conferencia/aceitar-falta`, { confirmar: true })).data,
     onSuccess: () => { for (const key of CHAVES_CONFERENCIA) qc.invalidateQueries({ queryKey: [key] }); },
+  });
+}
+
+export interface FaltaChegadaAberta {
+  opLoteId: string; osId: string; codigoGrv: string; artigo: string; numeroLote: number;
+  esperado: number; contado: number; faltam: number;
+  conferidoPor: string | null; conferidoEm: string;
+  etapaOrigemId: string | null; estacaoOrigem: string | null;
+}
+
+/** Faltas de chegada abertas de peças que saíram desta estação (Fundição). */
+export function useFaltasChegada(etapaId?: string) {
+  return useQuery<{ data: FaltaChegadaAberta[] }>({
+    queryKey: ['faltas-chegada', etapaId],
+    queryFn: async () => (await api.get(`/op-lote/faltas-chegada?etapaId=${etapaId}`)).data,
+    enabled: !!etapaId,
+    refetchInterval: 30_000,
   });
 }

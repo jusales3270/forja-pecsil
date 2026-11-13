@@ -7,6 +7,7 @@ Histórico de mudanças do sistema.
 ### Adicionado
 - Desbaste: contagem obrigatória das peças que chegaram no primeiro início da OP do lote. Com falta, o lote continua valendo o total, o Desbaste só trabalha o que chegou, e PCP (aviso pessoal) e Fundição (aviso na estação) são avisados. Ver `CONFERENCIA_CHEGADA.md`
 - Tótem do Desbaste: "Chegaram peças" (o operador registra as que faltavam) e "Aceitar falta" (só PCP/admin; o lote passa a valer o que chegou)
+- Tótem da Fundição: faixa vermelha fixa com os lotes que chegaram com falta ao Desbaste, até a falta ser resolvida
 - Painel de Produção: quadro "Faltas na chegada" e selo no card do kanban
 - Sem migration
 

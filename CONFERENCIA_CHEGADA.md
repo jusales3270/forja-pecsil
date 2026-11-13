@@ -15,7 +15,7 @@ Serve para pegar a diferença entre o que a Fundição deu como entregue e o que
 - As 65 seguem normalmente para as próximas operações como parcial, mas o lote não fecha.
 - Avisos:
   - cada conta PCP ativa recebe um aviso pessoal no sino;
-  - a estação de onde as peças vieram (a Fundição) recebe um aviso no tótem;
+  - a estação de onde as peças vieram (a Fundição) recebe um aviso no sino e uma **faixa vermelha fixa no topo do tótem**: "⚠ FALTA DE PEÇAS NO LOTE · OS 12950 · Lote 1: chegaram 65 de 70 peças no Desbaste — faltam 5". A faixa fica até as peças chegarem ou o PCP aceitar a falta;
   - os avisos dizem OS, artigo, lote, esperado, contado, quantas faltam e quem conferiu.
 - O card do lote continua na fila do Desbaste com "⚠ Faltam X peças da chegada", mesmo depois de trabalhar tudo o que chegou.
 
