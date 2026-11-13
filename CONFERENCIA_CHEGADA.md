@@ -19,7 +19,12 @@ Serve para pegar a diferença entre o que a Fundição deu como entregue e o que
   - os avisos dizem OS, artigo, lote, esperado, contado, quantas faltam e quem conferiu.
 - O card do lote continua na fila do Desbaste com "⚠ Faltam X peças da chegada", mesmo depois de trabalhar tudo o que chegou.
 
-## Como resolver
+## Como resolver (regra do Domingo)
+
+O Desbaste **segue trabalhando** o que chegou. A Fundição continua avisada até **enviar o restante** e **o Desbaste confirmar** que recebeu.
+
+1. **Enviei as peças que faltam**, botão na faixa vermelha da Fundição: registra quantas foram mandadas. O Desbaste recebe um aviso no sino e um destaque no card ("📦 A Fundição enviou X peça(s). Confirme quando chegarem"). A faixa continua, agora com "enviadas — aguardando o Desbaste confirmar".
+2. O Desbaste confirma em **Chegaram peças**. Aí a faixa some.
 
 - **Chegaram peças**, botão do operador do Desbaste: informa quantas das que faltavam apareceram, e elas ficam disponíveis no Desbaste. Quando não falta mais nenhuma, o lote fecha normalmente.
 - **Aceitar falta**, botão só do PCP ou admin, com confirmação: o lote passa a valer o que chegou (65). As operações que já fizeram as 65 fecham na hora. A próxima estação é avisada, a metalização externa registra a saída para o fornecedor se for o caso, e o lote e a OS são concluídos se for o fim do roteiro.
@@ -33,6 +38,10 @@ Serve para pegar a diferença entre o que a Fundição deu como entregue e o que
   - selo "⚠ Faltam X da chegada" no card do kanban;
   - na trilha da OS, o Desbaste aparece como etapa atual.
 
+## Integração (Business OS)
+
+`GET /api/integracao/faltas-chegada` (só a conta de integração) devolve as faltas abertas e as resolvidas dos últimos 30 dias (`?dias=` muda o período). Cada linha traz: `id` estável (a OP de chegada), OS, cliente, artigo, lote, esperado, contado, falta inicial, enviadas pela Fundição, aguardando confirmação, chegaram depois, aceitas, faltam, `situacao` (`aberta` ou `resolvida`), `resolucao` (`pecas_chegaram` ou `falta_aceita`), quem e quando conferiu, enviou e resolveu.
+
 ## Deploy
 
-Sem migration. A contagem fica registrada na timeline da OS (eventos `conferencia_chegada`, `conferencia_complemento` e `falta_aceita`), e os avisos usam o tipo `os_em_risco`.
+Sem migration. A contagem fica registrada na timeline da OS (eventos `conferencia_chegada`, `falta_enviada`, `conferencia_complemento` e `falta_aceita`), e os avisos usam o tipo `os_em_risco`.

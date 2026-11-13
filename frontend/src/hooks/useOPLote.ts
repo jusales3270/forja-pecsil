@@ -102,7 +102,11 @@ export interface OPLotePendente {
   /** Desbaste: primeiro início do lote, conferir quantas peças chegaram. */
   conferenciaChegada?: { exigida: boolean; esperado: number } | null;
   /** Desbaste: peças que faltaram na chegada e ainda não apareceram. */
-  faltaChegada?: { faltam: number; esperado: number; contado: number } | null;
+  faltaChegada?: {
+    faltam: number; esperado: number; contado: number;
+    /** A Fundição disse que enviou e o Desbaste ainda não confirmou. */
+    aguardandoConfirmacao: number; enviadoEm: string | null;
+  } | null;
   etapa: { id: string; nome: string };
   lote: {
     id: string;
@@ -410,6 +414,7 @@ export interface FaltaChegadaAberta {
   esperado: number; contado: number; faltam: number;
   conferidoPor: string | null; conferidoEm: string;
   etapaOrigemId: string | null; estacaoOrigem: string | null;
+  aguardandoConfirmacao: number; enviadoPor: string | null; enviadoEm: string | null;
 }
 
 /** Faltas de chegada abertas de peças que saíram desta estação (Fundição). */
@@ -419,5 +424,15 @@ export function useFaltasChegada(etapaId?: string) {
     queryFn: async () => (await api.get(`/op-lote/faltas-chegada?etapaId=${etapaId}`)).data,
     enabled: !!etapaId,
     refetchInterval: 30_000,
+  });
+}
+
+/** Fundição: avisa que enviou as peças que faltavam (o Desbaste ainda confirma). */
+export function useEnvioDaOrigem() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async ({ id, quantidade }: { id: string; quantidade: number }) =>
+      (await api.post<{ data: { aguardandoConfirmacao: number; faltam: number } }>(`/op-lote/${id}/conferencia/envio`, { quantidade })).data,
+    onSuccess: () => { for (const key of CHAVES_CONFERENCIA) qc.invalidateQueries({ queryKey: [key] }); },
   });
 }

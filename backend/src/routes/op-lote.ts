@@ -26,13 +26,15 @@ import {
   conferenciaExigida,
   listarFaltasAbertas,
   opDeChegada,
+  operacaoAnterior,
+  registrarEnvioDaOrigem,
   registrarComplemento,
   registrarConferencia,
 } from '../lib/conferencia-chegada.js';
 import { Prisma } from '@prisma/client';
 import { prisma } from '../db/prisma.js';
 import { calcularFluxoDePecas } from '../lib/fluxo-pecas.js';
-import { checarEstacaoDaOP, usuarioAtual } from '../lib/permissoes-estacao.js';
+import { checarEstacaoDaOP, podeOperarEtapa, usuarioAtual } from '../lib/permissoes-estacao.js';
 import { avisarProximaSeLoteCompleto } from '../lib/aviso-chegada.js';
 
 // ============================================================
@@ -302,7 +304,9 @@ export async function opLoteRoutes(app: FastifyInstance) {
               : null,
             faltaChegada: (() => {
               const c = conferencias.get(op.id);
-              return c && c.pendente > 0 ? { faltam: c.pendente, esperado: c.esperado, contado: c.contado + c.complementos } : null;
+              return c && c.pendente > 0
+                ? { faltam: c.pendente, esperado: c.esperado, contado: c.contado + c.complementos, aguardandoConfirmacao: c.aguardandoConfirmacao, enviadoEm: c.enviadoEm }
+                : null;
             })(),
             pecasDisponiveis: pecas?.disponiveis ?? 0,
             liberadasPelaAnterior: pecas?.liberadasPelaAnterior ?? op.lote.quantidadePecas,
@@ -1325,6 +1329,46 @@ export async function opLoteRoutes(app: FastifyInstance) {
         return { data: { faltam: conf.pendente } };
       } catch (err: any) {
         if (err.statusCode) return reply.code(err.statusCode).send({ error: 'conferencia_invalida', message: err.message });
+        throw err;
+      }
+    },
+  );
+
+  // ---------------- CONFERÊNCIA DE CHEGADA: FUNDIÇÃO ENVIOU AS QUE FALTAVAM ----------------
+  // Quem registra é a estação de onde as peças saíram. A falta segue aberta até
+  // o Desbaste confirmar em "Chegaram peças".
+  app.post(
+    '/op-lote/:id/conferencia/envio',
+    { onRequest: [app.authenticate] },
+    async (request, reply) => {
+      const params = z.object({ id: z.string().uuid() }).safeParse(request.params);
+      const body = z.object({ quantidade: z.number().int().min(1) }).safeParse(request.body);
+      if (!params.success || !body.success) {
+        return reply.code(400).send({ error: 'invalid_input', message: 'Informe quantas peças foram enviadas.' });
+      }
+      const user = await usuarioAtual(request.user as any);
+      if (!user) return reply.code(401).send({ error: 'conta_indisponivel', message: 'Conta indisponível. Entre novamente.' });
+      const op = await prisma.oPLote.findUnique({
+        where: { id: params.data.id },
+        select: { loteId: true, lote: { select: { os: { select: { status: true } } } } },
+      });
+      if (!op) return reply.code(404).send({ error: 'not_found', message: 'OP não encontrada' });
+      if (!['aberta', 'em_producao'].includes(op.lote.os.status)) {
+        return reply.code(409).send({ error: 'os_nao_ativa', message: 'A OS não está ativa.' });
+      }
+      const origem = operacaoAnterior(await carregarOpsDoLote(prisma, op.loteId), params.data.id);
+      if (!origem || !podeOperarEtapa(user, origem.etapaId)) {
+        return reply.code(403).send({ error: 'forbidden', message: `Só a ${origem?.etapaNome ?? 'estação de origem'} registra o envio das peças que faltavam.` });
+      }
+      try {
+        const r = await prisma.$transaction((tx) =>
+          registrarEnvioDaOrigem(tx, { opLoteId: params.data.id, quantidade: body.data.quantidade, autorId: user.pessoaId }));
+        for (const etapaId of new Set([r.etapaDesbasteId, origem.etapaId])) {
+          app.io.to(`estacao:${etapaId}`).emit('op:nova-na-fila', { opLoteId: params.data.id, loteId: op.loteId, etapaId });
+        }
+        return { data: { aguardandoConfirmacao: r.conferencia.aguardandoConfirmacao, faltam: r.conferencia.pendente } };
+      } catch (err: any) {
+        if (err.statusCode) return reply.code(err.statusCode).send({ error: 'envio_invalido', message: err.message });
         throw err;
       }
     },

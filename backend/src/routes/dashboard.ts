@@ -184,6 +184,7 @@ export async function dashboardRoutes(app: FastifyInstance) {
         cliente: op.lote.os.cliente.nome, artigo: op.lote.os.artigo.codigo, descricao: op.lote.os.artigo.descricao,
         estacao: nomeEtapa.get(op.etapaId) ?? '', esperado: c.esperado, contado: c.contado + c.complementos,
         faltam: c.pendente, conferidoPor: c.conferidoPor, conferidoEm: c.conferidoEm,
+        aguardandoConfirmacao: c.aguardandoConfirmacao, enviadoEm: c.enviadoEm,
       };
     }).sort((a, b) => b.faltam - a.faltam);
     // Indicada no Desbaste mas o lote ainda não saiu: ainda está na fábrica.

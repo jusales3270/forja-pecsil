@@ -8,6 +8,7 @@
 //   PUT  /api/integracao/materiais                 — catálogo de materiais do Almoxarifado
 //   GET  /api/integracao/desenhos                  — todos os desenhos com arquivo (Biblioteca da Fundição)
 //   GET  /api/integracao/desenhos/:id/arquivo      — o arquivo do desenho (stream)
+//   GET  /api/integracao/faltas-chegada            — faltas de peças na chegada ao Desbaste (abertas + resolvidas recentes)
 //
 // O rascunho NÃO cria lote nem OP e não avisa estação: fica fora do Tótem e do
 // Painel até o PCP completar o Artigo e liberar (POST /os/:id/liberar).
@@ -19,6 +20,7 @@ import { z } from 'zod';
 import { prisma } from '../db/prisma.js';
 import { buscaDoMaterial } from '../lib/materiais-busca.js';
 import { listarDesenhosParaBiblioteca } from '../lib/desenhos-integracao.js';
+import { listarFaltasParaIntegracao } from '../lib/conferencia-chegada.js';
 import { obterArquivoStream } from '../lib/storage.js';
 import { ORIGEM_TREINO, PREFIXO_PROVISORIO, PREFIXO_TREINO, criarEvento } from '../lib/os-producao.js';
 
@@ -186,6 +188,14 @@ export async function integracaoRoutes(app: FastifyInstance) {
   // quando o desenho é novo ou a chave do arquivo mudou (a Forja apaga o antigo).
   app.get('/integracao/desenhos', { onRequest: [exigirIntegracao] }, async () => {
     return { data: await listarDesenhosParaBiblioteca() };
+  });
+
+  // Faltas de peças na chegada ao Desbaste, para a tela do chefe e o WhatsApp do
+  // Business OS. Abertas sempre; resolvidas dos últimos `dias` (padrão 30), para a
+  // plataforma marcar como resolvida. Id estável = a OP de chegada.
+  app.get('/integracao/faltas-chegada', { onRequest: [exigirIntegracao] }, async (request) => {
+    const { dias } = z.object({ dias: z.coerce.number().int().min(1).max(365).default(30) }).parse(request.query);
+    return { data: await listarFaltasParaIntegracao(prisma, { desde: new Date(Date.now() - dias * 86_400_000) }) };
   });
 
   app.get('/integracao/desenhos/:id/arquivo', { onRequest: [exigirIntegracao] }, async (request, reply) => {

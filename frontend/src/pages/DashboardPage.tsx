@@ -165,6 +165,7 @@ export default function DashboardPage() {
           {!d.faltasChegada.length && <p className="dash-empty">Nenhuma falta pendente.</p>}
           <div className="space-y-4">{d.faltasChegada.map(f => <article key={f.opLoteId} className="dash-panel">
             <div className="flex flex-wrap justify-between gap-2"><h3 className="font-mono font-bold text-lg">{f.codigoGrv}</h3><span className="text-rose-500 font-semibold">Faltam {f.faltam} peça(s)</span></div>
+            {f.aguardandoConfirmacao > 0 && <p className="text-sm text-amber-500 mt-1">📦 Fundição enviou {f.aguardandoConfirmacao}{f.enviadoEm ? ` em ${new Date(f.enviadoEm).toLocaleString('pt-BR')}` : ''} — aguardando o Desbaste confirmar.</p>}
             <p className="text-sm mt-2">{f.cliente} · {f.artigo} — {f.descricao}</p>
             <dl className="grid grid-cols-2 sm:grid-cols-3 gap-3 text-sm mt-4">
               <Dado nome="Lote" valor={`Lote ${f.numeroLote}`} />
