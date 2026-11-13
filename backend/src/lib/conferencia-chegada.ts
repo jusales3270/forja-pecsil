@@ -25,6 +25,8 @@ import { carregarOpsDoLote, registrarSaidaExterna, type OpDoLote } from './metal
 export const ACAO_CONFERENCIA = 'conferencia_chegada';
 export const ACAO_COMPLEMENTO = 'conferencia_complemento';
 export const ACAO_FALTA_ACEITA = 'falta_aceita';
+/** A Fundição avisou que mandou as peças que faltavam (o Desbaste ainda confirma). */
+export const ACAO_ENVIO_ORIGEM = 'falta_enviada';
 
 type Db = Pick<Prisma.TransactionClient, 'eventoOS'>;
 
@@ -40,6 +42,12 @@ export interface Conferencia {
   aceitas: number;
   /** Ainda faltando: trava o lote. */
   pendente: number;
+  /** Peças que a Fundição disse ter enviado. */
+  enviadas: number;
+  /** Enviadas pela Fundição e ainda não confirmadas pelo Desbaste. */
+  aguardandoConfirmacao: number;
+  enviadoPor: string | null;
+  enviadoEm: Date | null;
   conferidoPor: string | null;
   conferidoEm: Date;
 }
@@ -62,7 +70,7 @@ export async function carregarConferencias(db: Db, loteIds: string[]): Promise<M
   const eventos = await db.eventoOS.findMany({
     where: {
       loteId: { in: loteIds },
-      OR: [ACAO_CONFERENCIA, ACAO_COMPLEMENTO, ACAO_FALTA_ACEITA].map((acao) => ({ payload: { path: ['acao'], equals: acao } })),
+      OR: [ACAO_CONFERENCIA, ACAO_COMPLEMENTO, ACAO_FALTA_ACEITA, ACAO_ENVIO_ORIGEM].map((acao) => ({ payload: { path: ['acao'], equals: acao } })),
     },
     orderBy: { timestamp: 'asc' },
     select: { payload: true, timestamp: true, autor: { select: { nome: true } } },
@@ -74,16 +82,22 @@ export async function carregarConferencias(db: Db, loteIds: string[]): Promise<M
       if (mapa.has(p.opLoteId)) continue; // vale a primeira
       mapa.set(p.opLoteId, {
         opLoteId: p.opLoteId, esperado: p.esperado, contado: p.contado, complementos: 0, aceitas: 0,
-        pendente: 0, conferidoPor: e.autor?.nome ?? null, conferidoEm: e.timestamp,
+        pendente: 0, enviadas: 0, aguardandoConfirmacao: 0, enviadoPor: null, enviadoEm: null,
+        conferidoPor: e.autor?.nome ?? null, conferidoEm: e.timestamp,
       });
     } else {
       const c = mapa.get(p.opLoteId);
       if (!c) continue;
-      if (p.acao === ACAO_COMPLEMENTO) c.complementos += Number(p.quantidade) || 0;
-      else c.aceitas += Number(p.quantidade) || 0;
+      const qtd = Number(p.quantidade) || 0;
+      if (p.acao === ACAO_COMPLEMENTO) c.complementos += qtd;
+      else if (p.acao === ACAO_ENVIO_ORIGEM) { c.enviadas += qtd; c.enviadoPor = e.autor?.nome ?? null; c.enviadoEm = e.timestamp; }
+      else c.aceitas += qtd;
     }
   }
-  for (const c of mapa.values()) c.pendente = Math.max(0, c.esperado - c.contado - c.complementos - c.aceitas);
+  for (const c of mapa.values()) {
+    c.pendente = Math.max(0, c.esperado - c.contado - c.complementos - c.aceitas);
+    c.aguardandoConfirmacao = Math.min(c.pendente, Math.max(0, c.enviadas - c.complementos));
+  }
   return mapa;
 }
 
@@ -170,7 +184,56 @@ export async function registrarComplemento(
       },
     },
   });
-  return { ...conf, complementos: conf.complementos + params.quantidade, pendente: conf.pendente - params.quantidade };
+  const pendente = conf.pendente - params.quantidade;
+  return {
+    ...conf, complementos: conf.complementos + params.quantidade, pendente,
+    aguardandoConfirmacao: Math.min(pendente, Math.max(0, conf.enviadas - conf.complementos - params.quantidade)),
+  };
+}
+
+/**
+ * A Fundição avisa que mandou as peças que faltavam. A falta continua aberta
+ * (e a faixa na Fundição também) até o Desbaste confirmar que recebeu; o
+ * Desbaste é avisado para conferir.
+ */
+export async function registrarEnvioDaOrigem(
+  tx: Prisma.TransactionClient,
+  params: { opLoteId: string; quantidade: number; autorId: string },
+): Promise<{ conferencia: Conferencia; etapaDesbasteId: string }> {
+  const op = await contexto(tx, params.opLoteId);
+  await tx.$queryRaw`SELECT id FROM lotes WHERE id = ${op.loteId} FOR UPDATE`;
+  const conf = (await carregarConferencias(tx, [op.loteId])).get(op.id);
+  if (!conf || conf.pendente <= 0) throw Object.assign(new Error('Não há peças faltando neste lote.'), { statusCode: 409 });
+  const podeEnviar = conf.pendente - conf.aguardandoConfirmacao;
+  if (podeEnviar <= 0) {
+    throw Object.assign(new Error('As peças que faltam já foram enviadas. Falta o Desbaste confirmar o recebimento.'), { statusCode: 409 });
+  }
+  if (params.quantidade > podeEnviar) {
+    throw Object.assign(new Error(`Faltam só ${podeEnviar} peça(s) para enviar.`), { statusCode: 400 });
+  }
+  const autor = await tx.pessoa.findUnique({ where: { id: params.autorId }, select: { nome: true } });
+  await tx.eventoOS.create({
+    data: {
+      osId: op.lote.osId, loteId: op.loteId, tipo: 'observacao_livre', autorId: params.autorId,
+      payload: {
+        acao: ACAO_ENVIO_ORIGEM, opLoteId: op.id, codigoOp: op.codigoOp, tipoServico: op.tipoServico,
+        quantidade: params.quantidade, faltavam: conf.pendente,
+      },
+    },
+  });
+  const desbaste = await tx.oPLote.findUniqueOrThrow({ where: { id: op.id }, select: { etapaId: true } });
+  await tx.alerta.create({ data: {
+    tipo: 'os_em_risco', severidade: 'warning', entidadeTipo: 'OPLote', entidadeId: op.id,
+    etapaDestinoId: desbaste.etapaId, canal: 'dashboard',
+    mensagem:
+      `${op.lote.os.codigoGrv} (${op.lote.os.artigo.codigo}) — lote ${op.lote.numeroLote}: a Fundição enviou ` +
+      `${params.quantidade} das ${conf.pendente} peças que faltavam${autor?.nome ? ` (${autor.nome})` : ''}. ` +
+      `Confira e confirme em "Chegaram peças" quando chegarem.`,
+  } });
+  return {
+    conferencia: { ...conf, enviadas: conf.enviadas + params.quantidade, aguardandoConfirmacao: conf.aguardandoConfirmacao + params.quantidade, enviadoPor: autor?.nome ?? null, enviadoEm: new Date() },
+    etapaDesbasteId: desbaste.etapaId,
+  };
 }
 
 /**
@@ -262,6 +325,10 @@ export interface FaltaAberta {
   /** Estação de onde as peças saíram (a Fundição). */
   etapaOrigemId: string | null;
   estacaoOrigem: string | null;
+  /** Enviadas pela Fundição e ainda não confirmadas pelo Desbaste. */
+  aguardandoConfirmacao: number;
+  enviadoPor: string | null;
+  enviadoEm: Date | null;
 }
 
 /**
@@ -300,7 +367,137 @@ export async function listarFaltasAbertas(
       numeroLote: op.lote.numeroLote, esperado: c.esperado, contado: c.contado + c.complementos, faltam: c.pendente,
       conferidoPor: c.conferidoPor, conferidoEm: c.conferidoEm,
       etapaOrigemId: anterior?.etapaId ?? null, estacaoOrigem: anterior?.etapaNome ?? null,
+      aguardandoConfirmacao: c.aguardandoConfirmacao, enviadoPor: c.enviadoPor, enviadoEm: c.enviadoEm,
     });
   }
   return lista.sort((a, b) => a.conferidoEm.getTime() - b.conferidoEm.getTime());
+}
+
+export interface FaltaIntegracao {
+  /** Id estável: a OP de chegada (uma conferência por OP). */
+  id: string;
+  osId: string;
+  codigoGrv: string;
+  cliente: string;
+  artigo: { codigo: string; descricao: string };
+  numeroLote: number;
+  esperado: number;
+  /** Contado na chegada. */
+  contado: number;
+  /** Faltaram na conferência. */
+  faltaInicial: number;
+  /** Chegaram depois. */
+  chegaramDepois: number;
+  /** PCP deu como perdidas. */
+  aceitas: number;
+  /** Ainda faltando agora. */
+  faltam: number;
+  /** A Fundição disse ter enviado (total). */
+  enviadas: number;
+  /** Enviadas pela Fundição e ainda não confirmadas pelo Desbaste. */
+  aguardandoConfirmacao: number;
+  enviadoPor: string | null;
+  enviadoEm: Date | null;
+  situacao: 'aberta' | 'resolvida';
+  resolucao: 'pecas_chegaram' | 'falta_aceita' | null;
+  conferidoPor: string | null;
+  conferidoEm: Date;
+  resolvidoPor: string | null;
+  resolvidoEm: Date | null;
+  estacaoConferencia: string | null;
+  estacaoOrigem: string | null;
+}
+
+/**
+ * Faltas de chegada para a integração (Business OS): todas as abertas e as
+ * resolvidas desde `desde`. Uma linha por conferência com falta; a plataforma
+ * guarda pelo `id` e avisa o chefe quando aparece uma nova ou ela se resolve.
+ */
+export async function listarFaltasParaIntegracao(
+  tx: Prisma.TransactionClient,
+  params: { desde: Date },
+): Promise<FaltaIntegracao[]> {
+  const conferencias = await tx.eventoOS.findMany({
+    where: { payload: { path: ['acao'], equals: ACAO_CONFERENCIA } },
+    orderBy: { timestamp: 'asc' },
+    select: { loteId: true, payload: true },
+  });
+  const comFalta = conferencias.filter((e) => Number((e.payload as any)?.faltam) > 0 && e.loteId);
+  const loteIds = [...new Set(comFalta.map((e) => e.loteId!))];
+  if (loteIds.length === 0) return [];
+
+  const eventos = await tx.eventoOS.findMany({
+    where: {
+      loteId: { in: loteIds },
+      OR: [ACAO_CONFERENCIA, ACAO_COMPLEMENTO, ACAO_FALTA_ACEITA, ACAO_ENVIO_ORIGEM].map((acao) => ({ payload: { path: ['acao'], equals: acao } })),
+    },
+    orderBy: { timestamp: 'asc' },
+    select: { payload: true, timestamp: true, autor: { select: { nome: true } } },
+  });
+
+  type Linha = FaltaIntegracao & { opLoteId: string };
+  const linhas = new Map<string, Linha>();
+  for (const e of eventos) {
+    const p = e.payload as any;
+    if (!p?.opLoteId) continue;
+    if (p.acao === ACAO_CONFERENCIA) {
+      if (linhas.has(p.opLoteId) || !(Number(p.faltam) > 0)) continue;
+      linhas.set(p.opLoteId, {
+        opLoteId: p.opLoteId, id: p.opLoteId, osId: '', codigoGrv: '', cliente: '', artigo: { codigo: '', descricao: '' },
+        numeroLote: 0, esperado: p.esperado, contado: p.contado, faltaInicial: p.esperado - p.contado,
+        chegaramDepois: 0, aceitas: 0, faltam: p.esperado - p.contado,
+        enviadas: 0, aguardandoConfirmacao: 0, enviadoPor: null, enviadoEm: null, situacao: 'aberta', resolucao: null,
+        conferidoPor: e.autor?.nome ?? null, conferidoEm: e.timestamp, resolvidoPor: null, resolvidoEm: null,
+        estacaoConferencia: null, estacaoOrigem: null,
+      });
+      continue;
+    }
+    const l = linhas.get(p.opLoteId);
+    if (!l || l.faltam <= 0) continue;
+    const qtd = Number(p.quantidade) || 0;
+    if (p.acao === ACAO_ENVIO_ORIGEM) {
+      l.enviadas += qtd; l.enviadoPor = e.autor?.nome ?? null; l.enviadoEm = e.timestamp;
+      l.aguardandoConfirmacao = Math.min(l.faltam, Math.max(0, l.enviadas - l.chegaramDepois));
+      continue;
+    }
+    if (p.acao === ACAO_COMPLEMENTO) l.chegaramDepois += qtd;
+    else l.aceitas += qtd;
+    l.faltam = Math.max(0, l.faltaInicial - l.chegaramDepois - l.aceitas);
+    l.aguardandoConfirmacao = Math.min(l.faltam, Math.max(0, l.enviadas - l.chegaramDepois));
+    if (l.faltam === 0) {
+      l.situacao = 'resolvida';
+      l.resolucao = p.acao === ACAO_FALTA_ACEITA ? 'falta_aceita' : 'pecas_chegaram';
+      l.resolvidoPor = e.autor?.nome ?? null;
+      l.resolvidoEm = e.timestamp;
+    }
+  }
+
+  const resultado: FaltaIntegracao[] = [];
+  for (const l of linhas.values()) {
+    if (l.situacao === 'resolvida' && l.resolvidoEm! < params.desde) continue;
+    const op = await tx.oPLote.findUnique({
+      where: { id: l.opLoteId },
+      select: {
+        loteId: true, etapa: { select: { nome: true } },
+        lote: { select: { numeroLote: true, os: { select: { id: true, codigoGrv: true, cliente: { select: { nome: true } }, artigo: { select: { codigo: true, descricao: true } } } } } },
+      },
+    });
+    if (!op) continue;
+    const ops = ordenar(await carregarOpsDoLote(tx, op.loteId));
+    const anterior = ops[ops.findIndex((o) => o.id === l.opLoteId) - 1] ?? null;
+    const { opLoteId: _op, ...linha } = l;
+    resultado.push({
+      ...linha,
+      osId: op.lote.os.id, codigoGrv: op.lote.os.codigoGrv, cliente: op.lote.os.cliente.nome,
+      artigo: { codigo: op.lote.os.artigo.codigo, descricao: op.lote.os.artigo.descricao },
+      numeroLote: op.lote.numeroLote, estacaoConferencia: op.etapa.nome, estacaoOrigem: anterior?.etapaNome ?? null,
+    });
+  }
+  return resultado.sort((a, b) => b.conferidoEm.getTime() - a.conferidoEm.getTime());
+}
+
+/** A operação logo antes da informada (de onde as peças saíram). */
+export function operacaoAnterior<T extends OpDoLote>(ops: T[], opId: string): T | null {
+  const o = ordenar(ops);
+  return o[o.findIndex((x) => x.id === opId) - 1] ?? null;
 }

@@ -107,6 +107,7 @@ export interface FaltaChegadaResumo {
   cliente: string; artigo: string; descricao: string; estacao: string;
   esperado: number; contado: number; faltam: number;
   conferidoPor: string | null; conferidoEm: string;
+  aguardandoConfirmacao: number; enviadoEm: string | null;
 }
 export interface GrupoAtraso {
   id: string; nome: string; total: number; atrasadas: number; mediaDiasAtraso: number; osIds: string[];

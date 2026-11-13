@@ -273,7 +273,7 @@ export function TotemEstacaoPage() {
         )}
 
         {/* Falta de peças conferida no Desbaste, de lotes que saíram daqui */}
-        <FaixaFaltaChegada etapaId={etapaId} />
+        <FaixaFaltaChegada etapaId={etapaId} podeOperar={podeOperar} />
 
         {/* Fluxo interno da etapa — só aparece onde a etapa tem operações
             internas (hoje, a fundição). Nas demais a tela segue igual. */}

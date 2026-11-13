@@ -261,6 +261,12 @@ function PayloadResumo({ tipo, payload, claro }: { tipo: string; payload: any; c
       <p>OP {payload.codigoOp} · {payload.tipoServico}</p>
     </div>;
   }
+  if (payload.acao === 'falta_enviada') {
+    return <div className="mt-2 text-sm space-y-1">
+      <p>Fundição enviou {payload.quantidade} das {payload.faltavam} peças que faltavam — aguardando o Desbaste confirmar</p>
+      <p>OP {payload.codigoOp} · {payload.tipoServico}</p>
+    </div>;
+  }
   if (payload.acao === 'falta_aceita') {
     return <div className="mt-2 text-sm space-y-1">
       <p>PCP aceitou a falta de {payload.quantidade} peça(s): o lote passou de {payload.quantidadeLoteAntes} para {payload.quantidadeLoteDepois}</p>

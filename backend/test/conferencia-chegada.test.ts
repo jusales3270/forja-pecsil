@@ -164,7 +164,7 @@ describe('conferência de chegada no Desbaste', () => {
     const card = (await pendentes(desbaste.id)).find((o: any) => o.id === desbId);
     assert.ok(card, 'card continua na fila sem peças');
     assert.equal(card.pecasDisponiveis, 0);
-    assert.deepEqual(card.faltaChegada, { faltam: 2, esperado: 5, contado: 3 });
+    assert.deepEqual(card.faltaChegada, { faltam: 2, esperado: 5, contado: 3, aguardandoConfirmacao: 0, enviadoEm: null });
     assert.equal(card.conferenciaChegada, null, 'não pergunta de novo');
   });
 
@@ -249,6 +249,86 @@ describe('conferência de chegada no Desbaste', () => {
     assert.equal((await post(`${desbId}/encerrar`, { quantidadeConcluida: 3 })).statusCode, 200);
     assert.equal((await post(`${desbId}/conferencia/aceitar-falta`, { confirmar: true }, tokenPcp)).statusCode, 200);
     assert.ok(!(await faltas(fundicao.id)).some((f: any) => f.opLoteId === desbId), 'some depois do aceite');
+  });
+
+  test('integração (Business OS): falta aberta e depois resolvida, só para a conta de integração', async () => {
+    const integ = await ensurePessoa({ codigoPessoal: 'TEST-CONF-INTEG', pin: '7009', papel: 'chefe' });
+    await prisma.pessoa.update({ where: { id: integ.id }, data: { integracao: true } });
+    const tokenInteg = await loginAs(app, 'TEST-CONF-INTEG', '7009');
+    const listar = async (token = tokenInteg) =>
+      app.inject({ method: 'GET', url: '/api/integracao/faltas-chegada', headers: { authorization: `Bearer ${token}` } });
+
+    const { desbId, osId } = await loteNoDesbaste();
+    assert.equal((await iniciarDesbaste(desbId, { conferenciaChegada: { quantidade: 3 } })).statusCode, 201);
+    assert.equal((await listar(tokenAdmin)).statusCode, 403, 'só a conta de integração');
+
+    let item = (await listar()).json().data.find((f: any) => f.id === desbId);
+    assert.ok(item, 'falta aberta vai para o Business OS');
+    assert.equal(item.situacao, 'aberta');
+    assert.equal(item.osId, osId);
+    assert.equal(item.esperado, 5);
+    assert.equal(item.contado, 3);
+    assert.equal(item.faltam, 2);
+    assert.equal(item.estacaoConferencia, 'Desbaste');
+    assert.equal(item.estacaoOrigem, 'Fundição');
+
+    assert.equal((await post(`${desbId}/encerrar`, { quantidadeConcluida: 3 })).statusCode, 200);
+    assert.equal((await post(`${desbId}/conferencia/complemento`, { quantidade: 1 })).statusCode, 200);
+    assert.equal((await post(`${desbId}/conferencia/aceitar-falta`, { confirmar: true }, tokenPcp)).statusCode, 200);
+    item = (await listar()).json().data.find((f: any) => f.id === desbId);
+    assert.equal(item.situacao, 'resolvida');
+    assert.equal(item.resolucao, 'falta_aceita');
+    assert.equal(item.chegaramDepois, 1);
+    assert.equal(item.aceitas, 1);
+    assert.equal(item.faltam, 0);
+    assert.ok(item.resolvidoEm);
+
+    // Conferência sem falta não vai para a integração
+    const outro = await loteNoDesbaste();
+    assert.equal((await iniciarDesbaste(outro.desbId, { conferenciaChegada: { quantidade: 5 } })).statusCode, 201);
+    assert.ok(!(await listar()).json().data.some((f: any) => f.id === outro.desbId));
+  });
+
+  test('Fundição envia o restante: a faixa continua até o Desbaste confirmar (regra do Domingo)', async () => {
+    const contaFund = await ensurePessoa({ codigoPessoal: 'TEST-CONF-EST-FUND', pin: '7010', papel: 'estacao' });
+    await prisma.pessoa.update({ where: { id: contaFund.id }, data: { etapaId: fundicao.id } });
+    const tokenFund = await loginAs(app, 'TEST-CONF-EST-FUND', '7010');
+    const tokenDesb = await loginAs(app, 'TEST-CONF-OPER-DESB', '7004');
+    const faixa = async () =>
+      (await app.inject({ method: 'GET', url: `/api/op-lote/faltas-chegada?etapaId=${fundicao.id}`, headers: { authorization: `Bearer ${tokenFund}` } })).json().data;
+
+    const { desbId } = await loteNoDesbaste();
+    assert.equal((await iniciarDesbaste(desbId, { conferenciaChegada: { quantidade: 3 } })).statusCode, 201);
+    // O Desbaste segue trabalhando o que chegou
+    assert.equal((await post(`${desbId}/encerrar`, { quantidadeConcluida: 3 })).statusCode, 200);
+
+    assert.equal((await post(`${desbId}/conferencia/envio`, { quantidade: 2 }, tokenDesb)).statusCode, 403, 'só a Fundição registra o envio');
+    assert.equal((await post(`${desbId}/conferencia/envio`, { quantidade: 3 }, tokenFund)).statusCode, 400, 'mais do que falta');
+    let r = await post(`${desbId}/conferencia/envio`, { quantidade: 2 }, tokenFund);
+    assert.equal(r.statusCode, 200, r.body);
+    assert.deepEqual(r.json().data, { aguardandoConfirmacao: 2, faltam: 2 });
+    assert.equal((await post(`${desbId}/conferencia/envio`, { quantidade: 1 }, tokenFund)).statusCode, 409, 'já enviou tudo');
+
+    // Desbaste avisado; faixa continua, agora com "enviadas, aguardando confirmar"
+    const aviso = await prisma.alerta.findFirst({ where: { tipo: 'os_em_risco', entidadeId: desbId, etapaDestinoId: desbaste.id } });
+    assert.match(aviso!.mensagem, /Fundição enviou 2 das 2/);
+    let item = (await faixa()).find((f: any) => f.opLoteId === desbId);
+    assert.ok(item, 'faixa continua até o Desbaste confirmar');
+    assert.equal(item.aguardandoConfirmacao, 2);
+    const card = (await pendentes(desbaste.id)).find((o: any) => o.id === desbId);
+    assert.equal(card.faltaChegada.aguardandoConfirmacao, 2);
+    assert.equal((await calcularFluxoDePecas([(await prisma.oPLote.findUniqueOrThrow({ where: { id: desbId } })).loteId])).get(desbId)?.disponiveis, 0, 'enviada não é recebida');
+
+    // Desbaste confirma: faixa some e a falta vira resolvida na integração
+    assert.equal((await post(`${desbId}/conferencia/complemento`, { quantidade: 2 }, tokenDesb)).statusCode, 200);
+    assert.ok(!(await faixa()).some((f: any) => f.opLoteId === desbId), 'some depois do ok do Desbaste');
+    const integ = await ensurePessoa({ codigoPessoal: 'TEST-CONF-INTEG', pin: '7009', papel: 'chefe' });
+    await prisma.pessoa.update({ where: { id: integ.id }, data: { integracao: true } });
+    const tokenInteg = await loginAs(app, 'TEST-CONF-INTEG', '7009');
+    item = (await app.inject({ method: 'GET', url: '/api/integracao/faltas-chegada', headers: { authorization: `Bearer ${tokenInteg}` } })).json().data.find((f: any) => f.id === desbId);
+    assert.equal(item.situacao, 'resolvida');
+    assert.equal(item.resolucao, 'pecas_chegaram');
+    assert.equal(item.enviadas, 2);
   });
 });
 

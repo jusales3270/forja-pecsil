@@ -52,14 +52,19 @@ export function FaltaNaChegada({ op, podeOperar }: { op: OPLotePendente; podeOpe
         ⚠ Faltam {falta.faltam} peça(s) da chegada
       </div>
       <div className="text-xs text-neutral-300 mt-0.5">
-        Chegaram {falta.contado} de {falta.esperado}. O lote só fecha quando as que faltam chegarem ou o PCP aceitar a falta.
+        Chegaram {falta.contado} de {falta.esperado}. Pode seguir trabalhando o que chegou; o lote fecha quando as que faltam chegarem ou o PCP aceitar a falta.
       </div>
+      {falta.aguardandoConfirmacao > 0 && (
+        <div className="text-sm text-emerald-300 mt-1.5 font-medium">
+          📦 A Fundição enviou {falta.aguardandoConfirmacao} peça(s){falta.enviadoEm ? ` em ${new Date(falta.enviadoEm).toLocaleString('pt-BR', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' })}` : ''}. Confirme quando chegarem.
+        </div>
+      )}
       {(podeOperar || ehPcp) && (
         <div className="flex flex-wrap gap-2 mt-2">
           {podeOperar && (
             <button
               type="button"
-              onClick={() => { setQuantidade(String(falta.faltam)); setModal('chegaram'); }}
+              onClick={() => { setQuantidade(String(falta.aguardandoConfirmacao || falta.faltam)); setModal('chegaram'); }}
               className="px-3 py-1.5 text-sm rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-medium"
             >
               Chegaram peças
