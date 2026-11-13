@@ -18,6 +18,7 @@
 // ============================================================
 
 import { prisma } from '../db/prisma.js';
+import { carregarConferencias } from './conferencia-chegada.js';
 
 export interface PecasNaOperacao {
   /** Peças esperando nesta operação: a anterior liberou e esta ainda não fez. */
@@ -50,9 +51,16 @@ export async function calcularFluxoDePecas(
     },
   });
 
+  // Conferência de chegada no Desbaste: peças que não chegaram não estão
+  // disponíveis, mesmo que a operação anterior as tenha dado como feitas.
+  const conferencias = await carregarConferencias(prisma, loteIds);
+
   for (const lote of lotes) {
     let liberadas = lote.quantidadePecas;
     for (const op of lote.opsLote) {
+      // Nenhuma operação recebe mais que o lote (o PCP pode ter reduzido o
+      // lote ao aceitar uma falta), nem as peças que faltaram na chegada.
+      liberadas = Math.max(0, Math.min(liberadas - (conferencias.get(op.id)?.pendente ?? 0), lote.quantidadePecas));
       mapa.set(op.id, {
         disponiveis: Math.max(0, liberadas - op.quantidadeConcluida),
         liberadasPelaAnterior: liberadas,

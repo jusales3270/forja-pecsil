@@ -32,6 +32,7 @@ import { getSocket, joinEstacao, leaveEstacao } from '../../lib/socket';
 import { useQueryClient } from '@tanstack/react-query';
 import { toast } from '../../components/Toast';
 import { IniciarOPModal } from './IniciarOPModal';
+import { FaltaNaChegada } from './FaltaNaChegada';
 import { EncerrarOPModal } from './EncerrarOPModal';
 import { PausarOPModal } from './PausarOPModal';
 import { DetalhesOPModal } from './DetalhesOPModal';
@@ -564,6 +565,8 @@ function CardPendente({
         </div>
       )}
 
+      <FaltaNaChegada op={op} podeOperar={podeOperar} />
+
       <div className="flex items-center justify-between mt-3 pt-3 border-t border-neutral-800">
         <div className="text-xs text-neutral-500">{op.lote.os.cliente.nome}</div>
         <div className="flex items-center gap-2">
@@ -584,7 +587,7 @@ function CardPendente({
             <span>📐</span>
             <span>Ver Desenho</span>
           </button>
-          {podeOperar &&
+          {podeOperar && op.pecasDisponiveis > 0 &&
             (op.bloqueadoPor ? (
               <span
                 className="px-4 py-2 text-xs rounded-lg border border-amber-500/40 bg-amber-500/10 text-amber-300"

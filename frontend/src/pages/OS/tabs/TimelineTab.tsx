@@ -247,6 +247,27 @@ function PayloadResumo({ tipo, payload, claro }: { tipo: string; payload: any; c
     );
   }
 
+  if (payload.acao === 'conferencia_chegada') {
+    return <div className="mt-2 text-sm space-y-1">
+      <p>{payload.faltam > 0
+        ? `Conferência no Desbaste: chegaram ${payload.contado} de ${payload.esperado} peças — FALTAM ${payload.faltam}`
+        : `Conferência no Desbaste: chegaram as ${payload.contado} peças`}</p>
+      <p>OP {payload.codigoOp} · {payload.tipoServico}</p>
+    </div>;
+  }
+  if (payload.acao === 'conferencia_complemento') {
+    return <div className="mt-2 text-sm space-y-1">
+      <p>Chegaram {payload.quantidade} das {payload.faltavam} peças que faltavam{payload.faltam > 0 ? ` (ainda faltam ${payload.faltam})` : ' — não falta mais nenhuma'}</p>
+      <p>OP {payload.codigoOp} · {payload.tipoServico}</p>
+    </div>;
+  }
+  if (payload.acao === 'falta_aceita') {
+    return <div className="mt-2 text-sm space-y-1">
+      <p>PCP aceitou a falta de {payload.quantidade} peça(s): o lote passou de {payload.quantidadeLoteAntes} para {payload.quantidadeLoteDepois}</p>
+      <p>OP {payload.codigoOp} · {payload.tipoServico}</p>
+    </div>;
+  }
+
   if (payload.acao === 'metalizacao_externa_indicada' || payload.acao === 'metalizacao_interna_indicada') {
     return <div className="mt-2 text-sm space-y-1">
       <p>{payload.acao === 'metalizacao_externa_indicada'

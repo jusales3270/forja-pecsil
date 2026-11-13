@@ -14,7 +14,7 @@ import { DashboardCharts, TIPOS_PECA, numero } from './dashboard/DashboardCharts
 import type { FasePipeline } from '../hooks/usePipelineEtapa';
 import './dashboard/dashboard.css';
 
-type Selecao = { tipo: 'externos' } | { tipo: 'lista'; titulo: string; ids: string[] } | { tipo: 'op'; id: string };
+type Selecao = { tipo: 'externos' } | { tipo: 'faltas' } | { tipo: 'lista'; titulo: string; ids: string[] } | { tipo: 'op'; id: string };
 const STATUS: Record<string, string> = { na_fila: 'Na fila', em_processo: 'Em processo', aguardando_qualidade: 'Aguardando qualidade', bloqueada: 'Bloqueada', concluida: 'Concluída' };
 const dataCurta = (data: string) => new Date(data.slice(0, 10) + 'T12:00:00').toLocaleDateString('pt-BR');
 const prazoTexto = (dias: number) => dias < 0 ? `${Math.abs(dias)}d de atraso` : dias === 0 ? 'Vence hoje' : `Vence em ${dias}d`;
@@ -58,7 +58,7 @@ export default function DashboardPage() {
   const todasOS = useMemo(() => new Map(Object.values(d?.osPorStatusLista ?? {}).flat().map(os => [os.id, os])), [d]);
   const roteiros = useMemo(() => d?.roteiros.filter(r => roteiroBate(r, buscaRoteiro)) ?? [], [d, buscaRoteiro]);
   const h = d?.indicadores.historico;
-  const tituloModal = selecao?.tipo === 'externos' ? 'OS em envio externo' : selecao?.tipo === 'lista' ? selecao.titulo : '';
+  const tituloModal = selecao?.tipo === 'externos' ? 'OS em envio externo' : selecao?.tipo === 'faltas' ? 'Faltas na chegada ao Desbaste' : selecao?.tipo === 'lista' ? selecao.titulo : '';
 
   return <main className="dash-page" data-theme={claro ? 'light' : 'dark'}>
     <header className="flex flex-wrap justify-between items-start gap-4">
@@ -78,12 +78,13 @@ export default function DashboardPage() {
     {isLoading && <p role="status" className="dash-empty">Carregando indicadores…</p>}
     {isError && <div role="alert" className="dash-panel text-rose-500">Não foi possível atualizar o painel. <button className="underline" onClick={() => refetch()}>Tentar novamente</button></div>}
     {d && h && <>
-      <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-3">
+      <div className="grid grid-cols-2 md:grid-cols-4 xl:grid-cols-7 gap-3">
         <Resumo label="Abertas" valor={d.osPorStatus.aberta ?? 0} detalhe="Aguardando produção" onClick={() => abrirLista('OS abertas', (d.osPorStatusLista.aberta ?? []).map(o => o.id))} />
         <Resumo label="Em produção" valor={d.osPorStatus.em_producao ?? 0} detalhe="Internas e externas" onClick={() => abrirLista('OS em produção', (d.osPorStatusLista.em_producao ?? []).map(o => o.id))} />
         <Resumo label="Em dia" valor={d.indicadores.carteira.emDia} detalhe="OS ativas dentro do prazo" cor="emerald" onClick={() => abrirLista('OS em dia', d.indicadores.carteira.emDiaIds)} />
         <Resumo label="Atrasadas" valor={d.indicadores.carteira.atrasadas} detalhe="OS ativas com prazo vencido" cor="rose" onClick={() => abrirLista('OS atrasadas', d.indicadores.carteira.atrasadasIds)} />
         <Resumo label="Envio externo" valor={d.totalOSExternas} detalhe={`${d.enviosExternos.length} lotes · ${d.enviosExternos.reduce((s, e) => s + e.quantidade, 0)} peças fora`} cor="sky" onClick={() => setSelecao({ tipo: 'externos' })} />
+        <Resumo label="Faltas na chegada" valor={d.faltasChegada.length} detalhe={`${d.faltasChegada.reduce((s, f) => s + f.faltam, 0)} peças faltando no Desbaste`} cor="rose" onClick={() => setSelecao({ tipo: 'faltas' })} />
         <Resumo label="Concluídas" valor={h.total} detalhe={`Nos últimos ${dias} dias`} onClick={() => abrirLista('OS concluídas no período', h.os.map(o => o.id))} />
       </div>
       <p className="dash-muted text-xs -mt-3">Envios externos e prazos detalham a mesma carteira; os quadros não devem ser somados.</p>
@@ -104,6 +105,7 @@ export default function DashboardPage() {
                   <p className="text-sm mt-2">{c.cliente}</p><p className="dash-muted text-sm">{c.artigo}</p>
                   <p className="text-xs mt-3">OP {c.codigoOp} · Lote {c.numeroLote} · {c.quantidade} peças</p>
                   <p className="dash-muted text-xs mt-1">{vizinho(c.veioDe) ? `de ${vizinho(c.veioDe)}` : 'início do roteiro'} · {vizinho(c.proxima) ? `próxima ${vizinho(c.proxima)}` : 'última operação'}</p>
+                  {c.faltaChegada ? <p className="text-rose-500 text-xs font-semibold mt-2">⚠ Faltam {c.faltaChegada} da chegada</p> : null}
                   {c.externo ? <p className="text-sky-500 text-xs font-semibold mt-2">🔒 METALIZAÇÃO EXTERNA · {c.externoAguardandoSaida ? 'lote ainda no desbaste' : 'aguardando retorno'}</p> : <p className="dash-muted text-xs mt-2">{STATUS[c.status] ?? c.status}</p>}
                   <p className={`text-xs mt-2 ${c.diasAtePrazo < 0 ? 'text-rose-500 font-semibold' : 'dash-muted'}`}>{prazoTexto(c.diasAtePrazo)}</p>
                 </button>)}
@@ -143,7 +145,7 @@ export default function DashboardPage() {
     {selecao && selecao.tipo !== 'op' && d && <Modal open title={tituloModal} size="xl" onClose={() => setSelecao(null)}>
       <div className="dash-dialog">
         {selecao.tipo === 'externos' && <>
-          <p className="dash-muted text-sm mb-4">{d.totalOSExternas} OS · {d.enviosExternos.length} lotes aguardando retorno. A confirmação de recebimento é feita na Metalização.</p>
+          <p className="dash-muted text-sm mb-4">{d.totalOSExternas} OS · {d.enviosExternos.length} lotes aguardando retorno. A confirmação do retorno é feita no Encaixe e Arredondamento.</p>
           {!d.enviosExternos.length && <p className="dash-empty">Nenhuma OS em envio externo.</p>}
           <div className="space-y-4">{d.enviosExternos.map(e => <article key={e.opLoteId} className="dash-panel">
             <div className="flex flex-wrap justify-between gap-2"><h3 className="font-mono font-bold text-lg">{e.codigoGrv}</h3><span className="text-sky-500 font-semibold">Aguardando retorno · {e.diasFora}d fora</span></div>
@@ -155,6 +157,22 @@ export default function DashboardPage() {
               <Dado nome="Enviado em" valor={new Date(e.enviadoEm).toLocaleString('pt-BR')} />
               <Dado nome="Prazo da OS" valor={dataCurta(e.prazoEntrega)} />
               <Dado nome="Situação do prazo" valor={prazoTexto(e.diasAtePrazo)} />
+            </dl>
+          </article>)}</div>
+        </>}
+        {selecao.tipo === 'faltas' && <>
+          <p className="dash-muted text-sm mb-4">Lotes em que chegaram menos peças no Desbaste do que a Fundição entregou. O lote só fecha quando as peças aparecerem ou o PCP aceitar a falta no tótem do Desbaste.</p>
+          {!d.faltasChegada.length && <p className="dash-empty">Nenhuma falta pendente.</p>}
+          <div className="space-y-4">{d.faltasChegada.map(f => <article key={f.opLoteId} className="dash-panel">
+            <div className="flex flex-wrap justify-between gap-2"><h3 className="font-mono font-bold text-lg">{f.codigoGrv}</h3><span className="text-rose-500 font-semibold">Faltam {f.faltam} peça(s)</span></div>
+            <p className="text-sm mt-2">{f.cliente} · {f.artigo} — {f.descricao}</p>
+            <dl className="grid grid-cols-2 sm:grid-cols-3 gap-3 text-sm mt-4">
+              <Dado nome="Lote" valor={`Lote ${f.numeroLote}`} />
+              <Dado nome="Esperado" valor={`${f.esperado} peças`} />
+              <Dado nome="Chegaram" valor={`${f.contado} peças`} />
+              <Dado nome="Estação" valor={f.estacao} />
+              <Dado nome="Conferido por" valor={f.conferidoPor ?? 'Não informado'} />
+              <Dado nome="Conferido em" valor={new Date(f.conferidoEm).toLocaleString('pt-BR')} />
             </dl>
           </article>)}</div>
         </>}

@@ -21,6 +21,8 @@ export interface KanbanCard {
   externo: boolean;
   /** Externa indicada no Desbaste, lote ainda na fábrica. */
   externoAguardandoSaida?: boolean;
+  /** Peças que faltaram na chegada ao Desbaste. */
+  faltaChegada?: number | null;
   fornecedor: string | null;
   quantidade: number;
   opLoteId: string;
@@ -99,6 +101,13 @@ export interface EnvioExternoResumo {
   fornecedor: string | null; quantidade: number; enviadoEm: string; diasFora: number;
   prazoEntrega: string; diasAtePrazo: number;
 }
+/** Lote com peças que faltaram na chegada ao Desbaste (ainda sem solução). */
+export interface FaltaChegadaResumo {
+  opLoteId: string; osId: string; codigoGrv: string; numeroLote: number;
+  cliente: string; artigo: string; descricao: string; estacao: string;
+  esperado: number; contado: number; faltam: number;
+  conferidoPor: string | null; conferidoEm: string;
+}
 export interface GrupoAtraso {
   id: string; nome: string; total: number; atrasadas: number; mediaDiasAtraso: number; osIds: string[];
 }
@@ -123,6 +132,7 @@ export interface DashboardData {
   gargalos: Gargalo[];
   enviosExternos: EnvioExternoResumo[];
   totalOSExternas: number;
+  faltasChegada: FaltaChegadaResumo[];
   geradoEm: string;
   osPorStatus: Record<string, number>;
   osPorStatusLista: Record<string, OSResumo[]>;

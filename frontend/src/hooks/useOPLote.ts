@@ -99,6 +99,10 @@ export interface OPLotePendente {
   saiuParaExterno?: boolean;
   /** Lista de metalização externa: como está a operação de antes (o Desbaste). */
   operacaoAnterior?: { estacao: string; concluidas: number } | null;
+  /** Desbaste: primeiro início do lote, conferir quantas peças chegaram. */
+  conferenciaChegada?: { exigida: boolean; esperado: number } | null;
+  /** Desbaste: peças que faltaram na chegada e ainda não apareceram. */
+  faltaChegada?: { faltam: number; esperado: number; contado: number } | null;
   etapa: { id: string; nome: string };
   lote: {
     id: string;
@@ -171,6 +175,8 @@ export interface IniciarOPInput {
   modoMetalizacao?: 'interno';
   /** Escolha feita no Desbaste para a Metalização seguinte do lote. */
   metalizacao?: { modo: 'interno' | 'externo'; fornecedor?: string };
+  /** Desbaste: quantas peças chegaram de fato. */
+  conferenciaChegada?: { quantidade: number };
   /** Opcional: operação terceirizada ou de espera não ocupa máquina. */
   maquinaId?: string;
   operadorId?: string;
@@ -372,5 +378,27 @@ export function useMetalizacaoExterna() {
         qc.invalidateQueries({ queryKey: [key] });
       }
     },
+  });
+}
+
+const CHAVES_CONFERENCIA = ['op-lote-pendentes', 'op-lote-em-andamento', 'op-lote-envios-externos', 'op-lote-detail', 'pipeline-etapa', 'dashboard', 'avisos', 'os-list', 'os-detail', 'os-timeline'];
+
+/** Desbaste: chegaram peças que faltavam na conferência. */
+export function useComplementoChegada() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async ({ id, quantidade }: { id: string; quantidade: number }) =>
+      (await api.post<{ data: { faltam: number } }>(`/op-lote/${id}/conferencia/complemento`, { quantidade })).data,
+    onSuccess: () => { for (const key of CHAVES_CONFERENCIA) qc.invalidateQueries({ queryKey: [key] }); },
+  });
+}
+
+/** PCP: aceita a falta; o lote passa a valer o que chegou. */
+export function useAceitarFalta() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async ({ id }: { id: string }) =>
+      (await api.post<{ data: { quantidadeAntes: number; quantidadeDepois: number } }>(`/op-lote/${id}/conferencia/aceitar-falta`, { confirmar: true })).data,
+    onSuccess: () => { for (const key of CHAVES_CONFERENCIA) qc.invalidateQueries({ queryKey: [key] }); },
   });
 }
