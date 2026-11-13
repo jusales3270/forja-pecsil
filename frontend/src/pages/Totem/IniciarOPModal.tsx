@@ -34,6 +34,12 @@ export function IniciarOPModal({ op, etapaId, onClose }: Props) {
   const escolheMetalizacao = !!metalDoLote?.podeAlterar;
   const [modoLote, setModoLote] = useState<'interno' | 'externo' | null>(metalDoLote?.modo ?? null);
   const [fornecedorLote, setFornecedorLote] = useState(metalDoLote?.fornecedor ?? '');
+  // Desbaste: no primeiro início do lote, contar as peças que chegaram
+  const conferencia = op.conferenciaChegada?.exigida ? op.conferenciaChegada : null;
+  const [contadas, setContadas] = useState(conferencia ? String(conferencia.esperado) : '');
+  const qtdContada = Number(contadas);
+  const contagemValida = !conferencia || (Number.isInteger(qtdContada) && qtdContada >= 1 && qtdContada <= conferencia.esperado);
+  const faltamNaChegada = conferencia && contagemValida ? conferencia.esperado - qtdContada : 0;
   const [modo, setModo] = useState<'interno' | 'externo' | null>(null);
   const [fornecedor, setFornecedor] = useState(op.fornecedor ?? '');
   const externo = metalizacao && modo === 'externo';
@@ -80,6 +86,7 @@ export function IniciarOPModal({ op, etapaId, onClose }: Props) {
     if (iniciar.isPending || envio.isPending) return;
     setErro(null);
     if (metalizacao && !modo) { setErro('Escolha metalização interna ou externa.'); return; }
+    if (conferencia && !contagemValida) { setErro(`Informe quantas peças chegaram (de 1 a ${conferencia.esperado}).`); return; }
     if (escolheMetalizacao && !modoLote) { setErro('Indique se a metalização deste lote será interna ou externa.'); return; }
     if (!semMaquina) {
       if (!maquinaId) {
@@ -106,10 +113,16 @@ export function IniciarOPModal({ op, etapaId, onClose }: Props) {
           ...(escolheMetalizacao && modoLote
             ? { metalizacao: { modo: modoLote, ...(modoLote === 'externo' && fornecedorLote.trim() ? { fornecedor: fornecedorLote.trim() } : {}) } }
             : {}),
+          ...(conferencia ? { conferenciaChegada: { quantidade: qtdContada } } : {}),
           ...(semMaquina ? {} : { maquinaId, operadorId }),
           observacoes: observacoes.trim() || null,
         },
       });
+      if (faltamNaChegada > 0) {
+        toast.sucesso(`OP iniciada. Falta de ${faltamNaChegada} peça(s) registrada: PCP e Fundição foram avisados.`);
+        onClose();
+        return;
+      }
       toast.sucesso(
         !metalizacao && op.terceirizada
           ? 'Envio registrado.'
@@ -211,6 +224,34 @@ export function IniciarOPModal({ op, etapaId, onClose }: Props) {
                 <input className="input py-2" value={fornecedor} maxLength={200} onChange={e => setFornecedor(e.target.value)} />
               </label>
             </>}
+          </fieldset>
+        )}
+
+        {conferencia && (
+          <fieldset className="space-y-2">
+            <legend className="text-lg font-medium mb-2">Quantas peças chegaram?</legend>
+            <p className="text-sm text-neutral-400">
+              Conte as peças deste lote antes de começar. O sistema esperava <strong>{conferencia.esperado}</strong>.
+            </p>
+            <input
+              type="number"
+              inputMode="numeric"
+              min={1}
+              max={conferencia.esperado}
+              value={contadas}
+              onChange={(e) => setContadas(e.target.value)}
+              className="input py-2 text-2xl font-semibold w-40"
+              aria-label="Quantidade de peças que chegaram"
+            />
+            {!contagemValida && contadas !== '' && (
+              <p className="text-sm text-red-400">Informe de 1 a {conferencia.esperado}.</p>
+            )}
+            {faltamNaChegada > 0 && (
+              <p className="text-sm text-amber-300">
+                ⚠ Faltam {faltamNaChegada} peça(s). PCP e Fundição serão avisados. O lote continua valendo {conferencia.esperado}
+                {' '}e só fecha quando as que faltam chegarem ou o PCP aceitar a falta.
+              </p>
+            )}
           </fieldset>
         )}
 

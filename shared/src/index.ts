@@ -434,6 +434,11 @@ export interface OPLote {
   tempoTotalPlanejado: number;
 }
 
+/** Estação onde o lote vindo da Fundição é conferido na chegada. */
+export function isDesbaste(nome: string): boolean {
+  return nome.normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim().toLowerCase() === 'desbaste';
+}
+
 /** Estação que permite decidir a execução interna ou externa por lote. */
 export function isMetalizacao(nome: string): boolean {
   return nome.normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim().toLowerCase() === 'metalizacao';

@@ -20,10 +20,18 @@ import {
   podeAlterar,
   registrarSaidaExterna,
 } from '../lib/metalizacao-lote.js';
+import {
+  aceitarFalta,
+  carregarConferencias,
+  conferenciaExigida,
+  opDeChegada,
+  registrarComplemento,
+  registrarConferencia,
+} from '../lib/conferencia-chegada.js';
 import { Prisma } from '@prisma/client';
 import { prisma } from '../db/prisma.js';
 import { calcularFluxoDePecas } from '../lib/fluxo-pecas.js';
-import { checarEstacaoDaOP } from '../lib/permissoes-estacao.js';
+import { checarEstacaoDaOP, usuarioAtual } from '../lib/permissoes-estacao.js';
 import { avisarProximaSeLoteCompleto } from '../lib/aviso-chegada.js';
 
 // ============================================================
@@ -40,6 +48,8 @@ const filtroEstacaoSchema = z.object({
 // e a exigência é validada conforme o tipo da OP.
 const iniciarSchema = z.object({
   modoMetalizacao: z.literal('interno').optional(),
+  /** Desbaste: quantas peças chegaram de fato (primeiro início do lote). */
+  conferenciaChegada: z.object({ quantidade: z.number().int() }).optional(),
   /** Escolha feita no Desbaste para a Metalização seguinte do lote. */
   metalizacao: z
     .object({
@@ -241,6 +251,7 @@ export async function opLoteRoutes(app: FastifyInstance) {
       });
 
       const internasIndicadas = await metalizacoesIndicadasInternas(prisma, [...new Set(ops.map((o) => o.loteId))]);
+      const conferencias = await carregarConferencias(prisma, [...new Set(ops.map((o) => o.loteId))]);
 
       const opsComContexto = await Promise.all(
         ops.map(async (op) => {
@@ -284,6 +295,14 @@ export async function opLoteRoutes(app: FastifyInstance) {
               : null,
             metalizacaoDefinida:
               esta && isMetalizacao(op.etapa.nome) ? modoAtual(esta, internasIndicadas.has(esta.id)) : null,
+            // Desbaste: contagem obrigatória no primeiro início do lote
+            conferenciaChegada: conferenciaExigida(op, opDeChegada(opsDoLote), conferencias)
+              ? { exigida: true, esperado: pecas?.liberadasPelaAnterior ?? op.lote.quantidadePecas }
+              : null,
+            faltaChegada: (() => {
+              const c = conferencias.get(op.id);
+              return c && c.pendente > 0 ? { faltam: c.pendente, esperado: c.esperado, contado: c.contado + c.complementos } : null;
+            })(),
             pecasDisponiveis: pecas?.disponiveis ?? 0,
             liberadasPelaAnterior: pecas?.liberadasPelaAnterior ?? op.lote.quantidadePecas,
             bloqueadoPor: trava
@@ -298,7 +317,9 @@ export async function opLoteRoutes(app: FastifyInstance) {
       );
 
       return {
-        data: opsComContexto.filter((op) => op.pecasDisponiveis > 0),
+        // Com peças faltando da chegada, o card fica na fila mesmo sem peças:
+        // é ali que chegam as que faltavam ou o PCP aceita a falta.
+        data: opsComContexto.filter((op) => op.pecasDisponiveis > 0 || op.faltaChegada != null),
       };
     },
   );
@@ -564,6 +585,39 @@ export async function opLoteRoutes(app: FastifyInstance) {
         app.io.to(`estacao:${metalDoLote.etapaId}`).emit('op:nova-na-fila', { loteId: opLote.loteId, etapaId: metalDoLote.etapaId });
       };
       const fluxoInicio = await calcularFluxoDePecas([opLote.loteId]);
+
+      // Conferência de chegada no Desbaste: no primeiro início do lote, quem
+      // está no posto diz quantas peças chegaram de fato.
+      const conferencias = await carregarConferencias(prisma, [opLote.loteId]);
+      const exigeConferencia = conferenciaExigida(opLote, opDeChegada(opsDoLote), conferencias);
+      const esperadoNaChegada = fluxoInicio.get(opLote.id)?.liberadasPelaAnterior ?? opLote.lote.quantidadePecas;
+      const contagem = exigeConferencia ? bodyParsed.data.conferenciaChegada?.quantidade : undefined;
+      if (exigeConferencia) {
+        if (contagem == null) {
+          return reply.code(400).send({
+            error: 'conferencia_chegada_obrigatoria',
+            message: 'Conte as peças que chegaram antes de iniciar.',
+            esperado: esperadoNaChegada,
+          });
+        }
+        if (contagem < 1 || contagem > esperadoNaChegada) {
+          return reply.code(400).send({
+            error: 'conferencia_invalida',
+            message: `Informe de 1 a ${esperadoNaChegada} peças.`,
+            esperado: esperadoNaChegada,
+          });
+        }
+      }
+      const gravarConferencia = async (tx: Prisma.TransactionClient) => {
+        if (contagem == null) return null;
+        return registrarConferencia(tx, { opLoteId: opLote.id, esperado: esperadoNaChegada, contado: contagem, autorId: programadorId });
+      };
+      const avisarFalta = (r: { faltam: number; etapaOrigemId: string | null } | null) => {
+        if (!r || r.faltam <= 0) return;
+        // A Fundição atualiza a tela e o sino na hora
+        if (r.etapaOrigemId) app.io.to(`estacao:${r.etapaOrigemId}`).emit('op:nova-na-fila', { loteId: opLote.loteId, etapaId: r.etapaOrigemId });
+      };
+
       if ((fluxoInicio.get(opLote.id)?.disponiveis ?? 0) <= 0) {
         return reply.code(409).send({ error: 'sem_pecas_disponiveis', message: 'Nenhuma peça foi liberada para esta operação.' });
       }
@@ -571,7 +625,9 @@ export async function opLoteRoutes(app: FastifyInstance) {
 
       // Terceirizada e espera não abrem máquina: o carimbo marca só o relógio.
       if (semMaquina) {
+        let falta: Awaited<ReturnType<typeof gravarConferencia>> = null;
         const carimbo = await prisma.$transaction(async (tx) => {
+          falta = await gravarConferencia(tx);
           await gravarEscolha(tx);
           const inicio = await tx.oPLote.updateMany({
             where: { id: opLote.id, status: 'na_fila', envioExternoEm: null },
@@ -637,6 +693,7 @@ export async function opLoteRoutes(app: FastifyInstance) {
           maquinaId: null,
         });
         avisarEstacaoDoRetorno();
+        avisarFalta(falta);
 
         const completo = await prisma.oPLote.findUnique({
           where: { id: opLote.id },
@@ -703,6 +760,7 @@ export async function opLoteRoutes(app: FastifyInstance) {
       // Tudo certo — abre transação
       try {
         const resultado = await prisma.$transaction(async (tx) => {
+          const falta = await gravarConferencia(tx);
           await gravarEscolha(tx);
           const inicio = await tx.oPLote.updateMany({
             where: { id: opLote.id, status: 'na_fila', envioExternoEm: null },
@@ -839,7 +897,7 @@ export async function opLoteRoutes(app: FastifyInstance) {
             },
           });
 
-          return { carimbo, processamento, avisouInicio };
+          return { carimbo, processamento, avisouInicio, falta };
         });
 
         // Emite evento em tempo real pra estação
@@ -853,6 +911,7 @@ export async function opLoteRoutes(app: FastifyInstance) {
           });
 
         avisarEstacaoDoRetorno();
+        avisarFalta(resultado.falta);
 
         if (resultado.avisouInicio) {
           // Global: quem precisa saber está na etapa avisada, não nesta.
@@ -1219,6 +1278,77 @@ export async function opLoteRoutes(app: FastifyInstance) {
           error: 'erro_interno',
           message: 'Erro ao encerrar OP. Tente novamente.',
         });
+      }
+    },
+  );
+
+  // ---------------- CONFERÊNCIA DE CHEGADA: PEÇAS QUE FALTAVAM APARECERAM ----------------
+  app.post(
+    '/op-lote/:id/conferencia/complemento',
+    { onRequest: [app.authenticate] },
+    async (request, reply) => {
+      const params = z.object({ id: z.string().uuid() }).safeParse(request.params);
+      const body = z.object({ quantidade: z.number().int().min(1) }).safeParse(request.body);
+      if (!params.success || !body.success) {
+        return reply.code(400).send({ error: 'invalid_input', message: 'Informe quantas peças chegaram.' });
+      }
+      const user = request.user as any;
+      if (!podeOperarTotem(user.papel)) {
+        return reply.code(403).send({ error: 'forbidden', message: 'Seu usuário não opera o tótem.' });
+      }
+      const bloqueio = await checarEstacaoDaOP(user, params.data.id);
+      if (bloqueio) return reply.code(403).send(bloqueio);
+      const op = await prisma.oPLote.findUnique({
+        where: { id: params.data.id },
+        select: { etapaId: true, loteId: true, lote: { select: { os: { select: { status: true } } } } },
+      });
+      if (!op) return reply.code(404).send({ error: 'not_found', message: 'OP não encontrada' });
+      if (!['aberta', 'em_producao'].includes(op.lote.os.status)) {
+        return reply.code(409).send({ error: 'os_nao_ativa', message: 'A OS não está ativa.' });
+      }
+      try {
+        const conf = await prisma.$transaction((tx) =>
+          registrarComplemento(tx, { opLoteId: params.data.id, quantidade: body.data.quantidade, autorId: user.pessoaId }));
+        app.io.to(`estacao:${op.etapaId}`).emit('op:nova-na-fila', { opLoteId: params.data.id, loteId: op.loteId, etapaId: op.etapaId });
+        return { data: { faltam: conf.pendente } };
+      } catch (err: any) {
+        if (err.statusCode) return reply.code(err.statusCode).send({ error: 'conferencia_invalida', message: err.message });
+        throw err;
+      }
+    },
+  );
+
+  // ---------------- CONFERÊNCIA DE CHEGADA: PCP ACEITA A FALTA ----------------
+  // O lote passa a valer o que chegou. Só PCP e admin decidem.
+  app.post(
+    '/op-lote/:id/conferencia/aceitar-falta',
+    { onRequest: [app.authenticate] },
+    async (request, reply) => {
+      const params = z.object({ id: z.string().uuid() }).safeParse(request.params);
+      const body = z.object({ confirmar: z.literal(true) }).safeParse(request.body);
+      if (!params.success || !body.success) {
+        return reply.code(400).send({ error: 'invalid_input', message: 'Confirme que a falta será aceita.' });
+      }
+      const user = await usuarioAtual(request.user as any);
+      if (!user) return reply.code(401).send({ error: 'conta_indisponivel', message: 'Conta indisponível. Entre novamente.' });
+      if (!['pcp', 'admin'].includes(user.papel)) {
+        return reply.code(403).send({ error: 'forbidden', message: 'Só o PCP aceita a falta de peças.' });
+      }
+      const op = await prisma.oPLote.findUnique({
+        where: { id: params.data.id },
+        select: { loteId: true, lote: { select: { os: { select: { status: true } } } } },
+      });
+      if (!op) return reply.code(404).send({ error: 'not_found', message: 'OP não encontrada' });
+      if (!['aberta', 'em_producao'].includes(op.lote.os.status)) {
+        return reply.code(409).send({ error: 'os_nao_ativa', message: 'A OS não está ativa.' });
+      }
+      try {
+        const r = await prisma.$transaction((tx) => aceitarFalta(tx, { opLoteId: params.data.id, autorId: user.pessoaId }));
+        for (const etapaId of r.estacoes) app.io.to(`estacao:${etapaId}`).emit('op:nova-na-fila', { loteId: op.loteId, etapaId });
+        return { data: { quantidadeAntes: r.quantidadeAntes, quantidadeDepois: r.quantidadeDepois } };
+      } catch (err: any) {
+        if (err.statusCode) return reply.code(err.statusCode).send({ error: 'falta_invalida', message: err.message });
+        throw err;
       }
     },
   );

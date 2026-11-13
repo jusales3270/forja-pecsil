@@ -44,6 +44,8 @@ export interface PassoTrilha {
 export function montarTrilha(
   ops: OpDaTrilha[],
   disponiveis: (opLoteId: string) => number,
+  /** Faltaram peças na chegada: a OP segura o lote, mesmo sem peça disponível. */
+  comFaltaNaChegada: (opLoteId: string) => boolean = () => false,
 ): PassoTrilha[] {
   const ordenadas = [...ops].sort((a, b) => a.ordem - b.ordem || a.codigoOp.localeCompare(b.codigoOp) || a.id.localeCompare(b.id));
 
@@ -59,7 +61,7 @@ export function montarTrilha(
     if (op.status === 'concluida') estado = 'concluido';
     else if (externo) estado = 'externo';
     else if (travado) estado = 'futuro';
-    else if (op.status !== 'na_fila' || pecas > 0) estado = 'atual';
+    else if (op.status !== 'na_fila' || pecas > 0 || comFaltaNaChegada(op.id)) estado = 'atual';
     else estado = 'futuro';
 
     if (op.exigeLoteCompleto && op.status !== 'concluida') travado = true;

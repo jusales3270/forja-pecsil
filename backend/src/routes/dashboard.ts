@@ -13,6 +13,7 @@ import { exigirModulo } from '../lib/acessos.js';
 import { diasAtePrazo, montarIndicadores } from '../lib/dashboard-kpis.js';
 import { montarPipelineEtapa, listarEtapasComFases } from '../lib/pipeline-etapa.js';
 import { montarTrilha, vizinhosNaTrilha, type PassoTrilha } from '../lib/roteiro-os.js';
+import { carregarConferencias } from '../lib/conferencia-chegada.js';
 
 export async function dashboardRoutes(app: FastifyInstance) {
   // GET /api/dashboard  -> visao macro pro chefe
@@ -140,9 +141,13 @@ export async function dashboardRoutes(app: FastifyInstance) {
       },
       orderBy: [{ os: { prazoEntrega: 'asc' } }, { numeroLote: 'asc' }],
     });
-    const fluxo = await calcularFluxoDePecas([...new Set([...opsAtivas.map(o => o.loteId), ...lotesAtivos.map(l => l.id)])]);
+    const loteIdsAtivos = [...new Set([...opsAtivas.map(o => o.loteId), ...lotesAtivos.map(l => l.id)])];
+    const fluxo = await calcularFluxoDePecas(loteIdsAtivos);
+    // Peças que faltaram na chegada ao Desbaste e ainda não foram resolvidas
+    const conferencias = await carregarConferencias(prisma, loteIdsAtivos);
+    const faltaNaChegada = (opLoteId: string) => conferencias.get(opLoteId)?.pendente ?? 0;
     const trilhaPorLote = new Map<string, PassoTrilha[]>(
-      lotesAtivos.map(l => [l.id, montarTrilha(l.opsLote, id => fluxo.get(id)?.disponiveis ?? 0)]),
+      lotesAtivos.map(l => [l.id, montarTrilha(l.opsLote, id => fluxo.get(id)?.disponiveis ?? 0, id => faltaNaChegada(id) > 0)]),
     );
     const roteirosPorOS = new Map<string, {
       osId: string; codigoGrv: string; cliente: string; artigo: string; descricao: string; prioridade: string;
@@ -169,8 +174,18 @@ export async function dashboardRoutes(app: FastifyInstance) {
     const opsVisiveis = opsAtivas.filter(op => {
       if (op.status !== 'na_fila') return true;
       const travada = (travas.get(op.loteId) ?? Infinity) < op.ordem;
-      return !travada && (fluxo.get(op.id)?.disponiveis ?? 0) > 0;
+      return !travada && ((fluxo.get(op.id)?.disponiveis ?? 0) > 0 || faltaNaChegada(op.id) > 0);
     });
+    const nomeEtapa = new Map(etapas.map(et => [et.id, et.nome]));
+    const faltasChegada = opsAtivas.filter(op => faltaNaChegada(op.id) > 0).map(op => {
+      const c = conferencias.get(op.id)!;
+      return {
+        opLoteId: op.id, osId: op.lote.os.id, codigoGrv: op.lote.os.codigoGrv, numeroLote: op.lote.numeroLote,
+        cliente: op.lote.os.cliente.nome, artigo: op.lote.os.artigo.codigo, descricao: op.lote.os.artigo.descricao,
+        estacao: nomeEtapa.get(op.etapaId) ?? '', esperado: c.esperado, contado: c.contado + c.complementos,
+        faltam: c.pendente, conferidoPor: c.conferidoPor, conferidoEm: c.conferidoEm,
+      };
+    }).sort((a, b) => b.faltam - a.faltam);
     // Indicada no Desbaste mas o lote ainda não saiu: ainda está na fábrica.
     const saiuParaExterno = (op: typeof opsAtivas[number]) =>
       (fluxo.get(op.id)?.liberadasPelaAnterior ?? 0) >= op.lote.quantidadePecas;
@@ -216,6 +231,8 @@ export async function dashboardRoutes(app: FastifyInstance) {
             opLoteId: op.id,
             osId: op.lote.os.id,
             externo: emExterno(op),
+            /** Peças que faltaram na chegada ao Desbaste (nulo = sem falta). */
+            faltaChegada: faltaNaChegada(op.id) || null,
             /** Externa indicada no Desbaste, mas o lote ainda não saiu da fábrica. */
             externoAguardandoSaida: emExterno(op) && !saiuParaExterno(op),
             fornecedor: op.fornecedor,
@@ -381,6 +398,7 @@ export async function dashboardRoutes(app: FastifyInstance) {
         indicadores,
         gargalos,
         enviosExternos,
+        faltasChegada,
         totalOSExternas: new Set(enviosExternos.map(e => e.osId)).size,
         osPorStatus,
         osPorStatusLista,
